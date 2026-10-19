@@ -16,6 +16,7 @@
 #include "llvieweroctree.h"
 #include "llviewershadermgr.h"
 #include "llvoavatarself.h"
+#include "llvovolume.h"
 #include "pipeline.h"
 
 // Cube helper is implemented by llvieweroctree.cpp and historically declared
@@ -25,6 +26,8 @@ LLVertexBuffer* ll_create_cube_vb(U32 type_mask);
 namespace
 {
     std::vector<ASLightRigRenderer::Light> sLights;
+    // My Lights viewer-object ids, refreshed every idle tick by the floater.
+    std::set<LLUUID> sLightRigIds;
     const F32 DEFERRED_RADIUS_SCALE = 1.5f;
     const F32 DEFERRED_FALLOFF_SCALE = 0.5f;
 
@@ -78,6 +81,17 @@ bool ASLightRigRenderer::usesShaderBackend()
 void ASLightRigRenderer::setLights(const std::vector<Light>& lights)
 {
     sLights = lights;
+}
+
+void ASLightRigRenderer::setLightRigIds(const std::set<LLUUID>& ids)
+{
+    sLightRigIds = ids;
+}
+
+bool ASLightRigRenderer::allowsLight(const LLVOVolume* light)
+{
+    static LLCachedControl<bool> only_my_lights(gSavedSettings, "ASLightRigOnlyMyLights", false);
+    return !only_my_lights || (light && sLightRigIds.count(light->getID()));
 }
 
 void ASLightRigRenderer::render(LLPipeline& pipeline, F32 light_scale)

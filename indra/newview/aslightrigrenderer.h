@@ -7,12 +7,15 @@
 #ifndef AS_LIGHTRIGRENDERER_H
 #define AS_LIGHTRIGRENDERER_H
 
+#include <set>
 #include <vector>
 
+#include "lluuid.h"
 #include "v3color.h"
 #include "v3math.h"
 
 class LLPipeline;
+class LLVOVolume;
 
 class ASLightRigRenderer
 {
@@ -39,6 +42,16 @@ public:
     // transparency receives the contribution LLVOVolume lights normally get
     // through LLPipeline::mNearbyLights. Returns the next free slot.
     static S32 appendForwardLights(LLPipeline& pipeline, S32 first_slot, F32 light_scale);
+
+    // "Only My Lights" (ASLightRigOnlyMyLights): when on, every local light
+    // except the My Lights objects is kept out of LLPipeline::mNearbyLights,
+    // which feeds the deferred, forward (alpha), projector-shadow,
+    // reflection-probe and volumetric local-light paths. Worn lights are
+    // excluded too. Shader-backend My Lights never enter mNearbyLights and
+    // are unaffected.
+    static void setLightRigIds(const std::set<LLUUID>& ids);
+    // True when the light may enter mNearbyLights.
+    static bool allowsLight(const LLVOVolume* light);
 };
 
 #endif // AS_LIGHTRIGRENDERER_H

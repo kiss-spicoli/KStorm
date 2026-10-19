@@ -386,7 +386,10 @@ void ASFloaterMyLights::updateLights()
     // small set copy) and simplest way to handle lights being added/
     // removed/enabled while isolate mode is active, without a separate
     // change-notification path.
-    ASBackgroundIsolate::setLightRigIds(getLightRigObjectIds());
+    const std::set<LLUUID> rig_ids = getLightRigObjectIds();
+    ASBackgroundIsolate::setLightRigIds(rig_ids);
+    // "Only My Lights" keeps these and drops every other local light.
+    ASLightRigRenderer::setLightRigIds(rig_ids);
 }
 
 std::set<LLUUID> ASFloaterMyLights::getLightRigObjectIds() const

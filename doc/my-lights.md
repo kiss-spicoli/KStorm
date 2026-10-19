@@ -585,3 +585,52 @@ by debug-feature masks and UI rendering, not by scene render types.
 Set **My Lights > Background** to **Black** in a region containing legacy trees
 or bushes. Confirm that vegetation disappears immediately and returns when the
 background mode is set to **None**.
+
+## Only My Lights
+
+### Behavior
+
+The persistent **Only My Lights** checkbox (`ASLightRigOnlyMyLights`) turns off
+every local light except My Lights. That includes world lights, projectors,
+everyone's worn lights including your own, and animesh lights. The sun, moon,
+ambient/EEP light, emissive/fullbright surfaces and glow are unaffected. Only
+this viewer is affected.
+
+### Implementation
+
+- Every local-light consumer reads `LLPipeline::mNearbyLights`, so one filter
+  covers all of them: the deferred light loop, the forward/alpha hardware
+  lights (`setupHWLights()`), projector shadow selection, reflection-probe
+  captures, and the volumetric local-light collector.
+- `LLPipeline::calcNearbyLights()` has two tagged `<AS:KS>` checks, one in each
+  loop (existing lights and new lights), calling
+  `ASLightRigRenderer::allowsLight()`. A rejected light that was already
+  listed is dropped (`NEARBY_LIGHT` cleared). Unticking the box lets lights
+  re-enter on the next frame through the normal new-light path.
+- `allowsLight()` passes everything while the setting is off. Otherwise it
+  passes only ids in `ASLightRigRenderer`'s My Lights id set, which
+  `ASFloaterMyLights::updateLights()` refreshes every idle tick (the same ids
+  given to `ASBackgroundIsolate`).
+- Shader-backend My Lights never enter `mNearbyLights` and always render.
+
+### Runtime verification
+
+In a scene with world lights, projectors and a worn face light, add a My
+Lights light and tick **Only My Lights**: only the My Lights light should
+remain, including on alpha hair and in volumetrics. Untick it and everything
+returns. Repeat with the Shader backend, and with no My Lights lights (no
+local light at all).
+
+## Max lights control
+
+The **Max lights** slider beside **Show light beacons** binds directly to
+`RenderLocalLightCount` (`control_name`). That's the same setting as
+Preferences > Graphics > Max. nearby lights and the Phototools sliders, so it
+applies live and stays in sync with them. Range 0–512, matching the other
+sliders.
+
+- LLVOVolume backend: My Lights share this budget with every other local light
+  (with **Only My Lights** on, they have it to themselves).
+- Shader backend: My Lights are capped separately at the same number
+  (`ASLightRigRenderer::render()`).
+- 0 skips the local-light pass entirely, turning off My Lights too.
