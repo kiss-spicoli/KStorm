@@ -6421,6 +6421,13 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
                 drawable->clearState(LLDrawable::NEARBY_LIGHT);
                 continue;
             }
+            // <AS:KS> Only My Lights: drop every other local light.
+            if (!ASLightRigRenderer::allowsLight(volight))
+            {
+                drawable->clearState(LLDrawable::NEARBY_LIGHT);
+                continue;
+            }
+            // </AS:KS>
 
             F32 dist = calc_light_dist(volight, cam_pos, max_dist);
             F32 fade = light->fade;
@@ -6476,6 +6483,12 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
             {
                 continue;
             }
+            // <AS:KS> Only My Lights: skip every other local light.
+            if (!ASLightRigRenderer::allowsLight(light))
+            {
+                continue;
+            }
+            // </AS:KS>
             LLVOAvatar * av = light->getAvatar();
             if (av && (av->isTooComplex() || av->isInMuteList() || av->isTooSlow()))
             {
