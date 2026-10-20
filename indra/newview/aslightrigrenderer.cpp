@@ -28,6 +28,8 @@ namespace
     std::vector<ASLightRigRenderer::Light> sLights;
     // My Lights viewer-object ids, refreshed every idle tick by the floater.
     std::set<LLUUID> sLightRigIds;
+    // Boost per My Lights object id; only boosts other than 1 are stored.
+    std::map<LLUUID, F32> sLightBoosts;
     const F32 DEFERRED_RADIUS_SCALE = 1.5f;
     const F32 DEFERRED_FALLOFF_SCALE = 0.5f;
 
@@ -76,6 +78,21 @@ namespace
 bool ASLightRigRenderer::usesShaderBackend()
 {
     return gSavedSettings.getString("ASLightRigRenderBackend") == "Shader";
+}
+
+void ASLightRigRenderer::setLightBoosts(const std::map<LLUUID, F32>& boosts)
+{
+    sLightBoosts = boosts;
+}
+
+F32 ASLightRigRenderer::getLightBoost(const LLVOVolume* light)
+{
+    if (sLightBoosts.empty() || !light)
+    {
+        return 1.f; // common case: no boosted My Lights
+    }
+    auto it = sLightBoosts.find(light->getID());
+    return it != sLightBoosts.end() ? it->second : 1.f;
 }
 
 void ASLightRigRenderer::setLights(const std::vector<Light>& lights)

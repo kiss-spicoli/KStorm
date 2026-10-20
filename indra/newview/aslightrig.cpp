@@ -43,6 +43,7 @@ ASLightRig::ASLightRig()
     mRadius(5.f),
     mFalloff(1.f),
     mColor(1.f, 1.f, 1.f),
+    mBoost(1.f),
     mSpot(false),
     mAimJoint("mNeck"),
     mAimYaw(0.f),
@@ -437,6 +438,7 @@ LLSD ASLightRig::toLLSD() const
         data["region"] = mRegionName;
         data["grid"] = mGrid;
     }
+    data["boost"] = mBoost;
     return data;
 }
 
@@ -476,4 +478,6 @@ void ASLightRig::fromLLSD(const LLSD& data)
         mRegionName = data["region"].asString();
         mGrid = data["grid"].asString();
     }
+    // Absent from older presets: no boost.
+    mBoost = data.has("boost") ? llclamp((F32)data["boost"].asReal(), MIN_BOOST, MAX_BOOST) : 1.f;
 }

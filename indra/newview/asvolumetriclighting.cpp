@@ -28,6 +28,7 @@
 #include "asvolumetriclighting.h"
 
 #include "asbackgroundisolate.h"
+#include "aslightrigrenderer.h"
 #include "llcontrol.h"
 #include "lluictrl.h"
 #include "ascelestialtwilight.h"
@@ -810,7 +811,8 @@ void ASVolumetricLighting::renderLocalLights(LLPipeline& pipeline)
         }
 
         F32 radius = volume->getLightRadius() * 1.5f;
-        LLColor3 color = volume->getLightLinearColor();
+        // My Lights Boost (aslightrigrenderer.h); 1 for every other light.
+        LLColor3 color = volume->getLightLinearColor() * ASLightRigRenderer::getLightBoost(volume);
         F32 fade = iter->fade >= 0.f ? iter->fade / LIGHT_FADE_TIME
                                     : 1.f + iter->fade / LIGHT_FADE_TIME;
         color *= llclamp(fade, 0.f, 1.f);
