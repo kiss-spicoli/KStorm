@@ -7,12 +7,15 @@
 #ifndef AS_LIGHTRIGRENDERER_H
 #define AS_LIGHTRIGRENDERER_H
 
+#include <map>
 #include <vector>
 
+#include "lluuid.h"
 #include "v3color.h"
 #include "v3math.h"
 
 class LLPipeline;
+class LLVOVolume;
 
 class ASLightRigRenderer
 {
@@ -39,6 +42,17 @@ public:
     // transparency receives the contribution LLVOVolume lights normally get
     // through LLPipeline::mNearbyLights. Returns the next free slot.
     static S32 appendForwardLights(LLPipeline& pipeline, S32 first_slot, F32 light_scale);
+
+    // Per-light brightness multiplier (Boost, 1-4) for LLVOVolume My Lights.
+    // LLLightParams clamps colour and intensity to 0-1, so the boost is
+    // applied where the renderer reads a light's linear colour instead
+    // (tagged call sites in pipeline.cpp, and asvolumetriclighting.cpp).
+    // The floater refreshes the map every idle tick with the lights whose
+    // boost is not 1. The shader backend applies the boost to its own
+    // snapshot's intensity.
+    static void setLightBoosts(const std::map<LLUUID, F32>& boosts);
+    // Boost for this light object; 1 for anything that is not a boosted My Light.
+    static F32 getLightBoost(const LLVOVolume* light);
 };
 
 #endif // AS_LIGHTRIGRENDERER_H

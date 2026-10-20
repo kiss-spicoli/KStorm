@@ -41,6 +41,7 @@ ASLightRig::ASLightRig()
     mRadius(5.f),
     mFalloff(1.f),
     mColor(1.f, 1.f, 1.f),
+    mBoost(1.f),
     mEnabled(true),
     mPositionAgent(LLVector3::zero)
 {
@@ -224,6 +225,7 @@ LLSD ASLightRig::toLLSD() const
     data["radius"] = mRadius;
     data["falloff"] = mFalloff;
     data["color"] = mColor.getValue();
+    data["boost"] = mBoost;
     return data;
 }
 
@@ -238,4 +240,6 @@ void ASLightRig::fromLLSD(const LLSD& data)
     mRadius = (F32)data["radius"].asReal();
     mFalloff = (F32)data["falloff"].asReal();
     mColor.setValue(data["color"]);
+    // Absent from older presets: no boost.
+    mBoost = data.has("boost") ? llclamp((F32)data["boost"].asReal(), MIN_BOOST, MAX_BOOST) : 1.f;
 }

@@ -51,6 +51,7 @@ ASFloaterMyLights::ASFloaterMyLights(const LLSD& key)
     mRadiusSlider(nullptr),
     mFalloffSlider(nullptr),
     mColorSwatch(nullptr),
+    mBoostSlider(nullptr),
     mMasterEnabledCheck(nullptr),
     mRenderBackendCombo(nullptr),
     mBackgroundCombo(nullptr),
@@ -80,6 +81,7 @@ bool ASFloaterMyLights::postBuild()
     mRadiusSlider = getChild<LLUICtrl>("as_light_radius");
     mFalloffSlider = getChild<LLUICtrl>("as_light_falloff");
     mColorSwatch = getChild<LLColorSwatchCtrl>("as_light_color");
+    mBoostSlider = getChild<LLUICtrl>("as_light_boost");
     mMasterEnabledCheck = getChild<LLCheckBoxCtrl>("as_light_master_enabled");
     mRenderBackendCombo = getChild<LLComboBox>("as_light_render_backend");
     mBackgroundCombo = getChild<LLComboBox>("as_light_background");
@@ -103,6 +105,7 @@ bool ASFloaterMyLights::postBuild()
     mRadiusSlider->setCommitCallback([this](LLUICtrl*, const LLSD&) { onRadiusChanged(); });
     mFalloffSlider->setCommitCallback([this](LLUICtrl*, const LLSD&) { onFalloffChanged(); });
     mColorSwatch->setCommitCallback([this](LLUICtrl*, const LLSD&) { onColorChanged(); });
+    mBoostSlider->setCommitCallback([this](LLUICtrl*, const LLSD&) { onBoostChanged(); });
 
     getChild<LLUICtrl>("as_light_preset_head")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onPresetHead(); });
     getChild<LLUICtrl>("as_light_preset_chest")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onPresetChest(); });
@@ -242,21 +245,29 @@ void ASFloaterMyLights::updateLights()
     }
 
     std::vector<ASLightRigRenderer::Light> shader_lights;
+    // Boosted LLVOVolume lights, read by the renderer's colour sites.
+    std::map<LLUUID, F32> boosts;
     for (auto& rig : mLights)
     {
         rig->updateTransform();
+        if (rig->isCreated() && rig->mBoost != 1.f)
+        {
+            boosts[rig->getObjectId()] = rig->mBoost;
+        }
         if (rig->isEnabled())
         {
             ASLightRigRenderer::Light light;
             light.position_agent = rig->getObjectPositionAgent();
             light.color_srgb = rig->mColor;
-            light.intensity = rig->mIntensity;
+            // The shader backend has no 0-1 clamp: apply the boost directly.
+            light.intensity = rig->mIntensity * rig->mBoost;
             light.radius = rig->mRadius;
             light.falloff = rig->mFalloff;
             shader_lights.push_back(light);
         }
     }
     ASLightRigRenderer::setLights(shader_lights);
+    ASLightRigRenderer::setLightBoosts(boosts);
 
     // Keep ASBackgroundIsolate's exempt-object set current -- cheap (a
     // small set copy) and simplest way to handle lights being added/
@@ -410,6 +421,7 @@ void ASFloaterMyLights::setControlsEnabled(bool enabled)
     mRadiusSlider->setEnabled(enabled);
     mFalloffSlider->setEnabled(enabled);
     mColorSwatch->setEnabled(enabled);
+    mBoostSlider->setEnabled(enabled);
     getChild<LLUICtrl>("as_light_preset_head")->setEnabled(enabled);
     getChild<LLUICtrl>("as_light_preset_chest")->setEnabled(enabled);
     getChild<LLUICtrl>("as_light_preset_back")->setEnabled(enabled);
@@ -436,6 +448,7 @@ void ASFloaterMyLights::refreshControlsFromSelectedLight()
     mRadiusSlider->setValue(rig->mRadius);
     mFalloffSlider->setValue(rig->mFalloff);
     mColorSwatch->set(LLColor4(rig->mColor));
+    mBoostSlider->setValue(rig->mBoost);
     mUpdatingControls = false;
 }
 
@@ -500,6 +513,16 @@ void ASFloaterMyLights::onColorChanged()
     if (!rig) return;
     rig->mColor = LLColor3(mColorSwatch->get());
     rig->applyParams();
+}
+
+void ASFloaterMyLights::onBoostChanged()
+{
+    if (mUpdatingControls) return;
+    ASLightRig* rig = getSelectedLight();
+    if (!rig) return;
+    // Applied at render time; updateLights() publishes it next idle tick.
+    rig->mBoost = llclamp((F32)mBoostSlider->getValue().asReal(),
+                          ASLightRig::MIN_BOOST, ASLightRig::MAX_BOOST);
 }
 
 void ASFloaterMyLights::onPresetHead()

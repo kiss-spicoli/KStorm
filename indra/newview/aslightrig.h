@@ -70,6 +70,12 @@ public:
     F32 mRadius;
     F32 mFalloff;
     LLColor3 mColor;
+    // Brightness multiplier on top of mIntensity, MIN_BOOST-MAX_BOOST.
+    // LLLightParams caps intensity at 1, so the boost is applied at render
+    // time (ASLightRigRenderer::getLightBoost()), not through the object.
+    F32 mBoost;
+    static constexpr F32 MIN_BOOST = 1.f;
+    static constexpr F32 MAX_BOOST = 4.f;
 
 private:
     bool mEnabled;

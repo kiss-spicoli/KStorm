@@ -428,3 +428,55 @@ by debug-feature masks and UI rendering, not by scene render types.
 Set **My Lights > Background** to **Black** in a region containing legacy trees
 or bushes. Confirm that vegetation disappears immediately and returns when the
 background mode is set to **None**.
+
+## Boost (brightness multiplier)
+
+### Behavior
+
+Each light has a **Boost** slider (1.0–4.0, default 1.0) beside its colour.
+It multiplies the light's brightness on top of **Intensity**, so a light can
+exceed the usual 1.0 limit. It's saved per light as `boost`; older presets
+load at 1.0. Only this viewer is affected.
+
+### Why at render time
+
+`LLLightParams::setLinearColor()` clamps colour and intensity to 0–1
+(`llprimitive.h`), and the network format stores them as bytes, so the light
+object cannot hold a value above 1. Instead `ASLightRigRenderer` keeps a map
+from My Lights object id to boost, which `ASFloaterMyLights::updateLights()`
+refreshes every idle tick with the lights whose boost is not 1.
+`ASLightRigRenderer::getLightBoost()` returns 1 for every other light, and
+returns 1 immediately while no light is boosted.
+
+### Where it is applied
+
+Every place the renderer turns a local light's linear colour into a shader
+value:
+
+- `LLPipeline::setupHWLights()`: forward/alpha hardware lights.
+- `LLPipeline::renderDeferredLighting()`: point lights, and both spot-light
+  paths (`gDeferredSpotLightProgram`, `gDeferredMultiSpotLightProgram`).
+  Tagged `<AS:KS>`, original lines kept in comments.
+- `asvolumetriclighting.cpp`: the volumetric local-light collector.
+
+The shader backend multiplies its snapshot intensity by the boost directly
+(`light.intensity = mIntensity * mBoost`), since it has no clamp.
+
+Light sorting, the dark-light cutoff and projector shadow priority do not use
+the boost. Priority is screen area. The near-black skip in the deferred loop
+sees the boosted colour.
+
+### Notes
+
+- With dynamic exposure on (`RenderDynamicExposureEnabled`), a very bright
+  light filling the view makes the camera expose down, darkening the rest of
+  the scene.
+- High boosts burn out skin and specular highlights quickly; 1.5–2.5 is
+  usually enough.
+
+### Runtime verification
+
+LLVOVolume backend: raise Boost on one light and compare opaque skin, alpha
+hair (forward lights), a spot's projected cone and volumetric beams. All
+should brighten together. Repeat with the Shader backend. Save and reload a
+preset, and load an older preset (Boost 1.0).

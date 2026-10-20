@@ -6695,7 +6695,10 @@ void LLPipeline::setupHWLights()
             }
 
             //send linear light color to shader
-            LLColor4  light_color = light->getLightLinearColor() * light_scale;
+            // <AS:KS> My Lights Boost (aslightrigrenderer.h).
+            // LLColor4  light_color = light->getLightLinearColor() * light_scale;
+            LLColor4  light_color = light->getLightLinearColor() * (light_scale * ASLightRigRenderer::getLightBoost(light));
+            // </AS:KS>
             light_color.mV[3] = 0.0f;
 
             F32 fade = iter->fade;
@@ -10113,7 +10116,10 @@ void LLPipeline::renderDeferredLighting()
                     }
                     // </FS:Beq>
                     // send light color to shader in linear space
-                    LLColor3 col = volume->getLightLinearColor() * light_scale;
+                    // <AS:KS> My Lights Boost (aslightrigrenderer.h).
+                    // LLColor3 col = volume->getLightLinearColor() * light_scale;
+                    LLColor3 col = volume->getLightLinearColor() * (light_scale * ASLightRigRenderer::getLightBoost(volume));
+                    // </AS:KS>
 
                     if (col.magVecSquared() < 0.001f)
                     {
@@ -10205,7 +10211,10 @@ void LLPipeline::renderDeferredLighting()
                     setupSpotLight(gDeferredSpotLightProgram, drawablep);
 
                     // send light color to shader in linear space
-                    LLColor3 col = volume->getLightLinearColor() * light_scale;
+                    // <AS:KS> My Lights Boost (aslightrigrenderer.h).
+                    // LLColor3 col = volume->getLightLinearColor() * light_scale;
+                    LLColor3 col = volume->getLightLinearColor() * (light_scale * ASLightRigRenderer::getLightBoost(volume));
+                    // </AS:KS>
 
                     gDeferredSpotLightProgram.uniform3fv(LLShaderMgr::LIGHT_CENTER, 1, c);
                     gDeferredSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_SIZE, s);
@@ -10282,7 +10291,10 @@ void LLPipeline::renderDeferredLighting()
                     setupSpotLight(gDeferredMultiSpotLightProgram, drawablep);
 
                     // send light color to shader in linear space
-                    LLColor3 col = volume->getLightLinearColor() * light_scale;
+                    // <AS:KS> My Lights Boost (aslightrigrenderer.h).
+                    // LLColor3 col = volume->getLightLinearColor() * light_scale;
+                    LLColor3 col = volume->getLightLinearColor() * (light_scale * ASLightRigRenderer::getLightBoost(volume));
+                    // </AS:KS>
 
                     gDeferredMultiSpotLightProgram.uniform3fv(LLShaderMgr::LIGHT_CENTER, 1, glm::value_ptr(tc));
                     gDeferredMultiSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_SIZE, light_size_final);

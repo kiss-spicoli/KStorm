@@ -64,6 +64,7 @@ private:
     void onRadiusChanged();
     void onFalloffChanged();
     void onColorChanged();
+    void onBoostChanged();
     void onPresetHead();
     void onPresetChest();
     void onPresetBack();
@@ -106,6 +107,7 @@ private:
     LLUICtrl* mRadiusSlider;
     LLUICtrl* mFalloffSlider;
     LLColorSwatchCtrl* mColorSwatch;
+    LLUICtrl* mBoostSlider;
     LLCheckBoxCtrl* mMasterEnabledCheck;
     LLComboBox* mRenderBackendCombo;
     LLComboBox* mBackgroundCombo;
