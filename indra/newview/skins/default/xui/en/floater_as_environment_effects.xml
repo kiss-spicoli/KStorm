@@ -64,5 +64,12 @@
       name="aurora_settings_tab" />
     <!-- Extensible nested Weather tabs; Snow is the first independent effect. -->
     <panel filename="panel_as_weather.xml" label="Weather" name="weather_tab" />
+    <!-- <AS:KS> KS lighting controls; hidden unless KSLightingControls is TRUE. -->
+    <panel
+      class="ks_lighting_panel"
+      filename="panel_ks_lighting.xml"
+      label="KS"
+      name="ks_lighting_tab" />
+    <!-- </AS:KS> -->
   </tab_container>
 </floater>
