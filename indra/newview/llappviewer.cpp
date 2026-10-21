@@ -84,6 +84,9 @@
 // <AS:chanayane> Stream keeper
 #include "asstreamkeeper.h"
 // </AS:chanayane>
+// <AS:KS> Restore values cached by "Set KS environment" before saving settings.
+#include "ksenvironment.h"
+// </AS:KS>
 #include "llviewerparcelmedia.h"
 #include "llviewershadermgr.h"
 #include "llviewermediafocus.h"
@@ -2025,6 +2028,11 @@ void LLAppViewer::flushLFSIO()
 
 bool LLAppViewer::cleanup()
 {
+    // <AS:KS> KSSetEnvironment does not persist; restore its cached values before
+    // settings are saved, while setting listeners (LLWorld, camera) still exist.
+    KSEnvironment::restoreForShutdown();
+    // </AS:KS>
+
 #if LL_VELOPACK
     // Apply any pending Velopack update before shutdown
     if (velopack_is_update_pending())
