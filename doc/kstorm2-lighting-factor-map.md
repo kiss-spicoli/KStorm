@@ -1,10 +1,10 @@
 # KStorm2 lighting factor map (HDR mode C only)
 
-Author: Kissmy Spicoli. Date: 2026-10-24. Branch `kstorm` at `230af14da33` (after the ks-rename merge; KStorm files, classes and settings use `ks*`/`KS*`, ownership tags `<KS:KS>`).
+Author: Kissmy Spicoli. Date: 2026-10-24. Branch `kstorm` at `d892f8560a7` (after the ks-rename, slider-fix and docs merges; KStorm files, classes and settings use `ks*`/`KS*`, ownership tags `<KS:KS>`).
 
-Derived from `doc/kstorm-lighting-factor-map.md`, reduced to the single lighting model KStorm will use: EEP/PBR with HDR (mode C). Content that applied only to classic, auto-adjusted legacy or hybrid skies has been removed; for that material see the original document.
+Derived from `doc/kstorm-lighting-factor-map.md`, reduced to the lighting KStorm will use: EEP/PBR with HDR. EEP skies run in mode C; legacy skies use LL's default auto-adjust (mode B, the same HDR shading with LL's conversion scales), decided 2026-10-24. Content that applied only to classic, auto-adjusted legacy or hybrid skies has been removed; for that material see the original document.
 
-Read-only analysis. No source, XUI, settings or shader file was changed. Paths are relative to `indra/newview/` unless they start with `indra/`.
+This document changes no code. The one related code change, the Advanced Lighting atmosphere sliders (3.2), was made separately on `feat-al-atmosphere-sliders` and merged. Paths are relative to `indra/newview/` unless they start with `indra/`.
 
 Purpose: list every factor that changes scene lighting, group it (micro = code site, macro = environment vs local, sub-grouped by lighting model), cross-reference it with the panels that expose it, and list the factors with no UI. The last sections group the factors into functional centroids, which is the basis for any later UI redesign.
 
@@ -18,9 +18,10 @@ Derived in `LLSettingsVOSky::applySpecial` (`llsettingsvo.cpp:831-882`), `LLPipe
 
 | Mode | Condition | Shading | Post |
 |---|---|---|---|
-| **C. EEP / PBR HDR** | sky has key, ambiance > 0 | Ambient is **reduced to luminance**, so the ambient colour's hue is discarded (`atmosphericsFuncs.glsl:157`). Probe irradiance replaces ambient. Background/WL sky × `sky_hdr_scale = sqrt(gamma)*2` (`llsettingsvo.cpp:855`). | Post on. Dynamic-exposure range = [1/hdr_scale, hdr_scale] when hdr_scale > 1 (`pipeline.cpp:8084-8093`). |
+| **B. Auto-adjusted legacy (LL default conversion)** | legacy sky (no key), `RenderSkyAutoAdjustLegacy` on | Same HDR shading as C (classic off). Ambient × `RenderSkyAutoAdjustAmbientScale`; sky/background HDR scale = `RenderSkyAutoAdjustHDRScale` instead of the sky's gamma; Blue Horizon, Blue Density and sun colour × their AutoAdjust scales; probe ambiance = `RenderSkyAutoAdjustProbeAmbiance` (`llsettingsvo.cpp:861-873`). Shipped defaults: all scales 1.0, probe ambiance 0.01. Local lights stay ×0.9 because the sky is still legacy-origin (`pointLightF.glsl:184`). | Post on. Auto-exposure range still from the sky's own gamma (`pipeline.cpp:8084-8093`). Applied per frame as uniform scaling: no cloning, no asset change, day cycles included. |
+| **C. EEP / PBR HDR** | sky has key, ambiance > 0 | Ambient is **reduced to luminance**, so the ambient colour's hue is discarded (`atmosphericsFuncs.glsl:157`). Probe irradiance blends with ambient by `min(ambiance, 1)`; at the 0.01 default, fill ≈ sky ambient (8.3). Background/WL sky × `sky_hdr_scale = sqrt(gamma)*2` (`llsettingsvo.cpp:855`). | Post on. Dynamic-exposure range = [1/hdr_scale, hdr_scale] when hdr_scale > 1 (`pipeline.cpp:8084-8093`). At Sky HDR Scale ≤ 0.25 (hdr_scale ≤ 1) the range collapses to 1–1, so **auto-exposure is effectively off** even with dynamic exposure enabled. Set KS environment uses gamma 0.1. |
 
-"Sky has key" means the sky asset contains `reflection_probe_ambiance` (`canAutoAdjust()` is FALSE, `indra/llinventory/llsettingssky.cpp:1175`). Mode C also needs HDR on (`RenderHDREnabled`, set through `RenderDisableVintageMode`, `llviewercontrol.cpp:355`). Section 8 records how KStorm guarantees both: HDR forced on, incoming legacy skies converted locally, probe ambiance never below 0.01.
+"Sky has key" means the sky asset contains `reflection_probe_ambiance` (`canAutoAdjust()` is FALSE, `indra/llinventory/llsettingssky.cpp:1175`). Mode C also needs HDR on (`RenderHDREnabled`, set through `RenderDisableVintageMode`, `llviewercontrol.cpp:355`). Section 8 records how KStorm guarantees HDR shading for every sky: HDR forced on, legacy skies auto-adjusted (mode B), probe ambiance never below 0.01.
 
 Exceptions inside mode C that still skip post-processing: snapshot no-post (`gSnapshotNoPost`), and `RenderDisablePostProcessing` while the Build floater is open (`pipeline.cpp:8132`).
 
@@ -55,7 +56,7 @@ Key to columns. **Behaviour** describes the factor in mode C. **UI**: where the 
 | `sun_rotation` / `moon_rotation` | light direction (`lightnorm`), shadows, twilight | Light source switches from sun to moon when the sun fades below its disc edge (`ascelestialtwilight.cpp`). | ED, PL, AL, AEE Sun/Moon az/el, KS (fixed values) |
 | `sun_scale` / `moon_scale` | `ASCelestialTwilight::influence` (disc-edge elevation) | **Hidden coupling**: disc size changes when sun and moon light fade out at the horizon. | ED, PL |
 | `moon_brightness` | `moonF.glsl:270`; `ascelestialtwilight.cpp:80` (glow factor ×0.25); lens flare | Moon disc and night haze glow only. **Does not scale moonlight on surfaces.** | ED (sun/moon tab) only. Not in PL/AL. |
-| `gamma` ("Scene Gamma" / KS "HDR Scale") | `SKY_HDR_SCALE` (`llsettingsvo.cpp:855`); exposure range (`pipeline.cpp:8084-8093`) | HDR scale: sky/background ×`sqrt(gamma)*2`, auto-exposure range [1/s, s]. | ED, PL, AL ("scene_gamma"), KS ("HDR Scale", writes the ENV_LOCAL sky) |
+| `gamma` (widget `scene_gamma`, on screen "Brightness:"; KS "HDR Scale") | `SKY_HDR_SCALE` (`llsettingsvo.cpp:855`); exposure range (`pipeline.cpp:8084-8093`) | HDR scale: sky/background ×`sqrt(gamma)*2`, auto-exposure range [1/s, s]; at gamma ≤ 0.25 auto-exposure is pinned at 1. | ED, PL, AL ("scene_gamma"), KS ("HDR Scale", writes the ENV_LOCAL sky) |
 | `reflection_probe_ambiance` | `REFLECTION_PROBE_AMBIANCE`; `llreflectionmapmanager.cpp:1221` (`max(sky, probe)`) | Must stay above 0 for mode C (minimum 0.01, section 8). Minimum ambiance for every probe; weight of probe irradiance vs ambient (8.3). Forced to 1.0 when probes are off (`llsettingsvo.cpp:858`). | ED, PL, AL. KS sets 0.01 via Set KS environment. |
 | `cloud_shadow` (coverage) | `atmosphericsFuncs.glsl:113,119` | Removes sun, adds ambient. | ED clouds, PL |
 | `glow` (size→x, focus→z) | `atmosphericsFuncs.glsl` haze glow | Sun-side haze brightness. Editor maps size `(2-v)*20` and focus `v*-5`. | ED, PL, AL |
@@ -67,7 +68,7 @@ Key to columns. **Behaviour** describes the factor in mode C. **UI**: where the 
 |---|---|---|---|
 | `blue_horizon`, `blue_density` | `calcAtmosphericVars`; desaturated in irradiance capture (`llsettingsvo.cpp:699`, `RenderDesaturateIrradiance`) | Sky colour, sun attenuation, haze additive. Editor ÷2. | ED, PL, AL |
 | `haze_horizon`, `haze_density` | same | Haze, sun attenuation (`haze_density*0.25`). | ED, PL, AL |
-| `density_multiplier` | same | Haze thickness and sun extinction. Editor ×0.001. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `403c38b3323`, not yet built). |
+| `density_multiplier` | same | Haze thickness and sun extinction. Stored = display × 0.001. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `403c38b3323`, not yet built). |
 | `distance_multiplier` | same | Haze distance. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `403c38b3323`, not yet built). |
 | `max_y` (Max Altitude) | same; `calculateLightSettings` | Sun extinction altitude. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `403c38b3323`, not yet built). |
 | `cloud_*` (colour, scale, variance, density/detail, scroll, map) | `cloudsV/F.glsl`; `cloud_shadow` above | Mostly visual. Coverage feeds lighting. | ED clouds, PL (colour, coverage, scale, map) |
@@ -136,7 +137,7 @@ Water fog colour, density, underwater modifier, fresnel scale/offset, normal map
 
 ### 3.8 Environment source selection (who owns the sky)
 
-Region, parcel, estate, day cycle, local (ENV_LOCAL), RLV `@setenv`, KS Set KS environment (version −7), AS celestial panels (−5), Personal Lighting (−2), Quick Prefs presets (NO_VERSION −3). UI: World > Environment menu (Use Shared, My Environments, Personal Lighting, Advanced Lighting), Phototools WL/Water/DC preset combos (`quickprefs.cpp`), region panel. Any local edit creates or freezes an ENV_LOCAL sky. Legacy WindLight XML presets are imported as EEP objects without a probe-ambiance key (`buildFromLegacyPreset`, `llsettingsvo.cpp:974+`), so like legacy region skies they are converted locally (section 8, P2).
+Region, parcel, estate, day cycle, local (ENV_LOCAL), RLV `@setenv`, KS Set KS environment (version −7), AS celestial panels (−5), Personal Lighting (−2), Quick Prefs presets (NO_VERSION −3). UI: World > Environment menu (Use Shared, My Environments, Personal Lighting, Advanced Lighting), Phototools WL/Water/DC preset combos (`quickprefs.cpp`), region panel. Any local edit creates or freezes an ENV_LOCAL sky. Legacy WindLight XML presets are imported as EEP objects without a probe-ambiance key (`buildFromLegacyPreset`, `llsettingsvo.cpp:974+`), so like legacy region skies they are auto-adjusted (mode B, section 8, P2).
 
 ---
 
@@ -173,7 +174,7 @@ Per-light rig data (`aslightrig.h:111-141`): placement joint, distance, height, 
 ### 4.4 Dark spots and hair occlusion
 
 - Dark My Lights spots: multiplicative darkening pass after the additive lights (`ksdarklight.cpp`, class `KSDarkLight`, shader `ksDarkSpotLightF.glsl`). Per-light "Dark" checkbox. Skipped on alpha.
-- Hair occlusion (`kshairocclusion.cpp`, `ksHairOcclusionF.glsl`, `alphaF.glsl:417`): body-proxy shadow and darkening for self alpha hair. 13 settings, all in `floater_ks_hair_occlusion.xml` except `KSHairOcclusionHeadOffset`.
+- Hair occlusion (`kshairocclusion.cpp`, `ksHairOcclusionF.glsl`, `alphaF.glsl:417`): body-proxy shadow and darkening for self alpha hair. 14 settings; 13 are in `floater_ks_hair_occlusion.xml`, `KSHairOcclusionHeadOffset` is not surfaced.
 
 ### 4.5 Manual reflection probes (Build > Features)
 
@@ -216,7 +217,7 @@ Redundancy (number of XUI files binding the control): `RenderShadowDetail` 10, `
 
 High impact (they change what the user sees with no visible cause):
 
-1. Whether the current sky arrived as legacy and was converted (P2) is never shown.
+1. Whether the current sky is legacy (auto-adjusted, mode B) or EEP (mode C) is never shown.
 2. `KSRenderLocalLightSubjectSort` (only through Set KS environment).
 3. Dynamic exposure: `RenderDynamicExposureEnabled/Coefficient/SpeedError/SpeedTarget`, `RenderDiffuseLuminanceScale`, `RenderUseExposureSkySettings`.
 4. Hard-coded transforms: radius ×1.5, falloff ×0.5, ×3.25/×3.0, twilight fade −6°/−8°, sky HDR min/max/offset.
@@ -234,7 +235,7 @@ A centroid is a set of factors that a user perceives as one control goal. Today 
 
 | Group | Centroid | Factors | Panels today |
 |---|---|---|---|
-| **G1 Light character** | C1 Sky origin and conversion | legacy-sky conversion (P2), probe ambiance ≥ 0.01, HDR forced on | none (proposed P5 status readout) |
+| **G1 Light character** | C1 Sky origin | legacy (auto-adjusted) vs EEP (P2), probe ambiance ≥ 0.01, HDR forced on | none (proposed P5 status readout) |
 | **G2 Direct light** | C2 Key light (sun/moon) | sun colour (also moonlight), rotation, scale→twilight, `RenderHDRSkySunlightScale`, cloud coverage, haze extinction (blue density, haze density, density multiplier, max_y) | ED, PL, AL, KS, AEE |
 | | C3 Shadows | shadow detail/res/bias/blur/splits, spot shadows | PG, PT, APT, KS |
 | **G3 Fill light** | C4 Ambient / fill | ambient colour, `RenderSkyAmbientScale`, probe ambiance, probe irradiance, cloud ambient boost, `ambientLighting()` | ED, PL, AL, KS |
@@ -264,14 +265,14 @@ Decisions:
 | # | Decision | Effect on the map |
 |---|---|---|
 | P1 | HDR is always on. No control. | `RenderDisableVintageMode` fixed TRUE (so `RenderHDREnabled` and `RenderEnableEmissiveBuffer` are on). Needs GL > 4.05 (`pipeline.cpp:9290`). Hardware the feature table drops to vintage (`llfeaturemanager.cpp:778`) is unsupported. |
-| P2 | Old-style skies are converted locally. | Any incoming sky with `canAutoAdjust()` (region, parcel, day-cycle frame, legacy preset) is cloned to ENV_LOCAL and given a probe ambiance, which makes it EEP and puts it in mode C. Converted skies may need retuning; the method is in `kstorm-lighting-factor-map.md` §9.7. |
+| P2 | Legacy skies use LL's default auto-adjust (revised 2026-10-24; replaces local conversion). | `RenderSkyAutoAdjustLegacy` forced on with its shipped scale defaults (1.0) and probe ambiance 0.01; nothing chosen by KStorm. Chosen for performance: a few uniform multiplies per frame, no cloning or per-keyframe conversion, day cycles handled. EEP skies and Use Shared Environment are unaffected. Editing a legacy sky's Probe Fill Strength turns that copy into an EEP sky (mode C), as today. Graphic presets also save `RenderSkyAutoAdjustLegacy`, so loading an old preset must not turn it off. |
 | P3 | Probe ambiance on conversion = **0.01** (revised from 1.0; the user's usual value). Slider minimum 0.01, step 0.01. | Ambiance never reaches 0, so every sky stays in mode C. At 0.01, surface fill is ~99% sky ambient (neutral, hue-less) and probe irradiance (bounce, indoor darkening, colour bleed) is effectively off, except inside manual probes whose own ambiance is higher. Reflections, exposure and tonemapping are unaffected. See 8.3. |
 | L1 | Ambient is shown as a brightness slider, not a colour picker. | See 8.2: the slider must scale the stored colour, not replace it. |
 | L2 | Probe ambiance cannot go below 0.01. | Same as P3. Also applies to KS (it already uses 0.01) and to asset editors. |
 
 ### 8.1 Controls in scope
 
-**HDR-specific:** `RenderExposure`; `RenderTonemapType`, `RenderTonemapMix`; dynamic exposure (`RenderDynamicExposureEnabled`, `Coefficient`, `SpeedError`, `SpeedTarget`), `RenderDiffuseLuminanceScale`, `RenderUseExposureSkySettings`; `RenderHDRSkySunlightScale`; sky `gamma` relabelled **HDR Scale**; probe ambiance (0.01+); probes, SSR, mirrors, hero probes; `RenderGlowHDR`.
+**HDR-specific:** `RenderExposure`; `RenderTonemapType`, `RenderTonemapMix`; dynamic exposure (`RenderDynamicExposureEnabled`, `Coefficient`, `SpeedError`, `SpeedTarget`), `RenderDiffuseLuminanceScale`, `RenderUseExposureSkySettings`; `RenderHDRSkySunlightScale`; sky `gamma` relabelled **Sky HDR Scale** (new UI); probe ambiance (0.01+); probes, SSR, mirrors, hero probes; `RenderGlowHDR`.
 
 Controls that matter only for the removed models are out of scope; the list is in `kstorm-lighting-factor-map.md` §9.1 ("Old-style only").
 
@@ -336,7 +337,7 @@ Both are RGB colours. They model the clear-air (Rayleigh-like, "blue sky") part 
 - During irradiance capture both are desaturated (`RenderDesaturateIrradiance`), so they do not tint probe fill light, only its brightness.
 - Extinction on geometry uses only the red channel of the attenuation (`atmosphericsF.glsl:37`, `light *= atten.r`), so fading on objects is grey even when Blue Density is coloured.
 
-Adopted UI labels (decided 2026-10-24; asset field names unchanged): Blue Density → **Air Density (per colour)**; Blue Horizon → **Air Glow Colour**; Haze Density → **Haze Density** (keep); Haze Horizon → **Haze Glow Brightness**; Glow Size → **Haze Glow Size**; Glow Focus → **Haze Glow Focus** ("Haze" prefix separates these from material Glow); Density Multiplier → **Atmosphere Thickness**; Distance Multiplier → **Fog Distance Scale**. Tooltips: Air Density sets sunset reddening, fog fade rate and the air/haze mix; Air Glow Colour sets sky and distant-fog colour only.
+Adopted UI labels (decided 2026-10-24; asset field names unchanged): Blue Density → **Air Density (per colour)**; Blue Horizon → **Air Glow Colour**; Haze Density → **Haze Density** (keep); Haze Horizon → **Haze Glow Brightness**; Glow Size → **Haze Glow Strength**; Glow Focus → **Haze Glow Focus** ("Haze" prefix separates these from material Glow); Density Multiplier → **Atmosphere Thickness**; Distance Multiplier → **Fog Distance Scale**. Tooltips: Air Density sets sunset reddening, fog fade rate and the air/haze mix; Air Glow Colour sets sky and distant-fog colour only.
 
 ### 8.6 When probes are captured
 
@@ -357,7 +358,7 @@ Method: every `control_name` (and code-wired widget) in all XUI files whose sett
 |---|---|---|---|
 | `RenderQualityPerformance` (quality slider) | PG, perf prefs | **Bulk writer**: applies feature-table values to shadows, probes, SSAO, SSR, mirrors, light count, exposure, tonemap, vintage, glow res, transparent water (`featuretable.txt`) | 10 (P5) |
 | Graphic presets (save/load) | PG | **Bulk writer**: restores 116 settings, including every lighting setting above (`app_settings/graphic_preset_controls.xml`) | 10 (P5) |
-| `RenderGlowHDR` | PT | glow map in HDR | 3.3 / P2 |
+| `RenderGlowHDR` | PT | glow map in HDR | 4.6 / P2 |
 | `RenderAutoMaskAlphaDeferred` / `NonDeferred` | PG, menu | alpha-masked surfaces go through the deferred (lit, shadowed) path instead of forward | P4 |
 | `RenderNormalMapScale` | PT | strength of normals generated from legacy bump maps (`lldrawpoolbump.cpp:838`) | P4 surface |
 | `WLSkyDetail` | PG, PGA, PT | sky dome tessellation | P1 |
@@ -378,49 +379,51 @@ Result: with this section, every lighting control in Preferences > Graphics, the
 
 ## 10. Proposed consolidated panels
 
-Five panels hold every lighting control (surfaced and currently unsurfaced). All existing panels stay. The new ones are a superset organised by centroid (section 7), with one range per control. Asset editors (Fixed sky, Day Cycle, Water) and per-object editing (Build, material editors) remain the authoring tools; the new panels edit the live local copy and link out to those editors.
+Five panels hold every lighting control (surfaced and currently unsurfaced). All existing panels stay. The new ones are a superset organised by centroid (section 7). Asset editors (Fixed sky, Day Cycle, Water) and per-object editing (Build, material editors) remain the authoring tools; the new panels edit the live local copy and link out to those editors. All labels below are the decided new-UI labels (12.1, 12.8); existing panels keep theirs.
+
+**The per-control specification (label, binding, range, step, tooltip, dependency, code site) is in `doc/kstorm2-lighting-UI-design.md`.** This section is the summary it was built from.
 
 ### P1 Environment (G2 key light, G3 fill, G5 atmosphere)
-- **Source:** Use Shared Environment, My Environments, sky/water/day presets (prev/next), reset to region default, transition time, Set KS environment, "Edit as asset…" buttons. Shows the conversion state (P2).
-- **Key light:** sun azimuth/elevation/trackball, moon azimuth/elevation/trackball, sun and moon colour (labelled as shared), Sunlight Scale (`RenderHDRSkySunlightScale`), sun scale, moon scale (note: also moves twilight fade), moon disc brightness, partial moon below horizon, star brightness.
-- **Fill:** Ambient brightness (hue-preserving, 8.2), Ambient Scale (`RenderSkyAmbientScale`), Probe Ambiance (0.01–10, step 0.01).
-- **Atmosphere — Haze group (one block, Haze Density first):** Haze Density; Haze Glow Brightness (Haze Horizon); Haze Glow Size (Glow Size); Haze Glow Focus (Glow Focus); Air Glow Colour (Blue Horizon); Air Density (Blue Density) (both 0–3 per channel, the code range). Behaviour required by 12.7: while Haze Density is 0, Haze Glow Brightness, Haze Glow Size and Haze Glow Focus show as inactive with the note "No effect while Haze Density is 0"; the two Air controls carry the haze-0 notes.
-- **Atmosphere — other:** Atmosphere Thickness (density multiplier), Fog Distance Scale (distance multiplier), max altitude, moisture/droplet/ice, `RenderDeferredAtmospheric`.
+- **Source:** Use Shared Environment, My Environments, sky/water/day presets (prev/next), reset to region default, transition time, Set KS environment, "Edit as asset…" buttons. Shows the sky origin (legacy auto-adjusted / EEP, P2) and "Local override active" with Reset.
+- **Key light:** sun azimuth/elevation, moon azimuth/elevation (no trackball), **Sun & Moon Light Colour**, Sunlight Scale (`RenderHDRSkySunlightScale`), sun scale, moon scale (tooltip: larger discs fade out later at the horizon), **Moon Disk Brightness**, partial moon below horizon, star brightness.
+- **Fill:** **Ambient Brightness** (hue-preserving, 8.2), Ambient Scale (`RenderSkyAmbientScale`, negatives allowed), **Probe Fill Strength** (0.01–10, step 0.01; 11.1 tooltip; disabled when probes are off, 8.3).
+- **Atmosphere — Haze group (one block, Haze Density first):** Haze Density; Haze Glow Brightness (Haze Horizon); Haze Glow Strength (Glow Size); Haze Glow Focus (Glow Focus); Air Glow Colour (Blue Horizon); Air Density (Blue Density) (both 0–3 per channel, the code range). Behaviour required by 12.7: while Haze Density is 0, Haze Glow Brightness, Haze Glow Strength and Haze Glow Focus show as inactive with the note "No effect while Haze Density is 0"; the two Air controls carry the haze-0 notes.
+- **Atmosphere — other:** Atmosphere Thickness (density multiplier), Fog Distance Scale (distance multiplier), **Haze Ceiling (m)** (max altitude), moisture/droplet/ice, `RenderDeferredAtmospheric`.
 - **Clouds:** coverage, scale, variance, colour, density X/Y/D, detail X/Y/D, scroll, map.
 - **Water:** fog colour, density, underwater modifier, fresnel scale/offset, normal map/scale, waves, refraction above/below, blur, transparent water.
 - **Sky visuals (tabs linking the AEE panels):** procedural sun, moon rendering, stars/Milky Way, horizon scattering and water horizon fog, auroras, weather; Sky Detail (`WLSkyDetail`).
 
 ### P2 Camera & Tone (G6)
-- HDR Scale (sky gamma), Exposure (0.5–4, the code clamp), dynamic exposure (enable, coefficient, speed error, speed target, luminance scale, use-sky-HDR-range), tonemap type and mix.
+- **Sky HDR Scale** (sky gamma; tooltip notes auto-exposure is pinned at ≤ 0.25), Exposure (0.5–4, the code clamp; tooltip "Overall scene exposure."), dynamic exposure (enable, coefficient, speed error, speed target, luminance scale, use-sky-HDR-range), tonemap type and mix.
 - Bloom/glow: `RenderGlow`, `RenderGlowHDR`, resolution, iterations, strength, width, plus internals (lum weights, min luminance, max extract alpha, warmth amount/weights, noise); AS diffuse glow; lens flare.
 - Lens: vignette (AS and FS), chromatic aberration, camera-effects master; colour grading (tab); CAS sharpness; Depth of Field button (DoF settings stay in their floater).
 
 ### P3 Shadows, Occlusion & Reflections (C3, C5, C6)
 - **Shadows:** detail, resolution scale, bias, blur size, blur distance factor, FOV cutoff, spot offset, soften (Gaussian x/y), clarity (split exponent), internals (splits, offset, offset error, bias error, error cutoff, noise, spot bias, deferred spot/tree bias and offset, edge depth/normal cutoffs, deferred noise).
-- **Occlusion:** AO toggle, technique, white-material debug, SSAO scale/max scale/factor/effect, irradiance scale/max, GTAO quality/radius/power/denoise/bent normals/influence/effect/backend; Hair Occlusion (all 14 settings).
-- **Reflections:** probe level, detail, count, resolution, draw distance, update period, max local light ambiance, desaturate irradiance, dynamic allocation, probe-volume debug; SSR toggle and its 6 tuning values; mirrors, hero probe resolution/update rate/distance/conservative multiplier.
+- **Occlusion:** AO toggle, technique, white-material debug, SSAO scale/max scale/factor/effect, irradiance scale/max, GTAO quality/radius/power/denoise/bent normals/influence/effect/backend (one Effect control for the active technique); Hair Occlusion (all 14 settings).
+- **Reflections:** probe level (first option labelled **Sky only**), detail, count, resolution, draw distance, update period, max local light ambiance, desaturate irradiance, dynamic allocation, probe-volume debug; SSR toggle and its 6 tuning values; mirrors, hero probe resolution/update rate/distance/conservative multiplier.
 - **Volumetric:** all 11 volumetric settings.
 - `RenderShaderLightingMaxLevel`.
 
 ### P4 Local Lights (G4)
-- **Budget:** max lights (one range), attached lights, subject sort (now visible), only My Lights, show other avatars, far clip note.
-- **My Lights:** the rig editor (tab or embedded), backend, boost, dark, no eye highlights, eye mask radius, presets.
-- **Selected object:** mirror of Build > Features for the selection: light on, colour, intensity, radius (showing the ×1.5 effective), falloff, projector texture/FOV/focus/ambiance, reflection probe type/dynamic/mirror/ambiance/near clip.
+- **Budget:** **Max nearby lights (global)**, attached lights, subject sort (now visible), only My Lights, show other avatars, far clip note.
+- **My Lights:** the rig editor (tab or embedded), backend, boost, dark, no eye highlights, eye mask radius, presets. Softness shapes the curve (12.4). My Lights tooltips: radius reaches about 1.5 × the value; spot FOV/focus/texture are not applied to alpha surfaces.
+- **Selected object:** mirror of Build > Features for the selection, with Build's own labels and behaviour (local lighting outside My Lights is unchanged): light on, colour, intensity, radius, falloff, projector texture/FOV/focus/ambiance, reflection probe type/dynamic/mirror/ambiance/near clip.
 - **Surface response:** `RenderAutoMaskAlphaDeferred/NonDeferred`, `RenderNormalMapScale`, link to the material editors.
 - **Debug:** light beacons, show light radius, light bounding boxes.
 
 ### P5 Lighting Status & Expert
-- **Status readout:** sky origin (legacy/EEP), converted (yes/no), effective probe ambiance, HDR on, post active, probe level. This surfaces C1 (sky origin and conversion).
+- **Status readout:** sky origin (legacy auto-adjusted / EEP), effective probe ambiance, HDR on, post active, probe level, local override active (with Reset), and "auto-exposure pinned" when Sky HDR Scale ≤ 0.25 with dynamic exposure on. This surfaces C1.
 - **Bulk writers:** quality slider (`RenderQualityPerformance`) and graphic presets, with a warning that they overwrite P1–P4 values.
 - **Expert:** HDRI preview and its 4 settings, specular LUT (`RenderSpecularResX/Y`, `RenderSpecularExponent`), `RenderDeferredDisplayGamma`.
 
-Coverage check against existing panels: Personal Lighting → P1. Advanced Lighting → P1 + P2 + P3 + P4 (and DoF button in P2). KS → P1 (Set KS env, scales, HDR Scale) + P2 (exposure) + P3 (shadows, AO). AEE → P1 sky tabs + P2 lens/grading + P3 volumetric. Phototools/Advanced Phototools lighting parts → P1 (presets, water) + P2 (tone, glow, CAS) + P3 (shadows, AO, probes, SSR, mirrors) + P4 (lights, debug). Prefs Graphics lighting parts → P2 + P3 + P4 + P5. PA → P1 (partial moon) + P3 (AO, volumetric). My Lights, Hair Occlusion → P4, P3. Build light/probe → P4 (mirror). Debug-only lighting settings → P1–P5 as listed.
+Coverage check against existing panels: Personal Lighting → P1. Advanced Lighting → P1 + P2 + P3 + P4 (and DoF button in P2). KS → P1 (Set KS env, scales, Sky HDR Scale) + P2 (exposure) + P3 (shadows, AO). AEE → P1 sky tabs + P2 lens/grading + P3 volumetric. Phototools/Advanced Phototools lighting parts → P1 (presets, water) + P2 (tone, glow, CAS) + P3 (shadows, AO, probes, SSR, mirrors) + P4 (lights, debug). Prefs Graphics lighting parts → P2 + P3 + P4 + P5. PA → P1 (partial moon) + P3 (AO, volumetric). My Lights, Hair Occlusion → P4, P3. Build light/probe → P4 (mirror). Debug-only lighting settings → P1–P5 as listed.
 
 ---
 
 ## 11. Misleading controls and recommended alignment
 
-Live controls whose label, tooltip, range or placement misrepresents what they do in mode C. Labels were read from the en XUI files. "Label" changes are XUI/tooltip edits only. "Code" means a behaviour change.
+Live controls whose label, tooltip, range or placement misrepresents what they do in mode C. This section is the rationale; **where it differs from section 12, section 12 wins**. The status of every row is in 12.8. Labels were read from the en XUI files. "Label" changes are XUI/tooltip edits only. "Code" means a behaviour change.
 
 ### 11.1 Wrong name or wrong description
 
@@ -485,6 +488,14 @@ The slider wiring from section 3.2 is committed (`9b783fa6bf6`) and merged into 
 | `RenderSkyAmbientScale` | Negative values allowed in the UI, since the code allows them (12.5). |
 | Duplicates | Remove duplicates that control a single value within one pane (12.6). Slider + number-box pairs are allowed, including pairs whose two ranges differ. |
 | Haze group | Wherever these controls are surfaced, they appear together and show their haze-0 dependency (12.7). |
+| 11.1 scope | Applies to the new UI (still in design) and to My Lights only. |
+| 11.2 ranges | Ambient Scale allows negatives; light count and sunlight scale keep their existing ranges. |
+| Unresolved 11.x items | Adopted as recommended (12.8). |
+| Legacy skies | LL's default auto-adjust (mode B), forced on; replaces local conversion (8, P2). |
+| Trackball | Not in the new UI. |
+| New-UI ranges | Sunlight Scale 0–20 (the KS range); Max nearby lights 0–512. |
+| NaN guards | Added on branch `fix-haze-zero-nan-guards` (uncommitted): `cloudsV.glsl`, `asHorizonCloudTintV.glsl`, `lllegacyatmospherics.cpp`. |
+| Open items | Resolved or answered in `doc/kstorm2-lighting-UI-design.md` §7-8. |
 
 ### 12.2 Haze Density at 0 vs above 0
 
@@ -495,7 +506,7 @@ The formulas are continuous at 0, but several effects ride only on the haze term
 - **Fog strength becomes a colour-channel artefact.** The fog blend on geometry uses only the red channel of the transmittance: `alpha = atten.r` (`hazeF.glsl:89`), with `atten = exp(-(blue_density + haze_density)·dist·density_multiplier·distance_multiplier)`. Above 0, the grey haze term usually dominates. At 0, fog amount depends only on **Blue Density's red component**, which is small by default (0.24), so distance fog nearly vanishes.
 - **Sunset reddening weakens.** Sun extinction loses its `haze_density·0.25` term (`atmosphericsFuncs.glsl:66`).
 - **Steep near 0.** `haze_weight = h/(b+h)`: with Blue Density ≈ 0.24, haze 0.05 already gives about 17% weight, so the first few hundredths change the look the most.
-- **Possible NaN.** `cloudsV.glsl:125-127` and `asHorizonCloudTintV.glsl:141-143` divide by `abs(blue_density) + abs(haze_density)` **without** the `1e-6` floor that `skyV.glsl:111` and `atmosphericsFuncs.glsl:70` use. With haze 0 and any Blue Density channel at 0, clouds and the AS horizon cloud tint divide 0 by 0. The soften pass zeroes NaN (`clampHDRRange`), but these passes write their own colours. Not runtime-confirmed.
+- **Possible NaN.** `cloudsV.glsl:125-127` and `asHorizonCloudTintV.glsl:141-143` divide by `abs(blue_density) + abs(haze_density)` **without** the `1e-6` floor that `skyV.glsl:111` and `atmosphericsFuncs.glsl:70` use. With haze 0 and any Blue Density channel at 0, clouds and the AS horizon cloud tint divide 0 by 0; `lllegacyatmospherics.cpp:319` (`componentDiv` by total density) has the same gap on the CPU side. The soften pass zeroes NaN (`clampHDRRange`), but these passes write their own colours. Not runtime-confirmed.
 - No code path ties Exposure to haze. The Advanced Lighting Exposure tooltip ("ensure Haze is > 0") has no basis in the code, unless the NaN case above was what was seen.
 
 ### 12.3 Can the light count skip off-screen lights? (report only)
@@ -514,7 +525,10 @@ Not covered by that change:
 - **Shaders:** in `calcLegacyDistanceAttenuation`, `falloff < 0` selects a shaped curve. That function serves the deferred point/multi/spot paths and forward PBR, so one change covers them. The forward legacy path (`alphaF.glsl:182-229`) and `appendForwardLights` (`aslightrigrenderer.cpp:239-278`) need the same marker.
 - **Proposed curve:** keep the centre brightness and make falloff set the exponent, e.g. `2·(1−d)^p` with `p` rising with falloff, so falloff changes the edge without dimming.
 - **Knock-on:** the My Lights intensity tooltip ("decrease Softness for a brighter effect") becomes wrong; Boost remains the brightness lever. The "Softness" label direction must match the new curve (higher = softer edge).
-- **Touches:** `pipeline.cpp` (tagged, 4 light paths), `aslightrigrenderer.cpp`, `deferredUtil.glsl`, `alphaF.glsl`, `floater_as_my_lights.xml` tooltips.
+- **Marker limits (review finding):** a negative falloff is safe only inside `calcLegacyDistanceAttenuation`. In `setupHWLights` falloff feeds `x = 3·(1 + falloff·2)` and quadratic attenuation `falloff + 1` (`pipeline.cpp:6762, 6778`); in `alphaF.glsl:182-229` it feeds `12·fa − 9`. Both break before any decode, so the forward path needs a different carrier (an unused channel) or an early branch.
+- **Paths to cover:** `renderDeferredLighting` point, multi, spot and multi-spot; `setupHWLights` for the `LLVOVolume` backend; `ASLightRigRenderer::render` and `appendForwardLights` for the `Shader` backend; `ksdarklight.cpp:108` (passes falloff for dark spots).
+- **Direction:** Softness up → exponent down (softer, longer edge).
+- **Touches:** `pipeline.cpp` (tagged, 5 light paths), `aslightrigrenderer.cpp`, `ksdarklight.cpp`, `deferredUtil.glsl`, `alphaF.glsl`, `floater_as_my_lights.xml` tooltips.
 
 ### 12.5 UI ranges vs code ranges
 
@@ -522,7 +536,7 @@ Code ranges: the sky validation table (`indra/llinventory/llsettingssky.cpp`, `v
 
 | Control | UI now | Code range | Align to |
 |---|---|---|---|
-| sky `density_multiplier` (stored) | ED/AL 0.0001–2 shown ×1000 (stored 1e-7–0.002); ED compact 0–2 | 1e-7–2 | stored 1e-7–2 (display 0.0001–2000; a log scale is advisable) |
+| sky `density_multiplier` (stored) | ED/AL display 0.0001–2 (stored = display × 0.001, so 1e-7–0.002); ED compact 0–2 | 1e-7–2 | stored 1e-7–2 (display 0.0001–2000; a log scale is advisable) |
 | sky `distance_multiplier` | ED/AL 0.05–1000; ED compact 0–1000 | 0.0001–1000 | 0.0001–1000 |
 | sky `blue_horizon`, `blue_density` | swatch ÷2, so max 2 per channel | 0–3 per channel | **Decided for KStorm2:** 0–3 per channel (swatch ÷3, or colour + intensity) |
 | sky `cloud_scale` | 0.01–3 | 0.001–3 | 0.001–3 |
@@ -552,10 +566,10 @@ Rule: any UI that surfaces one of these controls surfaces the group together and
 
 | Control (new-UI label) | Relationship to Haze Density | Required UI association |
 |---|---|---|
-| **Haze Density** | Master. At 0, effects that exist only through the haze term switch off. | First in the group. Tooltip: "At 0, Haze Glow Size, Haze Glow Focus and Haze Glow Brightness stop working, fog takes Air Glow Colour only, and distance fog depends on Air Density's red channel." |
+| **Haze Density** | Master. At 0, effects that exist only through the haze term switch off. | First in the group. Tooltip: "At 0, Haze Glow Strength, Haze Glow Focus and Haze Glow Brightness stop working, fog takes Air Glow Colour only, and distance fog depends on Air Density's red channel." |
 | **Haze Glow Brightness** (Haze Horizon) | Multiplied by `haze_weight`; **no effect at 0**. | Adjacent; inactive with note while Haze Density is 0 (value kept, still editable). |
-| **Haze Glow Size** (Glow Size) | Shapes `haze_glow`, which multiplies only the haze term; **no effect at 0**. | Adjacent; inactive with note at 0. |
-| **Haze Glow Focus** (Glow Focus) | Same as Haze Glow Size; **no effect at 0**. | Adjacent; inactive with note at 0. |
+| **Haze Glow Strength** (Glow Size) | Scales `haze_glow` brightness (`glow.x^z`, not its spread; `atmosphericsFuncs.glsl:97-102`), which multiplies only the haze term; **no effect at 0**. Relabelled Haze Glow Strength (decided 2026-10-24) because it scales brightness, not spread. | Adjacent; inactive with note at 0. |
+| **Haze Glow Focus** (Glow Focus) | Sets the glow's spread (`glow.z`, higher = tighter); multiplies only the haze term; **no effect at 0**. | Adjacent; inactive with note at 0. |
 | **Air Glow Colour** (Blue Horizon) | At 0 it becomes the **only** fog and sky-scatter colour (`blue_weight = 1`). | In the group. Note at 0: "Sole fog colour while Haze Density is 0." |
 | **Air Density** (Blue Density) | Sets the haze/air mix. At 0, distance-fog strength comes only from its **red** channel (`alpha = atten.r`), and it alone sets sun extinction (sunset tint). | In the group. Note at 0: "Fog strength follows the red component while Haze Density is 0." |
 
@@ -564,6 +578,40 @@ Related but not dependent on haze 0 (keep nearby, outside the group): Atmosphere
 Existing panels: in the sky editor, Glow Size/Focus are on the Sun & Moon tab and the haze/air controls on the Atmosphere tab, which splits the group. Personal Lighting spreads the group over three columns (blue colours in `lp_1`, haze in `lp_2`, glow in `lp_3`). Advanced Lighting keeps haze and glow together (`lp_2`) but puts the blue colours in the sun/moon/atmosphere column. Neither shows the dependency. Labels on existing panels stay unchanged (12.1); applying the grouping there is an XUI change not yet requested.
 
 Engineering note for any UI that sets Haze Density to 0: guard the NaN case in 12.2 (Air Density channel 0 with haze 0) by clamping the denominators in `cloudsV.glsl` and `asHorizonCloudTintV.glsl` as `skyV.glsl` already does.
+
+
+### 12.8 Status of every section 11 item
+
+Decided = adopted (scope: new UI, plus My Lights where marked). Declined = left as is. Open = needs a decision or a design detail; the open items are restated in `doc/kstorm2-lighting-UI-design.md` §7.
+
+| Section 11 item | Status | Outcome |
+|---|---|---|
+| sky `gamma` label | Decided | **Sky HDR Scale**; tooltip adds that auto-exposure is pinned at ≤ 0.25. |
+| sky `moon_brightness` label | Decided | **Moon Disk Brightness**. |
+| sky `sunlight_color` label | Decided (as recommended) | **Sun & Moon Light Colour**. |
+| sky `ambient` | Decided; definition Open | Ambient Brightness slider scaling the stored colour (L1). Unit, range, black-colour fallback: Open (O1). |
+| sky `reflection_probe_ambiance` | Decided | **Probe Fill Strength**, 0.01–10, step 0.01, 11.1 tooltip, disabled when probes are off. |
+| Falloff / Softness | Decided | Shapes the curve for **My Lights only** (12.4); Build Falloff unchanged. Marker design: Open (O3). |
+| Radius ×1.5 tooltip | Decided (as recommended) | My Lights only; Build unchanged. |
+| Build "Ambiance" ×2 | Declined | Unchanged. |
+| Projector tooltips (alpha, prim size) | Decided (as recommended) | My Lights spot only; Build unchanged. |
+| `RenderExposure` tooltip | Decided (as recommended) | "Overall scene exposure." (new UI). |
+| Probe level "None" | Decided (as recommended) | **Sky only** (new UI). |
+| Light count tooltip | Decided (as recommended) | "Counts nearby candidates, not only visible lights." Code option (count drawn lights only) reported only (12.3). |
+| My Lights "Max lights" label | Decided (as recommended) | **Max nearby lights (global)** (My Lights and new UI). |
+| Sun/moon scale tooltip | Decided (as recommended) | "Larger discs fade out later at the horizon." |
+| sky `max_y` label | Decided (as recommended) | **Haze Ceiling (m)**. |
+| Glow tooltips | Decided | Haze Glow Strength / Haze Glow Focus with direction tooltips (12.7). |
+| Blue/Haze/Multiplier renames | Decided | 8.5. |
+| 11.2 Exposure range | Decided | 0.5–4 (new UI). |
+| 11.2 Ambient Scale range | Decided | Negatives allowed; new UI uses −10–40. |
+| 11.2 Sunlight Scale range | Decided | Existing ranges kept; new UI uses the existing 0–50 (Advanced Lighting). |
+| 11.2 Light count range | Decided | Existing ranges kept; new UI uses the existing slider 0–8192 with number box 0–10000. |
+| 11.2 Shadow resolution range | Declined | Left as is (12.5). |
+| 11.2 Colour swatches ÷3/÷2 | Decided (as recommended) | Colour + intensity controls (new UI); blue colours 0–3. |
+| 11.3 two "Effect" controls | Decided | One Effect control for the active AO technique (new UI). |
+| 11.3 "HDR and Emissive" toggle | Decided | Not in the new UI (P1, HDR forced). Existing panels unchanged. |
+| 11.3 local override indicator | Decided (as recommended) | "Local override active" + Reset in P1 and P5. |
 
 ---
 
