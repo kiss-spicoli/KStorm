@@ -809,6 +809,11 @@ void ASVolumetricLighting::renderLocalLights(LLPipeline& pipeline)
         {
             continue;
         }
+        // Dark My Lights spots (asdarklight.h) do not light the volume.
+        if (ASLightRigRenderer::isDarkLight(volume))
+        {
+            continue;
+        }
 
         F32 radius = volume->getLightRadius() * 1.5f;
         // My Lights Boost (aslightrigrenderer.h); 1 for every other light.

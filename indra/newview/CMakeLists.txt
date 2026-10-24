@@ -167,6 +167,9 @@ set(viewer_SOURCE_FILES
     ksenvironment.cpp
     kspanellighting.cpp
     # </AS:KS>
+    # <AS:KS> Dark My Lights spots.
+    asdarklight.cpp
+    # </AS:KS>
     # <AS:Chanayane> Viewer-local per-joint shape deformer preview.
     asbonedeformerbaker.cpp
     asfloaterbonedeformer.cpp
@@ -1117,6 +1120,9 @@ set(viewer_HEADER_FILES
     # <AS:KS> KS tab of Environment Effects.
     ksenvironment.h
     kspanellighting.h
+    # </AS:KS>
+    # <AS:KS> Dark My Lights spots.
+    asdarklight.h
     # </AS:KS>
     # <AS:Chanayane> Viewer-local per-joint shape deformer preview.
     asbonedeformerbaker.h

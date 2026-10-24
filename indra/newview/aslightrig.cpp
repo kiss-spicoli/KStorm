@@ -51,6 +51,7 @@ ASLightRig::ASLightRig()
     mSpotFOV(F_PI * 0.5f),      // LLLightImageParams default
     mSpotFocus(0.f),
     mSpotAmbiance(0.f),
+    mDark(false),
     mPlacement(PLACEMENT_FOLLOW),
     mEnabled(true),
     mLightOn(true),
@@ -430,6 +431,7 @@ LLSD ASLightRig::toLLSD() const
     data["spot_focus"] = mSpotFocus;
     data["spot_ambiance"] = mSpotAmbiance;
     data["spot_texture"] = mSpotTexture;
+    data["dark"] = mDark;
     data["placement"] = isFixed() ? "fixed" : "follow";
     if (isFixed())
     {
@@ -465,6 +467,7 @@ void ASLightRig::fromLLSD(const LLSD& data)
     if (data.has("spot_focus"))    mSpotFocus = (F32)data["spot_focus"].asReal();
     if (data.has("spot_ambiance")) mSpotAmbiance = (F32)data["spot_ambiance"].asReal();
     if (data.has("spot_texture"))  mSpotTexture = data["spot_texture"].asUUID();
+    if (data.has("dark"))          mDark = data["dark"].asBoolean();
 
     if (data["placement"].asString() == "fixed" && data.has("pos_global"))
     {

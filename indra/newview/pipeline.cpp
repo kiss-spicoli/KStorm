@@ -76,6 +76,9 @@
 // <AS:KS> Optional subject-based local light priority.
 #include "aslocallightsort.h"
 // </AS:KS>
+// <AS:KS> Dark My Lights spots.
+#include "asdarklight.h"
+// </AS:KS>
 
 #include "pipeline.h"
 
@@ -6705,6 +6708,13 @@ void LLPipeline::setupHWLights()
                 }
             }
 
+            // <AS:KS> Dark My Lights spots would light alpha; v1 leaves alpha alone.
+            if (ASLightRigRenderer::isDarkLight(light))
+            {
+                continue;
+            }
+            // </AS:KS>
+
             if (drawable->isState(LLDrawable::ACTIVE))
             {
                 mLightMovingMask |= (1<<cur_light);
@@ -10066,6 +10076,9 @@ void LLPipeline::renderDeferredLighting()
             std::list<LLVector4>        fullscreen_lights;
             LLDrawable::drawable_list_t spot_lights;
             LLDrawable::drawable_list_t fullscreen_spot_lights;
+            // <AS:KS> Dark My Lights spots, drawn last by ASDarkLight (asdarklight.h).
+            LLDrawable::drawable_list_t dark_spot_lights;
+            // </AS:KS>
             LLSettingsSky::ptr_t        psky        = LLEnvironment::instance().getCurrentSky();
 
             if (!gCubeSnapshot)
@@ -10182,6 +10195,14 @@ void LLPipeline::renderDeferredLighting()
                         {
                             break;
                         }
+                    }
+                    // </AS:KS>
+
+                    // <AS:KS> Dark My Lights spots skip the additive passes (asdarklight.h).
+                    if (volume->isLightSpotlight() && ASLightRigRenderer::isDarkLight(volume))
+                    {
+                        dark_spot_lights.push_back(drawablep);
+                        continue;
                     }
                     // </AS:KS>
 
@@ -10360,6 +10381,10 @@ void LLPipeline::renderDeferredLighting()
             // through the same deferred point-light shaders as stock lights.
             ASLightRigRenderer::render(*this, light_scale);
             // </AS:Chanayane>
+
+            // <AS:KS> Dark My Lights spots multiply the fully lit result.
+            ASDarkLight::render(*this, dark_spot_lights, light_scale);
+            // </AS:KS>
         }
 
         gGL.setColorMask(true, true);
@@ -10731,7 +10756,10 @@ void LLPipeline::setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep)
     // make sure we're not already targeting the same spot light with both shadow maps
     llassert(mTargetShadowSpotLight[0] != mTargetShadowSpotLight[1] || mTargetShadowSpotLight[0].isNull());
 
-    if (!gCubeSnapshot)
+    // <AS:KS> Dark My Lights spots never take a projector shadow map (asdarklight.h).
+    // if (!gCubeSnapshot)
+    if (!gCubeSnapshot && !ASLightRigRenderer::isDarkLight(volume))
+    // </AS:KS>
     {
         LLDrawable* potential = drawablep;
         //determine if this light is higher priority than one of the existing spot shadows

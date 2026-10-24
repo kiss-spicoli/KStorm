@@ -64,6 +64,14 @@ public:
     static void setLightBoosts(const std::map<LLUUID, F32>& boosts);
     // Boost for this light object; 1 for anything that is not a boosted My Light.
     static F32 getLightBoost(const LLVOVolume* light);
+
+    // Dark spots (ASLightRig::mDark): My Lights spot objects drawn by
+    // ASDarkLight's multiplicative pass instead of the additive light passes,
+    // and kept out of forward lights, volumetrics and projector shadows.
+    // The floater refreshes the set every idle tick.
+    static void setDarkLights(const std::set<LLUUID>& ids);
+    // True for a dark My Lights spot; false at once while there are none.
+    static bool isDarkLight(const LLVOVolume* light);
 };
 
 #endif // AS_LIGHTRIGRENDERER_H

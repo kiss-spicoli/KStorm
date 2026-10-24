@@ -74,6 +74,7 @@ ASFloaterMyLights::ASFloaterMyLights(const LLSD& key)
     mSpotFocusSlider(nullptr),
     mSpotAmbianceSlider(nullptr),
     mSpotTexturePicker(nullptr),
+    mDarkCheck(nullptr),
     mMasterEnabledCheck(nullptr),
     mRenderBackendCombo(nullptr),
     mBackgroundCombo(nullptr),
@@ -122,6 +123,7 @@ bool ASFloaterMyLights::postBuild()
     mSpotFocusSlider = getChild<LLUICtrl>("as_light_spot_focus");
     mSpotAmbianceSlider = getChild<LLUICtrl>("as_light_spot_ambiance");
     mSpotTexturePicker = getChild<LLTextureCtrl>("as_light_spot_texture");
+    mDarkCheck = getChild<LLCheckBoxCtrl>("as_light_spot_dark");
     mBoostSlider = getChild<LLUICtrl>("as_light_boost");
     mMasterEnabledCheck = getChild<LLCheckBoxCtrl>("as_light_master_enabled");
     mRenderBackendCombo = getChild<LLComboBox>("as_light_render_backend");
@@ -161,7 +163,7 @@ bool ASFloaterMyLights::postBuild()
     mBoostSlider->setCommitCallback([this](LLUICtrl*, const LLSD&) { onBoostChanged(); });
 
     for (LLUICtrl* ctrl : { (LLUICtrl*)mSpotCheck, (LLUICtrl*)mAimJointCombo, mAimYawSlider, mAimPitchSlider,
-                            mSpotFOVSlider, mSpotFocusSlider, mSpotAmbianceSlider })
+                            mSpotFOVSlider, mSpotFocusSlider, mSpotAmbianceSlider, (LLUICtrl*)mDarkCheck })
     {
         ctrl->setCommitCallback([this](LLUICtrl*, const LLSD&) { onSpotChanged(); });
     }
@@ -302,8 +304,21 @@ void ASFloaterMyLights::renderAllLightBeacons()
             // with the light's strength (1 m per 20 m of radius x intensity).
             const F32 aim_length = 0.4f + rig->mRadius * rig->mIntensity / 20.f;
             const LLVector3 tip = pos + rig->getAimDirection() * aim_length;
-            gGL.vertex3fv(pos.mV);
-            gGL.vertex3fv(tip.mV);
+            if (rig->mDark)
+            {
+                // Dark spot: dashed arm, every other of DASHES segments.
+                static const S32 DASHES = 8;
+                for (S32 i = 0; i < DASHES; i += 2)
+                {
+                    gGL.vertex3fv(lerp(pos, tip, (F32)i / DASHES).mV);
+                    gGL.vertex3fv(lerp(pos, tip, (F32)(i + 1) / DASHES).mV);
+                }
+            }
+            else
+            {
+                gGL.vertex3fv(pos.mV);
+                gGL.vertex3fv(tip.mV);
+            }
         }
     }
     gGL.end();
@@ -336,6 +351,8 @@ void ASFloaterMyLights::updateLights()
     dormant.reserve(mLights.size());
     // Boosted LLVOVolume lights, read by the renderer's colour sites.
     std::map<LLUUID, F32> boosts;
+    // Dark LLVOVolume spots, drawn by ASDarkLight instead of the light passes.
+    std::set<LLUUID> dark_lights;
     for (auto& rig : mLights)
     {
         rig->updateTransform();
@@ -343,6 +360,10 @@ void ASFloaterMyLights::updateLights()
         if (rig->isCreated() && rig->mBoost != 1.f)
         {
             boosts[rig->getObjectId()] = rig->mBoost;
+        }
+        if (rig->isCreated() && rig->mSpot && rig->mDark)
+        {
+            dark_lights.insert(rig->getObjectId());
         }
         // Dormant fixed lights have no position in any loaded region.
         if (rig->isEnabled() && !rig->isDormant())
@@ -359,6 +380,7 @@ void ASFloaterMyLights::updateLights()
     }
     ASLightRigRenderer::setLights(shader_lights);
     ASLightRigRenderer::setLightBoosts(boosts);
+    ASLightRigRenderer::setDarkLights(dark_lights);
 
     // After a teleport, show the lights of the arrival region: switch to
     // Active here and select its first light (if any).
@@ -730,8 +752,10 @@ void ASFloaterMyLights::updateSpotControlsEnabled()
     mAimPitchSlider->setEnabled(spot_on);
     mSpotFOVSlider->setEnabled(spot_on);
     mSpotFocusSlider->setEnabled(spot_on);
-    mSpotAmbianceSlider->setEnabled(spot_on);
+    // A dark spot has no ambiance (ASDarkLight ignores it).
+    mSpotAmbianceSlider->setEnabled(spot_on && !rig->mDark);
     mSpotTexturePicker->setEnabled(spot_on);
+    mDarkCheck->setEnabled(spot_on);
 }
 
 void ASFloaterMyLights::refreshControlsFromSelectedLight()
@@ -771,6 +795,7 @@ void ASFloaterMyLights::refreshControlsFromSelectedLight()
     mSpotFocusSlider->setValue(rig->mSpotFocus);
     mSpotAmbianceSlider->setValue(rig->mSpotAmbiance);
     mSpotTexturePicker->setImageAssetID(rig->mSpotTexture);
+    mDarkCheck->setValue(rig->mDark);
     mBoostSlider->setValue(rig->mBoost);
     mUpdatingControls = false;
     updatePlacementControls();
@@ -852,6 +877,7 @@ void ASFloaterMyLights::onSpotChanged()
     rig->mSpotFOV = (F32)mSpotFOVSlider->getValue().asReal() * DEG_TO_RAD;
     rig->mSpotFocus = (F32)mSpotFocusSlider->getValue().asReal();
     rig->mSpotAmbiance = (F32)mSpotAmbianceSlider->getValue().asReal();
+    rig->mDark = mDarkCheck->get();
     rig->applyParams();
     rig->updateTransform();
     updateSpotControlsEnabled();

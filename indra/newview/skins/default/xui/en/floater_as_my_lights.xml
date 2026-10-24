@@ -99,6 +99,7 @@
 
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="420" name="as_light_spot_texture_label" top="448" width="205">Projector image</text>
   <texture_picker allow_no_texture="true" can_apply_immediately="true" default_image_name="Default" follows="left|top" height="96" label="" layout="topleft" left="420" name="as_light_spot_texture" top="466" width="80" tool_tip="Image projected by the spotlight. None gives a plain white cone." />
+  <check_box follows="left|top" height="16" label="Dark" layout="topleft" left="420" name="as_light_spot_dark" top="570" width="150" tool_tip="Darkens the cone instead of lighting it, like a flag or gobo shadow. Intensity and Boost set how dark; the colour tints it (white is neutral, red removes red). With a projector image, white parts darken and black parts are left alone. Solid surfaces only: alpha hair, glass and volumetric beams are not darkened." />
 
   <!-- Right column: list of lights + presets -->
   <text type="string" length="1" follows="left|top" font="SansSerifSmallBold" height="14" layout="topleft" left="420" name="as_light_list_label" top="10" width="50">Lights</text>
