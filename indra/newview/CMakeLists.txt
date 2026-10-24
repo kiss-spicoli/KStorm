@@ -169,6 +169,7 @@ set(viewer_SOURCE_FILES
     # </AS:KS>
     # <AS:KS> Dark My Lights spots.
     asdarklight.cpp
+    # </AS:KS>
     # <AS:KS> Body-proxy hair occlusion.
     kshairocclusion.cpp
     # </AS:KS>
@@ -1125,6 +1126,7 @@ set(viewer_HEADER_FILES
     # </AS:KS>
     # <AS:KS> Dark My Lights spots.
     asdarklight.h
+    # </AS:KS>
     # <AS:KS> Body-proxy hair occlusion.
     kshairocclusion.h
     # </AS:KS>
