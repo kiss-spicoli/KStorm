@@ -64,6 +64,11 @@ private:
     void                        onHazeHorizonChanged();
     void                        onHazeDensityChanged();
     void                        onSceneGammaChanged();
+    // <KS:KS> Atmosphere sliders.
+    void                        onDensityMultipChanged();
+    void                        onDistanceMultipChanged();
+    void                        onMaxAltChanged();
+    // </KS:KS>
 
     void                        onCloudColorChanged();
     void                        onCloudCoverageChanged();
