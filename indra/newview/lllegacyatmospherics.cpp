@@ -312,7 +312,13 @@ void LLAtmospherics::calcSkyColorWLVert(const LLSettingsSky::ptr_t &psky, LLVect
 
     // Calculate relative weights
     LLColor3 temp2(0.f, 0.f, 0.f);
-    LLColor3 temp1 = vars.total_density;
+    // <KS:KS> Floor the denominator so Haze Density 0 with a zero Blue Density
+    // channel cannot divide 0 by 0 (matches the shader guards).
+    // LLColor3 temp1 = vars.total_density;
+    LLColor3 temp1(llmax(vars.total_density.mV[0], 1e-6f),
+                   llmax(vars.total_density.mV[1], 1e-6f),
+                   llmax(vars.total_density.mV[2], 1e-6f));
+    // </KS:KS>
 
     LLColor3 blue_weight = componentDiv(blue_density, temp1);
     LLColor3 blue_factor = blue_horizon * blue_weight;
