@@ -1450,6 +1450,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
             gDeferredMaterialProgram[i].mShaderFiles.clear();
             gDeferredMaterialProgram[i].mShaderFiles.push_back(make_pair("deferred/materialV.glsl", GL_VERTEX_SHADER));
             gDeferredMaterialProgram[i].mShaderFiles.push_back(make_pair("deferred/materialF.glsl", GL_FRAGMENT_SHADER));
+            // <AS:KS> Body-proxy hair occlusion library.
+            gDeferredMaterialProgram[i].mShaderFiles.push_back(make_pair("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER));
+            // </AS:KS>
             gDeferredMaterialProgram[i].mShaderLevel = mShaderLevel[SHADER_DEFERRED];
 
             gDeferredMaterialProgram[i].clearPermutations();
@@ -1618,6 +1621,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         shader->mShaderFiles.clear();
         shader->mShaderFiles.push_back(make_pair("deferred/pbralphaV.glsl", GL_VERTEX_SHADER));
         shader->mShaderFiles.push_back(make_pair("deferred/pbralphaF.glsl", GL_FRAGMENT_SHADER));
+        // <AS:KS> Body-proxy hair occlusion library.
+        shader->mShaderFiles.push_back(make_pair("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER));
+        // </AS:KS>
 
         shader->clearPermutations();
 
@@ -1949,6 +1955,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
             shader->mShaderFiles.clear();
             shader->mShaderFiles.push_back(make_pair("deferred/alphaV.glsl", GL_VERTEX_SHADER));
             shader->mShaderFiles.push_back(make_pair("deferred/alphaF.glsl", GL_FRAGMENT_SHADER));
+            // <AS:KS> Body-proxy hair occlusion library.
+            shader->mShaderFiles.push_back(make_pair("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER));
+            // </AS:KS>
 
             shader->clearPermutations();
             shader->addPermutation("USE_VERTEX_COLOR", "1");
@@ -2547,6 +2556,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         gDeferredAvatarAlphaProgram.mShaderFiles.clear();
         gDeferredAvatarAlphaProgram.mShaderFiles.push_back(make_pair("deferred/alphaV.glsl", GL_VERTEX_SHADER));
         gDeferredAvatarAlphaProgram.mShaderFiles.push_back(make_pair("deferred/alphaF.glsl", GL_FRAGMENT_SHADER));
+        // <AS:KS> Body-proxy hair occlusion library (never uploaded here: stays off).
+        gDeferredAvatarAlphaProgram.mShaderFiles.push_back(make_pair("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER));
+        // </AS:KS>
 
         gDeferredAvatarAlphaProgram.clearPermutations();
         gDeferredAvatarAlphaProgram.addPermutation("USE_DIFFUSE_TEX", "1");

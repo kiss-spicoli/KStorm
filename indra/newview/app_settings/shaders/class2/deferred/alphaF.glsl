@@ -166,6 +166,14 @@ float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen);
 
 float getAmbientClamp();
 
+// <AS:KS> Body-proxy hair occlusion (ksHairOcclusionF.glsl).
+float ksHairAO(vec3 p, vec3 n);
+float ksHairLightFactor(vec3 p, vec4 lp, vec3 col);
+float ksHairSunShadow(vec3 p, vec3 dir, float shadow);
+bool ksHairDebugActive();
+vec3 ksHairDebugValue();
+// </AS:KS>
+
 void mirrorClip(vec3 pos);
 
 void sampleReflectionProbesLegacy(inout vec3 ambenv, inout vec3 glossenv, inout vec3 legacyenv,
@@ -350,6 +358,11 @@ void main()
 #endif
 // </AS:Chanayane>
 
+// <AS:KS> Body-proxy hair occlusion: proximity AO, then sun/moon occlusion.
+    float ks_hair_ao = ksHairAO(pos.xyz, norm);
+    shadow = ksHairSunShadow(pos.xyz, light_dir, shadow);
+// </AS:KS>
+
     vec3 sunlit;
     vec3 amblit;
     vec3 additive;
@@ -365,6 +378,9 @@ void main()
     vec3 glossenv;
     vec3 legacyenv;
     sampleReflectionProbesLegacy(irradiance, glossenv, legacyenv, frag, pos.xyz, norm.xyz, 0.0, 0.0, true, amblit_linear);
+// <AS:KS> Body-proxy hair occlusion: darken ambient near the body.
+    irradiance *= ks_hair_ao;
+// </AS:KS>
 
 
     float da = dot(norm.xyz, light_dir.xyz);
@@ -396,7 +412,10 @@ void main()
 
     vec4 light = vec4(0,0,0,0);
 
-   #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, diffuse_linear.rgb, pos.xyz, norm, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, light_attenuation[i].w);
+// <AS:KS> Body-proxy hair occlusion per light.
+   // #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, diffuse_linear.rgb, pos.xyz, norm, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, light_attenuation[i].w);
+   #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, diffuse_linear.rgb, pos.xyz, norm, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, light_attenuation[i].w) * ksHairLightFactor(pos.xyz, light_position[i], light_diffuse[i].rgb);
+// </AS:KS>
 
     LIGHT_LOOP(1)
     LIGHT_LOOP(2)
@@ -439,6 +458,14 @@ if (as_ao_debug_white != 0)
     color.rgb = vec3(shadow);
 }
 // </AS:Chanayane>
+// <AS:KS> Body-proxy hair occlusion debug view.
+#ifndef FOR_IMPOSTOR
+if (ksHairDebugActive())
+{
+    color.rgb = ksHairDebugValue();
+}
+#endif
+// </AS:KS>
 // <AS:Chanayane> Replace the original framebuffer output only during OIT capture.
 // frag_color = max(color, vec4(0));
 #ifdef EXACT_OIT

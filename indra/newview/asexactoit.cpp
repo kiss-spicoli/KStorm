@@ -542,6 +542,8 @@ bool ASExactOIT::loadAlphaShaders(S32 shader_level, bool use_sun_shadow)
         shader.mShaderFiles.clear();
         shader.mShaderFiles.emplace_back("deferred/alphaV.glsl", GL_VERTEX_SHADER);
         shader.mShaderFiles.emplace_back("deferred/alphaF.glsl", GL_FRAGMENT_SHADER);
+        // KS: body-proxy hair occlusion library (doc/hair-occlusion.md).
+        shader.mShaderFiles.emplace_back("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER);
         addCaptureFragment(shader);
         shader.clearPermutations();
         shader.addPermutation("USE_VERTEX_COLOR", "1");
@@ -596,6 +598,8 @@ bool ASExactOIT::loadPBRAlphaShaders(S32 shader_level, bool use_sun_shadow)
         shader.mShaderFiles.clear();
         shader.mShaderFiles.emplace_back("deferred/pbralphaV.glsl", GL_VERTEX_SHADER);
         shader.mShaderFiles.emplace_back("deferred/pbralphaF.glsl", GL_FRAGMENT_SHADER);
+        // KS: body-proxy hair occlusion library (doc/hair-occlusion.md).
+        shader.mShaderFiles.emplace_back("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER);
         addCaptureFragment(shader);
         shader.clearPermutations();
         shader.addPermutation("DIFFUSE_ALPHA_MODE", llformat("%d", (int)LLMaterial::DIFFUSE_ALPHA_MODE_BLEND));
@@ -703,6 +707,8 @@ bool ASExactOIT::loadMaterialAlphaShaders(S32 shader_level, bool use_sun_shadow,
         shader.mShaderFiles.clear();
         shader.mShaderFiles.emplace_back("deferred/materialV.glsl", GL_VERTEX_SHADER);
         shader.mShaderFiles.emplace_back("deferred/materialF.glsl", GL_FRAGMENT_SHADER);
+        // KS: body-proxy hair occlusion library (doc/hair-occlusion.md).
+        shader.mShaderFiles.emplace_back("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER);
         addCaptureFragment(shader);
         shader.mShaderLevel = shader_level;
         shader.clearPermutations();
