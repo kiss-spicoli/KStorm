@@ -463,7 +463,11 @@ bool LLGLSLShader::createShader()
                 (*fileIter).first == "deferred/asExactOITReserveSubgroupF.glsl" ||
                 (*fileIter).first == "deferred/asAVBOITCaptureF.glsl" ||
                 (*fileIter).first == "deferred/asMacOITCaptureF.glsl" ||
-                (*fileIter).first == "deferred/asMacOITMomentsF.glsl";
+// <AS:KS> The hair occlusion library is linked into indexed alpha programs too.
+                // (*fileIter).first == "deferred/asMacOITMomentsF.glsl";
+                (*fileIter).first == "deferred/asMacOITMomentsF.glsl" ||
+                (*fileIter).first == "deferred/ksHairOcclusionF.glsl";
+// </AS:KS>
             const S32 texture_index_channels =
                 oit_capture_library ? -1 : mFeatures.mIndexedTextureChannels;
             GLuint shaderhandle = LLShaderMgr::instance()->loadShaderFile((*fileIter).first, mShaderLevel, (*fileIter).second, &mDefines, texture_index_channels);
