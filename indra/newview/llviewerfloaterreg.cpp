@@ -691,6 +691,10 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("as_environment_effects", "floater_as_environment_effects.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
     LLFloaterReg::add("as_weather", "floater_as_weather.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
     // </AS:Chanayane>
+    // <AS:KS> KStorm menu floaters (controls bind settings; no floater class needed).
+    LLFloaterReg::add("ks_environment_effects", "floater_ks_environment_effects.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
+    LLFloaterReg::add("ks_hair_occlusion", "floater_ks_hair_occlusion.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
+    // </AS:KS>
     // <FS:CR> Search floater is deferred to login now so we can tell what grid we're in.
     //LLFloaterReg::add("search", "floater_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearch>);
     LLFloaterReg::add("legacy_search", "floater_directory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDirectory>);

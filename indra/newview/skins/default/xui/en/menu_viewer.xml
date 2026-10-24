@@ -6787,4 +6787,34 @@
       </menu_item_check>
       <!-- </AS:Chanayane> -->
    </menu>
+
+   <!-- <AS:KS> KStorm Menu -->
+   <menu
+      create_jump_keys="true"
+      label="KStorm"
+      name="KStorm"
+      tear_off="true"
+      visible="true">
+      <menu_item_check
+         label="Environment Effects"
+         name="KS Environment Effects">
+         <menu_item_check.on_check
+            function="Floater.Visible"
+            parameter="ks_environment_effects" />
+         <menu_item_check.on_click
+            function="Floater.Toggle"
+            parameter="ks_environment_effects" />
+      </menu_item_check>
+      <menu_item_check
+         label="Hair Occlusion"
+         name="KS Hair Occlusion">
+         <menu_item_check.on_check
+            function="Floater.Visible"
+            parameter="ks_hair_occlusion" />
+         <menu_item_check.on_click
+            function="Floater.Toggle"
+            parameter="ks_hair_occlusion" />
+      </menu_item_check>
+   </menu>
+   <!-- </AS:KS> -->
 </menu_bar>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
-<!-- KS tab of Environment Effects. Shown only while KSLightingControls is TRUE (KSPanelLighting). -->
+<!-- KS lighting controls, shown in the KStorm > Environment Effects floater (KSPanelLighting). -->
 <panel border="false" class="ks_lighting_panel" follows="all" height="380" layout="topleft" left="1" top="1" width="460" name="ks_lighting">
   <!-- Caches the current values when enabled, restores them when disabled (KSEnvironment). -->
   <check_box control_name="KSSetEnvironment" follows="left|top" height="16" label="Set KS environment" layout="topleft" left="15" name="ks_set_environment" top="10" width="410" tool_tip="Sets draw distance, avatar impostors, name tags, local light sort and Personal Lighting to the KS environment. Turning it off restores the previous values." />
