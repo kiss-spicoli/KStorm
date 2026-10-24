@@ -165,6 +165,7 @@ private:
     LLUICtrl* mSpotFocusSlider;
     LLUICtrl* mSpotAmbianceSlider;
     LLTextureCtrl* mSpotTexturePicker;
+    LLCheckBoxCtrl* mDarkCheck;
     LLCheckBoxCtrl* mMasterEnabledCheck;
     LLComboBox* mRenderBackendCombo;
     LLComboBox* mBackgroundCombo;

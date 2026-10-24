@@ -685,3 +685,156 @@ LLVOVolume backend: raise Boost on one light and compare opaque skin, alpha
 hair (forward lights), a spot's projected cone and volumetric beams. All
 should brighten together. Repeat with the Shader backend. Save and reload a
 preset, and load an older preset (Boost 1.0).
+
+## Dark spotlights (design, branch `feat-mylights-dark`)
+
+Status: implemented, built and runtime-tested (2026-10-24). The shader was
+not checked with glslang (`.glslang/bin/glslang.exe` is not present in this
+checkout); it compiled at runtime.
+
+### Goal
+
+A per-light **Normal / Dark** mode for My Lights spotlights. A dark spot
+darkens what its cone covers instead of lighting it, like a gobo shadow or a
+flag in a photo studio. Viewer-local, like Boost.
+
+### Why not negative intensity
+
+Local lights are drawn after the sun/ambient composite (`gDeferredSoftenProgram`)
+and added into the HDR screen target with `BT_ADD` (`renderDeferredLighting()`).
+`spotLightF.glsl` never clamps its output to >= 0, so a negative colour would
+subtract. But `LLLightParams` clamps colour and intensity to 0-1, and
+subtraction removes a fixed amount: bright surfaces dim a little, dark ones go
+below zero, and specular turns into dark reflections. It reads as "black
+light", not shade.
+
+### Approach: multiplicative pass
+
+Dark spots are drawn in their own pass after all additive local lights, with
+`BT_MULT` (`dst = src * dst`). The shader outputs a per-pixel multiplier:
+
+```
+darkness = clamp(strength * dist_atten * nl_weight * shadow * proj_texture * color, 0, 1)
+frag_color = vec4(vec3(1.0) - darkness, 1.0)
+```
+
+- Darkening is proportional: highlights dim, black stays black, nothing goes
+  below zero.
+- The projector image becomes the shadow pattern: white darkens, black leaves
+  the scene alone (a gobo cut-out).
+- `strength` = Intensity x Boost, so the existing sliders control how dark it
+  gets. Intensity 1, Boost 1 reaches black at the cone centre near the light.
+- Cone, focus blur, falloff and distance attenuation reuse the stock helpers
+  (`clipProjectedLightVars()`, `calcLegacyDistanceAttenuation()`,
+  `getProjectedLightDiffuseColor()` in `deferredUtil.glsl`) and the stock
+  uniforms from `LLPipeline::setupSpotLight()`, so a dark spot covers exactly
+  the area the same light would light.
+- Alpha output 1, so `BT_MULT` leaves destination alpha unchanged.
+
+### Scope
+
+- LLVOVolume backend only (spots only exist there; the Shader backend is
+  point-only).
+- Opaque deferred surfaces only. Dark spots are excluded from:
+  - forward/alpha hardware lights (`setupHWLights()`), otherwise they would
+    light alpha hair;
+  - the volumetric local-light collector (`asvolumetriclighting.cpp`);
+  - reflection-probe captures (`gCubeSnapshot`): neither added nor darkened.
+  Transparent objects (alpha hair, glass) are therefore not darkened in v1.
+- Spot ambiance is ignored in Dark mode (slider disabled).
+
+### Data and UI
+
+- `ASLightRig::mDark` (bool), saved as `dark`. Older presets load as Normal.
+- My Lights spot section: **Dark** checkbox under **Spotlight**, enabled only
+  while Spotlight is on. Ambiance disabled while Dark is on.
+- `ASFloaterMyLights::updateLights()` fills an id set of created, enabled
+  rigs with `mSpot && mDark` every idle tick, next to the Boost map.
+- `ASLightRigRenderer::setDarkLights(const std::set<LLUUID>&)` and
+  `isDarkLight(const LLVOVolume*)`, returning false at once while the set is
+  empty (common case), like `getLightBoost()`.
+- The beacon draws a dark spot's aim arm dashed (light colour, 4 dashes).
+
+### Renderer changes
+
+New module `asdarklight.{h,cpp}` (author Kissmy Spicoli) owns the shader and
+the pass. Tagged `<AS:KS>` call-outs:
+
+- `pipeline.cpp`, `renderDeferredLighting()` local-light loop: before the
+  box/fullscreen spot split, a dark spot is pushed onto a `dark_spots` list
+  and skipped (`continue`). It still counts toward `RenderLocalLightCount`.
+- `pipeline.cpp`, after `ASLightRigRenderer::render()` (end of the local-light
+  block): `ASDarkLight::render(*this, dark_spots, light_scale)` unless
+  `gCubeSnapshot`. It sets `BT_MULT`, binds the program, calls the public
+  `setupSpotLight()` per light, sets the colour/size/falloff uniforms as the
+  fullscreen spot path does, draws `mScreenTriangleVB`, then restores
+  `BT_ADD`. v1 draws full-screen triangles only (the shader discards outside
+  the frustum); the box-volume variant can come later if dark spots are many.
+- `pipeline.cpp`, `setupSpotLight()` shadow-candidate block: skip dark spots
+  so they never take one of the two projector shadow maps (see questions).
+- `pipeline.cpp`, `setupHWLights()`: skip dark spots.
+- `asvolumetriclighting.cpp`: skip dark spots in the collector.
+- `llviewershadermgr.cpp`: `ASDarkLight::registerShader()`, `createShader()`,
+  `unloadShader()` hooks, as `ASVignette` does.
+
+Shader: `class3/deferred/asDarkSpotLightF.glsl` with
+`deferred/multiPointLightV.glsl` and the `MULTI_SPOTLIGHT` permutation,
+features as `gDeferredMultiSpotLightProgram` (`hasSrgb`, `isDeferred`,
+`hasFullGBuffer`, `hasShadows`). Validate with `.glslang/bin/glslang.exe` as
+AGENTS.md describes. No shader version bump.
+
+### Order of passes
+
+sun/ambient (soften) -> isolate base layer -> point lights -> projectors ->
+fullscreen lights -> Shader-backend My Lights -> **dark spots** -> volumetric
+composite -> forward alpha. Dark spots therefore darken sunlight, ambient and
+every local light, but not volumetric beams or transparency.
+
+### Decisions
+
+1. Spots only (dark point lights could be added to the same pass later).
+2. Tinted: per-channel multiplier `1 - darkness`, darkness scaled by the
+   light colour. White is neutral; red removes red (cyan cast).
+3. Weighted by N.L: surfaces facing away from the light are not darkened.
+4. Dark spots never take one of the two projector shadow maps.
+5. Alpha hair, glass and volumetric beams are not darkened in v1.
+
+### As implemented
+
+- `aslightrig.{h,cpp}`: `mDark`, saved as `dark`.
+- `asfloatermylights.{h,cpp}`, `floater_as_my_lights.xml`: **Dark** checkbox
+  (`as_light_spot_dark`) under the projector image, enabled while Spotlight
+  is on; Ambiance disabled while Dark is on. `updateLights()` fills the dark
+  id set (created rigs with `mSpot && mDark`).
+- `aslightrigrenderer.{h,cpp}`: `setDarkLights()`, `isDarkLight()`.
+- `asdarklight.{h,cpp}`: program `KStorm Dark Spot Light Shader`
+  (`multiPointLightV.glsl` + `asDarkSpotLightF.glsl`, `MULTI_SPOTLIGHT`,
+  `HAS_EMISSIVE` when `RenderEnableEmissiveBuffer`), and `render()`.
+- `pipeline.cpp` (`<AS:KS>`): dark spots collected after the frustum test
+  and light-count check, before the box/fullscreen split; pass called after
+  `ASLightRigRenderer::render()`; skipped in `setupHWLights()`; excluded from
+  the shadow-candidate block of `setupSpotLight()`.
+- `asvolumetriclighting.cpp`: dark spots skipped in the collector.
+- `llviewershadermgr.cpp` (`<AS:KS>`): register, create, unload.
+- `CMakeLists.txt`: `asdarklight.cpp/.h`.
+
+Strength calibration: darkness = colour x image x `calcLegacyDistanceAttenuation()`
+x N.L. Distance attenuation reaches up to 2 near the light (less with higher
+falloff), so Intensity 1 can reach black over much of a close cone; lower
+Intensity for partial shade.
+
+If a Dark spot has no effect at all, the shader probably failed to compile:
+dark spots are removed from the light passes and the pass is skipped when the
+program is incomplete. Look for "KStorm Dark Spot Light Shader" in
+`AyaneStorm.log`.
+
+### Runtime verification
+
+LLVOVolume backend. Make a spot aimed at your chest in daylight and tick
+**Dark**: the cone should go dark without black fringes or negative colours.
+Lower Intensity for partial shade; raise Boost to deepen it. Try a red light
+(cyan cast), a projector image (white parts darken, black parts not), Focus,
+and FOV. Check that back-facing surfaces stay lit, that alpha hair keeps its
+lighting, that volumetric beams do not show the dark spot, and that other
+projectors keep their shadows with `RenderShadowDetail` 2. Untick Dark: the
+light lights again. Save and reload a preset; load an older preset (Normal).

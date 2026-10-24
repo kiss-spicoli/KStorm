@@ -30,6 +30,8 @@ namespace
     std::set<LLUUID> sLightRigIds;
     // Boost per My Lights object id; only boosts other than 1 are stored.
     std::map<LLUUID, F32> sLightBoosts;
+    // Dark My Lights spot object ids.
+    std::set<LLUUID> sDarkLights;
     const F32 DEFERRED_RADIUS_SCALE = 1.5f;
     const F32 DEFERRED_FALLOFF_SCALE = 0.5f;
 
@@ -93,6 +95,20 @@ F32 ASLightRigRenderer::getLightBoost(const LLVOVolume* light)
     }
     auto it = sLightBoosts.find(light->getID());
     return it != sLightBoosts.end() ? it->second : 1.f;
+}
+
+void ASLightRigRenderer::setDarkLights(const std::set<LLUUID>& ids)
+{
+    sDarkLights = ids;
+}
+
+bool ASLightRigRenderer::isDarkLight(const LLVOVolume* light)
+{
+    if (sDarkLights.empty() || !light)
+    {
+        return false; // common case: no dark My Lights
+    }
+    return sDarkLights.count(light->getID()) > 0;
 }
 
 void ASLightRigRenderer::setLights(const std::vector<Light>& lights)

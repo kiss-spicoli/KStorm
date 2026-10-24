@@ -66,6 +66,9 @@
 // <AS:Chanayane> Self-lighting floater background isolate shader lifecycle.
 #include "asbackgroundisolate.h"
 // </AS:Chanayane>
+// <AS:KS> Dark My Lights spots.
+#include "asdarklight.h"
+// </AS:KS>
 // <AS:Chanayane> Exact OIT and AVBOIT
 #include "asexactoit.h"
 #include "asavboit.h"
@@ -518,6 +521,9 @@ void LLViewerShaderMgr::finalizeShaderList()
     // <AS:Chanayane> Register the self-lighting floater's background isolate shader.
     ASBackgroundIsolate::registerShader(mShaderList);
     // </AS:Chanayane>
+    // <AS:KS> Register the dark My Lights spot shader.
+    ASDarkLight::registerShader(mShaderList);
+    // </AS:KS>
     // <AS:Chanayane> Register independent viewer-local weather shaders.
     ASWeather::registerShaders(mShaderList);
     // </AS:Chanayane>
@@ -1271,6 +1277,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         // <AS:Chanayane> Unload the self-lighting floater's background isolate shader.
         ASBackgroundIsolate::unloadShader();
         // </AS:Chanayane>
+        // <AS:KS> Unload the dark My Lights spot shader.
+        ASDarkLight::unloadShader();
+        // </AS:KS>
         // <AS:Chanayane> Unload viewer-local weather shaders and resources.
         ASWeather::unloadShaders();
         // </AS:Chanayane>
@@ -3140,6 +3149,13 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         ASBackgroundIsolate::createShader(mShaderLevel[SHADER_DEFERRED]);
     }
     // </AS:Chanayane>
+
+    // <AS:KS> Build the dark My Lights spot pass; optional, failure only disables it.
+    if (success)
+    {
+        ASDarkLight::createShader(mShaderLevel[SHADER_DEFERRED]);
+    }
+    // </AS:KS>
 
     // <AS:Chanayane> Build optional viewer-local weather shaders.
     if (success)
