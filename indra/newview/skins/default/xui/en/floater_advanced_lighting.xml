@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- KS mashup from floater_adjust_environment, etc.  2025/01 -->
 
+<!-- <KS:KS> +80px height for the atmosphere sliders below.
 <floater title="Advanced Lighting" name="advanced_lighting" help_topic="advanced_lighting_floater" layout="topleft" width="370" height="590" single_instance="true" can_resize="false">
+-->
+<floater title="Advanced Lighting" name="advanced_lighting" help_topic="advanced_lighting_floater" layout="topleft" width="370" height="670" single_instance="true" can_resize="false">
+<!-- </KS:KS> -->
    <string name="hdr_string">HDR Scale:</string>
    <string name="brightness_string">Brightness:</string>
    <string name="hdr_tooltip">Intensity of lighting effects such as realistically bright skies and dynamic exposure. 1.0 is the default, 0 is off, values between 0 and 1 are mixing Ambient with HDR.</string>
+   <!-- <KS:KS> +80px height for the atmosphere sliders.
    <layout_stack name="outer_stack" width="366" height="595" follows="all" animate="false" top="0" orientation="vertical">
       <layout_panel name="env_controls" border="false" bevel_style="in" auto_resize="true" user_resize="true" height="580" visible="true">
          <layout_stack name="settings_stack" width="360" height="580" follows="all" animate="false" orientation="horizontal">
+   -->
+   <layout_stack name="outer_stack" width="366" height="675" follows="all" animate="false" top="0" orientation="vertical">
+      <layout_panel name="env_controls" border="false" bevel_style="in" auto_resize="true" user_resize="true" height="660" visible="true">
+         <layout_stack name="settings_stack" width="360" height="660" follows="all" animate="false" orientation="horizontal">
+   <!-- </KS:KS> -->
             <layout_panel border="false" name="lp_2" bevel_style="in" auto_resize="false" user_resize="false" visible="true" width="200" height="150">
 
                <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="12" left="8" name="reflection_probe_ambiance_label">Reflection Probe Ambiance:</text>
@@ -37,17 +47,18 @@
                <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="haze_size_label">Sun Glow Intensity:</text>
                <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="2" min_val="0"  max_val="1.99" increment="0.01" can_edit_text="true" name="glow_size" 
                        tool_tip="Sun Glow Focus must not be 0 for this to have a visible effect."/>
-<!-- KS: code from panel_settings_sky_atmos.xml.  Hidden pending binding to pipeline.
+<!-- <KS:KS> Atmosphere sliders shown and wired to the live sky in llfloaterenvironmentadjustadvanced.cpp; bogus control_names removed.
+     Original was these controls commented out ("Hidden pending binding to pipeline"), with control_name="density_multiplier" / "distance_multiplier". -->
                <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="5" left="8"  name="density_multiplier_label">Density Multiplier:</text>
-               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="4" min_val="0.0001" max_val="2" increment="0.0001" can_edit_text="true" name="density_multiplier" control_name="density_multiplier"
+               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="4" min_val="0.0001" max_val="2" increment="0.0001" can_edit_text="true" name="density_multiplier"
                        tool_tip="Fog/haze/glow density."/>
                <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="5" left="8"  name="distance_multiplier_label">Distance Multiplier:</text>
-               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="2" min_val="0.05" max_val="1000" increment="0.01" can_edit_text="true" name="distance_multiplier" control_name="distance_multiplier"
+               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="2" min_val="0.05" max_val="1000" increment="0.01" can_edit_text="true" name="distance_multiplier"
                        initial_value="0.8" tool_tip="Fog/haze/glow multiplier for distance."/>
                <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="5" left="8"  name="maximum_altitude_label">Maximum Altitude:</text>
                <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0" max_val="10000"  increment="0.1"   can_edit_text="true" name="max_alt" 
                        tool_tip="fog/haze/glow maximum altitude."/>
--->
+<!-- </KS:KS> -->
                <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="UseSSAO" label="Ambient Occlusion" control_name="RenderDeferredSSAO">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
                <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="ScreenSpaceReflections" label="Screen Space Reflections" control_name="RenderScreenSpaceReflections">

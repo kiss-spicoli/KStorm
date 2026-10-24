@@ -64,13 +64,21 @@ namespace
     const std::string FIELD_SKY_MOON_AZIMUTH("moon_azimuth");
     const std::string FIELD_SKY_MOON_ELEVATION("moon_elevation");
     const std::string FIELD_REFLECTION_PROBE_AMBIANCE("probe_ambiance");
+    // <KS:KS> Atmosphere sliders, same semantics as llpaneleditsky.cpp.
+    const std::string FIELD_SKY_DENSITY_MULTIP("density_multiplier");
+    const std::string FIELD_SKY_DISTANCE_MULTIP("distance_multiplier");
+    const std::string FIELD_SKY_MAX_ALT("max_alt");
+    // </KS:KS>
     const std::string BTN_RESET("btn_reset");
 
     const F32 SLIDER_SCALE_SUN_AMBIENT(3.0f);
     const F32 SLIDER_SCALE_BLUE_HORIZON_DENSITY(2.0f);
     const F32 SLIDER_SCALE_GLOW_R(20.0f);
     const F32 SLIDER_SCALE_GLOW_B(-5.0f);
+    // <KS:KS> Enabled for the density multiplier slider.
     //const F32 SLIDER_SCALE_DENSITY_MULTIPLIER(0.001f);
+    const F32 SLIDER_SCALE_DENSITY_MULTIPLIER(0.001f);
+    // </KS:KS>
 
     const S32 FLOATER_ENVIRONMENT_UPDATE(-2);
 }
@@ -92,6 +100,11 @@ bool LLFloaterEnvironmentAdjustAdvanced::postBuild()
     getChild<LLUICtrl>(FIELD_SKY_HAZE_HORIZON)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onHazeHorizonChanged(); });
     getChild<LLUICtrl>(FIELD_SKY_HAZE_DENSITY)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onHazeDensityChanged(); });
     getChild<LLUICtrl>(FIELD_SKY_SCENE_GAMMA)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onSceneGammaChanged(); });
+    // <KS:KS> Atmosphere sliders.
+    getChild<LLUICtrl>(FIELD_SKY_DENSITY_MULTIP)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onDensityMultipChanged(); });
+    getChild<LLUICtrl>(FIELD_SKY_DISTANCE_MULTIP)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onDistanceMultipChanged(); });
+    getChild<LLUICtrl>(FIELD_SKY_MAX_ALT)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onMaxAltChanged(); });
+    // </KS:KS>
 
     getChild<LLUICtrl>(FIELD_SKY_CLOUD_COLOR)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onCloudColorChanged(); });
     getChild<LLUICtrl>(FIELD_SKY_CLOUD_COVERAGE)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onCloudCoverageChanged(); });
@@ -170,6 +183,13 @@ void LLFloaterEnvironmentAdjustAdvanced::refresh()
     getChild<LLUICtrl>(FIELD_SKY_HAZE_HORIZON)->setValue(mLiveSky->getHazeHorizon());
     getChild<LLUICtrl>(FIELD_SKY_HAZE_DENSITY)->setValue(mLiveSky->getHazeDensity());
     getChild<LLUICtrl>(FIELD_SKY_SCENE_GAMMA)->setValue(mLiveSky->getGamma());
+    // <KS:KS> Atmosphere sliders.
+    F32 density_mult = mLiveSky->getDensityMultiplier();
+    density_mult /= SLIDER_SCALE_DENSITY_MULTIPLIER;
+    getChild<LLUICtrl>(FIELD_SKY_DENSITY_MULTIP)->setValue(density_mult);
+    getChild<LLUICtrl>(FIELD_SKY_DISTANCE_MULTIP)->setValue(mLiveSky->getDistanceMultiplier());
+    getChild<LLUICtrl>(FIELD_SKY_MAX_ALT)->setValue(mLiveSky->getMaxY());
+    // </KS:KS>
     getChild<LLColorSwatchCtrl>(FIELD_SKY_CLOUD_COLOR)->set(mLiveSky->getCloudColor());
     getChild<LLUICtrl>(FIELD_SKY_CLOUD_COVERAGE)->setValue(mLiveSky->getCloudShadow());
     getChild<LLUICtrl>(FIELD_SKY_CLOUD_SCALE)->setValue(mLiveSky->getCloudScale());
@@ -311,6 +331,34 @@ void LLFloaterEnvironmentAdjustAdvanced::onSceneGammaChanged()
     mLiveSky->setGamma((F32)getChild<LLUICtrl>(FIELD_SKY_SCENE_GAMMA)->getValue().asReal());
     mLiveSky->update();
 }
+
+// <KS:KS> Atmosphere sliders.
+void LLFloaterEnvironmentAdjustAdvanced::onDensityMultipChanged()
+{
+    if (!mLiveSky)
+        return;
+    F32 density_mult = (F32)getChild<LLUICtrl>(FIELD_SKY_DENSITY_MULTIP)->getValue().asReal();
+    density_mult *= SLIDER_SCALE_DENSITY_MULTIPLIER;
+    mLiveSky->setDensityMultiplier(density_mult);
+    mLiveSky->update();
+}
+
+void LLFloaterEnvironmentAdjustAdvanced::onDistanceMultipChanged()
+{
+    if (!mLiveSky)
+        return;
+    mLiveSky->setDistanceMultiplier((F32)getChild<LLUICtrl>(FIELD_SKY_DISTANCE_MULTIP)->getValue().asReal());
+    mLiveSky->update();
+}
+
+void LLFloaterEnvironmentAdjustAdvanced::onMaxAltChanged()
+{
+    if (!mLiveSky)
+        return;
+    mLiveSky->setMaxY((F32)getChild<LLUICtrl>(FIELD_SKY_MAX_ALT)->getValue().asReal());
+    mLiveSky->update();
+}
+// </KS:KS>
 
 void LLFloaterEnvironmentAdjustAdvanced::onCloudColorChanged()
 {
