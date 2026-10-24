@@ -55,9 +55,9 @@
 #include "llfloaterreg.h"
 #include "llfloatercamera.h"
 #include "llmenugl.h"
-// <AS:KS> Alt-click subject for local light priority.
-#include "aslocallightsort.h"
-// </AS:KS>
+// <KS:KS> Alt-click subject for local light priority.
+#include "kslocallightsort.h"
+// </KS:KS>
 
 // Globals
 bool gCameraBtnZoom = true;
@@ -225,9 +225,9 @@ void LLToolCamera::pickCallback(const LLPickInfo& pick_info)
             {
                 gAgentCamera.setFocusOnAvatar(false, ANIMATE);
                 gAgentCamera.setFocusGlobal(pick_info);
-                // <AS:KS> Record the ray hit as the local light subject.
-                ASLocalLightSort::setSubject(pick_info);
-                // </AS:KS>
+                // <KS:KS> Record the ray hit as the local light subject.
+                KSLocalLightSort::setSubject(pick_info);
+                // </KS:KS>
             }
         }
         else if (!pick_info.mPosGlobal.isExactlyZero())
@@ -235,9 +235,9 @@ void LLToolCamera::pickCallback(const LLPickInfo& pick_info)
             // Hit the ground
             gAgentCamera.setFocusOnAvatar(false, ANIMATE);
             gAgentCamera.setFocusGlobal(pick_info);
-            // <AS:KS> Record the ray hit as the local light subject.
-            ASLocalLightSort::setSubject(pick_info);
-            // </AS:KS>
+            // <KS:KS> Record the ray hit as the local light subject.
+            KSLocalLightSort::setSubject(pick_info);
+            // </KS:KS>
         }
 
         bool zoom_tool = gCameraBtnZoom && (LLToolMgr::getInstance()->getBaseTool() == LLToolCamera::getInstance());

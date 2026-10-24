@@ -1,12 +1,12 @@
 /**
- * @file asdarklight.cpp
+ * @file ksdarklight.cpp
  * @author Kissmy Spicoli
  * @brief Dark My Lights spots: a multiplicative pass that darkens a cone.
  */
 
 #include "llviewerprecompiledheaders.h"
 
-#include "asdarklight.h"
+#include "ksdarklight.h"
 
 #include "aslightrigrenderer.h"
 #include "llgl.h"
@@ -28,12 +28,12 @@ namespace
     constexpr F32 DEFERRED_LIGHT_FALLOFF = 0.5f;
 }
 
-void ASDarkLight::registerShader(std::vector<LLGLSLShader*>& shaders)
+void KSDarkLight::registerShader(std::vector<LLGLSLShader*>& shaders)
 {
     shaders.push_back(&sDarkSpotProgram);
 }
 
-bool ASDarkLight::createShader(S32 shader_level)
+bool KSDarkLight::createShader(S32 shader_level)
 {
     // Features and permutations as gDeferredMultiSpotLightProgram, including
     // add_common_permutations() (static in llviewershadermgr.cpp).
@@ -52,17 +52,17 @@ bool ASDarkLight::createShader(S32 shader_level)
     }
     sDarkSpotProgram.mShaderFiles.clear();
     sDarkSpotProgram.mShaderFiles.emplace_back("deferred/multiPointLightV.glsl", GL_VERTEX_SHADER);
-    sDarkSpotProgram.mShaderFiles.emplace_back("deferred/asDarkSpotLightF.glsl", GL_FRAGMENT_SHADER);
+    sDarkSpotProgram.mShaderFiles.emplace_back("deferred/ksDarkSpotLightF.glsl", GL_FRAGMENT_SHADER);
     sDarkSpotProgram.mShaderLevel = shader_level;
     return sDarkSpotProgram.createShader();
 }
 
-void ASDarkLight::unloadShader()
+void KSDarkLight::unloadShader()
 {
     sDarkSpotProgram.unload();
 }
 
-void ASDarkLight::render(LLPipeline& pipeline, const LLDrawable::drawable_list_t& dark_spots, F32 light_scale)
+void KSDarkLight::render(LLPipeline& pipeline, const LLDrawable::drawable_list_t& dark_spots, F32 light_scale)
 {
     // Reflection probes see neither the dark spot nor its darkening.
     if (dark_spots.empty() || gCubeSnapshot || !sDarkSpotProgram.isComplete())

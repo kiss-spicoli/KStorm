@@ -160,19 +160,20 @@ set(viewer_SOURCE_FILES
     aslightrig.cpp
     aslightrigrenderer.cpp
     asfloatermylights.cpp
-    # Optional subject-based local light priority.
-    aslocallightsort.cpp
     # </AS:Chanayane>
-    # <AS:KS> KS tab of Environment Effects.
+    # <KS:KS> Optional subject-based local light priority.
+    kslocallightsort.cpp
+    # </KS:KS>
+    # <KS:KS> KS tab of Environment Effects.
     ksenvironment.cpp
     kspanellighting.cpp
-    # </AS:KS>
-    # <AS:KS> Dark My Lights spots.
-    asdarklight.cpp
-    # </AS:KS>
-    # <AS:KS> Body-proxy hair occlusion.
+    # </KS:KS>
+    # <KS:KS> Dark My Lights spots.
+    ksdarklight.cpp
+    # </KS:KS>
+    # <KS:KS> Body-proxy hair occlusion.
     kshairocclusion.cpp
-    # </AS:KS>
+    # </KS:KS>
     # <AS:Chanayane> Viewer-local per-joint shape deformer preview.
     asbonedeformerbaker.cpp
     asfloaterbonedeformer.cpp
@@ -1117,19 +1118,20 @@ set(viewer_HEADER_FILES
     aslightrig.h
     aslightrigrenderer.h
     asfloatermylights.h
-    # Optional subject-based local light priority.
-    aslocallightsort.h
     # </AS:Chanayane>
-    # <AS:KS> KS tab of Environment Effects.
+    # <KS:KS> Optional subject-based local light priority.
+    kslocallightsort.h
+    # </KS:KS>
+    # <KS:KS> KS tab of Environment Effects.
     ksenvironment.h
     kspanellighting.h
-    # </AS:KS>
-    # <AS:KS> Dark My Lights spots.
-    asdarklight.h
-    # </AS:KS>
-    # <AS:KS> Body-proxy hair occlusion.
+    # </KS:KS>
+    # <KS:KS> Dark My Lights spots.
+    ksdarklight.h
+    # </KS:KS>
+    # <KS:KS> Body-proxy hair occlusion.
     kshairocclusion.h
-    # </AS:KS>
+    # </KS:KS>
     # <AS:Chanayane> Viewer-local per-joint shape deformer preview.
     asbonedeformerbaker.h
     asfloaterbonedeformer.h

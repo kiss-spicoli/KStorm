@@ -136,7 +136,7 @@ public:
     F32 mSpotFocus;
     F32 mSpotAmbiance;
     LLUUID mSpotTexture;        // projector image; null = plain white
-    // Dark spot: darkens its cone instead of lighting it (ASDarkLight).
+    // Dark spot: darkens its cone instead of lighting it (KSDarkLight).
     // Applied at render time like mBoost; the object stays an ordinary spot.
     bool mDark;
 

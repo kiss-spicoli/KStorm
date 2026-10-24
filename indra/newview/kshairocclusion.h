@@ -8,7 +8,7 @@
  * (alphaF, materialF blend mode, pbralphaF, via ksHairOcclusionF.glsl) use
  * them to occlude the sun/moon and local lights and to darken fragments next
  * to the body, but only while drawing the self avatar's attachments.
- * Settings: KSHairOcclusion*. Design: doc/hair-occlusion.md.
+ * Settings: KSHairOcclusion*. Design: doc/ks-hair-occlusion.md.
  */
 #ifndef KS_HAIROCCLUSION_H
 #define KS_HAIROCCLUSION_H

@@ -1,4 +1,4 @@
-# Local Light Priority (RenderLocalLightCount, ASRenderLocalLightSubjectSort)
+# Local Light Priority (RenderLocalLightCount, KSRenderLocalLightSubjectSort)
 
 ## Upstream behavior
 
@@ -29,10 +29,10 @@
   - `mFocusGlobal` animates toward `mFocusTargetGlobal`. When focus returns to the avatar (`mFocusOnAvatar`), it becomes avatar-relative (`calcFocusPositionTargetGlobal()`).
   - Rigged mesh is not picked (`pick_rigged=false`), so on mesh bodies the hit lands on the avatar's collision volumes rather than the visible skin.
 
-## ASRenderLocalLightSubjectSort (default false)
+## KSRenderLocalLightSubjectSort (default false)
 
-- Module: `aslocallightsort.h/.cpp`, class `ASLocalLightSort` (friend of `LLPipeline`).
-- Subject: `ASLocalLightSort::setSubject(pick_info)` is called from tagged lines in `LLToolCamera::pickCallback()`, next to both `setFocusGlobal(pick_info)` calls (object and land). It stores `mPosGlobal`, plus the object ID and the hit in the object's render frame, so the subject follows a moving object or avatar. If the object is gone, the last known global position is used.
+- Module: `kslocallightsort.h/.cpp`, class `KSLocalLightSort` (friend of `LLPipeline`).
+- Subject: `KSLocalLightSort::setSubject(pick_info)` is called from tagged lines in `LLToolCamera::pickCallback()`, next to both `setFocusGlobal(pick_info)` calls (object and land). It stores `mPosGlobal`, plus the object ID and the hit in the object's render frame, so the subject follows a moving object or avatar. If the object is gone, the last known global position is used.
 - Lifetime: the subject lasts while `gAgentCamera.getFocusOnAvatar()` is false. It is dropped when focus returns to the avatar (walk, Esc, camera reset), and replaced by the next Alt-click. A focus change that is not an Alt-click or Camera tool pick (for example menu zoom-to-object or sit camera) does not update it.
 - No subject: the camera origin is used, which gives upstream order (sorting still applies, but scores match `calc_light_dist()`).
 - When on, the cap loop iterates `mNearbyLights` in order of `max(|renderPos - subject| - radius, 0)`. Selected lights score 0, moving lights get the 0.25 * radius bonus, dim lights sort last, and the tie-break is the drawable address. Lights fading out of camera range sort after in-range lights.

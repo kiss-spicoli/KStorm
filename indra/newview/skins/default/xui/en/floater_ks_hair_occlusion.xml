@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
-<!-- KStorm > Hair Occlusion: body-proxy hair occlusion, see doc/hair-occlusion.md. Every control binds a KSHairOcclusion* setting. -->
+<!-- KStorm > Hair Occlusion: body-proxy hair occlusion, see doc/ks-hair-occlusion.md. Every control binds a KSHairOcclusion* setting. -->
 <floater
  positioning="cascading"
  can_close="true"

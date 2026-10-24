@@ -16,14 +16,14 @@
 
 namespace
 {
-    // Viewer settings set by the KS environment. ASRenderLocalLightSubjectSort
+    // Viewer settings set by the KS environment. KSRenderLocalLightSubjectSort
     // comes from feat-local-light-subject-sort; missing controls are skipped.
     const std::map<std::string, LLSD> KS_SETTINGS =
     {
         { "RenderFarClip",                 LLSD(16.0) },
         { "RenderAvatarMaxNonImpostors",   LLSD(4) },
         { "AvatarNameTagMode",             LLSD(0) },
-        { "ASRenderLocalLightSubjectSort", LLSD(true) },
+        { "KSRenderLocalLightSubjectSort", LLSD(true) },
     };
 
     // Personal Lighting values. Colors are the RGB equivalents of the color

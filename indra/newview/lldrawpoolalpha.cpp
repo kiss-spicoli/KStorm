@@ -37,9 +37,9 @@
 #include "asoitdispatcher.h"
 // </AS:Chanayane>
 
-// <AS:KS> Body-proxy hair occlusion.
+// <KS:KS> Body-proxy hair occlusion.
 #include "kshairocclusion.h"
-// </AS:KS>
+// </KS:KS>
 
 #include "lldrawpoolalpha.h"
 
@@ -133,9 +133,9 @@ static void prepare_alpha_shader(LLGLSLShader* shader, bool deferredEnvironment,
                       ASAmbientOcclusion::debugWhiteEnabled() &&
                       !LLPipeline::sRenderingHUDs && !gCubeSnapshot ? 1 : 0);
 // </AS:Chanayane>
-// <AS:KS> Body-proxy hair occlusion shapes.
+// <KS:KS> Body-proxy hair occlusion shapes.
     KSHairOcclusion::applyShader(*shader);
-// </AS:KS>
+// </KS:KS>
     shader->uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f / 2.2f));
 
     if (LLPipeline::sRenderingHUDs)
@@ -937,9 +937,9 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged,
                     continue;
                 }
 
-                // <AS:KS> Body-proxy hair occlusion applies to self-avatar draws only.
+                // <KS:KS> Body-proxy hair occlusion applies to self-avatar draws only.
                 KSHairOcclusion::applyDraw(current_shader, params, group);
-                // </AS:KS>
+                // </KS:KS>
 
                 bool tex_setup = TexSetup(&params, (mat != nullptr));
 

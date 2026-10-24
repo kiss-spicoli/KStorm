@@ -1,5 +1,5 @@
 /**
- * @file asdarklight.h
+ * @file ksdarklight.h
  * @author Kissmy Spicoli
  * @brief Dark My Lights spots: a multiplicative pass that darkens a cone.
  *
@@ -16,8 +16,8 @@
  * lights, the volumetric collector, reflection-probe captures and projector
  * shadow maps.
  */
-#ifndef AS_DARKLIGHT_H
-#define AS_DARKLIGHT_H
+#ifndef KS_DARKLIGHT_H
+#define KS_DARKLIGHT_H
 
 #include <vector>
 
@@ -26,7 +26,7 @@
 class LLGLSLShader;
 class LLPipeline;
 
-namespace ASDarkLight
+namespace KSDarkLight
 {
     void registerShader(std::vector<LLGLSLShader*>& shaders);
     bool createShader(S32 shader_level);
@@ -37,4 +37,4 @@ namespace ASDarkLight
     void render(LLPipeline& pipeline, const LLDrawable::drawable_list_t& dark_spots, F32 light_scale);
 }
 
-#endif // AS_DARKLIGHT_H
+#endif // KS_DARKLIGHT_H

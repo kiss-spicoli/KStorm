@@ -44,7 +44,7 @@ public:
     // through LLPipeline::mNearbyLights. Returns the next free slot.
     static S32 appendForwardLights(LLPipeline& pipeline, S32 first_slot, F32 light_scale);
 
-    // "Only My Lights" (ASLightRigOnlyMyLights): when on, every local light
+    // "Only My Lights" (KSLightRigOnlyMyLights): when on, every local light
     // except the My Lights objects is kept out of LLPipeline::mNearbyLights,
     // which feeds the deferred, forward (alpha), projector-shadow,
     // reflection-probe and volumetric local-light paths. Worn lights are
@@ -66,7 +66,7 @@ public:
     static F32 getLightBoost(const LLVOVolume* light);
 
     // Dark spots (ASLightRig::mDark): My Lights spot objects drawn by
-    // ASDarkLight's multiplicative pass instead of the additive light passes,
+    // KSDarkLight's multiplicative pass instead of the additive light passes,
     // and kept out of forward lights, volumetrics and projector shadows.
     // The floater refreshes the set every idle tick.
     static void setDarkLights(const std::set<LLUUID>& ids);

@@ -66,9 +66,9 @@
 // <AS:Chanayane> Self-lighting floater background isolate shader lifecycle.
 #include "asbackgroundisolate.h"
 // </AS:Chanayane>
-// <AS:KS> Dark My Lights spots.
-#include "asdarklight.h"
-// </AS:KS>
+// <KS:KS> Dark My Lights spots.
+#include "ksdarklight.h"
+// </KS:KS>
 // <AS:Chanayane> Exact OIT and AVBOIT
 #include "asexactoit.h"
 #include "asavboit.h"
@@ -521,9 +521,9 @@ void LLViewerShaderMgr::finalizeShaderList()
     // <AS:Chanayane> Register the self-lighting floater's background isolate shader.
     ASBackgroundIsolate::registerShader(mShaderList);
     // </AS:Chanayane>
-    // <AS:KS> Register the dark My Lights spot shader.
-    ASDarkLight::registerShader(mShaderList);
-    // </AS:KS>
+    // <KS:KS> Register the dark My Lights spot shader.
+    KSDarkLight::registerShader(mShaderList);
+    // </KS:KS>
     // <AS:Chanayane> Register independent viewer-local weather shaders.
     ASWeather::registerShaders(mShaderList);
     // </AS:Chanayane>
@@ -1277,9 +1277,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         // <AS:Chanayane> Unload the self-lighting floater's background isolate shader.
         ASBackgroundIsolate::unloadShader();
         // </AS:Chanayane>
-        // <AS:KS> Unload the dark My Lights spot shader.
-        ASDarkLight::unloadShader();
-        // </AS:KS>
+        // <KS:KS> Unload the dark My Lights spot shader.
+        KSDarkLight::unloadShader();
+        // </KS:KS>
         // <AS:Chanayane> Unload viewer-local weather shaders and resources.
         ASWeather::unloadShaders();
         // </AS:Chanayane>
@@ -1459,9 +1459,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
             gDeferredMaterialProgram[i].mShaderFiles.clear();
             gDeferredMaterialProgram[i].mShaderFiles.push_back(make_pair("deferred/materialV.glsl", GL_VERTEX_SHADER));
             gDeferredMaterialProgram[i].mShaderFiles.push_back(make_pair("deferred/materialF.glsl", GL_FRAGMENT_SHADER));
-            // <AS:KS> Body-proxy hair occlusion library.
+            // <KS:KS> Body-proxy hair occlusion library.
             gDeferredMaterialProgram[i].mShaderFiles.push_back(make_pair("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER));
-            // </AS:KS>
+            // </KS:KS>
             gDeferredMaterialProgram[i].mShaderLevel = mShaderLevel[SHADER_DEFERRED];
 
             gDeferredMaterialProgram[i].clearPermutations();
@@ -1630,9 +1630,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         shader->mShaderFiles.clear();
         shader->mShaderFiles.push_back(make_pair("deferred/pbralphaV.glsl", GL_VERTEX_SHADER));
         shader->mShaderFiles.push_back(make_pair("deferred/pbralphaF.glsl", GL_FRAGMENT_SHADER));
-        // <AS:KS> Body-proxy hair occlusion library.
+        // <KS:KS> Body-proxy hair occlusion library.
         shader->mShaderFiles.push_back(make_pair("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER));
-        // </AS:KS>
+        // </KS:KS>
 
         shader->clearPermutations();
 
@@ -1964,9 +1964,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
             shader->mShaderFiles.clear();
             shader->mShaderFiles.push_back(make_pair("deferred/alphaV.glsl", GL_VERTEX_SHADER));
             shader->mShaderFiles.push_back(make_pair("deferred/alphaF.glsl", GL_FRAGMENT_SHADER));
-            // <AS:KS> Body-proxy hair occlusion library.
+            // <KS:KS> Body-proxy hair occlusion library.
             shader->mShaderFiles.push_back(make_pair("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER));
-            // </AS:KS>
+            // </KS:KS>
 
             shader->clearPermutations();
             shader->addPermutation("USE_VERTEX_COLOR", "1");
@@ -2565,9 +2565,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         gDeferredAvatarAlphaProgram.mShaderFiles.clear();
         gDeferredAvatarAlphaProgram.mShaderFiles.push_back(make_pair("deferred/alphaV.glsl", GL_VERTEX_SHADER));
         gDeferredAvatarAlphaProgram.mShaderFiles.push_back(make_pair("deferred/alphaF.glsl", GL_FRAGMENT_SHADER));
-        // <AS:KS> Body-proxy hair occlusion library (never uploaded here: stays off).
+        // <KS:KS> Body-proxy hair occlusion library (never uploaded here: stays off).
         gDeferredAvatarAlphaProgram.mShaderFiles.push_back(make_pair("deferred/ksHairOcclusionF.glsl", GL_FRAGMENT_SHADER));
-        // </AS:KS>
+        // </KS:KS>
 
         gDeferredAvatarAlphaProgram.clearPermutations();
         gDeferredAvatarAlphaProgram.addPermutation("USE_DIFFUSE_TEX", "1");
@@ -3162,12 +3162,12 @@ bool LLViewerShaderMgr::loadShadersDeferred()
     }
     // </AS:Chanayane>
 
-    // <AS:KS> Build the dark My Lights spot pass; optional, failure only disables it.
+    // <KS:KS> Build the dark My Lights spot pass; optional, failure only disables it.
     if (success)
     {
-        ASDarkLight::createShader(mShaderLevel[SHADER_DEFERRED]);
+        KSDarkLight::createShader(mShaderLevel[SHADER_DEFERRED]);
     }
-    // </AS:KS>
+    // </KS:KS>
 
     // <AS:Chanayane> Build optional viewer-local weather shaders.
     if (success)

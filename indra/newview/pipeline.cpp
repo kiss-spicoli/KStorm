@@ -73,12 +73,12 @@
 // <AS:Chanayane> Optional viewer-object-free My Lights backend.
 #include "aslightrigrenderer.h"
 // </AS:Chanayane>
-// <AS:KS> Optional subject-based local light priority.
-#include "aslocallightsort.h"
-// </AS:KS>
-// <AS:KS> Dark My Lights spots.
-#include "asdarklight.h"
-// </AS:KS>
+// <KS:KS> Optional subject-based local light priority.
+#include "kslocallightsort.h"
+// </KS:KS>
+// <KS:KS> Dark My Lights spots.
+#include "ksdarklight.h"
+// </KS:KS>
 
 #include "pipeline.h"
 
@@ -6427,13 +6427,13 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
                 drawable->clearState(LLDrawable::NEARBY_LIGHT);
                 continue;
             }
-            // <AS:KS> Only My Lights: drop every other local light.
+            // <KS:KS> Only My Lights: drop every other local light.
             if (!ASLightRigRenderer::allowsLight(volight))
             {
                 drawable->clearState(LLDrawable::NEARBY_LIGHT);
                 continue;
             }
-            // </AS:KS>
+            // </KS:KS>
 
             F32 dist = calc_light_dist(volight, cam_pos, max_dist);
             F32 fade = light->fade;
@@ -6489,12 +6489,12 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
             {
                 continue;
             }
-            // <AS:KS> Only My Lights: skip every other local light.
+            // <KS:KS> Only My Lights: skip every other local light.
             if (!ASLightRigRenderer::allowsLight(light))
             {
                 continue;
             }
-            // </AS:KS>
+            // </KS:KS>
             LLVOAvatar * av = light->getAvatar();
             if (av && (av->isTooComplex() || av->isInMuteList() || av->isTooSlow()))
             {
@@ -6708,12 +6708,12 @@ void LLPipeline::setupHWLights()
                 }
             }
 
-            // <AS:KS> Dark My Lights spots would light alpha; v1 leaves alpha alone.
+            // <KS:KS> Dark My Lights spots would light alpha; v1 leaves alpha alone.
             if (ASLightRigRenderer::isDarkLight(light))
             {
                 continue;
             }
-            // </AS:KS>
+            // </KS:KS>
 
             if (drawable->isState(LLDrawable::ACTIVE))
             {
@@ -6721,10 +6721,10 @@ void LLPipeline::setupHWLights()
             }
 
             //send linear light color to shader
-            // <AS:KS> My Lights Boost (aslightrigrenderer.h).
+            // <KS:KS> My Lights Boost (aslightrigrenderer.h).
             // LLColor4  light_color = light->getLightLinearColor() * light_scale;
             LLColor4  light_color = light->getLightLinearColor() * (light_scale * ASLightRigRenderer::getLightBoost(light));
-            // </AS:KS>
+            // </KS:KS>
             light_color.mV[3] = 0.0f;
 
             F32 fade = iter->fade;
@@ -10076,9 +10076,9 @@ void LLPipeline::renderDeferredLighting()
             std::list<LLVector4>        fullscreen_lights;
             LLDrawable::drawable_list_t spot_lights;
             LLDrawable::drawable_list_t fullscreen_spot_lights;
-            // <AS:KS> Dark My Lights spots, drawn last by ASDarkLight (asdarklight.h).
+            // <KS:KS> Dark My Lights spots, drawn last by KSDarkLight (ksdarklight.h).
             LLDrawable::drawable_list_t dark_spot_lights;
-            // </AS:KS>
+            // </KS:KS>
             LLSettingsSky::ptr_t        psky        = LLEnvironment::instance().getCurrentSky();
 
             if (!gCubeSnapshot)
@@ -10110,16 +10110,16 @@ void LLPipeline::renderDeferredLighting()
                 // It is calculated from mLights
                 // mNearbyLights also provides fade value to gracefully fade-out out of range lights
                 S32 count = 0;
-                // <AS:KS> Optional subject-based priority (aslocallightsort.h).
+                // <KS:KS> Optional subject-based priority (kslocallightsort.h).
                 // Subject sort counts only lights that pass the off-screen and dark checks.
                 // for (light_set_t::iterator iter = mNearbyLights.begin(); iter != mNearbyLights.end(); ++iter)
                 std::vector<const Light*> ordered_lights;
-                ASLocalLightSort::order(mNearbyLights, ordered_lights);
-                const bool count_drawn_only = ASLocalLightSort::enabled();
+                KSLocalLightSort::order(mNearbyLights, ordered_lights);
+                const bool count_drawn_only = KSLocalLightSort::enabled();
                 for (const Light* lightp : ordered_lights)
-                // </AS:KS>
+                // </KS:KS>
                 {
-                    // <AS:KS> Counted after the checks below in subject sort.
+                    // <KS:KS> Counted after the checks below in subject sort.
                     // count++;
                     // if (count > local_light_count)
                     // { //stop collecting lights once we hit the limit
@@ -10133,12 +10133,12 @@ void LLPipeline::renderDeferredLighting()
                             break;
                         }
                     }
-                    // </AS:KS>
+                    // </KS:KS>
 
-                    // <AS:KS> Iterate the ordered list.
+                    // <KS:KS> Iterate the ordered list.
                     // LLDrawable * drawablep = iter->drawable;
                     LLDrawable * drawablep = lightp->drawable;
-                    // </AS:KS>
+                    // </KS:KS>
                     LLVOVolume * volume = drawablep->getVOVolume();
                     if (!volume)
                     {
@@ -10165,10 +10165,10 @@ void LLPipeline::renderDeferredLighting()
                     }
                     // </FS:Beq>
                     // send light color to shader in linear space
-                    // <AS:KS> My Lights Boost (aslightrigrenderer.h).
+                    // <KS:KS> My Lights Boost (aslightrigrenderer.h).
                     // LLColor3 col = volume->getLightLinearColor() * light_scale;
                     LLColor3 col = volume->getLightLinearColor() * (light_scale * ASLightRigRenderer::getLightBoost(volume));
-                    // </AS:KS>
+                    // </KS:KS>
 
                     if (col.magVecSquared() < 0.001f)
                     {
@@ -10187,7 +10187,7 @@ void LLPipeline::renderDeferredLighting()
                         continue;
                     }
 
-                    // <AS:KS> Subject sort: count only lights that will be drawn.
+                    // <KS:KS> Subject sort: count only lights that will be drawn.
                     if (count_drawn_only)
                     {
                         count++;
@@ -10196,15 +10196,15 @@ void LLPipeline::renderDeferredLighting()
                             break;
                         }
                     }
-                    // </AS:KS>
+                    // </KS:KS>
 
-                    // <AS:KS> Dark My Lights spots skip the additive passes (asdarklight.h).
+                    // <KS:KS> Dark My Lights spots skip the additive passes (ksdarklight.h).
                     if (volume->isLightSpotlight() && ASLightRigRenderer::isDarkLight(volume))
                     {
                         dark_spot_lights.push_back(drawablep);
                         continue;
                     }
-                    // </AS:KS>
+                    // </KS:KS>
 
                     sVisibleLightCount++;
 
@@ -10279,10 +10279,10 @@ void LLPipeline::renderDeferredLighting()
                     setupSpotLight(gDeferredSpotLightProgram, drawablep);
 
                     // send light color to shader in linear space
-                    // <AS:KS> My Lights Boost (aslightrigrenderer.h).
+                    // <KS:KS> My Lights Boost (aslightrigrenderer.h).
                     // LLColor3 col = volume->getLightLinearColor() * light_scale;
                     LLColor3 col = volume->getLightLinearColor() * (light_scale * ASLightRigRenderer::getLightBoost(volume));
-                    // </AS:KS>
+                    // </KS:KS>
 
                     gDeferredSpotLightProgram.uniform3fv(LLShaderMgr::LIGHT_CENTER, 1, c);
                     gDeferredSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_SIZE, s);
@@ -10359,10 +10359,10 @@ void LLPipeline::renderDeferredLighting()
                     setupSpotLight(gDeferredMultiSpotLightProgram, drawablep);
 
                     // send light color to shader in linear space
-                    // <AS:KS> My Lights Boost (aslightrigrenderer.h).
+                    // <KS:KS> My Lights Boost (aslightrigrenderer.h).
                     // LLColor3 col = volume->getLightLinearColor() * light_scale;
                     LLColor3 col = volume->getLightLinearColor() * (light_scale * ASLightRigRenderer::getLightBoost(volume));
-                    // </AS:KS>
+                    // </KS:KS>
 
                     gDeferredMultiSpotLightProgram.uniform3fv(LLShaderMgr::LIGHT_CENTER, 1, glm::value_ptr(tc));
                     gDeferredMultiSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_SIZE, light_size_final);
@@ -10382,9 +10382,9 @@ void LLPipeline::renderDeferredLighting()
             ASLightRigRenderer::render(*this, light_scale);
             // </AS:Chanayane>
 
-            // <AS:KS> Dark My Lights spots multiply the fully lit result.
-            ASDarkLight::render(*this, dark_spot_lights, light_scale);
-            // </AS:KS>
+            // <KS:KS> Dark My Lights spots multiply the fully lit result.
+            KSDarkLight::render(*this, dark_spot_lights, light_scale);
+            // </KS:KS>
         }
 
         gGL.setColorMask(true, true);
@@ -10756,10 +10756,10 @@ void LLPipeline::setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep)
     // make sure we're not already targeting the same spot light with both shadow maps
     llassert(mTargetShadowSpotLight[0] != mTargetShadowSpotLight[1] || mTargetShadowSpotLight[0].isNull());
 
-    // <AS:KS> Dark My Lights spots never take a projector shadow map (asdarklight.h).
+    // <KS:KS> Dark My Lights spots never take a projector shadow map (ksdarklight.h).
     // if (!gCubeSnapshot)
     if (!gCubeSnapshot && !ASLightRigRenderer::isDarkLight(volume))
-    // </AS:KS>
+    // </KS:KS>
     {
         LLDrawable* potential = drawablep;
         //determine if this light is higher priority than one of the existing spot shadows

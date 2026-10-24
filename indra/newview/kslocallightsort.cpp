@@ -1,10 +1,10 @@
 /**
- * @file aslocallightsort.cpp
+ * @file kslocallightsort.cpp
  * @author Kissmy Spicoli
  * @brief Optional subject-based priority for deferred local lights.
  */
 #include "llviewerprecompiledheaders.h"
-#include "aslocallightsort.h"
+#include "kslocallightsort.h"
 
 #include <algorithm>
 #include <cfloat>
@@ -83,13 +83,13 @@ namespace
     }
 }
 
-bool ASLocalLightSort::enabled()
+bool KSLocalLightSort::enabled()
 {
-    static LLCachedControl<bool> subject_sort(gSavedSettings, "ASRenderLocalLightSubjectSort", false);
+    static LLCachedControl<bool> subject_sort(gSavedSettings, "KSRenderLocalLightSubjectSort", false);
     return subject_sort;
 }
 
-void ASLocalLightSort::setSubject(const LLPickInfo& pick)
+void KSLocalLightSort::setSubject(const LLPickInfo& pick)
 {
     if (pick.mPosGlobal.isExactlyZero())
     {
@@ -109,7 +109,7 @@ void ASLocalLightSort::setSubject(const LLPickInfo& pick)
     }
 }
 
-void ASLocalLightSort::order(const LLPipeline::light_set_t& lights,
+void KSLocalLightSort::order(const LLPipeline::light_set_t& lights,
                              std::vector<const LLPipeline::Light*>& out)
 {
     out.clear();

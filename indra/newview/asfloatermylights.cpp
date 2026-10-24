@@ -109,23 +109,23 @@ bool ASFloaterMyLights::postBuild()
     mRadiusSlider = getChild<LLUICtrl>("as_light_radius");
     mFalloffSlider = getChild<LLUICtrl>("as_light_falloff");
     mColorSwatch = getChild<LLColorSwatchCtrl>("as_light_color");
-    mLightOnCheck = getChild<LLCheckBoxCtrl>("as_light_on");
-    mPlacementCombo = getChild<LLComboBox>("as_light_placement");
-    mPosXSlider = getChild<LLUICtrl>("as_light_pos_x");
-    mPosYSlider = getChild<LLUICtrl>("as_light_pos_y");
-    mPosZSlider = getChild<LLUICtrl>("as_light_pos_z");
-    mListFilterCombo = getChild<LLComboBox>("as_light_list_filter");
-    mPresetRegionOnlyCheck = getChild<LLCheckBoxCtrl>("as_light_preset_region_only");
-    mSpotCheck = getChild<LLCheckBoxCtrl>("as_light_spot");
-    mAimJointCombo = getChild<LLComboBox>("as_light_aim_joint");
-    mAimYawSlider = getChild<LLUICtrl>("as_light_aim_yaw");
-    mAimPitchSlider = getChild<LLUICtrl>("as_light_aim_pitch");
-    mSpotFOVSlider = getChild<LLUICtrl>("as_light_spot_fov");
-    mSpotFocusSlider = getChild<LLUICtrl>("as_light_spot_focus");
-    mSpotAmbianceSlider = getChild<LLUICtrl>("as_light_spot_ambiance");
-    mSpotTexturePicker = getChild<LLTextureCtrl>("as_light_spot_texture");
-    mDarkCheck = getChild<LLCheckBoxCtrl>("as_light_spot_dark");
-    mBoostSlider = getChild<LLUICtrl>("as_light_boost");
+    mLightOnCheck = getChild<LLCheckBoxCtrl>("ks_light_on");
+    mPlacementCombo = getChild<LLComboBox>("ks_light_placement");
+    mPosXSlider = getChild<LLUICtrl>("ks_light_pos_x");
+    mPosYSlider = getChild<LLUICtrl>("ks_light_pos_y");
+    mPosZSlider = getChild<LLUICtrl>("ks_light_pos_z");
+    mListFilterCombo = getChild<LLComboBox>("ks_light_list_filter");
+    mPresetRegionOnlyCheck = getChild<LLCheckBoxCtrl>("ks_light_preset_region_only");
+    mSpotCheck = getChild<LLCheckBoxCtrl>("ks_light_spot");
+    mAimJointCombo = getChild<LLComboBox>("ks_light_aim_joint");
+    mAimYawSlider = getChild<LLUICtrl>("ks_light_aim_yaw");
+    mAimPitchSlider = getChild<LLUICtrl>("ks_light_aim_pitch");
+    mSpotFOVSlider = getChild<LLUICtrl>("ks_light_spot_fov");
+    mSpotFocusSlider = getChild<LLUICtrl>("ks_light_spot_focus");
+    mSpotAmbianceSlider = getChild<LLUICtrl>("ks_light_spot_ambiance");
+    mSpotTexturePicker = getChild<LLTextureCtrl>("ks_light_spot_texture");
+    mDarkCheck = getChild<LLCheckBoxCtrl>("ks_light_spot_dark");
+    mBoostSlider = getChild<LLUICtrl>("ks_light_boost");
     mMasterEnabledCheck = getChild<LLCheckBoxCtrl>("as_light_master_enabled");
     mRenderBackendCombo = getChild<LLComboBox>("as_light_render_backend");
     mBackgroundCombo = getChild<LLComboBox>("as_light_background");
@@ -143,12 +143,12 @@ bool ASFloaterMyLights::postBuild()
     mNameEditor->setCommitCallback([this](LLUICtrl*, const LLSD&) { onNameChanged(); });
     mLightOnCheck->setCommitCallback([this](LLUICtrl*, const LLSD&) { onLightOnChanged(); });
     mListFilterCombo->setCommitCallback([this](LLUICtrl*, const LLSD&) { onListFilterChanged(); });
-    getChild<LLUICtrl>("as_light_clear_region")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onClearThisRegion(); });
-    getChild<LLUICtrl>("as_light_clear_away")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onClearAwayLights(); });
+    getChild<LLUICtrl>("ks_light_clear_region")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onClearThisRegion(); });
+    getChild<LLUICtrl>("ks_light_clear_away")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onClearAwayLights(); });
 
     mPlacementCombo->setCommitCallback([this](LLUICtrl*, const LLSD&) { onPlacementChanged(); });
-    getChild<LLUICtrl>("as_light_place_camera")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onPlaceAtCamera(); });
-    getChild<LLUICtrl>("as_light_place_focus")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onPlaceAtCameraFocus(); });
+    getChild<LLUICtrl>("ks_light_place_camera")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onPlaceAtCamera(); });
+    getChild<LLUICtrl>("ks_light_place_focus")->setCommitCallback([this](LLUICtrl*, const LLSD&) { onPlaceAtCameraFocus(); });
     for (LLUICtrl* ctrl : { mPosXSlider, mPosYSlider, mPosZSlider })
     {
         ctrl->setCommitCallback([this](LLUICtrl*, const LLSD&) { onFixedOffsetChanged(); });
@@ -203,7 +203,7 @@ bool ASFloaterMyLights::postBuild()
     // collapsing keeps everything above it plus the same bottom margin.
     mFullHeight = getRect().getHeight();
     const S32 SPOT_SECTION_MARGIN = 22;
-    mCollapsedHeight = mFullHeight - getChild<LLView>("as_light_spot_label")->getRect().mTop + SPOT_SECTION_MARGIN;
+    mCollapsedHeight = mFullHeight - getChild<LLView>("ks_light_spot_label")->getRect().mTop + SPOT_SECTION_MARGIN;
     updateSpotSectionVisibility();
 
     setControlsEnabled(false);
@@ -355,7 +355,7 @@ void ASFloaterMyLights::updateLights()
     dormant.reserve(mLights.size());
     // Boosted LLVOVolume lights, read by the renderer's colour sites.
     std::map<LLUUID, F32> boosts;
-    // Dark LLVOVolume spots, drawn by ASDarkLight instead of the light passes.
+    // Dark LLVOVolume spots, drawn by KSDarkLight instead of the light passes.
     std::set<LLUUID> dark_lights;
     for (auto& rig : mLights)
     {
@@ -720,8 +720,8 @@ void ASFloaterMyLights::updatePlacementControls()
         "as_light_preset_head", "as_light_preset_chest", "as_light_preset_back",
         "as_light_distance", "as_light_height", "as_light_azimuth" };
     static const char* const FIXED_CONTROLS[] = {
-        "as_light_place_camera", "as_light_place_focus",
-        "as_light_pos_x", "as_light_pos_y", "as_light_pos_z", "as_light_region" };
+        "ks_light_place_camera", "ks_light_place_focus",
+        "ks_light_pos_x", "ks_light_pos_y", "ks_light_pos_z", "ks_light_region" };
 
     const ASLightRig* rig = getSelectedLight();
     const bool fixed = rig && rig->isFixed();
@@ -737,8 +737,8 @@ void ASFloaterMyLights::updatePlacementControls()
     // Placing works even while dormant (it re-places the light here);
     // offsets need the home region to be loaded to be seen.
     const bool editable_pos = fixed && !rig->isDormant();
-    getChild<LLUICtrl>("as_light_place_camera")->setEnabled(rig != nullptr);
-    getChild<LLUICtrl>("as_light_place_focus")->setEnabled(rig != nullptr);
+    getChild<LLUICtrl>("ks_light_place_camera")->setEnabled(rig != nullptr);
+    getChild<LLUICtrl>("ks_light_place_focus")->setEnabled(rig != nullptr);
     mPosXSlider->setEnabled(editable_pos);
     mPosYSlider->setEnabled(editable_pos);
     mPosZSlider->setEnabled(editable_pos);
@@ -756,7 +756,7 @@ void ASFloaterMyLights::updateSpotControlsEnabled()
     mAimPitchSlider->setEnabled(spot_on);
     mSpotFOVSlider->setEnabled(spot_on);
     mSpotFocusSlider->setEnabled(spot_on);
-    // A dark spot has no ambiance (ASDarkLight ignores it).
+    // A dark spot has no ambiance (KSDarkLight ignores it).
     mSpotAmbianceSlider->setEnabled(spot_on && !rig->mDark);
     mSpotTexturePicker->setEnabled(spot_on);
     mDarkCheck->setEnabled(spot_on);
@@ -780,7 +780,7 @@ void ASFloaterMyLights::refreshControlsFromSelectedLight()
     mPosXSlider->setValue(rig->mFixedOffset.mV[VX]);
     mPosYSlider->setValue(rig->mFixedOffset.mV[VY]);
     mPosZSlider->setValue(rig->mFixedOffset.mV[VZ]);
-    getChild<LLUICtrl>("as_light_region")->setValue(
+    getChild<LLUICtrl>("ks_light_region")->setValue(
         !rig->isFixed() ? std::string()
         : rig->isDormant() ? "Region: " + rig->mRegionName + " (away)"
         : "Region: " + rig->mRegionName);
@@ -1044,9 +1044,9 @@ void ASFloaterMyLights::onRenderBackendChanged()
 void ASFloaterMyLights::updateSpotSectionVisibility()
 {
     static const char* const SPOT_CONTROLS[] = {
-        "as_light_spot_label", "as_light_spot", "as_light_aim_joint_label", "as_light_aim_joint",
-        "as_light_aim_yaw", "as_light_aim_pitch", "as_light_spot_fov", "as_light_spot_focus",
-        "as_light_spot_ambiance", "as_light_spot_texture_label", "as_light_spot_texture" };
+        "ks_light_spot_label", "ks_light_spot", "ks_light_aim_joint_label", "ks_light_aim_joint",
+        "ks_light_aim_yaw", "ks_light_aim_pitch", "ks_light_spot_fov", "ks_light_spot_focus",
+        "ks_light_spot_ambiance", "ks_light_spot_texture_label", "ks_light_spot_texture" };
 
     const bool show = !ASLightRigRenderer::usesShaderBackend();
     for (const char* name : SPOT_CONTROLS)

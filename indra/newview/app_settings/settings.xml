@@ -11167,8 +11167,8 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>256</integer>
   </map>
-  <!-- <AS:KS> Optional subject-based local light priority -->
-  <key>ASRenderLocalLightSubjectSort</key>
+  <!-- <KS:KS> Optional subject-based local light priority -->
+  <key>KSRenderLocalLightSubjectSort</key>
   <map>
     <key>Comment</key>
     <string>If TRUE, RenderLocalLightCount keeps the local lights nearest the Alt-click subject (while the camera focus is off-avatar) instead of nearest the camera, and counts only lights that are on screen and not dark</string>
@@ -11179,8 +11179,8 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <!-- </AS:KS> -->
-  <!-- <AS:KS> KS lighting controls (KStorm > Environment Effects) -->
+  <!-- </KS:KS> -->
+  <!-- <KS:KS> KS lighting controls (KStorm > Environment Effects) -->
   <key>KSSetEnvironment</key>
   <map>
     <key>Comment</key>
@@ -11192,8 +11192,8 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <!-- </AS:KS> -->
-  <!-- <AS:KS> Body-proxy hair occlusion (doc/hair-occlusion.md) -->
+  <!-- </KS:KS> -->
+  <!-- <KS:KS> Body-proxy hair occlusion (doc/ks-hair-occlusion.md) -->
   <key>KSHairOcclusionEnabled</key>
   <map>
     <key>Comment</key>
@@ -11352,7 +11352,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <!-- </AS:KS> -->
+  <!-- </KS:KS> -->
   <key>RenderShadowSplitExponent</key>
   <map>
     <key>Comment</key>
@@ -14266,7 +14266,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>1.0</real>
   </map>
-    <!-- <AS:KS> RenderHDRSkySunlightScale Persist changed 0 -> 1 so the KS tab value survives restarts. </AS:KS> -->
+    <!-- <KS:KS> RenderHDRSkySunlightScale Persist changed 0 -> 1 so the KS tab value survives restarts. </KS:KS> -->
     <key>RenderHDRSkySunlightScale</key>
     <map>
         <key>Comment</key>
@@ -27490,8 +27490,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key><integer>0</integer>
       <key>Backup</key><integer>0</integer>
     </map>
-    <!-- <AS:KS> Only My Lights -->
-    <key>ASLightRigOnlyMyLights</key>
+    <!-- <KS:KS> Only My Lights -->
+    <key>KSLightRigOnlyMyLights</key>
     <map>
       <key>Comment</key><string>Disable every local light except My Lights, including worn light attachments (sun, moon and ambient light are unaffected)</string>
       <key>Persist</key><integer>1</integer>
@@ -27499,7 +27499,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key><integer>0</integer>
       <key>Backup</key><integer>0</integer>
     </map>
-    <!-- </AS:KS> -->
+    <!-- </KS:KS> -->
     <key>ASLightRigNoEyeSpecular</key>
     <map>
       <key>Comment</key><string>Suppress My Lights specular highlights (catchlights) on the self avatar's eyes. Shader backend only</string>

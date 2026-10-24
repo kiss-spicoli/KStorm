@@ -809,7 +809,7 @@ void ASVolumetricLighting::renderLocalLights(LLPipeline& pipeline)
         {
             continue;
         }
-        // Dark My Lights spots (asdarklight.h) do not light the volume.
+        // Dark My Lights spots (ksdarklight.h) do not light the volume.
         if (ASLightRigRenderer::isDarkLight(volume))
         {
             continue;

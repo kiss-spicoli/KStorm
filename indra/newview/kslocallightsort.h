@@ -1,11 +1,11 @@
 /**
- * @file aslocallightsort.h
+ * @file kslocallightsort.h
  * @author Kissmy Spicoli
  * @brief Optional subject-based priority for deferred local lights.
  *
  * LLPipeline::mNearbyLights is ordered by distance from the camera to the
  * edge of each light's radius, and renderDeferredLighting() renders the
- * first RenderLocalLightCount entries. With ASRenderLocalLightSubjectSort
+ * first RenderLocalLightCount entries. With KSRenderLocalLightSubjectSort
  * on, the cap is applied in order of distance from the subject instead,
  * so lights around the subject win over lights around the camera.
  *
@@ -21,8 +21,8 @@
  * The score mirrors calc_light_dist(): max(|pos - subject| - radius, 0),
  * selected lights 0, moving lights minus 0.25 * radius, dim lights last.
  */
-#ifndef AS_LOCAL_LIGHT_SORT_H
-#define AS_LOCAL_LIGHT_SORT_H
+#ifndef KS_LOCAL_LIGHT_SORT_H
+#define KS_LOCAL_LIGHT_SORT_H
 
 #include <vector>
 
@@ -32,10 +32,10 @@ class LLPickInfo;
 
 // A class (not a namespace) so LLPipeline can befriend it: Light and
 // light_set_t are protected.
-class ASLocalLightSort
+class KSLocalLightSort
 {
 public:
-    // ASRenderLocalLightSubjectSort. When true, the caller also counts only
+    // KSRenderLocalLightSubjectSort. When true, the caller also counts only
     // lights that pass its off-screen and dark checks against the cap.
     static bool enabled();
 
@@ -49,4 +49,4 @@ public:
                       std::vector<const LLPipeline::Light*>& out);
 };
 
-#endif // AS_LOCAL_LIGHT_SORT_H
+#endif // KS_LOCAL_LIGHT_SORT_H

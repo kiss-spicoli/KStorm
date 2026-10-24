@@ -123,7 +123,7 @@ void ASLightRigRenderer::setLightRigIds(const std::set<LLUUID>& ids)
 
 bool ASLightRigRenderer::allowsLight(const LLVOVolume* light)
 {
-    static LLCachedControl<bool> only_my_lights(gSavedSettings, "ASLightRigOnlyMyLights", false);
+    static LLCachedControl<bool> only_my_lights(gSavedSettings, "KSLightRigOnlyMyLights", false);
     return !only_my_lights || (light && sLightRigIds.count(light->getID()));
 }
 

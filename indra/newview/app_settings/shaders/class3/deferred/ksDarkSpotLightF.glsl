@@ -1,5 +1,5 @@
 /**
- * @file asDarkSpotLightF.glsl
+ * @file ksDarkSpotLightF.glsl
  * @author Kissmy Spicoli
  * @brief Dark My Lights spot: per-pixel multiplier for a BT_MULT pass.
  *

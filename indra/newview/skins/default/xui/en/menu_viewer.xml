@@ -6788,7 +6788,7 @@
       <!-- </AS:Chanayane> -->
    </menu>
 
-   <!-- <AS:KS> KStorm Menu -->
+   <!-- <KS:KS> KStorm Menu -->
    <menu
       create_jump_keys="true"
       label="KStorm"
@@ -6816,5 +6816,5 @@
             parameter="ks_hair_occlusion" />
       </menu_item_check>
    </menu>
-   <!-- </AS:KS> -->
+   <!-- </KS:KS> -->
 </menu_bar>

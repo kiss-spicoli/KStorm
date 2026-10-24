@@ -590,7 +590,7 @@ background mode is set to **None**.
 
 ### Behavior
 
-The persistent **Only My Lights** checkbox (`ASLightRigOnlyMyLights`) turns off
+The persistent **Only My Lights** checkbox (`KSLightRigOnlyMyLights`) turns off
 every local light except My Lights. That includes world lights, projectors,
 everyone's worn lights including your own, and animesh lights. The sun, moon,
 ambient/EEP light, emissive/fullbright surfaces and glow are unaffected. Only
@@ -602,7 +602,7 @@ this viewer is affected.
   covers all of them: the deferred light loop, the forward/alpha hardware
   lights (`setupHWLights()`), projector shadow selection, reflection-probe
   captures, and the volumetric local-light collector.
-- `LLPipeline::calcNearbyLights()` has two tagged `<AS:KS>` checks, one in each
+- `LLPipeline::calcNearbyLights()` has two tagged `<KS:KS>` checks, one in each
   loop (existing lights and new lights), calling
   `ASLightRigRenderer::allowsLight()`. A rejected light that was already
   listed is dropped (`NEARBY_LIGHT` cleared). Unticking the box lets lights
@@ -661,7 +661,7 @@ value:
 - `LLPipeline::setupHWLights()`: forward/alpha hardware lights.
 - `LLPipeline::renderDeferredLighting()`: point lights, and both spot-light
   paths (`gDeferredSpotLightProgram`, `gDeferredMultiSpotLightProgram`).
-  Tagged `<AS:KS>`, original lines kept in comments.
+  Tagged `<KS:KS>`, original lines kept in comments.
 - `asvolumetriclighting.cpp`: the volumetric local-light collector.
 
 The shader backend multiplies its snapshot intensity by the boost directly
@@ -757,14 +757,14 @@ frag_color = vec4(vec3(1.0) - darkness, 1.0)
 
 ### Renderer changes
 
-New module `asdarklight.{h,cpp}` (author Kissmy Spicoli) owns the shader and
-the pass. Tagged `<AS:KS>` call-outs:
+New module `ksdarklight.{h,cpp}` (author Kissmy Spicoli) owns the shader and
+the pass. Tagged `<KS:KS>` call-outs:
 
 - `pipeline.cpp`, `renderDeferredLighting()` local-light loop: before the
   box/fullscreen spot split, a dark spot is pushed onto a `dark_spots` list
   and skipped (`continue`). It still counts toward `RenderLocalLightCount`.
 - `pipeline.cpp`, after `ASLightRigRenderer::render()` (end of the local-light
-  block): `ASDarkLight::render(*this, dark_spots, light_scale)` unless
+  block): `KSDarkLight::render(*this, dark_spots, light_scale)` unless
   `gCubeSnapshot`. It sets `BT_MULT`, binds the program, calls the public
   `setupSpotLight()` per light, sets the colour/size/falloff uniforms as the
   fullscreen spot path does, draws `mScreenTriangleVB`, then restores
@@ -774,10 +774,10 @@ the pass. Tagged `<AS:KS>` call-outs:
   so they never take one of the two projector shadow maps (see questions).
 - `pipeline.cpp`, `setupHWLights()`: skip dark spots.
 - `asvolumetriclighting.cpp`: skip dark spots in the collector.
-- `llviewershadermgr.cpp`: `ASDarkLight::registerShader()`, `createShader()`,
+- `llviewershadermgr.cpp`: `KSDarkLight::registerShader()`, `createShader()`,
   `unloadShader()` hooks, as `ASVignette` does.
 
-Shader: `class3/deferred/asDarkSpotLightF.glsl` with
+Shader: `class3/deferred/ksDarkSpotLightF.glsl` with
 `deferred/multiPointLightV.glsl` and the `MULTI_SPOTLIGHT` permutation,
 features as `gDeferredMultiSpotLightProgram` (`hasSrgb`, `isDeferred`,
 `hasFullGBuffer`, `hasShadows`). Validate with `.glslang/bin/glslang.exe` as
@@ -803,20 +803,20 @@ every local light, but not volumetric beams or transparency.
 
 - `aslightrig.{h,cpp}`: `mDark`, saved as `dark`.
 - `asfloatermylights.{h,cpp}`, `floater_as_my_lights.xml`: **Dark** checkbox
-  (`as_light_spot_dark`) under the projector image, enabled while Spotlight
+  (`ks_light_spot_dark`) under the projector image, enabled while Spotlight
   is on; Ambiance disabled while Dark is on. `updateLights()` fills the dark
   id set (created rigs with `mSpot && mDark`).
 - `aslightrigrenderer.{h,cpp}`: `setDarkLights()`, `isDarkLight()`.
-- `asdarklight.{h,cpp}`: program `KStorm Dark Spot Light Shader`
-  (`multiPointLightV.glsl` + `asDarkSpotLightF.glsl`, `MULTI_SPOTLIGHT`,
+- `ksdarklight.{h,cpp}`: program `KStorm Dark Spot Light Shader`
+  (`multiPointLightV.glsl` + `ksDarkSpotLightF.glsl`, `MULTI_SPOTLIGHT`,
   `HAS_EMISSIVE` when `RenderEnableEmissiveBuffer`), and `render()`.
-- `pipeline.cpp` (`<AS:KS>`): dark spots collected after the frustum test
+- `pipeline.cpp` (`<KS:KS>`): dark spots collected after the frustum test
   and light-count check, before the box/fullscreen split; pass called after
   `ASLightRigRenderer::render()`; skipped in `setupHWLights()`; excluded from
   the shadow-candidate block of `setupSpotLight()`.
 - `asvolumetriclighting.cpp`: dark spots skipped in the collector.
-- `llviewershadermgr.cpp` (`<AS:KS>`): register, create, unload.
-- `CMakeLists.txt`: `asdarklight.cpp/.h`.
+- `llviewershadermgr.cpp` (`<KS:KS>`): register, create, unload.
+- `CMakeLists.txt`: `ksdarklight.cpp/.h`.
 
 Strength calibration: darkness = colour x image x `calcLegacyDistanceAttenuation()`
 x N.L. Distance attenuation reaches up to 2 near the light (less with higher

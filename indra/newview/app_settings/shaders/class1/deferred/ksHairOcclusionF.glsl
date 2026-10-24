@@ -1,7 +1,7 @@
 /**
  * @file ksHairOcclusionF.glsl
  * @author Kissmy Spicoli
- * @brief Body-proxy hair occlusion for forward alpha (see doc/hair-occlusion.md).
+ * @brief Body-proxy hair occlusion for forward alpha (see doc/ks-hair-occlusion.md).
  *
  * The self avatar's head, neck and shoulders are approximated by up to four
  * capsules (a sphere is a capsule with A == B), in view space. Self-avatar
