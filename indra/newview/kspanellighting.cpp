@@ -1,7 +1,7 @@
 /**
  * @file kspanellighting.cpp
  * @author Kissmy Spicoli
- * @brief KS tab of the Environment Effects floater.
+ * @brief KS lighting panel of the KStorm > Environment Effects floater.
  */
 
 #include "llviewerprecompiledheaders.h"
@@ -11,7 +11,6 @@
 #include "ksenvironment.h"
 #include "llcombobox.h"
 #include "llfeaturemanager.h"
-#include "lltabcontainer.h"
 #include "lluictrl.h"
 #include "llviewercontrol.h"
 
@@ -40,15 +39,6 @@ bool KSPanelLighting::postBuild()
             }
         });
 
-    // The panel is already in the tab container when postBuild() runs
-    // (LLPanel::initPanelXML adds it to its parent first).
-    if (LLControlVariablePtr control = gSavedSettings.getControl("KSLightingControls"))
-    {
-        mShowConnection = control->getSignal()->connect(
-            [this](LLControlVariable*, const LLSD&, const LLSD&) { updateTabVisibility(); });
-    }
-    updateTabVisibility();
-
     refreshHdrScale();
     refreshShadowState();
     return true;
@@ -61,29 +51,6 @@ void KSPanelLighting::onVisibilityChange(bool new_visibility)
     {
         refreshHdrScale();
         refreshShadowState();
-    }
-}
-
-void KSPanelLighting::updateTabVisibility()
-{
-    LLTabContainer* tabs = dynamic_cast<LLTabContainer*>(getParent());
-    if (!tabs)
-    {
-        return;
-    }
-
-    const bool show = gSavedSettings.getBOOL("KSLightingControls");
-    if (tabs->getTabVisibility(this) == show)
-    {
-        return;
-    }
-
-    // setTabVisibility() selects the first visible tab; keep the user's tab.
-    LLPanel* current = tabs->getCurrentPanel();
-    tabs->setTabVisibility(this, show);
-    if (current && current != this)
-    {
-        tabs->selectTabPanel(current);
     }
 }
 

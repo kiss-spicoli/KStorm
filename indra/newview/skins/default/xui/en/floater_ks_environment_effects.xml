@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- KStorm Viewer; author: Kissmy Spicoli -->
+<!-- KStorm > Environment Effects: the KS lighting panel (KSPanelLighting). -->
+<floater
+  name="ks_environment_effects"
+  title="KStorm Environment Effects"
+  can_dock="false"
+  can_resize="false"
+  save_rect="true"
+  save_visibility="true"
+  width="462"
+  height="402"
+  layout="topleft">
+  <panel
+    class="ks_lighting_panel"
+    filename="panel_ks_lighting.xml"
+    follows="all"
+    layout="topleft"
+    left="1"
+    name="ks_lighting_panel"
+    top="20" />
+</floater>

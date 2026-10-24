@@ -10,15 +10,15 @@ Note: AGENTS.md says author "chanayane@firestorm"; the KStorm brief says Kissmy 
 - Self avatar only, from the start. No other avatars.
 - Sun/moon and local lights are all occluded by the shapes.
 - Proximity darkening applies to ambient and to every light (sun/moon and locals), except where a light shines straight in from outside the crevice and is not occluded: there it is added at full strength.
-- UI in the My Lights floater.
+- UI in its own floater, KStorm > Hair Occlusion (first shipped as a My Lights column, moved 2026-10-24).
 - "Show proxies" debug draw in phase 1.
 - Forward alpha only; deferred light shaders untouched (see "Deferred path").
 
 ## Files
 
-- New: `indra/newview/kshairocclusion.{h,cpp}` (`KSHairOcclusion`: shapes, uploads, per-draw self flag, proxy wireframes), `app_settings/shaders/class1/deferred/ksHairOcclusionF.glsl` (shader library).
-- Tagged `<AS:KS>`: `alphaF.glsl`, `pbralphaF.glsl`, `materialF.glsl` (prototypes, AO/sun after the shadow sample, ambient, `LIGHT_LOOP`, debug view); `llviewershadermgr.cpp` (library added to the material, PBR alpha, alpha/skinned/HUD alpha and avatar alpha programs); `lldrawpoolalpha.cpp` (include, `applyShader()` in `prepare_alpha_shader()`, `applyDraw()` per draw in `renderAlpha()`); `settings.xml`; `CMakeLists.txt`.
-- AS-owned, untagged with a comment: `asexactoit.cpp` (library in the three Exact OIT file lists), `asfloatermylights.cpp` (`renderProxies()` at the top of `renderAllLightBeacons()`), `floater_as_my_lights.xml` (new right-hand column, floater width 640 → 870).
+- New: `indra/newview/kshairocclusion.{h,cpp}` (`KSHairOcclusion`: shapes, uploads, per-draw self flag, proxy wireframes), `app_settings/shaders/class1/deferred/ksHairOcclusionF.glsl` (shader library), `skins/default/xui/en/floater_ks_hair_occlusion.xml` (floater `ks_hair_occlusion`).
+- Tagged `<AS:KS>`: `llglslshader.cpp` (library skips the indexed-texture helper injection, see "Shader layout"); `menu_viewer.xml` (KStorm menu); `llviewerfloaterreg.cpp` (`ks_hair_occlusion` registered as a plain `LLFloater`); `alphaF.glsl`, `pbralphaF.glsl`, `materialF.glsl` (prototypes, AO/sun after the shadow sample, ambient, `LIGHT_LOOP`, debug view); `llviewershadermgr.cpp` (library added to the material, PBR alpha, alpha/skinned/HUD alpha and avatar alpha programs); `lldrawpoolalpha.cpp` (include, `applyShader()` in `prepare_alpha_shader()`, `applyDraw()` per draw in `renderAlpha()`); `settings.xml`; `CMakeLists.txt`.
+- AS-owned, untagged with a comment: `asexactoit.cpp` (library in the three Exact OIT file lists), `asfloatermylights.cpp` (`renderProxies()` at the top of `renderAllLightBeacons()`, before the My Lights instance check, so proxies draw whether or not My Lights was opened).
 - Not changed: the alpha impostor program (its `FOR_IMPOSTOR` path never calls the library) and the HUD PBR alpha program (its `IS_HUD` branch has no lighting).
 
 ## Problem
@@ -132,6 +132,7 @@ Attach the library:
 - `llviewershadermgr.cpp`: one tagged `mShaderFiles.push_back(...)` after `materialF` (all material programs), the PBR alpha program (its rigged variant copies the list), the alpha/skinned/HUD alpha loop, and avatar alpha. Not added to the alpha impostor and HUD PBR programs, which never call it.
 - `asexactoit.cpp`: same addition at :544, :598, :705.
 - AVBOIT and Mac OIT inherit it.
+- `llglslshader.cpp`: the viewer pastes a `diffuseLookup()` helper into every fragment file of an indexed-texture program (`llshadermgr.cpp:689`), which duplicated it in alpha programs. The library is on the same exclusion list as the OIT capture libraries (passes `-1` channels).
 
 Alternative with fewer C++ edits: inline the ~50 lines into each of the three shaders. Rejected: three copies drift.
 
@@ -168,11 +169,9 @@ The AVBOIT colour pass and Exact/Mac OIT capture all draw through `renderAlpha()
 - Deferred AO is already handled by GTAO; only the light term would be added.
 - Making it self-only would need a new G-buffer flag written by self attachments, a much larger change across the deferred material shaders.
 
-## UI (My Lights floater)
+## UI (KStorm > Hair Occlusion)
 
-A third column on the right of `floater_as_my_lights.xml` (floater width 640 → 870), above the spot section so it stays visible when the Shader backend collapses the floater: **Hair occlusion** header, **Shade hair with head, neck, shoulders** (`KSHairOcclusionEnabled`), **Show proxies**, **Debug view** combo (Off / Local lights / Darkening / Sun/moon), sliders Shadow, Shadow softness, Darkening, Reach, Inside, Straight-in, Facing away, Head, Neck, Shoulders. Every control binds its setting with `control_name`, so no floater code is needed and changes apply live. `KSHairOcclusionHeadOffset` is a debug setting only. Works with both backends.
-
-The floater is not resizable; if an old saved rect keeps it at 640 wide, the new column is cut off (check at runtime).
+Floater `ks_hair_occlusion` (`floater_ks_hair_occlusion.xml`, 300 × 380, not resizable), opened from the KStorm menu: **Hair occlusion** header, **Shade hair with head, neck, shoulders** (`KSHairOcclusionEnabled`), **Show proxies**, **Debug view** combo (Off / Local lights / Darkening / Sun/moon), sliders Shadow, Shadow softness, Darkening, Reach, Inside, Straight-in, Facing away, Head, Neck, Shoulders. Every control binds its setting with `control_name`, so no floater code is needed and changes apply live. `KSHairOcclusionHeadOffset` is a debug setting only. Works with both My Lights backends and without My Lights.
 
 ## Show proxies (debug draw)
 

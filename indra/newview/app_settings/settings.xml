@@ -11180,18 +11180,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
   <!-- </AS:KS> -->
-  <!-- <AS:KS> KS lighting controls tab in Environment Effects -->
-  <key>KSLightingControls</key>
-  <map>
-    <key>Comment</key>
-    <string>If TRUE, shows the KS tab in the Environment Effects floater</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
+  <!-- <AS:KS> KS lighting controls (KStorm > Environment Effects) -->
   <key>KSSetEnvironment</key>
   <map>
     <key>Comment</key>
