@@ -169,6 +169,8 @@ set(viewer_SOURCE_FILES
     # </AS:KS>
     # <AS:KS> Dark My Lights spots.
     asdarklight.cpp
+    # <AS:KS> Body-proxy hair occlusion.
+    kshairocclusion.cpp
     # </AS:KS>
     # <AS:Chanayane> Viewer-local per-joint shape deformer preview.
     asbonedeformerbaker.cpp
@@ -1123,6 +1125,8 @@ set(viewer_HEADER_FILES
     # </AS:KS>
     # <AS:KS> Dark My Lights spots.
     asdarklight.h
+    # <AS:KS> Body-proxy hair occlusion.
+    kshairocclusion.h
     # </AS:KS>
     # <AS:Chanayane> Viewer-local per-joint shape deformer preview.
     asbonedeformerbaker.h

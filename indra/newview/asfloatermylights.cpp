@@ -12,6 +12,7 @@
 
 #include "asbackgroundisolate.h"
 #include "aslightrigrenderer.h"
+#include "kshairocclusion.h"
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llcallbacklist.h"
@@ -262,6 +263,9 @@ void ASFloaterMyLights::onClose(bool app_quitting)
 // static
 void ASFloaterMyLights::renderAllLightBeacons()
 {
+    // Hair occlusion proxies share the beacons' UI-debug gate (no snapshots).
+    KSHairOcclusion::renderProxies();
+
     if (!gSavedSettings.getBOOL("ASRenderLightBeacon"))
     {
         return;

@@ -11204,6 +11204,166 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
   <!-- </AS:KS> -->
+  <!-- <AS:KS> Body-proxy hair occlusion (doc/hair-occlusion.md) -->
+  <key>KSHairOcclusionEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>If TRUE, the self avatar's head, neck and shoulders shade its own alpha-blended attachments (hair) from the sun/moon and local lights, and darken them next to the body</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>KSHairOcclusionLightStrength</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: how much the body shapes block lights (0-1)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.85</real>
+  </map>
+  <key>KSHairOcclusionSoftness</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: shadow edge softness (cosine units, 0.01-0.5)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.15</real>
+  </map>
+  <key>KSHairOcclusionAOStrength</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: darkening next to the body (0-1)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.6</real>
+  </map>
+  <key>KSHairOcclusionAOFade</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: distance outside the body shapes over which the darkening fades out (m)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.04</real>
+  </map>
+  <key>KSHairOcclusionAOInside</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: depth inside a body shape at which the darkening is full (m)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.01</real>
+  </map>
+  <key>KSHairOcclusionAONormal</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: reduce the darkening on surfaces facing away from the body (0-1)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+  <key>KSHairOcclusionOpenAngle</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: how directly a light must shine in from outside to skip the darkening (cosine, 0.05-1; smaller = more lights count as shining in)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.5</real>
+  </map>
+  <key>KSHairOcclusionHeadRadius</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: head sphere radius before head-size scaling (m, 0 = off)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.085</real>
+  </map>
+  <key>KSHairOcclusionHeadOffset</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: head sphere centre. X = forward (m), Y = left (m), both scaled with head size; Z = fraction of the way from mHead to mSkull (eye height)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Vector3</string>
+    <key>Value</key>
+    <array>
+      <real>0.01</real>
+      <real>0.0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+  <key>KSHairOcclusionNeckRadius</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: neck capsule radius before head-size scaling (m, 0 = off)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.05</real>
+  </map>
+  <key>KSHairOcclusionShoulderRadius</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: shoulder capsule radius before shoulder-width scaling (m, 0 = off)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.055</real>
+  </map>
+  <key>KSHairOcclusionShowProxies</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion: draw the body shapes as wireframes (not in snapshots)</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>KSHairOcclusionDebug</key>
+  <map>
+    <key>Comment</key>
+    <string>Hair occlusion debug view on self alpha: 0 off, 1 local-light visibility, 2 darkening (AO), 3 sun/moon visibility</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <!-- </AS:KS> -->
   <key>RenderShadowSplitExponent</key>
   <map>
     <key>Comment</key>
