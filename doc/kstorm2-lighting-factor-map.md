@@ -2,7 +2,7 @@
 
 Author: Kissmy Spicoli. Date: 2026-10-24. Branch `kstorm` at `d892f8560a7` (after the ks-rename, slider-fix and docs merges; KStorm files, classes and settings use `ks*`/`KS*`, ownership tags `<KS:KS>`).
 
-Derived from `doc/kstorm-lighting-factor-map.md`, reduced to the lighting KStorm will use: EEP/PBR with HDR. EEP skies run in mode C; legacy skies use LL's default auto-adjust (mode B, the same HDR shading with LL's conversion scales), decided 2026-10-24. Content that applied only to classic, auto-adjusted legacy or hybrid skies has been removed; for that material see the original document.
+Derived from the original lighting map (`doc/kstorm-lighting-factor-map.md`, retired 2026-10-24; in git history at `a9dcf435756` and earlier; the parts still needed are Appendices B–D), reduced to the lighting KStorm will use: EEP/PBR with HDR. EEP skies run in mode C; legacy skies use LL's default auto-adjust (mode B, the same HDR shading with LL's conversion scales), decided 2026-10-24. Content that applied only to classic, auto-adjusted legacy or hybrid skies has been removed; for that material see Appendices B–D.
 
 This document changes no code. The one related code change, the Advanced Lighting atmosphere sliders (3.2), was made separately on `feat-al-atmosphere-sliders` and merged. Paths are relative to `indra/newview/` unless they start with `indra/`.
 
@@ -225,7 +225,7 @@ High impact (they change what the user sees with no visible cause):
 
 Tuning (expert, low impact): shadow internals (`RenderShadowSplits`, `Offset`, `OffsetError`, `BiasError`, `ErrorCutoff`, `Noise`, `RenderSpotShadowBias`, `RenderDeferredSpot/TreeShadowBias/Offset`), SSR internals (6), `RenderGlowLumWeights/MinLuminance/MaxExtractAlpha/Warmth*/Noise`, `RenderGTAOBackend`, `RenderVolumetricLightingSampleCountOverride`, `RenderHDRI*` (4), `RenderSpecularExponent/ResX/ResY`, `RenderEdgeDepth/NormCutoff`, `KSHairOcclusionHeadOffset`, `ASLightRigEyeMaskRadius`, `RenderHDREnabled` (indirect only).
 
-The full machine-generated list (settings read by render code with no UI binding) can be regenerated with the scripts in the appendix.
+The full machine-generated list (settings read by render code with no UI binding) can be regenerated with the scripts in Appendix A.
 
 ---
 
@@ -274,11 +274,11 @@ Decisions:
 
 **HDR-specific:** `RenderExposure`; `RenderTonemapType`, `RenderTonemapMix`; dynamic exposure (`RenderDynamicExposureEnabled`, `Coefficient`, `SpeedError`, `SpeedTarget`), `RenderDiffuseLuminanceScale`, `RenderUseExposureSkySettings`; `RenderHDRSkySunlightScale`; sky `gamma` relabelled **Sky HDR Scale** (new UI); probe ambiance (0.01+); probes, SSR, mirrors, hero probes; `RenderGlowHDR`.
 
-Controls that matter only for the removed models are out of scope; the list is in `kstorm-lighting-factor-map.md` §9.1 ("Old-style only").
+Controls that matter only for the removed models are out of scope; the list is in Appendix C.
 
 **Model-independent:** sun/moon position, sun colour, sun/moon scale, haze/blue/density/distance/max altitude, clouds, glow size/focus, rainbow/halo, water, shadows, AO, hair occlusion, prim lights, light budget, My Lights, dark spots, volumetric, AS sky visuals, bloom, colour grading, CAS.
 
-**Cannot be tagged cleanly (redesign needed):** ambient (8.2), probe ambiance (8.3), legacy Blinn-Phong materials (content stays and renders through the legacy path in HDR), local light constants (8.4), atmosphere values of converted skies (retuning method: `kstorm-lighting-factor-map.md` §9.7).
+**Cannot be tagged cleanly (redesign needed):** ambient (8.2), probe ambiance (8.3), legacy Blinn-Phong materials (content stays and renders through the legacy path in HDR), local light constants (8.4), atmosphere values of legacy skies tuned for HDR (retuning method: Appendix D).
 
 ### 8.2 Ambient as a brightness slider: hue must be preserved
 
@@ -358,7 +358,7 @@ Method: every `control_name` (and code-wired widget) in all XUI files whose sett
 |---|---|---|---|
 | `RenderQualityPerformance` (quality slider) | PG, perf prefs | **Bulk writer**: applies feature-table values to shadows, probes, SSAO, SSR, mirrors, light count, exposure, tonemap, vintage, glow res, transparent water (`featuretable.txt`) | 10 (P5) |
 | Graphic presets (save/load) | PG | **Bulk writer**: restores 116 settings, including every lighting setting above (`app_settings/graphic_preset_controls.xml`) | 10 (P5) |
-| `RenderGlowHDR` | PT | glow map in HDR | 4.6 / P2 |
+| `RenderGlowHDR` | PT | glow map in HDR | 4.6 / none (Debug Settings; persists) |
 | `RenderAutoMaskAlphaDeferred` / `NonDeferred` | PG, menu | alpha-masked surfaces go through the deferred (lit, shadowed) path instead of forward | P4 |
 | `RenderNormalMapScale` | PT | strength of normals generated from legacy bump maps (`lldrawpoolbump.cpp:838`) | P4 surface |
 | `WLSkyDetail` | PG, PGA, PT | sky dome tessellation | P1 |
@@ -384,10 +384,10 @@ Five panels hold every lighting control (surfaced and currently unsurfaced). All
 **The per-control specification (label, binding, range, step, tooltip, dependency, code site) is in `doc/kstorm2-lighting-UI-design.md`.** This section is the summary it was built from.
 
 ### P1 Environment (G2 key light, G3 fill, G5 atmosphere)
-- **Source:** Use Shared Environment, My Environments, sky/water/day presets (prev/next), reset to region default, transition time, Set KS environment, "Edit as asset…" buttons. Shows the sky origin (legacy auto-adjusted / EEP, P2) and "Local override active" with Reset.
+- **Source:** Use Shared Environment, My Environments, sky/water/day presets (prev/next), reset to region default, Set KS environment (transition time stays 0 and is not exposed), "Edit as asset…" buttons. Shows the sky origin (legacy auto-adjusted / EEP, P2) and "Local override active" with Reset.
 - **Key light:** sun azimuth/elevation, moon azimuth/elevation (no trackball), **Sun & Moon Light Colour**, Sunlight Scale (`RenderHDRSkySunlightScale`), sun scale, moon scale (tooltip: larger discs fade out later at the horizon), **Moon Disk Brightness**, partial moon below horizon, star brightness.
 - **Fill:** **Ambient Brightness** (hue-preserving, 8.2), Ambient Scale (`RenderSkyAmbientScale`, negatives allowed), **Probe Fill Strength** (0.01–10, step 0.01; 11.1 tooltip; disabled when probes are off, 8.3).
-- **Atmosphere — Haze group (one block, Haze Density first):** Haze Density; Haze Glow Brightness (Haze Horizon); Haze Glow Strength (Glow Size); Haze Glow Focus (Glow Focus); Air Glow Colour (Blue Horizon); Air Density (Blue Density) (both 0–3 per channel, the code range). Behaviour required by 12.7: while Haze Density is 0, Haze Glow Brightness, Haze Glow Strength and Haze Glow Focus show as inactive with the note "No effect while Haze Density is 0"; the two Air controls carry the haze-0 notes.
+- **Haze** (one section labelled "Haze", no special highlighting; Haze Density first): Haze Density; Haze Glow Brightness (Haze Horizon); Haze Glow Strength (Glow Size); Haze Glow Focus (Glow Focus); Air Glow Colour (Blue Horizon); Air Density (Blue Density) (both 0–3 per channel, the code range). Behaviour required by 12.7: while Haze Density is 0, Haze Glow Brightness, Haze Glow Strength and Haze Glow Focus show as inactive with the note "No effect while Haze Density is 0"; the two Air controls carry the haze-0 notes.
 - **Atmosphere — other:** Atmosphere Thickness (density multiplier), Fog Distance Scale (distance multiplier), **Haze Ceiling (m)** (max altitude), moisture/droplet/ice, `RenderDeferredAtmospheric`.
 - **Clouds:** coverage, scale, variance, colour, density X/Y/D, detail X/Y/D, scroll, map.
 - **Water:** fog colour, density, underwater modifier, fresnel scale/offset, normal map/scale, waves, refraction above/below, blur, transparent water.
@@ -414,7 +414,7 @@ Five panels hold every lighting control (surfaced and currently unsurfaced). All
 
 ### P5 Lighting Status & Expert
 - **Status readout:** sky origin (legacy auto-adjusted / EEP), effective probe ambiance, HDR on, post active, probe level, local override active (with Reset), and "auto-exposure pinned" when Sky HDR Scale ≤ 0.25 with dynamic exposure on. This surfaces C1.
-- **Bulk writers:** quality slider (`RenderQualityPerformance`) and graphic presets, with a warning that they overwrite P1–P4 values.
+- **Presets & quality** (the bulk writers): quality slider (`RenderQualityPerformance`) and graphic presets, with a warning that they overwrite P1–P4 values.
 - **Expert:** HDRI preview and its 4 settings, specular LUT (`RenderSpecularResX/Y`, `RenderSpecularExponent`), `RenderDeferredDisplayGamma`.
 
 Coverage check against existing panels: Personal Lighting → P1. Advanced Lighting → P1 + P2 + P3 + P4 (and DoF button in P2). KS → P1 (Set KS env, scales, Sky HDR Scale) + P2 (exposure) + P3 (shadows, AO). AEE → P1 sky tabs + P2 lens/grading + P3 volumetric. Phototools/Advanced Phototools lighting parts → P1 (presets, water) + P2 (tone, glow, CAS) + P3 (shadows, AO, probes, SSR, mirrors) + P4 (lights, debug). Prefs Graphics lighting parts → P2 + P3 + P4 + P5. PA → P1 (partial moon) + P3 (AO, volumetric). My Lights, Hair Occlusion → P4, P3. Build light/probe → P4 (mirror). Debug-only lighting settings → P1–P5 as listed.
@@ -487,7 +487,7 @@ The slider wiring from section 3.2 is committed (`9b783fa6bf6`) and merged into 
 | UI ranges | Revised: in KStorm2 (the new UI) correct only Exposure and Blue Horizon/Blue Density to their code ranges; leave the other 12.5 mismatches as they are. Existing panels unchanged. |
 | `RenderSkyAmbientScale` | Negative values allowed in the UI, since the code allows them (12.5). |
 | Duplicates | Remove duplicates that control a single value within one pane (12.6). Slider + number-box pairs are allowed, including pairs whose two ranges differ. |
-| Haze group | Wherever these controls are surfaced, they appear together and show their haze-0 dependency (12.7). |
+| Haze group | Wherever these controls are surfaced, they appear together and show their haze-0 dependency (12.7). On screen the section is simply "Haze", with no special highlighting. |
 | 11.1 scope | Applies to the new UI (still in design) and to My Lights only. |
 | 11.2 ranges | Ambient Scale allows negatives; light count and sunlight scale keep their existing ranges. |
 | Unresolved 11.x items | Adopted as recommended (12.8). |
@@ -495,7 +495,7 @@ The slider wiring from section 3.2 is committed (`9b783fa6bf6`) and merged into 
 | Trackball | Not in the new UI. |
 | New-UI ranges | Sunlight Scale 0–20 (the KS range); Max nearby lights 0–512. |
 | NaN guards | Added on branch `fix-haze-zero-nan-guards` (uncommitted): `cloudsV.glsl`, `asHorizonCloudTintV.glsl`, `lllegacyatmospherics.cpp`. |
-| Open items | Resolved or answered in `doc/kstorm2-lighting-UI-design.md` §7-8. |
+| Open items | All resolved except O5 (deferred); see `doc/kstorm2-lighting-UI-design.md` §7-8. Includes: Ambient Brightness 0–3 / 0.01; My Lights curve set as recommended; dynamic-exposure ranges; Sky HDR Scale edits `RenderSkyAutoAdjustHDRScale` on legacy skies; forced settings reapplied; local lights keep LL's ×0.9 under legacy skies. |
 
 ### 12.2 Haze Density at 0 vs above 0
 
@@ -518,6 +518,9 @@ Not covered by that change:
 - My Lights' `Shader` backend, whose own index counts off-screen lights (`doc/ks-local-light-sort.md`).
 
 ### 12.4 My Lights-only falloff shaping (design notes, no change made)
+
+**Superseded mechanism:** the negative-value marker below is replaced by a positive out-of-range falloff value (≥ 10), which also reaches PBR alpha surfaces; see `doc/kstorm2-lighting-UI-design.md` §8.3.
+
 
 - Today falloff is a brightness divisor: `2·((1−d)/(1+f))²`, `f = falloff × 0.5`.
 - Both My Lights backends draw through the stock light programs: `ASLightRigRenderer::render` binds `gDeferredLightProgram` / `gDeferredMultiLightProgram` (`aslightrigrenderer.cpp:158-232`), and the `LLVOVolume` backend goes through `renderDeferredLighting`. So a My Lights-only curve needs a **per-light marker** that stock lights never carry.
@@ -615,10 +618,69 @@ Decided = adopted (scope: new UI, plus My Lights where marked). Declined = left 
 
 ---
 
-## Appendix: method and verification
+## Appendix A: Method and verification
 
 - Uniform producers: `LLSettingsVOSky::applyToUniforms/applySpecial`, `LLShaderMgr` reserved uniforms (`indra/llrender/llshadermgr.cpp:1273-1617`). Consumers were traced in the shaders cited above.
 - Settings cross-reference: a script parsed `app_settings/settings.xml` and `settings_per_account.xml` (2913 + per-account), found C++ references by quoted name, XUI references (`control_name`, `enabled_control`, `parameter`, ...) in `skins/default/xui/en`, and panel-code references (`llfloater*`, `llpanel*`, `quickprefs`, `as*floater/panel`, `kspanel`, `llviewermenu`). Code-only "UI" hits were checked by hand: `RenderSkyAutoAdjustLegacy` is only read by the editors; `RenderShadowGaussian`, `RenderShadowSplitExponent` and `RenderSSAOEffect` are real Phototools controls.
 - Scripts (local only, not in the repo, kept in a temporary folder): `xref.py`, `uidump.py`, `tabdump.py`. Outputs: `settings_xref2.tsv`, `render_settings.tsv`, `undefined_controls.txt` in the same folder. The folder is temporary; rerun the scripts to regenerate.
 - Double-checked claims: ambient luminance in mode C, moonlight = sunlight colour, the probe-ambiance flag flip used by conversion.
 - Not done: runtime testing. Everything here is from source reading only.
+
+---
+
+## Appendix B: The original viewer as built (all four modes)
+
+Kept from the retired `doc/kstorm-lighting-factor-map.md` (removed 2026-10-24; full text in git history at `a9dcf435756` and earlier). This is how the viewer behaves **today**, before section 8 and the UI design are implemented; useful when debugging current behaviour.
+
+Four conditions select the mode. None has its own control.
+
+| Input | Where | Meaning |
+|---|---|---|
+| `canAutoAdjust()` | `indra/llinventory/llsettingssky.cpp:1175` | TRUE when the sky asset has **no** `reflection_probe_ambiance` key (a legacy sky). The value is then 0. |
+| `RenderSkyAutoAdjustLegacy` | settings.xml, default **0** in this tree | Turns on LL's legacy→HDR auto-adjust. No UI; the env editors only read it (`llpaneleditsky.cpp:211`, `llfloaterenvironmentadjust.cpp:181`). KStorm forces it on (8, P2; UI design R2, R12). |
+| sky `reflection_probe_ambiance` | sky asset / editors | `0` vs `> 0` switches post-processing. Moving the slider calls `setReflectionProbeAmbiance()`, which sets `mCanAutoAdjust = false` (`llsettingssky.cpp:1517`): any commit, even back to 0, makes that sky copy an EEP sky. Discarding the edited sky restores the original; saving writes the key into the asset (`llsettingssky.cpp:1271`). |
+| `RenderDisableVintageMode` | Prefs / Phototools / KS | Its handler sets `RenderHDREnabled` and `RenderEnableEmissiveBuffer` (`llviewercontrol.cpp:355`). KStorm forces it on (R1, R12). |
+
+Modes B and C are described in section 1. The other two:
+
+| Mode | Condition | Shading | Post |
+|---|---|---|---|
+| **A. Classic (pre-EEP / WindLight look)** | legacy sky, auto-adjust off | `classic_mode = 1`: sun ×1.35 (`softenLightF.glsl:226`), final ×1.1 (`:363`), sRGB-space mix 0.9/0.7 (`:299`). Probe irradiance is bypassed, so ambient = sky ambient only (`reflectionProbeF.glsl:747,864`). Ambient keeps its hue. Local lights ×0.9. | **No post**: no exposure, tonemap or dynamic exposure (`tonemapUtilF.glsl:145`). Scene Gamma is applied as the legacy gamma curve (`postDeferredGammaCorrect.glsl:41`). |
+| **D. Hybrid (EEP with ambiance 0)** | sky has key, ambiance == 0 | Non-classic shading (ambient as luminance), `sky_hdr_scale = 1`. | **No post** and legacy gamma, as in mode A. Undocumented and invisible to the user. |
+
+Consequences in the current viewer: Exposure, Tonemap type, Tonemap mix and dynamic exposure do nothing in modes A and D. Scene Gamma is the legacy gamma curve in A and D, the HDR scale in C, and only the auto-exposure range in B. No panel shows the active mode. KStorm reaches neither A (auto-adjust forced on) nor D (probe ambiance minimum 0.01).
+
+## Appendix C: Controls that matter only for modes A and D
+
+Hidden or removed under the KStorm policy (section 8), because they only act in the classic or non-HDR paths:
+
+- Vintage mode toggle ("HDR and Emissive"); forced on instead.
+- `RenderSkySunlightScale` (sun scale when HDR is off).
+- The legacy gamma meaning of Scene Gamma.
+- `RenderSunDynamicRange` (legacy forward lighting only).
+- `SkyAmbientScale`, `SkyNightColorShift`, `WaterGLFogDepthScale`, `WaterGLFogDepthFloor` (legacy fog colour, `lllegacyatmospherics.cpp`).
+- `WindLightUseAtmosShaders` (deprecated, forced TRUE).
+- Classic shader constants: ×1.35, ×1.1, the 0.9/0.7 mix.
+- `RenderReflectionProbeAmbiance` (saved in graphic presets, never read by code).
+
+No longer in this list since the auto-adjust decision: `RenderSkyAutoAdjustLegacy` and its six scale settings, and the local-light ×0.9 under legacy skies. They now act in mode B (section 1; UI design O11, R2, R12, R13).
+
+## Appendix D: Retuning legacy sky values
+
+Under the auto-adjust decision (8, P2) legacy skies are not converted; LL's auto-adjust scales are applied live each frame. This method applies when a legacy sky's look is tuned for HDR by hand, for example after editing its Probe Fill Strength turns that copy into an EEP sky, or when saving a tuned EEP version.
+
+Why values shift: classic composed sun and ambient in sRGB with the 1.35 / 1.1 / 0.9 / 0.7 constants and showed the result without tonemapping. The HDR path linearises the sun, reduces ambient to luminance for surfaces, adds haze as `linear(2·additive)·HDRScale`, then applies exposure, ACES/Neutral tonemapping and mix 0.7. Typical result: distant haze and the sky look brighter and more saturated relative to lit surfaces, and low-sun scenes gain contrast.
+
+Method:
+1. **Freeze the camera response first.** Exposure 1.0, dynamic exposure at default, tonemap type and mix fixed, Sky HDR Scale 1.0. Tune the atmosphere only after that.
+2. **Start from LL's mapping.** The auto-adjust settings are LL's legacy→HDR transfer (ambient, Air Glow Colour, Air Density and sun colour × their scales; HDR scale = `RenderSkyAutoAdjustHDRScale`). Shipped settings.xml defaults are 1.0 for all; the code fallbacks are 0.75 (ambient) and 2.0 (HDR scale).
+3. **Make a reference set while the classic path still exists** (until R12 forces auto-adjust on): capture the same camera views per sky (noon, golden hour, night; near and far) in classic and HDR, and compare mean luminance and per-region colour with a local script.
+4. **Adjust in dependency order:**
+   1. Air Density and Atmosphere Thickness (sun colour and surface tint at low sun);
+   2. Haze Density (white haze amount);
+   3. Fog Distance Scale (fog distance);
+   4. Air Glow Colour / Haze Glow Brightness (fog and sky colour and brightness);
+   5. Haze Glow Strength and Focus (sun halo);
+   6. Sky HDR Scale last: it scales sky and haze only, not surfaces, so it is the best "haze vs scene" balance control.
+5. **Keep ambient hue** (8.2); set Ambient Brightness only where Probe Fill Strength is below 1.
+6. Save the tuned result as an EEP sky so the work is not repeated per region.
