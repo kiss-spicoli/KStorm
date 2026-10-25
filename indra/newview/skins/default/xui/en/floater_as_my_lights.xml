@@ -123,4 +123,8 @@
   <button follows="left|top" height="22" layout="topleft" left="420" name="as_light_load_preset" top="356" width="205" label="Load preset..." />
 
   <check_box follows="left|top" height="16" label="No eye highlights" layout="topleft" left="420" name="as_light_no_eye_specular" top="392" width="205" control_name="ASLightRigNoEyeSpecular" tool_tip="Removes My Lights specular highlights (catchlights) from your avatar's eyes. Eyes still receive the light's diffuse illumination. Shader backend only." />
+  <!-- <KS:KS> Eye mask radius (ASLightRigEyeMaskRadius), previously Debug Settings only -->
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="420" name="ks_light_eye_mask_radius_label" top="410" width="205">Eye mask radius (m)</text>
+  <slider can_edit_text="true" control_name="ASLightRigEyeMaskRadius" decimal_digits="3" follows="left|top" height="16" increment="0.001" label="" label_width="0" layout="topleft" left="420" max_val="0.05" min_val="0.005" name="ks_light_eye_mask_radius" show_text="true" text_width="45" top="428" width="205" tool_tip="Size of the area around each eye where No eye highlights removes My Lights highlights, in meters. Highlights are fully removed inside three quarters of this distance and fade back in toward its edge. Make it smaller if highlights also disappear from your eyelids. Shader backend only." />
+  <!-- </KS:KS> -->
 </floater>
