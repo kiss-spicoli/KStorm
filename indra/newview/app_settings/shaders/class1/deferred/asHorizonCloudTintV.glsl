@@ -138,7 +138,11 @@ void main()
     light_atten = (blue_density + vec3(haze_density * 0.25)) * (density_multiplier * max_y);
 
     // Calculate relative weights
-    vec3 combined_haze = abs(blue_density) + vec3(abs(haze_density));
+    // <KS:KS> Floor the denominator like skyV.glsl so Haze Density 0 with a zero
+    // Blue Density channel cannot divide 0 by 0.
+    // vec3 combined_haze = abs(blue_density) + vec3(abs(haze_density));
+    vec3 combined_haze = max(abs(blue_density) + vec3(abs(haze_density)), vec3(1e-6));
+    // </KS:KS>
     vec3 blue_weight   = blue_density / combined_haze;
     vec3 haze_weight   = haze_density / combined_haze;
 
