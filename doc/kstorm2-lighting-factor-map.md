@@ -102,7 +102,7 @@ Key to columns. **Behaviour** describes the factor in mode C. **UI**: where the 
 | `RenderDesaturateIrradiance` | irradiance pass greys blue sky colours (`llsettingsvo.cpp:695`) | none |
 | `RenderScreenSpaceReflections` + 6 tuning settings | `pipeline.cpp:1380-1386` | toggle: PG, PGA, PT, APT, AL. Tuning: none |
 | `RenderMirrors`, hero probe resolution / update rate | `llheroprobemanager.cpp` | PG, PGA, PT, APT. `RenderHeroProbeDistance`: none |
-| HDRI sky (`RenderHDRIExposure`, `Rotation`, `SplitScreen`, `IrradianceOnly`) | `lldrawpoolwlsky.cpp` | Develop menu > "HDRI Preview" loads it. The 4 tuning settings have no UI. |
+| HDRI sky (`RenderHDRIExposure`, `Rotation`, `SplitScreen`, `IrradianceOnly`) | `lldrawpoolwlsky.cpp` | Develop menu > "HDRI Preview" loads it. The 4 tuning settings have no UI. **Not in the KStorm UI** (decided 2026-10-25): a developer tool for checking materials against an HDRI, not a lighting control; stays on the Develop menu. |
 
 ### 3.5 Shadows and ambient occlusion
 
@@ -223,7 +223,7 @@ High impact (they change what the user sees with no visible cause):
 4. Hard-coded transforms: radius ×1.5, falloff ×0.5, ×3.25/×3.0, twilight fade −6°/−8°, sky HDR min/max/offset.
 5. `RenderReflectionProbeMaxLocalLightAmbiance`, `RenderDefaultProbeUpdatePeriod`, `RenderDesaturateIrradiance`, `RenderHeroProbeDistance`.
 
-Tuning (expert, low impact): shadow internals (`RenderShadowSplits`, `Offset`, `OffsetError`, `BiasError`, `ErrorCutoff`, `Noise`, `RenderSpotShadowBias`, `RenderDeferredSpot/TreeShadowBias/Offset`), SSR internals (6), `RenderGlowLumWeights/MinLuminance/MaxExtractAlpha/Warmth*/Noise`, `RenderGTAOBackend`, `RenderVolumetricLightingSampleCountOverride`, `RenderHDRI*` (4), `RenderSpecularExponent/ResX/ResY`, `RenderEdgeDepth/NormCutoff`, `KSHairOcclusionHeadOffset`, `ASLightRigEyeMaskRadius`, `RenderHDREnabled` (indirect only).
+Tuning (expert, low impact): shadow internals (`RenderShadowSplits`, `Offset`, `OffsetError`, `BiasError`, `ErrorCutoff`, `Noise`, `RenderSpotShadowBias`, `RenderDeferredSpot/TreeShadowBias/Offset`), SSR internals (6), `RenderGlowLumWeights/MinLuminance/MaxExtractAlpha/Warmth*/Noise`, `RenderGTAOBackend`, `RenderVolumetricLightingSampleCountOverride`, `RenderHDRI*` (4; not in the KStorm UI, decided 2026-10-25), `RenderSpecularExponent/ResX/ResY`, `RenderEdgeDepth/NormCutoff`, `KSHairOcclusionHeadOffset`, `ASLightRigEyeMaskRadius`, `RenderHDREnabled` (indirect only).
 
 The full machine-generated list (settings read by render code with no UI binding) can be regenerated with the scripts in Appendix A.
 
@@ -388,7 +388,7 @@ Five panels hold every lighting control (surfaced and currently unsurfaced). All
 - **Key light:** sun azimuth/elevation, moon azimuth/elevation (no trackball), **Sun & Moon Light Colour**, Sunlight Scale (`RenderHDRSkySunlightScale`), sun scale, moon scale (tooltip: larger discs fade out later at the horizon), **Moon Disk Brightness**, partial moon below horizon, star brightness.
 - **Fill:** **Ambient Brightness** (hue-preserving, 8.2), Ambient Scale (`RenderSkyAmbientScale`, negatives allowed), **Probe Fill Strength** (0.01–10, step 0.01; 11.1 tooltip; disabled when probes are off, 8.3).
 - **Haze** (one section labelled "Haze", no special highlighting; Haze Density first): Haze Density; Haze Glow Brightness (Haze Horizon); Haze Glow Strength (Glow Size); Haze Glow Focus (Glow Focus); Air Glow Colour (Blue Horizon); Air Density (Blue Density) (both 0–3 per channel, the code range). Behaviour required by 12.7: while Haze Density is 0, Haze Glow Brightness, Haze Glow Strength and Haze Glow Focus show as inactive with the note "No effect while Haze Density is 0"; the two Air controls carry the haze-0 notes.
-- **Atmosphere — other:** Atmosphere Thickness (density multiplier), Fog Distance Scale (distance multiplier), **Haze Ceiling (m)** (max altitude), moisture/droplet/ice, `RenderDeferredAtmospheric`.
+- **Atmosphere — other:** Atmosphere Thickness (density multiplier), Fog Distance Scale (distance multiplier), **Haze Ceiling (m)** (max altitude; renamed **Atmosphere Height (m)**, decided 2026-10-25), moisture/droplet/ice, `RenderDeferredAtmospheric`.
 - **Clouds:** coverage, scale, variance, colour, density X/Y/D, detail X/Y/D, scroll, map.
 - **Water:** fog colour, density, underwater modifier, fresnel scale/offset, normal map/scale, waves, refraction above/below, blur, transparent water.
 - **Sky visuals (tabs linking the AEE panels):** procedural sun, moon rendering, stars/Milky Way, horizon scattering and water horizon fog, auroras, weather; Sky Detail (`WLSkyDetail`).
@@ -415,7 +415,7 @@ Five panels hold every lighting control (surfaced and currently unsurfaced). All
 ### P5 Lighting Status & Expert
 - **Status readout:** sky origin (legacy auto-adjusted / EEP), effective probe ambiance, HDR on, post active, probe level, local override active (with Reset), and "auto-exposure pinned" when Sky HDR Scale ≤ 0.25 with dynamic exposure on. This surfaces C1.
 - **Presets & quality** (the bulk writers): quality slider (`RenderQualityPerformance`) and graphic presets, with a warning that they overwrite P1–P4 values.
-- **Expert:** HDRI preview and its 4 settings, specular LUT (`RenderSpecularResX/Y`, `RenderSpecularExponent`), `RenderDeferredDisplayGamma`.
+- **Expert:** HDRI preview and its 4 settings (not in the KStorm UI, decided 2026-10-25), specular LUT (`RenderSpecularResX/Y`, `RenderSpecularExponent`), `RenderDeferredDisplayGamma`.
 
 Coverage check against existing panels: Personal Lighting → P1. Advanced Lighting → P1 + P2 + P3 + P4 (and DoF button in P2). KS → P1 (Set KS env, scales, Sky HDR Scale) + P2 (exposure) + P3 (shadows, AO). AEE → P1 sky tabs + P2 lens/grading + P3 volumetric. Phototools/Advanced Phototools lighting parts → P1 (presets, water) + P2 (tone, glow, CAS) + P3 (shadows, AO, probes, SSR, mirrors) + P4 (lights, debug). Prefs Graphics lighting parts → P2 + P3 + P4 + P5. PA → P1 (partial moon) + P3 (AO, volumetric). My Lights, Hair Occlusion → P4, P3. Build light/probe → P4 (mirror). Debug-only lighting settings → P1–P5 as listed.
 
@@ -443,7 +443,7 @@ Live controls whose label, tooltip, range or placement misrepresents what they d
 | `RenderLocalLightCount` | "Max. nearby lights", My Lights "Max lights … rendered" | Off-screen and rejected lights use slots unless subject sort is on (`pipeline.cpp:10128-10198`). | Tooltip: "Counts nearby candidates, not only visible lights." Code option: always count drawn lights only (the subject-sort counting rule). |
 | My Lights "Max lights" | in the per-rig floater | Global setting shared with Preferences. | Label **Max nearby lights (global)**. |
 | sky `sun_scale` / `moon_scale` | "Image and scale" / "Scale" | Also sets when sun/moon light fades at the horizon (`ascelestialtwilight.cpp`). | Tooltip: "Larger discs fade out later at the horizon." |
-| sky `max_y` | "Maximum Altitude:" | Height that limits haze integration and sun extinction. | Label **Haze Ceiling (m)**. |
+| sky `max_y` | "Maximum Altitude:" | Height that limits haze integration and sun extinction. | Label **Haze Ceiling (m)**; renamed **Atmosphere Height (m)** (decided 2026-10-25): it bounds air and haze alike, not haze only. |
 | sky `glow` | "Glow Size", "Glow Focus" | Editor maps size `(2−v)·20` and focus `v·−5`; focus is negative-going. | Tooltips with direction ("higher = tighter halo"). |
 | Blue Density, Blue Horizon, Haze Horizon, Density/Distance Multiplier | current names | — | Adopted renames (8.5). |
 
@@ -603,7 +603,7 @@ Decided = adopted (scope: new UI, plus My Lights where marked). Declined = left 
 | Light count tooltip | Decided (as recommended) | "Counts nearby candidates, not only visible lights." Code option (count drawn lights only) reported only (12.3). |
 | My Lights "Max lights" label | Decided (as recommended) | **Max nearby lights (global)** (My Lights and new UI). |
 | Sun/moon scale tooltip | Decided (as recommended) | "Larger discs fade out later at the horizon." |
-| sky `max_y` label | Decided (as recommended) | **Haze Ceiling (m)**. |
+| sky `max_y` label | Decided (as recommended) | **Haze Ceiling (m)**. Superseded 2026-10-25: **Atmosphere Height (m)**. |
 | Glow tooltips | Decided | Haze Glow Strength / Haze Glow Focus with direction tooltips (12.7). |
 | Blue/Haze/Multiplier renames | Decided | 8.5. |
 | 11.2 Exposure range | Decided | 0.5–4 (new UI). |
