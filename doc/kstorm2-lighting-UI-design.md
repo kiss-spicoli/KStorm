@@ -774,6 +774,15 @@ Add `RenderDynamicExposureEnabled` handling: save, set false, restore on off. Wh
 
 - Exposure › "Use fixed range" was wrong: `RenderUseExposureSkySettings` uses the sky's own HDR offset, min and max (`pipeline.cpp:8067-8080`). Relabelled "Use sky exposure range" with a corrected tooltip (§10, pane 12).
 - The design doc's spelling pass (R16) changed prose only; no backticked identifier or XUI name was affected.
+- **Step 3 (Quick, 2026-10-25):**
+  - My Environments… uses `KS.CycleFloater` (open, raise, close) like every other launch button, not `Floater.Toggle`.
+  - Show avatar names is handled in code, not `control_name`: `AvatarNameTagMode` is 0 or a display mode, and checking the box again restores the last mode instead of forcing 1.
+  - Quick's "pinned at 1" note sits on its own last row; while hidden, the pane drops that row and shrinks (its top stays put).
+  - Quick's list status reads "KS Reference" while Use KS Reference is on.
+  - DoF pane gained its DoF mode row; the items are read at run time from the `dof_mode` combo in `floater_as_depth_of_field.xml`.
+- **B2 content done in B1:** Use KS Reference now saves `RenderDynamicExposureEnabled`, sets it off and restores it; the Dynamic exposure check box (Quick and Exposure) is disabled while KS is on. `KSEnvironment::init()` declares the three code-only exposure settings.
+- **A4 implemented** (`ksenvironment.cpp`): clearing the local environment (Quick › Use Shared, the footer Reset, World › Use Shared Environment, Personal Lighting Reset) and applying an environment set without a version (My Environments, inventory, World presets) turn KS off with its viewer settings restored and the sky left alone. Edits by KS, Personal Lighting and the celestial panels carry their own versions and leave it on (A3). One exception: an unversioned change keeps KS on while the new local sky still holds the KS Sky HDR Scale, Haze Density and Probe Fill (Personal Lighting's cloud texture picker replaces the sky with such a copy). Consequence, awaiting your ruling: applying a **water-only** item keeps KS on, since the KS sky stays in place.
+- **Findings for B7 (D1, D2):** a graphics preset load sends no event of its own (`LLPresetsManager::loadPreset`); `PresetGraphicActive` signals only when the name changes; the load resets `RenderSkyAutoAdjustLegacy` and `RenderSkyAmbientScale` to their defaults. The quality slider sets `RenderQualityPerformance` after the feature settings. Reapply on the next idle after either signal, writing only differing values.
 
 ### 11.8 Test scenarios: alpha masks lit as opaque (2026-10-25)
 

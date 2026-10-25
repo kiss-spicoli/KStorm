@@ -164,9 +164,11 @@ set(viewer_SOURCE_FILES
     # <KS:KS> Optional subject-based local light priority.
     kslocallightsort.cpp
     # </KS:KS>
-    # <KS:KS> KS tab of Environment Effects.
+    # <KS:KS> KS environment and the KStorm Lighting floater.
     ksenvironment.cpp
-    kspanellighting.cpp
+    ksfloaterlighting.cpp
+    ksfloaterlightingpane.cpp
+    kslightingfields.cpp
     # </KS:KS>
     # <KS:KS> Dark My Lights spots.
     ksdarklight.cpp
@@ -1122,9 +1124,11 @@ set(viewer_HEADER_FILES
     # <KS:KS> Optional subject-based local light priority.
     kslocallightsort.h
     # </KS:KS>
-    # <KS:KS> KS tab of Environment Effects.
+    # <KS:KS> KS environment and the KStorm Lighting floater.
     ksenvironment.h
-    kspanellighting.h
+    ksfloaterlighting.h
+    ksfloaterlightingpane.h
+    kslightingfields.h
     # </KS:KS>
     # <KS:KS> Dark My Lights spots.
     ksdarklight.h

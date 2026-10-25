@@ -2791,6 +2791,9 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <!-- <AS:Chanayane> Sun settings toolbar command. -->
   <string name="Command_ASSunSettings_Label">Sun Settings</string>
   <!-- </AS:Chanayane> -->
+  <!-- <KS:KS> KStorm Lighting toolbar command. -->
+  <string name="Command_KSLighting_Label">KStorm Lighting</string>
+  <!-- </KS:KS> -->
   <!-- <AS:Chanayane> Aurora settings toolbar command. -->
   <string name="Command_ASAuroraSettings_Label">Aurora Settings</string>
   <!-- </AS:Chanayane> -->
@@ -2898,6 +2901,9 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <!-- <AS:Chanayane> Sun settings toolbar command. -->
   <string name="Command_ASSunSettings_Tooltip">Show or hide sun settings</string>
   <!-- </AS:Chanayane> -->
+  <!-- <KS:KS> KStorm Lighting toolbar command. -->
+  <string name="Command_KSLighting_Tooltip">Show or hide KStorm Lighting (Alt+Shift+L)</string>
+  <!-- </KS:KS> -->
   <!-- <AS:Chanayane> Aurora settings toolbar command. -->
   <string name="Command_ASAuroraSettings_Tooltip">Show or hide aurora settings</string>
   <!-- </AS:Chanayane> -->
