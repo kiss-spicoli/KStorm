@@ -144,7 +144,12 @@ loop mixed with world lights.
   100% of the radius. PBR `specPunc` and legacy specular are multiplied by it.
 - The count is reset to 0 before unbinding, so stock lights sharing these
   programs are unchanged.
-- Sphere radius: debug setting `ASLightRigEyeMaskRadius` (default 0.02 m).
+- Sphere radius: `ASLightRigEyeMaskRadius` (default 0.02 m), set by the
+  **Eye mask radius (m)** slider under the checkbox (KStorm,
+  `ks_light_eye_mask_radius`, 0.005-0.05 m, step 0.001; disabled with the
+  checkbox on LLVOVolume). Eye joints are 0.072 m apart, so the two spheres
+  meet at 0.036 m; larger values remove skin specular around the eyes. Values
+  outside the slider range can still be set in Debug Settings.
 
 No G-buffer tagging is needed; the mask is purely geometric. Mesh eyes work
 when rigged to either eye joint pair.

@@ -196,6 +196,9 @@ bool ASFloaterMyLights::postBuild()
     mRenderBackendCombo->setValue(gSavedSettings.getString("ASLightRigRenderBackend"));
     // Eye-specular masking lives in the direct shader path only.
     getChild<LLUICtrl>("as_light_no_eye_specular")->setEnabled(ASLightRigRenderer::usesShaderBackend());
+    // <KS:KS> Eye mask radius control, same backend rule as the checkbox
+    getChild<LLUICtrl>("ks_light_eye_mask_radius")->setEnabled(ASLightRigRenderer::usesShaderBackend());
+    // </KS:KS>
     mShowOtherAvatarsCheck->setValue(gSavedSettings.getBOOL("ASLightRigShowOtherAvatars"));
     mListFilterCombo->setValue("active");
 
@@ -1036,6 +1039,9 @@ void ASFloaterMyLights::onRenderBackendChanged()
 {
     gSavedSettings.setString("ASLightRigRenderBackend", mRenderBackendCombo->getValue().asString());
     getChild<LLUICtrl>("as_light_no_eye_specular")->setEnabled(ASLightRigRenderer::usesShaderBackend());
+    // <KS:KS> Eye mask radius control, same backend rule as the checkbox
+    getChild<LLUICtrl>("ks_light_eye_mask_radius")->setEnabled(ASLightRigRenderer::usesShaderBackend());
+    // </KS:KS>
     updateLights();
     updateSpotSectionVisibility();
     updateSpotControlsEnabled();
