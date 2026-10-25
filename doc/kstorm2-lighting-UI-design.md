@@ -483,7 +483,7 @@ Layout variant under evaluation (2026-10-24): accordions replaced by buttons tha
 
 **This section is the implementation reference.** It is generated from the v4 mock-up (`v4-list.html`, kept local and outside the repository) after all its regrouping. §2–§6 and their dated notes remain as the decision history; where they differ from this section, this section wins.
 
-**Launch floater "KStorm Lighting".** No controls, only one button per pane; each opens its pane as its own movable floater. Each button shows a 16×16 icon, its label and a short status. A title-bar toggle switches between the full list (225 px) and an icon strip (about 44 px; the name is the hover tooltip; no footer). Footer: sky origin, Probe Fill in use, and Shared env / Local override with a separate Reset button. Exposure's list status shows the Exposure value only (A8). Opened by a toolbar button (icon TBD) and the hotkey **Alt+Shift+L** (A13; free in every menu and in code).
+**Launch floater "KStorm Lighting".** No controls, only one button per pane; each opens its pane as its own movable floater. Each button shows a 16×16 icon, its label and a short status. A title-bar toggle switches between the full list (225 px) and an icon strip (about 44 px; the name is the hover tooltip; no footer). Footer: sky origin, Probe Fill in use, and Shared env / Local override with a separate Reset button. Exposure's list status shows the Exposure value only (A8). Opened by a toolbar button (icon TBD), the **KStorm › KStorm Lighting** menu item, and its hotkey **Alt+Shift+L** (A13; free in every menu and in code).
 
 **Tooltip suffixes.** Every control Use KS Reference writes ends its tooltip with "(KS Reference)" (A3): Sun azimuth and elevation, Moon azimuth and elevation, Sun & Moon Light, Ambient Brightness, Haze Density, Haze Glow Brightness, Strength and Focus, Sky HDR Scale, Probe Fill Strength, Show avatar names, Subject sort, Dynamic exposure. Exposure, Dynamic exposure, Tone mapping, Tone mapping mix and Glow end with "No effect while Build › Options › No Post-processing is on and the Build floater is open." (D3).
 
@@ -628,7 +628,7 @@ AyaneStorm My Lights floater (viewer-only lights). Gains the Curve selector and 
 | FOV cutoff | `RenderShadowFOVCutoff` | 0–100 / 0.1 | 0.8 | |
 | Spot offset | `RenderSpotShadowOffset` | 0–0.04 / 0.0001 | 0.04 | |
 | AO soften | `RenderShadowGaussian.y` | 0.001–3 / 0.001 | 2 | |
-| Ambient occlusion + **Settings…** (opens Ambient) | `RenderDeferredSSAO` | check box | true | Same as Quick (A7). |
+| Ambient occlusion + **Settings…** (opens Ambient) + **Hair…** | `RenderDeferredSSAO`; Hair… = `Floater.Toggle ks_hair_occlusion` | check box, two buttons on its row | true | Same as Quick (A7); Hair… added 2026-10-25. |
 | Ambient Brightness | (as Quick) | 0–3 / 0.01 | 0.25 | Same as Quick (A7). |
 | Probe Fill Strength | (as Quick) | 0.01–10 / 0.01 | 0.01 | Same as Quick (A7). |
 
@@ -656,7 +656,6 @@ AyaneStorm My Lights floater (viewer-only lights). Gains the Curve selector and 
 | GTAO denoise | `RenderGTAODenoisePasses` | 0; 1; 2; 3 | 3 | GTAO only. |
 | GTAO bent normals | `RenderGTAOBentNormals` | check box | false | GTAO only. |
 | Bent normal influence | `RenderGTAOBentNormalInfluence` | 0–1 / 0.01 | 1 | GTAO only. |
-| Hair Occlusion… | `Floater.Toggle ks_hair_occlusion` | floater button | | |
 
 #### 12. Exposure
 
@@ -729,6 +728,7 @@ Nothing here is built. Each branch is cut from `kstorm`, one feature per branch;
   - special controls get small handlers: Ambient Brightness (luminance edit with hue kept, §8.1), Sun & Moon Light and the air colors (color + intensity), sun and moon azimuth / elevation (quaternions, as `rotationFromDegrees` in `ksenvironment.cpp`), Haze Glow Strength and Focus (`glow` mapping), Atmosphere Thickness (× 0.001), Sky HDR Scale (sky `gamma` for EEP, `RenderSkyAutoAdjustHDRScale` for a legacy sky).
 - **Launches** of existing floaters: Environment Effects, Viewer Lights, Camera Effects, My Environments, Depth of Field…, Hair Occlusion… use `Floater.Toggle` (R15).
 - **Registration:** `llviewerfloaterreg.cpp` gains one `<KS:KS>` line per floater, as the existing `ks_environment_effects` line (`llviewerfloaterreg.cpp:695`).
+- **KStorm menu** (`menu_viewer.xml`, KStorm's own top-level menu): **KStorm Lighting** (`shortcut="alt|shift|L"`) replaces both current items. **Retire** KStorm Environment Effects (`ks_environment_effects`: its menu item, `floater_ks_environment_effects.xml`, `panel_ks_lighting.xml`, `kspanellighting.cpp/.h` and its registration line); every one of its controls has a home in this design. The **Hair Occlusion** menu item goes too; the floater opens from Shadows › Hair… (decided 2026-10-25).
 
 ### 11.2 Sky and water editing
 
@@ -906,6 +906,7 @@ General rule: do not change LL, FS or AS behavior, except for whatever competes 
 | A11 | Eye mask radius | Not in AyaneStorm's My Lights floater today (`ASLightRigEyeMaskRadius`, default 0.02). **Decided 2026-10-25: add a control to her floater**, in its own session and branch (`feat-my-lights-eye-mask`). It stays a KS Reference value. |
 | A12 | O15 viewer-only light overrides | **Future** (decided 2026-10-25). Details in §12.4. |
 | A13 | Opening KStorm Lighting | **Decided 2026-10-25:** toolbar button (icon mocked; final icon with the others) and **hotkey Alt+Shift+L** (menu shortcut on a new menu item; free in every menu and in code). |
+| A16 | KStorm menu | **Decided 2026-10-25:** keep KStorm's top-level menu (its own, so no LL menu edits) with **KStorm Lighting** (Alt+Shift+L). Retire KStorm Environment Effects. Remove the Hair Occlusion item; Hair Occlusion opens from a **Hair…** button to the right of Settings… on the Shadows pane's Ambient occlusion row, and leaves the Ambient pane. |
 | A15 | Use sky exposure range | **Approved 2026-10-25:** the relabel of "Use fixed range" (§11.7). |
 | A14 | §12.1 candidates | **Approved 2026-10-25:** KS Reference (the built-in memo, §12.6) sets the 54 settings of §12.1. **Every value it sets, sky and settings alike, must be restored to its prior value when it is turned off.** |
 
