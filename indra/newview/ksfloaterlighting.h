@@ -35,7 +35,8 @@ public:
     // Pane docking: the slot beside the launcher for a pane opened from it, top aligned with
     // the pane's button, on the side of the launcher the pane is on. Returns the launcher and
     // sets slot when pane_rect is within KSLightingPaneSnapRadius of that slot; otherwise null,
-    // and the pane moves freely ("broken off").
+    // and the pane moves freely ("broken off"). Called while a pane is dragged, so it also
+    // records whether the pane is docked, and on which side (KSLightingDockedPanes).
     static LLFloater* findPaneSnap(LLFloater* pane, const LLRect& pane_rect, LLRect& slot);
 
 private:
@@ -53,11 +54,18 @@ private:
                   const std::vector<std::string>& watched = {});
     void refreshStatuses();
     void setCompact(bool compact);
+    // The slot for an entry's pane of the given size, right or left of the launcher.
+    LLRect paneSlot(const Entry& entry, const LLRect& pane_rect, bool on_right) const;
+    // Header button: closes the open docked panes, or when none is open, opens every docked
+    // pane in its slot from top to bottom, so each header stays visible above the next pane.
+    void onDockToggle();
+    void refreshDockButton();
 
     std::vector<Entry> mEntries;
     std::vector<boost::signals2::connection> mConnections;
     LLEnvironment::connection_t mEnvironmentConnection;
     LLButton* mModeButton = nullptr;
+    LLButton* mDockButton = nullptr;
     S32 mFullWidth = 0;
     bool mCompact = false;
 };
