@@ -232,6 +232,37 @@ Shader backend: the spot section disappears, the floater shrinks with its top
 edge fixed, and the lights become points. Switch back: the section and height
 return. Close and reopen the floater in each backend to check the saved size.
 
+### Fixed aim (fixed spotlights, branch `feat-my-lights-fixed-aim`)
+
+A fixed light that is a spotlight shows a **Fixed aim** check box next to the
+Spotlight header. On, the beam stops following the avatar and points in one
+world direction set by the two aim sliders, which become:
+
+- **Aim heading (deg)**, 0–359.9, compass: 0 north, 90 east, 180 south, 270 west;
+- **Aim elevation (deg)**, -90–90: -90 straight down, 0 level, 90 straight up.
+
+Aim at is disabled while the aim is fixed. Off, or for a Follow light, the
+sliders return to the joint offsets (Aim yaw / Aim pitch), whose values are kept
+separately.
+
+- *Turning it on* starts from the beam's current direction
+  (`ASLightRig::fixAimHere()` converts the last aim direction to heading and
+  elevation), so the beam does not jump. A light that has never been lit
+  starts straight down.
+- *Direction:* `computeSpotRotation()` builds the aim from heading and elevation
+  in agent axes (X east, Y north, Z up) and skips the joint and the yaw/pitch
+  offsets. `usesFixedAim()` is true only for a fixed placement with Spotlight on.
+- *Saved* in presets and autosave as `aim_fixed`, `aim_heading` and
+  `aim_elevation`; older files load with the aim not fixed.
+- *Edits* in `aslightrig.*`, `asfloatermylights.*` and `floater_as_my_lights.xml`
+  are `<KS:KS>`-tagged.
+
+Runtime check: place a fixed spotlight, turn on Fixed aim (the beam should not
+move), walk around it (the beam should stay put), drag heading and elevation
+(the beacon arm and cone should turn), turn Fixed aim off (the beam aims at the
+joint again with the old yaw/pitch), switch the light to Follow (the check box
+disappears), save and reload a preset, relog.
+
 ## Fixed (placed) lights, per-light On, autosave on change
 
 ### Behavior
