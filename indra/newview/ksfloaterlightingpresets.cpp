@@ -82,6 +82,12 @@ void KSFloaterLightingPresets::onOpen(const LLSD& key)
     refreshList();
 }
 
+void KSFloaterLightingPresets::selectPreset(const std::string& name)
+{
+    mList->selectByValue(LLSD(name));
+    refreshButtons();
+}
+
 std::string KSFloaterLightingPresets::selectedName() const
 {
     const LLScrollListItem* item = mList->getFirstSelected();
@@ -206,6 +212,27 @@ void KSFloaterLightingPresets::openEditor(const std::string& mode)
 
 // ---------------------------------------------------------------------------
 // Dialog
+
+namespace
+{
+    // A new preset holds the values in use, so it becomes the active one: applying it writes
+    // nothing and records the current values (or the active preset's restore point) for Turn off.
+    bool saveAndApply(const std::string& name, const std::vector<std::string>& groups)
+    {
+        if (!KSLightingPresets::saveCurrent(name, groups))
+        {
+            return false;
+        }
+        std::string saved = name;
+        LLStringUtil::trim(saved);
+        KSLightingPresets::apply(saved);
+        if (KSFloaterLightingPresets* pane = LLFloaterReg::findTypedInstance<KSFloaterLightingPresets>("ks_lighting_presets"))
+        {
+            pane->selectPreset(saved);
+        }
+        return true;
+    }
+}
 
 KSFloaterLightingPresetEdit::KSFloaterLightingPresetEdit(const LLSD& key)
     : LLFloater(key)
@@ -383,7 +410,7 @@ void KSFloaterLightingPresetEdit::refreshOK()
 
 void KSFloaterLightingPresetEdit::save(const std::string& name, const std::vector<std::string>& groups)
 {
-    if (KSLightingPresets::saveCurrent(name, groups))
+    if (saveAndApply(name, groups))
     {
         closeFloater();
     }
@@ -411,7 +438,7 @@ void KSFloaterLightingPresetEdit::onOK()
                     }
                     else
                     {
-                        KSLightingPresets::saveCurrent(name, groups);
+                        saveAndApply(name, groups);
                     }
                 });
             return;

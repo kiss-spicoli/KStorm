@@ -29,6 +29,9 @@ public:
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
 
+    // Selects a preset in the list (after Save current as...).
+    void selectPreset(const std::string& name);
+
 private:
     void refreshList();
     void refreshButtons();

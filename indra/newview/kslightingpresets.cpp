@@ -795,6 +795,35 @@ namespace
         }
         return preset;
     }
+
+    // The active preset was saved with new contents: use them from now on. Values it did
+    // not hold before were just captured, so they equal the current ones, which become
+    // their restore values; the restore point keeps everything else.
+    void adoptActiveValues(const Preset& preset)
+    {
+        for (const auto& [key, value] : llsd::inMap(preset.mSettings))
+        {
+            if (!sRestore.mSettings.has(key))
+            {
+                sRestore.mSettings[key] = value;
+            }
+        }
+        for (const auto& [key, value] : llsd::inMap(preset.mSky))
+        {
+            if (!sRestore.mSky.has(key))
+            {
+                sRestore.mSky[key] = value;
+            }
+        }
+        for (const auto& [key, value] : llsd::inMap(preset.mWater))
+        {
+            if (!sRestore.mWater.has(key))
+            {
+                sRestore.mWater[key] = value;
+            }
+        }
+        sActivePreset = preset;
+    }
 }
 
 const std::vector<KSLightingPresets::Group>& KSLightingPresets::groups()
@@ -937,9 +966,14 @@ bool KSLightingPresets::saveCurrent(const std::string& name, const std::vector<s
     {
         return false;
     }
-    if (!savePreset(captureCurrent(trimmed, group_ids)))
+    const Preset preset = captureCurrent(trimmed, group_ids);
+    if (!savePreset(preset))
     {
         return false;
+    }
+    if (trimmed == sActive)
+    {
+        adoptActiveValues(preset);
     }
     changedSignal()();
     return true;
@@ -1149,29 +1183,7 @@ bool KSLightingPresets::setGroups(const std::string& name, const std::vector<std
     }
     if (name == sActive)
     {
-        // Newly captured values equal the current ones, so their restore value is the current one.
-        for (const auto& [key, value] : llsd::inMap(captured.mSettings))
-        {
-            if (!sRestore.mSettings.has(key))
-            {
-                sRestore.mSettings[key] = value;
-            }
-        }
-        for (const auto& [key, value] : llsd::inMap(captured.mSky))
-        {
-            if (!sRestore.mSky.has(key))
-            {
-                sRestore.mSky[key] = value;
-            }
-        }
-        for (const auto& [key, value] : llsd::inMap(captured.mWater))
-        {
-            if (!sRestore.mWater.has(key))
-            {
-                sRestore.mWater[key] = value;
-            }
-        }
-        sActivePreset = preset;
+        adoptActiveValues(preset);
     }
     changedSignal()();
     return true;

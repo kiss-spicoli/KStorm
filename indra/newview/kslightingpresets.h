@@ -68,7 +68,8 @@ namespace KSLightingPresets
     void turnOff(bool restore_environment = true);
 
     // Saves the current values of the given groups as a preset (replacing one of
-    // the same name). False if the name is empty, reserved or cannot be written.
+    // the same name; an active preset of that name stays active with the new
+    // values). False if the name is empty, reserved or cannot be written.
     bool saveCurrent(const std::string& name, const std::vector<std::string>& group_ids);
 
     // Deletes a saved preset, turning it off first when it is active.
