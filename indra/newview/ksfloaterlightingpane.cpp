@@ -125,15 +125,38 @@ void KSFloaterLightingPaneBase::setCollapsed(bool collapsed)
     {
         return;
     }
+    // Collapsed panes are also half as wide, so an expanded pane sticks out beyond them. The
+    // edge facing the launcher stays put, so a docked pane stays against it.
+    LLFloater* launcher = LLFloaterReg::findInstance("ks_lighting");
+    const bool keep_right = launcher && launcher->getParent() == getParent()
+                            && getRect().getCenterX() < launcher->getRect().getCenterX();
     LLRect rect = getRect();
     if (collapsed)
     {
         mExpandedHeight = rect.getHeight();
+        mExpandedWidth = rect.getWidth();
         rect.mBottom = rect.mTop - getHeaderHeight();
+        const S32 width = mExpandedWidth / 2;
+        if (keep_right)
+        {
+            rect.mLeft = rect.mRight - width;
+        }
+        else
+        {
+            rect.mRight = rect.mLeft + width;
+        }
     }
     else
     {
         rect.mBottom = rect.mTop - mExpandedHeight;
+        if (keep_right)
+        {
+            rect.mLeft = rect.mRight - mExpandedWidth;
+        }
+        else
+        {
+            rect.mRight = rect.mLeft + mExpandedWidth;
+        }
     }
     mCollapsed = collapsed;
     setShape(rect);

@@ -48,7 +48,8 @@ class KSFloaterLightingPaneBase : public LLFloater
 public:
     explicit KSFloaterLightingPaneBase(const LLSD& key);
 
-    // Collapsed, only the header bar shows; the top edge stays in place either way.
+    // Collapsed, only the header bar shows, at half the width; the top edge, and the side edge
+    // facing the launcher, stay in place either way.
     void setCollapsed(bool collapsed);
     bool isCollapsed() const { return mCollapsed; }
 
@@ -82,6 +83,7 @@ protected:
 private:
     bool mCollapsed = false;
     S32 mExpandedHeight = 0;
+    S32 mExpandedWidth = 0;
     bool mHeaderClickPending = false;
     LLRect mHeaderClickRect;
 };
