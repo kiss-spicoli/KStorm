@@ -26,6 +26,9 @@
   <button follows="left|top" height="20" label="Settings..." layout="topleft" left="166" name="ks_ao_settings" top="238" width="66" tool_tip="Opens the Ambient pane (ambient light and ambient occlusion).">
     <button.commit_callback function="KS.CycleFloater" parameter="ks_lighting_ambient" />
   </button>
+  <button follows="left|top" height="20" label="Hair..." layout="topleft" left="236" name="ks_hair" top="238" width="54" tool_tip="Opens Hair Occlusion.">
+    <button.commit_callback function="KS.CycleFloater" parameter="ks_hair_occlusion" />
+  </button>
   <slider can_edit_text="true" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Probe Fill Strength" label_width="120" layout="topleft" left="10" max_val="10" min_val="0.01" name="sky_probe_fill" show_text="true" text_width="56" top="264" width="280" tool_tip="&lt;1: fill from sky ambient (uniform). &gt;=1: fill from probes (bounce light, darker interiors). At a probe fill of 1 or more, probe irradiance fully replaces ambient wherever probes cover the surface. Reflections are unaffected. (KS Reference)" />
   <check_box follows="left|top" height="16" label="Show avatars" layout="topleft" left="10" name="ks_show_avatars" top="286" width="280" tool_tip="Shows or hides all avatars." />
   <check_box follows="left|top" height="16" label="Show avatar names" layout="topleft" left="10" name="ks_name_tags" top="308" width="280" tool_tip="Name tags over avatars. (KS Reference)" />
