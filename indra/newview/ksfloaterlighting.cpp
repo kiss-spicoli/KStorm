@@ -294,7 +294,7 @@ LLFloater* KSFloaterLighting::findPaneSnap(LLFloater* pane, const LLRect& pane_r
         // Both floaters share a parent, so their rects are in the same coordinates.
         const LLRect& launcher_rect = launcher->getRect();
         const S32 button_top = launcher_rect.mBottom + entry.mButton->getRect().mTop;
-        const bool on_right = pane_rect.getCenterX() >= launcher_rect.getCenterX();
+        const bool on_right = launcher->sideFor(pane, pane_rect.getCenterX() >= launcher_rect.getCenterX());
         LLRect candidate = pane_rect;
         candidate.translate(on_right ? launcher_rect.mRight - pane_rect.mLeft : launcher_rect.mLeft - pane_rect.mRight,
                             button_top - pane_rect.mTop);
@@ -317,6 +317,31 @@ LLFloater* KSFloaterLighting::findPaneSnap(LLFloater* pane, const LLRect& pane_r
 bool KSFloaterLighting::isDocked(const std::string& name)
 {
     return loadDocked().count(name) > 0 || !KSFloaterLightingProxy::targetOf(name).empty();
+}
+
+bool KSFloaterLighting::sideFor(LLFloater* pane, bool on_right) const
+{
+    const LLView* parent = getParent();
+    if (!parent || !pane)
+    {
+        return on_right;
+    }
+    S32 width = pane->getRect().getWidth();
+    if (KSFloaterLightingPaneBase* ks_pane = dynamic_cast<KSFloaterLightingPaneBase*>(pane))
+    {
+        width = llmax(width, ks_pane->getFullWidth());
+    }
+    const bool room_right = parent->getRect().getWidth() - getRect().mRight >= width;
+    const bool room_left = getRect().mLeft >= width;
+    if (on_right && !room_right && room_left)
+    {
+        return false;
+    }
+    if (!on_right && !room_left && room_right)
+    {
+        return true;
+    }
+    return on_right;
 }
 
 LLRect KSFloaterLighting::paneSlot(const Entry& entry, const LLRect& pane_rect, bool on_right) const
@@ -377,7 +402,7 @@ void KSFloaterLighting::onDockToggle()
             {
                 ks_pane->setCollapsed(false);
             }
-            pane->setShape(paneSlot(*entry, pane->getRect(), docked.at(name)));
+            pane->setShape(paneSlot(*entry, pane->getRect(), sideFor(pane, docked.at(name))));
             if (ks_pane)
             {
                 // A proxy is only a header; a pane reopens as it was.
@@ -411,7 +436,7 @@ void KSFloaterLighting::onPaneButton(const Entry& entry)
     auto side = docked.find(entry.mFloater);
     if (side != docked.end())
     {
-        pane->setShape(paneSlot(entry, pane->getRect(), side->second));
+        pane->setShape(paneSlot(entry, pane->getRect(), sideFor(pane, side->second)));
     }
     pane->setVisibleAndFrontmost(true);
 }
@@ -431,7 +456,7 @@ void KSFloaterLighting::onProxyButton(const Entry& entry)
     }
     if (LLFloater* proxy = LLFloaterReg::showInstance(entry.mProxy, LLSD(), false))
     {
-        proxy->setShape(paneSlot(entry, proxy->getRect(), false));
+        proxy->setShape(paneSlot(entry, proxy->getRect(), sideFor(proxy, false)));
         proxy->setVisibleAndFrontmost(false);
     }
     if (LLFloater* opened = LLFloaterReg::showInstance(entry.mFloater, LLSD(), true))
@@ -522,7 +547,7 @@ void KSFloaterLighting::keepDockedPanesInPlace()
         {
             continue;
         }
-        const LLRect slot = paneSlot(entry, pane->getRect(), side->second);
+        const LLRect slot = paneSlot(entry, pane->getRect(), sideFor(pane, side->second));
         if (slot.mLeft != pane->getRect().mLeft || slot.mTop != pane->getRect().mTop)
         {
             pane->setShape(slot);

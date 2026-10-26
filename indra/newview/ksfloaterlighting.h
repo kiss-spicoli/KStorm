@@ -70,6 +70,10 @@ private:
     void setCompact(bool compact);
     // The slot for an entry's pane of the given size, right or left of the launcher.
     LLRect paneSlot(const Entry& entry, const LLRect& pane_rect, bool on_right) const;
+    // The side a pane goes on: its own side, unless the screen has no room there for the
+    // pane's full width while the other side has (launcher near a screen edge). The pane's own
+    // side is kept, so it returns there when the launcher moves away from the edge.
+    bool sideFor(LLFloater* pane, bool on_right) const;
     // Header button: closes the open docked panes, or when none is open, opens every docked
     // pane in its slot from top to bottom, collapsed or expanded as it was when it closed, each
     // in front of the one above it so every header stays visible.

@@ -52,6 +52,8 @@ public:
     // facing the launcher, stay in place either way.
     void setCollapsed(bool collapsed);
     bool isCollapsed() const { return mCollapsed; }
+    // Full (expanded) width from XUI; 0 before postBuild() ends.
+    S32 getFullWidth() const { return mFullWidth; }
 
     // Topmost visible floater other than ignore (the floater holding a clicked button,
     // which the click itself brought to the front).
