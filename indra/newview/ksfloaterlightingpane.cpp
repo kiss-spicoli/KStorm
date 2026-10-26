@@ -349,20 +349,9 @@ void KSFloaterLightingProxy::onHeaderClicked()
     {
         return;
     }
-    LLFloater* floater = LLFloaterReg::findInstance(target);
-    if (floater && floater->isShown() && !floater->isMinimized())
-    {
-        floater->closeFloater();
-        return;
-    }
-    if (LLFloater* opened = LLFloaterReg::showInstance(target, LLSD(), true))
-    {
-        if (opened->isMinimized())
-        {
-            opened->setMinimized(false);
-        }
-        opened->setVisibleAndFrontmost(true);
-    }
+    // Closed: open it in front; open behind other floaters: bring it forward; open in front:
+    // close it. The proxy itself, which the click brought forward, does not count.
+    cycleFloater(target, this);
 }
 
 // ---------------------------------------------------------------------------

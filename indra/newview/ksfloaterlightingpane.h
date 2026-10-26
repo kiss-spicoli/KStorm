@@ -101,7 +101,8 @@ private:
 
 // A header-only stand-in, docked left of the launcher, for an AyaneStorm floater too large to
 // dock (Environment Effects, Viewer Lights, Camera Effects). A click on its header opens that
-// floater in front, or closes it. One XUI file, one registered instance per floater.
+// floater in front, brings it forward when it is behind, or closes it when it is in front.
+// One XUI file, one registered instance per floater.
 class KSFloaterLightingProxy : public KSFloaterLightingPaneBase
 {
 public:
