@@ -105,6 +105,9 @@ public:
 
     static const F32 DEFAULT_AUTO_ADJUST_PROBE_AMBIANCE;
     static F32 sAutoAdjustProbeAmbiance;
+    // <KS:KS> Floor for getReflectionProbeAmbiance(), fed from KSMinProbeAmbiance (llenvironment.cpp)
+    static F32 sMinProbeAmbiance;
+    // </KS:KS>
 
     typedef PTR_NAMESPACE::shared_ptr<LLSettingsSky> ptr_t;
 

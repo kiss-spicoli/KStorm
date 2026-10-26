@@ -80,7 +80,7 @@ namespace
     const std::map<std::string, LLSD> KS_REFERENCE_VALUES =
     {
         { "RenderHDREnabled",          LLSD(true) },
-        { "RenderSkyAutoAdjustLegacy", LLSD(true) },   // LL default is FALSE
+        { "RenderSkyAutoAdjustLegacy", LLSD(true) },   // LL default FALSE; KStorm default TRUE since 2026-10-26
         { "RenderDisableVintageMode",  LLSD(true) },
         { "WindLightUseAtmosShaders",  LLSD(true) },
     };
