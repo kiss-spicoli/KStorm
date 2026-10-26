@@ -338,7 +338,7 @@ void KSFloaterLighting::onDockToggle()
         }
         return;
     }
-    // Collapsed to their headers, which line up with the buttons; top to bottom, each in front.
+    // As each was when it closed (collapsed to the header or expanded); top to bottom, each in front.
     for (const Entry* entry : panes)
     {
         if (LLFloater* pane = LLFloaterReg::showInstance(entry->mFloater, LLSD(), false))
@@ -351,7 +351,7 @@ void KSFloaterLighting::onDockToggle()
             pane->setShape(paneSlot(*entry, pane->getRect(), docked.at(entry->mFloater)));
             if (ks_pane)
             {
-                ks_pane->setCollapsed(true);
+                ks_pane->setCollapsed(KSFloaterLightingPaneBase::wasCollapsed(entry->mFloater));
             }
             pane->setVisibleAndFrontmost(false);
         }

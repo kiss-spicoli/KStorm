@@ -61,8 +61,13 @@ public:
     // the same click, an expanded one only comes forward.
     bool handleMouseDown(S32 x, S32 y, MASK mask) override;
     void draw() override;
-    // Expands before closing, so the saved size is the full one.
+    // Remembers whether the pane was collapsed, then expands before closing, so the saved
+    // size is the full one.
     void onClose(bool app_quitting) override;
+
+    // Whether a pane was collapsed when it last closed (KSLightingPaneStates); a pane never
+    // closed counts as collapsed. The launcher's dock button reopens docked panes this way.
+    static bool wasCollapsed(const std::string& name);
 
     // Docks beside the launcher when dragged near this pane's slot (KSFloaterLighting::findPaneSnap).
     LLView* findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,

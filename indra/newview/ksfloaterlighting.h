@@ -57,8 +57,8 @@ private:
     // The slot for an entry's pane of the given size, right or left of the launcher.
     LLRect paneSlot(const Entry& entry, const LLRect& pane_rect, bool on_right) const;
     // Header button: closes the open docked panes, or when none is open, opens every docked
-    // pane in its slot from top to bottom, collapsed to its header bar, so the headers line
-    // up with the buttons.
+    // pane in its slot from top to bottom, collapsed or expanded as it was when it closed, each
+    // in front of the one above it so every header stays visible.
     void onDockToggle();
     // A button for one of our panes: closes it when it is fully open in front; otherwise opens
     // it fully (expanded, in its slot when docked) and brings it to the front.

@@ -201,8 +201,38 @@ void KSFloaterLightingPaneBase::draw()
 
 void KSFloaterLightingPaneBase::onClose(bool app_quitting)
 {
+    // KSLightingPaneStates holds "name:C" (collapsed) or "name:E" (expanded), separated by ";".
+    const std::string& name = getInstanceName();
+    std::vector<std::string> items;
+    LLStringUtil::getTokens(gSavedSettings.getString("KSLightingPaneStates"), items, ";");
+    std::string states;
+    for (const std::string& item : items)
+    {
+        if (item.compare(0, name.size() + 1, name + ":") != 0)
+        {
+            states += (states.empty() ? "" : ";") + item;
+        }
+    }
+    states += (states.empty() ? "" : ";") + name + (mCollapsed ? ":C" : ":E");
+    gSavedSettings.setString("KSLightingPaneStates", states);
+
     setCollapsed(false);
     LLFloater::onClose(app_quitting);
+}
+
+// static
+bool KSFloaterLightingPaneBase::wasCollapsed(const std::string& name)
+{
+    std::vector<std::string> items;
+    LLStringUtil::getTokens(gSavedSettings.getString("KSLightingPaneStates"), items, ";");
+    for (const std::string& item : items)
+    {
+        if (item.compare(0, name.size() + 1, name + ":") == 0)
+        {
+            return item.substr(name.size() + 1) != "E";
+        }
+    }
+    return true;
 }
 
 LLView* KSFloaterLightingPaneBase::findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,
