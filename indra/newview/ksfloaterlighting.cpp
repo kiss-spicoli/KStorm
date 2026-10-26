@@ -14,6 +14,7 @@
 #include "kslightingpresets.h"
 #include "llbutton.h"
 #include "llfloaterreg.h"
+#include "llfocusmgr.h"
 #include "lltextbox.h"
 #include "llui.h"
 #include "llviewercontrol.h"
@@ -420,7 +421,42 @@ void KSFloaterLighting::draw()
         }
     }
     refreshDockButton();
+    keepDockedPanesInPlace();
     LLFloater::draw();
+}
+
+void KSFloaterLighting::keepDockedPanesInPlace()
+{
+    if (isMinimized() || getHost())
+    {
+        return;
+    }
+    const std::map<std::string, bool> docked = loadDocked();
+    if (docked.empty())
+    {
+        return;
+    }
+    // A pane being dragged follows the mouse; findPaneSnap() decides whether it stays docked.
+    const LLView* captor = dynamic_cast<const LLView*>(gFocusMgr.getMouseCapture());
+    for (const Entry& entry : mEntries)
+    {
+        auto side = docked.find(entry.mFloater);
+        if (side == docked.end())
+        {
+            continue;
+        }
+        LLFloater* pane = LLFloaterReg::findInstance(entry.mFloater);
+        if (!pane || !pane->getVisible() || pane->isMinimized() || pane->getHost()
+            || pane->getParent() != getParent() || (captor && captor->hasAncestor(pane)))
+        {
+            continue;
+        }
+        const LLRect slot = paneSlot(entry, pane->getRect(), side->second);
+        if (slot.mLeft != pane->getRect().mLeft || slot.mTop != pane->getRect().mTop)
+        {
+            pane->setShape(slot);
+        }
+    }
 }
 
 void KSFloaterLighting::refreshStatuses()
