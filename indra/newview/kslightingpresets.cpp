@@ -45,8 +45,9 @@ namespace
         { "KSRenderLocalLightSubjectSort", LLSD(true) },
         // Auto-exposure is pinned at 1 by the KS Sky HDR Scale anyway; off makes that visible.
         { "RenderDynamicExposureEnabled",  LLSD(false) },
-        // Shadow map size relative to the screen (a change resizes the shadow maps).
-        { "RenderShadowResolutionScale",   LLSD(1.0) },
+        // Shadow map size relative to the screen (a change resizes the shadow maps). 1.5 gives crisp
+        // shadows at 4K (sun maps 5760 x 3240, about 0.56 GB of shadow maps in all).
+        { "RenderShadowResolutionScale",   LLSD(1.5) },
     };
 
     // Reference settings (design section 12.1, approved as A14): held at their
