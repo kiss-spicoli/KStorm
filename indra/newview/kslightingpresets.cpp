@@ -39,7 +39,7 @@ namespace
     // KSRenderLocalLightSubjectSort comes from feat-local-light-subject-sort.
     const std::map<std::string, LLSD> KS_SETTINGS =
     {
-        { "RenderFarClip",                 LLSD(16.0) },
+        { "RenderFarClip",                 LLSD(64.0) },   // draw distance, meters (16 before 2026-10-26)
         { "RenderAvatarMaxNonImpostors",   LLSD(4) },
         { "AvatarNameTagMode",             LLSD(0) },
         { "KSRenderLocalLightSubjectSort", LLSD(true) },
