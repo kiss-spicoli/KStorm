@@ -55,6 +55,10 @@ public:
 
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
+
+    // Docks beside the launcher when dragged near this pane's slot (KSFloaterLighting::findPaneSnap).
+    LLView* findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,
+                         S32 threshold, S32 padding = 0) override;
     void draw() override;
 
 private:

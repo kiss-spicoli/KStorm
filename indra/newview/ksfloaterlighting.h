@@ -32,6 +32,12 @@ public:
     void onOpen(const LLSD& key) override;
     void draw() override;
 
+    // Pane docking: the slot beside the launcher for a pane opened from it, top aligned with
+    // the pane's button, on the side of the launcher the pane is on. Returns the launcher and
+    // sets slot when pane_rect is within KSLightingPaneSnapRadius of that slot; otherwise null,
+    // and the pane moves freely ("broken off").
+    static LLFloater* findPaneSnap(LLFloater* pane, const LLRect& pane_rect, LLRect& slot);
+
 private:
     struct Entry
     {

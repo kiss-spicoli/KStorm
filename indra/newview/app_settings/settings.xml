@@ -11192,6 +11192,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>KSLightingPaneSnapRadius</key>
+  <map>
+    <key>Comment</key>
+    <string>Pixels within which a KStorm Lighting pane dragged near the launcher snaps beside it, top aligned with its button; 0 turns snapping off</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>40</integer>
+  </map>
   <key>KSMinProbeAmbiance</key>
   <map>
     <key>Comment</key>

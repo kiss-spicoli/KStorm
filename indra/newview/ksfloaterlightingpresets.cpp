@@ -9,6 +9,7 @@
 #include "ksfloaterlightingpresets.h"
 
 #include "ksenvironment.h"
+#include "ksfloaterlighting.h"
 #include "kslightingpresets.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
@@ -75,6 +76,20 @@ bool KSFloaterLightingPresets::postBuild()
     mChangedConnection = KSLightingPresets::changedSignal().connect([this]() { refreshList(); });
     refreshList();
     return true;
+}
+
+LLView* KSFloaterLightingPresets::findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,
+                            S32 threshold, S32 padding)
+{
+    // Called on every drag step with the rect at the dragged position; within the snap radius
+    // of this pane's slot beside the launcher, the slot wins over the usual edge snapping.
+    LLRect slot;
+    if (LLFloater* launcher = KSFloaterLighting::findPaneSnap(this, getRect(), slot))
+    {
+        new_rect = slot;
+        return launcher;
+    }
+    return LLFloater::findSnapRect(new_rect, mouse_dir, snap_type, threshold, padding);
 }
 
 void KSFloaterLightingPresets::onOpen(const LLSD& key)

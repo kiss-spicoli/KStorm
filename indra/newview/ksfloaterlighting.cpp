@@ -203,6 +203,39 @@ void KSFloaterLighting::addEntry(const std::string& key, const std::string& floa
     mEntries.push_back(entry);
 }
 
+// static
+LLFloater* KSFloaterLighting::findPaneSnap(LLFloater* pane, const LLRect& pane_rect, LLRect& slot)
+{
+    static LLCachedControl<S32> radius(gSavedSettings, "KSLightingPaneSnapRadius", 40);
+    KSFloaterLighting* launcher = LLFloaterReg::findTypedInstance<KSFloaterLighting>("ks_lighting");
+    if (radius() <= 0 || !pane || !launcher || !launcher->getVisible() || launcher->isMinimized()
+        || launcher->getHost() || pane->getHost() || launcher->getParent() != pane->getParent())
+    {
+        return nullptr;
+    }
+    for (const Entry& entry : launcher->mEntries)
+    {
+        if (entry.mFloater != pane->getInstanceName())
+        {
+            continue;
+        }
+        // Both floaters share a parent, so their rects are in the same coordinates.
+        const LLRect& launcher_rect = launcher->getRect();
+        const S32 button_top = launcher_rect.mBottom + entry.mButton->getRect().mTop;
+        const bool on_right = pane_rect.getCenterX() >= launcher_rect.getCenterX();
+        LLRect candidate = pane_rect;
+        candidate.translate(on_right ? launcher_rect.mRight - pane_rect.mLeft : launcher_rect.mLeft - pane_rect.mRight,
+                            button_top - pane_rect.mTop);
+        if (llabs(candidate.mLeft - pane_rect.mLeft) > radius() || llabs(candidate.mTop - pane_rect.mTop) > radius())
+        {
+            return nullptr;
+        }
+        slot = candidate;
+        return launcher;
+    }
+    return nullptr;     // not a pane with a launcher button (Ambient opens from Settings...)
+}
+
 void KSFloaterLighting::onOpen(const LLSD& key)
 {
     refreshStatuses();
