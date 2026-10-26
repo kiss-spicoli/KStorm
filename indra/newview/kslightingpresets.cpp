@@ -257,7 +257,7 @@ namespace
         return fields;
     }
 
-    void collectControls(const LLXMLNodePtr& node, std::set<std::string>& names)
+    void collectControls(LLXMLNodePtr node, std::set<std::string>& names)
     {
         std::string value;
         if (node->getAttributeString("control_name", value) && !value.empty())
