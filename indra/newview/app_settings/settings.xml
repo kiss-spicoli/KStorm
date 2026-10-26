@@ -11195,7 +11195,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>KSSetEnvironment</key>
   <map>
     <key>Comment</key>
-    <string>If TRUE, applies the KS environment (draw distance, impostors, name tags, light sort, Personal Lighting values); FALSE restores the values cached when it was enabled</string>
+    <string>If TRUE, applies KS Reference, the built-in KStorm lighting preset (kslightingpresets.cpp); FALSE turns it off and restores the values from before it was applied</string>
     <key>Persist</key>
     <integer>0</integer>
     <key>Type</key>

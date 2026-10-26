@@ -1,21 +1,11 @@
 /**
  * @file ksenvironment.h
  * @author Kissmy Spicoli
- * @brief "Set KS environment" (Use KS Reference) and the sky/water editing helpers
- *        used by the KStorm Lighting panes.
+ * @brief Sky and water editing helpers used by the KStorm Lighting panes and
+ *        lighting presets, plus the entry points the viewer calls (init,
+ *        Use Shared, shutdown).
  *
- * Turning KSSetEnvironment on caches the current values of a fixed set of
- * viewer settings and Personal Lighting (ENV_LOCAL sky) properties, then
- * applies the KS values. Turning it off writes the cached values back. If
- * no local environment existed when it was turned on, the local
- * environment is cleared instead of restoring the sky values.
- *
- * Use Shared and applying another environment (My Environments, inventory,
- * World menu presets) turn it off and restore only the viewer settings, since
- * the new environment replaces the KS sky (design A4).
- *
- * KSSetEnvironment does not persist. restoreForShutdown() is called before
- * the viewer saves settings at exit so the KS values are not saved.
+ * Use KS Reference is the built-in lighting preset; see kslightingpresets.h.
  */
 #ifndef KS_ENVIRONMENT_H
 #define KS_ENVIRONMENT_H
@@ -32,12 +22,13 @@ namespace KSEnvironment
     // Personal Lighting uses -2, NO_VERSION is -3, celestial panels use -5.
     constexpr S32 KS_ENVIRONMENT_UPDATE = -7;
 
-    // Connects the KSSetEnvironment and environment listeners and declares the code-only
-    // exposure settings. Safe to call repeatedly.
+    // Declares the code-only exposure settings and connects the lighting presets
+    // (Use KS Reference). Safe to call repeatedly.
     void init();
 
-    // Use Shared Environment: turns KS off without restoring its sky (A4), then clears the
-    // local environment as World > Environment > Use Shared Environment does.
+    // Use Shared Environment: turns off an active preset that holds sky or water values
+    // without restoring them (A4), then clears the local environment as
+    // World > Environment > Use Shared Environment does.
     void useShared();
 
     // Returns the ENV_LOCAL fixed sky, creating it from the parcel sky as
@@ -48,7 +39,8 @@ namespace KSEnvironment
     // panels) after a sky was edited in place.
     void commitSky(const LLSettingsSky::ptr_t& sky);
 
-    // Restores cached viewer settings without touching the environment.
+    // Puts the active lighting preset's viewer settings back before settings are
+    // saved at exit, without touching the environment.
     void restoreForShutdown();
 
     // Returns the ENV_LOCAL fixed water as our own copy, creating the local

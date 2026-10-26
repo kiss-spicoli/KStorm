@@ -60,8 +60,8 @@ Search terms: KStorm2 UI, lighting panels, P1 Environment, P2 Tone, P3 Shadows O
   - [12.3 Decisions (2026-10-25)](#123-decisions-2026-10-25)
   - [12.4 Restated items](#124-restated-items)
   - [12.5 Which §12.1 candidates can be set and restored safely](#125-which-121-candidates-can-be-set-and-restored-safely)
-  - [12.6 Memos: unified design (decided 2026-10-25)](#126-memos-unified-design-decided-2026-10-25)
-  - [12.7 Memos compared with My Environments](#127-memos-compared-with-my-environments)
+  - [12.6 Lighting Presets: unified design (decided 2026-10-25)](#126-lighting-presets-unified-design-decided-2026-10-25)
+  - [12.7 Lighting Presets compared with My Environments](#127-lighting-presets-compared-with-my-environments)
 
 ---
 
@@ -402,7 +402,7 @@ Not included (decided 2026-10-24): "Enable Reflection Probe Selection" (`SelectR
 | O13 | Local lights ×0.9 under legacy skies | **Resolved:** keep LL's behaviour (R13). |
 | O14 | Depth of field controls | **Resolved:** our Depth of Field floater (`as_depth_of_field`) gains the 11 DoF and camera controls it lacks, from Advanced Lighting, Phototools, Advanced Phototools and Graphics prefs: `CameraFNumber`, `CameraFocalLength`, `CameraFieldOfView`, `CameraFocusTransitionTime`, `CameraMaxCoF`, `CameraDoFResScale`, `FSFocusPointFollowsPointer`, `FSFocusPointLocked`, `FSFocusPointRender`, `RenderDepthOfFieldInEditMode` (dropped 2026-10-25: not in the KStorm UI), `CameraAngle` (zoom). It already has `RenderDepthOfField` and `ASDepthOfFieldMode`. Implementation is a change to `floater_as_depth_of_field.xml`. The Camera tab (§5A.1) also carries them built in (R15 allows built-in controls). |
 | O15 | Viewer-only light overrides on any object | **Future** (decided 2026-10-25; §12.3 A12). Let the lighting UI change, hide or add lights on any object, with or without modify rights, in your view only. See §8.5. |
-| O16 | Graphics preset save/load as a lighting memo | **Superseded by Memos** (§12.6, decided 2026-10-25). Quality (`RenderQualityPerformance`) and graphics presets, including Save preset… and Load preset…, are not surfaced in the KStorm lighting UI (decided 2026-10-25). The question to research: what a graphics preset actually saves and restores, and what a complete memo of the lighting controls in this design would need that a preset leaves out (for example environment and sky settings, Viewer Lights, per-sky values, settings outside the preset's list). |
+| O16 | Graphics preset save/load as a lighting preset | **Superseded by Lighting Presets** (§12.6, decided 2026-10-25). Quality (`RenderQualityPerformance`) and graphics presets, including Save preset… and Load preset…, are not surfaced in the KStorm lighting UI (decided 2026-10-25). The question to research: what a graphics preset actually saves and restores, and what a complete preset of the lighting controls in this design would need that a preset leaves out (for example environment and sky settings, Viewer Lights, per-sky values, settings outside the preset's list). |
 
 ---
 
@@ -818,7 +818,7 @@ Add `RenderDynamicExposureEnabled` handling: save, set false, restore on off. Wh
 | B4 | `feat-local-light-325` | Converge local-light constants on 3.25 (forward 3.0 → 3.25), as decided earlier | Shader change. |
 | B5 | merge `fix-haze-zero-nan-guards` | Already committed on its branch | Shaders unvalidated: glslang is not in the repository. Validate by a build and a run with Haze Density 0, or install `glslangValidator` and run it on the three files. |
 | B6 | (optional) toolbar commands | Register panes in `commands.xml` so they can sit on toolbars | Only if A13 says so. |
-| B7 | `feat-ks-memos` | Memos (§12.6): memo files, Memos pane and dialogs, apply with restore point, KS Reference as the built-in memo (absorbs B2's `ksenvironment.cpp` work and the §12.1 settings once A14 is approved) | After B1. Save to My Environments postponed. |
+| B7 | `feat-ks-lighting-presets` | Lighting Presets (§12.6): preset files, Lighting Presets pane and dialogs, apply with restore point, KS Reference as the built-in preset (absorbs B2's `ksenvironment.cpp` work and the §12.1 settings once A14 is approved) | After B1. Save to My Environments postponed. |
 
 ### 11.6 Verification per pane (user, after each build)
 
@@ -962,7 +962,7 @@ General rule: do not change LL, FS or AS behavior, except for whatever competes 
 | D1 | Quality slider | **Approved:** while Use KS Reference is on, reapply its values after a quality change. |
 | D2 | Graphics preset load | **Approved:** as D1. |
 | D3 | Build no-post | **Leave as LL.** The note is added to the tooltips of Exposure, Dynamic exposure, Tone mapping, Tone mapping mix and Glow (§10). Tooltips are static text, so this needs no code. |
-| A2 | Lighting memo (O16) | **Unified with A14 as Memos** (§12.6, decided 2026-10-25); compared with My Environments in §12.7. |
+| A2 | Lighting preset (O16) | **Unified with A14 as Lighting Presets** (§12.6, decided 2026-10-25); compared with My Environments in §12.7. |
 | A3 | Editing a KS value while KS is on | **Leave KS on** so the other values stay at the reference; turning it off restores the pre-KS values. Every control KS writes ends its tooltip with "(KS Reference)" (§10). |
 | A4 | Use Shared / My Environments while KS is on | **Both turn KS off** (no sky restore: the new environment replaces it). |
 | A5 | O14 | AyaneStorm's Depth of Field floater lacks all nine of our camera controls (F-number, Focal length, Field of view, Zoom, Focus follows pointer, Focus locked, Show focus point, Max blur, DoF resolution). **Keep our pane and its Depth of Field… button**; the O14 change to her floater is dropped. |
@@ -970,17 +970,17 @@ General rule: do not change LL, FS or AS behavior, except for whatever competes 
 | A7 | Ambient pane access | **Approved:** Ambient occlusion (with Settings…), Ambient Brightness and Probe Fill Strength are also at the bottom of Shadows (duplicates allowed). |
 | A8 | Exposure entry status | **Exposure value only.** |
 | A9 | Water labels | **Adopted:** Water fog color, Water fog density, Underwater fog multiplier. |
-| A10 | Compact mode | **Adopted.** Icons: the mock-up's placeholders stand for now; real 16×16 icons (16, including Memos and the toolbar button) are the next task. |
+| A10 | Compact mode | **Adopted.** Icons: the mock-up's placeholders stand for now; real 16×16 icons (16, including Lighting Presets and the toolbar button) are the next task. |
 | A11 | Eye mask radius | Not in AyaneStorm's My Lights floater today (`ASLightRigEyeMaskRadius`, default 0.02). **Decided 2026-10-25: add a control to her floater**, in its own session and branch (`feat-my-lights-eye-mask`). It stays a KS Reference value. |
 | A12 | O15 viewer-only light overrides | **Future** (decided 2026-10-25). Details in §12.4. |
 | A13 | Opening KStorm Lighting | **Decided 2026-10-25:** toolbar button (icon mocked; final icon with the others) and **hotkey Alt+Shift+L** (menu shortcut on a new menu item; free in every menu and in code). |
 | A16 | KStorm menu | **Decided 2026-10-25:** keep KStorm's top-level menu (its own, so no LL menu edits) with **KStorm Lighting** (Alt+Shift+L). Retire KStorm Environment Effects. Remove the Hair Occlusion item; Hair Occlusion opens from a **Hair…** button to the right of Settings… on the Shadows pane's Ambient occlusion row, and leaves the Ambient pane. |
 | A15 | Use sky exposure range | **Approved 2026-10-25:** the relabel of "Use fixed range" (§11.7). |
-| A14 | §12.1 candidates | **Approved 2026-10-25:** KS Reference (the built-in memo, §12.6) sets the 54 settings of §12.1. **Every value it sets, sky and settings alike, must be restored to its prior value when it is turned off.** |
+| A14 | §12.1 candidates | **Approved 2026-10-25:** KS Reference (the built-in preset, §12.6) sets the 54 settings of §12.1. **Every value it sets, sky and settings alike, must be restored to its prior value when it is turned off.** |
 
 ### 12.4 Restated items
 
-**A2 — KStorm lighting memo (O16).** A named snapshot of every lighting value in this design, saved to a file and loaded back.
+**A2 — KStorm lighting preset (O16).** A named snapshot of every lighting value in this design, saved to a file and loaded back.
 
 - *Contents:* the 76 viewer settings §10 surfaces (plus the §12.1 list if approved); the local sky and water as their settings data (`LLSettingsSky` / `LLSettingsWater` serialize themselves); the AyaneStorm floaters' settings (volumetric lighting, color grading, celestial, depth of field), as plain viewer settings; the Use KS Reference state.
 - *Size:* new KStorm code only: one class (about 300–500 lines) and a small Save / Load / Delete panel (or two buttons in the launch floater), files under the user settings folder like graphics presets. Loading writes settings directly and applies the sky and water as a local environment through `KSEnvironment`, the same path the panes use.
@@ -1044,66 +1044,79 @@ Recommendation: keep them (they are at the reference in a normal viewer, so KS w
 
 Totals for the 64 candidates: 48 safe (45 once the three no-effect settings are dropped), 9 costly, 6 not safe, and `RenderGamma` not recommended. **Decided 2026-10-25:** the 6 not-safe settings, `RenderGamma` and the 3 no-effect settings are removed from §12.1, leaving 54 candidates (45 safe, 9 costly).
 
-### 12.6 Memos: unified design (decided 2026-10-25)
+### 12.6 Lighting Presets: unified design (decided 2026-10-25)
 
-A2 (lighting memo) and A14 (KS Reference candidates) become one feature. **Use KS Reference is the first memo**: built in and read-only. Memos you make can be created, updated, renamed, duplicated and deleted.
+A2 (lighting preset) and A14 (KS Reference candidates) become one feature. **Use KS Reference is the first preset**: built in and read-only. Lighting Presets you make can be created, updated, renamed, duplicated and deleted.
 
 **Rules**
 
-- *Partial memos.* A memo stores only the groups it names (Sun/Moon, Atmosphere, Clouds, Water, Reflections, All lights, Shadows, Ambient, Exposure, Glow, Depth of field, Vignette, AyaneStorm floaters). KS Reference names a fixed subset: its sky values plus the 54 settings of §12.1.
-- *Apply with a restore point.* Applying records the current values of everything the memo will change; **Turn off** restores them. One memo is active at a time; applying another first turns the active one off, so memos never stack.
-- *Carried over from KS Reference:* while a memo is active its values are reapplied after a graphics-preset load or quality change (D1, D2); Use Shared and applying an environment from My Environments turn it off without restoring the sky (A4); editing one of its values leaves it active (A3); only values that differ are written (§12.5). The "(KS Reference)" tooltip suffix shows the active memo's name.
+- *Partial presets.* A preset stores only the groups it names (Sun/Moon, Atmosphere, Clouds, Water, Reflections, All lights, Shadows, Ambient, Exposure, Glow, Depth of field, Vignette, AyaneStorm floaters). KS Reference names a fixed subset: its sky values plus the 54 settings of §12.1.
+- *Apply with a restore point.* Applying records the current values of everything the preset will change; **Turn off** restores them. One preset is active at a time; applying another first turns the active one off, so presets never stack.
+- *Carried over from KS Reference:* while a preset is active its values are reapplied after a graphics-preset load or quality change (D1, D2); Use Shared and applying an environment from My Environments turn it off without restoring the sky (A4); editing one of its values leaves it active (A3); only values that differ are written (§12.5). The "(KS Reference)" tooltip suffix shows the active preset's name.
 - *KS Reference stays special:* values defined in code (a KStorm update may change them), cannot be deleted, renamed or updated; Duplicate makes an editable copy; it keeps its Quick check box.
-- *Storage:* one file per memo under the user settings folder, like graphics presets; sky and water are stored as their settings data (the same LLSD an EEP asset holds), viewer settings by name. No LL, FS or AS code changes.
+- *Storage:* one file per preset under the user settings folder, like graphics presets; sky and water are stored as their settings data (the same LLSD an EEP asset holds), viewer settings by name. No LL, FS or AS code changes.
 
 **Where it is surfaced and how it looks (mock-up v4)**
 
-- **Launch list:** a **Memos** entry directly under Quick (icon placeholder 🗂); its status shows the active memo or "none active".
-- **Quick:** unchanged — the Use KS Reference check box is the shortcut for the built-in memo. Applying any memo from the Memos pane updates that check box.
-- **Memos pane:**
-  - a list (XUI `scroll_list`): lock icon for read-only, name, scope ("full", a list of groups, or "partial (built in)"); the active memo is bold with "● active". KS Reference is always first. Double-click applies or turns off.
-  - buttons, row 1: **Apply** (becomes **Turn off** for the active memo), **Save current as…**
+- **Launch list:** a **Lighting Presets** entry directly under Quick (icon placeholder 🗂); its status shows the active preset or "none active".
+- **Quick:** unchanged — the Use KS Reference check box is the shortcut for the built-in preset. Applying any preset from the Lighting Presets pane updates that check box.
+- **Lighting Presets pane:**
+  - a list (XUI `scroll_list`): lock icon for read-only, name, scope ("full", a list of groups, or "partial (built in)"); the active preset is bold with "● active". KS Reference is always first. Double-click applies or turns off.
+  - buttons, row 1: **Apply** (becomes **Turn off** for the active preset), **Save current as…**
   - buttons, row 2: **Update**, **Rename…**, **Duplicate**, **Delete…**, **Contents…**. Update, Rename and Delete are disabled for KS Reference.
-  - a note: "Double-click a memo to apply it or turn it off. One memo is active at a time; Use Shared and My Environments turn it off."
+  - a note: "Double-click a preset to apply it or turn it off. One preset is active at a time; Use Shared and My Environments turn it off."
 - **Dialogs** (small floaters, like Save Graphics Preset):
   - *Save current as…:* name field and Include check boxes for the 13 groups (all checked); Save / Cancel. An existing name asks to replace; "KS Reference" is reserved.
   - *Rename…:* name field; Rename / Cancel.
   - *Delete…:* confirmation ("This cannot be undone"; if active, its earlier values are restored first); Delete / Cancel. In the viewer this is a standard alert.
-  - *Contents…:* for a user memo, the group check boxes (unchecking drops a group; checking one captures its current values); Save / Cancel. For KS Reference, a read-only list of its values.
-- **Editing values:** there is no separate value editor. Apply the memo, adjust the panes, then **Update**.
+  - *Contents…:* for a user preset, the group check boxes (unchecking drops a group; checking one captures its current values); Save / Cancel. For KS Reference, a read-only list of its values.
+- **Editing values:** there is no separate value editor. Apply the preset, adjust the panes, then **Update**.
 
-### 12.7 Memos compared with My Environments
+**As built (2026-10-26, branch `feat-ks-lighting-presets`).** "Memos" was renamed **Lighting Presets** (the list entry, the pane and this design). Code: `kslightingpresets.cpp` (model, storage, apply and turn off, KS Reference, A4, D1/D2) and `ksfloaterlightingpresets.cpp` (pane and one dialog for Save current as…, Rename… and Contents…); `ksenvironment.cpp` keeps only the sky and water helpers and delegates to it.
 
-| | My Environments (EEP settings items) | Memos |
+- *Model:* a preset is three value maps (viewer settings, sky fields, water fields) plus the groups it includes. Groups are what Save current as… and Contents… capture or drop; apply and turn off work on the maps. KS Reference names no groups: it holds its 9 sky values, its 5 viewer settings (draw distance 16, impostors 4, name tags off, subject sort on, Dynamic exposure off) and the 54 settings of §12.1 (each at its default except the four policy values).
+- *Group contents:* a group's viewer settings are read at run time from the controls its pane shows (`control_name` and the `ksv_` vector names in `floater_ks_lighting_<pane>.xml`), so presets and panes cannot drift apart. The AyaneStorm group reads her nine Environment Effects and Camera Effects panels and the Depth of Field floater, plus every `ASColorGrade*` and `ASWeather*` setting (set in code by her color grading and weather panels). Sky and water values are stored raw (rotations as quaternions, colors as RGB), not as the panes' display values.
+- *Files:* `user_settings/ks_lighting_presets/<escaped name>.xml` (LLSD: `groups`, `settings`, `sky`, `water`, and the full sky and water data as `sky_full` / `water_full` for the postponed export).
+- *Restore point:* the prior values of exactly what the preset writes; only differing values are written, on apply, turn off and reapply. If the preset created the local environment, turning it off clears it (as Use KS Reference always did).
+- *A4:* only presets holding sky or water values react to environment changes; an unversioned change keeps the preset while the local sky and water still hold its values.
+- *D1, D2:* `RenderQualityPerformance` and `PresetGraphicActive` (only when set to a name, which also ignores our own writes) schedule a reapply on the next idle; the values the load brought become the ones Turn off restores.
+- *List:* a lock icon for KS Reference, the active preset in bold with "(active)", and a Contains column ("built in", "full", "custom" for a copy of KS Reference, or the group names).
+- *Dropped:* the "(KS Reference)" tooltip suffix naming the active preset (tooltips are static text).
+- *Layout:* the pane is 380 px wide (not 300) so the five editing buttons fit on their own second row.
+- *Precision:* preset files store reals with the LLSD XML default precision (about 6 digits); settings are F32 anyway, and the A4 match uses a 0.001 tolerance.
+
+### 12.7 Lighting Presets compared with My Environments
+
+| | My Environments (EEP settings items) | Lighting Presets |
 |---|---|---|
 | What it is | Inventory items: Sky, Water, Day Cycle assets | Local files in the user settings folder |
 | Where it lives | On the server, in your inventory | This computer only |
 | Sharing | Can be given, sold, used for a parcel or region (with permissions) | Not shared |
-| Sky | Every sky field: sun and moon rotation and scale, colors, ambient, haze, glow, density and distance multipliers, height (`max_y`), gamma (Sky HDR Scale), probe ambiance (Probe Fill), clouds (color, coverage, scale, variance, density, scroll), moisture, droplet, ice, star and moon brightness, textures (sun, moon, cloud, bloom, halo, rainbow), atmosphere physics (Rayleigh, Mie, absorption), legacy fields | The same sky values as a snapshot of the current (local) sky, when the memo includes the sky groups |
+| Sky | Every sky field: sun and moon rotation and scale, colors, ambient, haze, glow, density and distance multipliers, height (`max_y`), gamma (Sky HDR Scale), probe ambiance (Probe Fill), clouds (color, coverage, scale, variance, density, scroll), moisture, droplet, ice, star and moon brightness, textures (sun, moon, cloud, bloom, halo, rainbow), atmosphere physics (Rayleigh, Mie, absorption), legacy fields | The same sky values as a snapshot of the current (local) sky, when the preset includes the sky groups |
 | Water | Every water field, including normal map and transparency texture | The same, when it includes Water |
-| Time of day | Day cycles: sky and water keyframes over the day, with altitude tracks | None: a memo holds one frozen sky |
+| Time of day | Day cycles: sky and water keyframes over the day, with altitude tracks | None: a preset holds one frozen sky |
 | Viewer settings | **None** | All the settings our panes surface: Exposure, Dynamic exposure and its tuning, tone mapping, Sunlight Luminance, Ambient Luminance, shadows, ambient occlusion, reflections and probes, glow, depth of field, vignette, light budget and filters; plus AyaneStorm floater settings and the §12.1 reference settings |
 | Applying | Replaces the environment (for you, or a parcel or region); no undo except Use Shared or another environment | Applies with a restore point; Turn off restores the previous values |
 | Built-in content | Library environments | KS Reference |
 
 **Consequences**
 
-- They complement each other: My Environments carries the sky and water (and time of day) and can be shared; memos carry the viewer-side look that no environment stores.
-- A memo that includes the sky duplicates what a sky asset holds. Because memos store the sky as the same settings data, a later option could be "Save sky to My Environments" from a memo (an inventory upload through the existing sky editor path; not planned).
+- They complement each other: My Environments carries the sky and water (and time of day) and can be shared; presets carry the viewer-side look that no environment stores.
+- A preset that includes the sky duplicates what a sky asset holds. Because presets store the sky as the same settings data, a later option could be "Save sky to My Environments" from a preset (an inventory upload through the existing sky editor path; not planned).
 
 **Is our local side a proper superset of My Environments? (checked 2026-10-25)** Not entirely:
 
-- *Memo storage:* a superset of **one Sky item plus one Water item**, provided the memo stores the full sky and water data (as recommended below), plus all the viewer settings no environment holds.
-- *Not covered:* **Day Cycles** — time-of-day keyframes, several skies and waters per day, altitude tracks, day length and offset. A memo holds one frozen sky. Also not covered: item name, permissions and sharing.
-- *Our panes:* not a superset of what the sky and water editors can edit. Not surfaced: sun, moon, cloud, bloom, halo and rainbow textures; cloud scroll rate; atmosphere physics (Rayleigh, Mie, absorption, density profiles, Mie anisotropy); planet, sky-top and sky-bottom radii; dome offset and radius; sun arc radius; the legacy fields; water normal map, transparency texture and wave directions (shown as placeholders only). These stay editable in the sky and water editors (My Environments) and are preserved in a memo's stored data.
-- *To close the gap* (not planned): a memo could reference a Day Cycle item and time instead of copying a frozen sky; the panes could add texture pickers and the physics settings in an expert block.
+- *Preset storage:* a superset of **one Sky item plus one Water item**, provided the preset stores the full sky and water data (as recommended below), plus all the viewer settings no environment holds.
+- *Not covered:* **Day Cycles** — time-of-day keyframes, several skies and waters per day, altitude tracks, day length and offset. A preset holds one frozen sky. Also not covered: item name, permissions and sharing.
+- *Our panes:* not a superset of what the sky and water editors can edit. Not surfaced: sun, moon, cloud, bloom, halo and rainbow textures; cloud scroll rate; atmosphere physics (Rayleigh, Mie, absorption, density profiles, Mie anisotropy); planet, sky-top and sky-bottom radii; dome offset and radius; sun arc radius; the legacy fields; water normal map, transparency texture and wave directions (shown as placeholders only). These stay editable in the sky and water editors (My Environments) and are preserved in a preset's stored data.
+- *To close the gap* (not planned): a preset could reference a Day Cycle item and time instead of copying a frozen sky; the panes could add texture pickers and the physics settings in an expert block.
 
-**Feasibility: "Save sky to My Environments" from a memo (evaluated 2026-10-25; postponed, decided 2026-10-25).**
+**Feasibility: "Save sky to My Environments" from a preset (evaluated 2026-10-25; postponed, decided 2026-10-25).**
 
-- *Mechanism exists, public:* `LLSettingsVOSky::buildSky(LLSD)` rebuilds a sky from the memo's data, and `LLSettingsVOBase::createInventoryItem(settings, parent_id, name, callback)` creates the inventory item and uploads the asset, exactly as the sky editor's Save As does (`llsettingsvo.cpp:144-175`). Water is the same with `buildWater`. No LL, FS or AS code changes.
-- *Effort:* small — about 100–150 lines in the memo code plus a **Save sky to My Environments…** button in the Memos pane (name dialog, target = the Settings folder), roughly a day including testing.
-- *Permission rule (the real work):* the sky editor offers Save As only when the source can be copied (`mCanCopy`; settings flags `FLAG_NOCOPY` / `FLAG_NOSAVE`, `llfloatereditenvironmentbase.cpp:208-235`). A memo can capture any sky, including a region's or a no-copy item's, so exporting it unchecked would bypass those permissions. The memo must record where its sky came from when it is captured and allow the export only for skies you could copy anyway (your own copyable items, the Library, KS Reference, skies built from those). Tracking that origin through `LLEnvironment` without LL changes needs research (asset id of the local sky, edits made on top of a region sky).
+- *Mechanism exists, public:* `LLSettingsVOSky::buildSky(LLSD)` rebuilds a sky from the preset's data, and `LLSettingsVOBase::createInventoryItem(settings, parent_id, name, callback)` creates the inventory item and uploads the asset, exactly as the sky editor's Save As does (`llsettingsvo.cpp:144-175`). Water is the same with `buildWater`. No LL, FS or AS code changes.
+- *Effort:* small — about 100–150 lines in the preset code plus a **Save sky to My Environments…** button in the Lighting Presets pane (name dialog, target = the Settings folder), roughly a day including testing.
+- *Permission rule (the real work):* the sky editor offers Save As only when the source can be copied (`mCanCopy`; settings flags `FLAG_NOCOPY` / `FLAG_NOSAVE`, `llfloatereditenvironmentbase.cpp:208-235`). A preset can capture any sky, including a region's or a no-copy item's, so exporting it unchecked would bypass those permissions. The preset must record where its sky came from when it is captured and allow the export only for skies you could copy anyway (your own copyable items, the Library, KS Reference, skies built from those). Tracking that origin through `LLEnvironment` without LL changes needs research (asset id of the local sky, edits made on top of a region sky).
 - *Region support:* blocked where the region does not support settings inventory (`isInventoryEnabled()`, notification "SettingsUnsuported").
-- *Content limits:* a memo holds one frozen sky, so the export is a Sky item, never a Day Cycle. AyaneStorm's viewer-local sky effects (horizon scattering, auroras, stars extras) are viewer settings, not sky fields, and do not go into the asset. For a complete export a memo that includes any sky group should store the full sky data, even though it applies only its included groups.
+- *Content limits:* a preset holds one frozen sky, so the export is a Sky item, never a Day Cycle. AyaneStorm's viewer-local sky effects (horizon scattering, auroras, stars extras) are viewer settings, not sky fields, and do not go into the asset. For a complete export a preset that includes any sky group should store the full sky data, even though it applies only its included groups.
 
-- Applying an environment from My Environments turns the active memo off (A4), so the two never fight over the sky.
+- Applying an environment from My Environments turns the active preset off (A4), so the two never fight over the sky.
