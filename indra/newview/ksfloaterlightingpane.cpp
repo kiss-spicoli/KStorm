@@ -29,6 +29,8 @@
 #include "llxmlnode.h"
 #include "pipeline.h"
 
+#include <map>
+
 namespace
 {
     const std::string VECTOR_PREFIX = "ksv_";
@@ -184,7 +186,7 @@ void KSFloaterLightingPaneBase::draw()
         mHeaderClickPending = false;
         if (getRect().mLeft == mHeaderClickRect.mLeft && getRect().mTop == mHeaderClickRect.mTop)
         {
-            setCollapsed(!mCollapsed);
+            onHeaderClicked();
         }
     }
     if (mCollapsed)
@@ -247,6 +249,78 @@ LLView* KSFloaterLightingPaneBase::findSnapRect(LLRect& new_rect, const LLCoordG
         return launcher;
     }
     return LLFloater::findSnapRect(new_rect, mouse_dir, snap_type, threshold, padding);
+}
+
+// ---------------------------------------------------------------------------
+// KSFloaterLightingProxy
+
+namespace
+{
+    struct ProxyTarget
+    {
+        const char* mFloater;   // the AyaneStorm floater
+        const char* mTitle;     // as its launcher button
+    };
+    const std::map<std::string, ProxyTarget> PROXIES =
+    {
+        { "ks_lighting_proxy_env_effects",    { "as_environment_effects", "Environment Effects" } },
+        { "ks_lighting_proxy_viewer_lights",  { "as_my_lights",           "Viewer Lights" } },
+        { "ks_lighting_proxy_camera_effects", { "as_camera_effects",      "Camera Effects" } },
+    };
+}
+
+KSFloaterLightingProxy::KSFloaterLightingProxy(const LLSD& key)
+    : KSFloaterLightingPaneBase(key)
+{
+}
+
+bool KSFloaterLightingProxy::postBuild()
+{
+    // It stays in its slot left of the launcher: no dragging, so every header click is a click.
+    setCanDrag(false);
+    return true;
+}
+
+void KSFloaterLightingProxy::onOpen(const LLSD& key)
+{
+    // The instance name is known only after building.
+    auto proxy = PROXIES.find(getInstanceName());
+    if (proxy != PROXIES.end())
+    {
+        setTitle(proxy->second.mTitle);
+    }
+    // Header only (its XUI has no content), and collapsed so every header click is ours.
+    setCollapsed(true);
+}
+
+// static
+std::string KSFloaterLightingProxy::targetOf(const std::string& proxy_name)
+{
+    auto proxy = PROXIES.find(proxy_name);
+    return proxy == PROXIES.end() ? std::string() : std::string(proxy->second.mFloater);
+}
+
+void KSFloaterLightingProxy::onHeaderClicked()
+{
+    const std::string target = targetOf(getInstanceName());
+    if (target.empty())
+    {
+        return;
+    }
+    LLFloater* floater = LLFloaterReg::findInstance(target);
+    if (floater && floater->isShown() && !floater->isMinimized())
+    {
+        floater->closeFloater();
+        return;
+    }
+    if (LLFloater* opened = LLFloaterReg::showInstance(target, LLSD(), true))
+    {
+        if (opened->isMinimized())
+        {
+            opened->setMinimized(false);
+        }
+        opened->setVisibleAndFrontmost(true);
+    }
 }
 
 // ---------------------------------------------------------------------------

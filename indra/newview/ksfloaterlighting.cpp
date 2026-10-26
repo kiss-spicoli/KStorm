@@ -147,6 +147,7 @@ bool KSFloaterLighting::postBuild()
         },
         { "RenderReflectionProbeLevel" });
     addEntry("env_effects", "as_environment_effects");
+    mEntries.back().mProxy = "ks_lighting_proxy_env_effects";
     addEntry("all_lights", "ks_lighting_all_lights",
         []()
         {
@@ -159,6 +160,7 @@ bool KSFloaterLighting::postBuild()
         },
         { "RenderLocalLightCount", "KSLightRigOnlyMyLights" });
     addEntry("viewer_lights", "as_my_lights");
+    mEntries.back().mProxy = "ks_lighting_proxy_viewer_lights";
     addEntry("shadows", "ks_lighting_shadows",
         []()
         {
@@ -191,6 +193,7 @@ bool KSFloaterLighting::postBuild()
         { "RenderDepthOfField", "CameraFNumber", "CameraFocalLength" });
     addEntry("vignette", "ks_lighting_vignette");
     addEntry("camera_effects", "as_camera_effects");
+    mEntries.back().mProxy = "ks_lighting_proxy_camera_effects";
 
     mModeButton = getChild<LLButton>("ks_mode");
     mModeButton->setCommitCallback([this](LLUICtrl*, const LLSD&) { setCompact(!mCompact); });
@@ -245,10 +248,15 @@ void KSFloaterLighting::addEntry(const std::string& key, const std::string& floa
         const size_t index = mEntries.size();
         entry.mButton->setCommitCallback([this, floater, index](LLUICtrl*, const LLSD&)
             {
-                // Our panes open fully or close; AyaneStorm's floaters open, come forward or close.
+                // Our panes open fully or close; the oversized AyaneStorm floaters open with their
+                // proxy headers or close; others open, come forward or close.
                 if (floater.compare(0, 12, "ks_lighting_") == 0)
                 {
                     onPaneButton(mEntries[index]);
+                }
+                else if (!mEntries[index].mProxy.empty())
+                {
+                    onProxyButton(mEntries[index]);
                 }
                 else
                 {
@@ -315,26 +323,39 @@ LLRect KSFloaterLighting::paneSlot(const Entry& entry, const LLRect& pane_rect, 
     return slot;
 }
 
+std::map<std::string, bool> KSFloaterLighting::dockedPanes() const
+{
+    std::map<std::string, bool> docked = loadDocked();
+    for (const Entry& entry : mEntries)
+    {
+        if (!entry.mProxy.empty())
+        {
+            docked[entry.mProxy] = false;
+        }
+    }
+    return docked;
+}
+
 void KSFloaterLighting::onDockToggle()
 {
-    const std::map<std::string, bool> docked = loadDocked();
+    const std::map<std::string, bool> docked = dockedPanes();
     std::vector<const Entry*> panes;        // launcher order: top to bottom
     bool any_open = false;
     for (const Entry& entry : mEntries)
     {
-        if (!entry.mFloater.empty() && docked.count(entry.mFloater))
+        if (!entry.mFloater.empty() && docked.count(dockName(entry)))
         {
             panes.push_back(&entry);
-            any_open |= LLFloaterReg::instanceVisible(entry.mFloater);
+            any_open |= LLFloaterReg::instanceVisible(dockName(entry));
         }
     }
     if (any_open)
     {
         for (const Entry* entry : panes)
         {
-            if (LLFloaterReg::instanceVisible(entry->mFloater))
+            if (LLFloaterReg::instanceVisible(dockName(*entry)))
             {
-                LLFloaterReg::hideInstance(entry->mFloater);
+                LLFloaterReg::hideInstance(dockName(*entry));
             }
         }
         return;
@@ -342,17 +363,19 @@ void KSFloaterLighting::onDockToggle()
     // As each was when it closed (collapsed to the header or expanded); top to bottom, each in front.
     for (const Entry* entry : panes)
     {
-        if (LLFloater* pane = LLFloaterReg::showInstance(entry->mFloater, LLSD(), false))
+        const std::string& name = dockName(*entry);
+        if (LLFloater* pane = LLFloaterReg::showInstance(name, LLSD(), false))
         {
             KSFloaterLightingPaneBase* ks_pane = dynamic_cast<KSFloaterLightingPaneBase*>(pane);
             if (ks_pane)
             {
                 ks_pane->setCollapsed(false);
             }
-            pane->setShape(paneSlot(*entry, pane->getRect(), docked.at(entry->mFloater)));
+            pane->setShape(paneSlot(*entry, pane->getRect(), docked.at(name)));
             if (ks_pane)
             {
-                ks_pane->setCollapsed(KSFloaterLightingPaneBase::wasCollapsed(entry->mFloater));
+                // A proxy is only a header; a pane reopens as it was.
+                ks_pane->setCollapsed(entry->mProxy.empty() ? KSFloaterLightingPaneBase::wasCollapsed(name) : true);
             }
             pane->setVisibleAndFrontmost(false);
         }
@@ -387,17 +410,45 @@ void KSFloaterLighting::onPaneButton(const Entry& entry)
     pane->setVisibleAndFrontmost(true);
 }
 
+void KSFloaterLighting::onProxyButton(const Entry& entry)
+{
+    LLFloater* floater = LLFloaterReg::findInstance(entry.mFloater);
+    if (floater && floater->isShown() && !floater->isMinimized()
+        && KSFloaterLightingPaneBase::topmostFloater(this) == floater)
+    {
+        floater->closeFloater();
+        if (LLFloater* proxy = LLFloaterReg::findInstance(entry.mProxy))
+        {
+            proxy->closeFloater();
+        }
+        return;
+    }
+    if (LLFloater* proxy = LLFloaterReg::showInstance(entry.mProxy, LLSD(), false))
+    {
+        proxy->setShape(paneSlot(entry, proxy->getRect(), false));
+        proxy->setVisibleAndFrontmost(false);
+    }
+    if (LLFloater* opened = LLFloaterReg::showInstance(entry.mFloater, LLSD(), true))
+    {
+        if (opened->isMinimized())
+        {
+            opened->setMinimized(false);
+        }
+        opened->setVisibleAndFrontmost(true);
+    }
+}
+
 void KSFloaterLighting::refreshDockButton()
 {
-    const std::map<std::string, bool> docked = loadDocked();
+    const std::map<std::string, bool> docked = dockedPanes();
     bool any_docked = false;
     bool any_open = false;
     for (const Entry& entry : mEntries)
     {
-        if (!entry.mFloater.empty() && docked.count(entry.mFloater))
+        if (!entry.mFloater.empty() && docked.count(dockName(entry)))
         {
             any_docked = true;
-            any_open |= LLFloaterReg::instanceVisible(entry.mFloater);
+            any_open |= LLFloaterReg::instanceVisible(dockName(entry));
         }
     }
     mDockButton->setToolTip(std::string(!any_docked ? "No docked panes: drag a pane next to its button to dock it."
@@ -431,21 +482,17 @@ void KSFloaterLighting::keepDockedPanesInPlace()
     {
         return;
     }
-    const std::map<std::string, bool> docked = loadDocked();
-    if (docked.empty())
-    {
-        return;
-    }
+    const std::map<std::string, bool> docked = dockedPanes();
     // A pane being dragged follows the mouse; findPaneSnap() decides whether it stays docked.
     const LLView* captor = dynamic_cast<const LLView*>(gFocusMgr.getMouseCapture());
     for (const Entry& entry : mEntries)
     {
-        auto side = docked.find(entry.mFloater);
-        if (side == docked.end())
+        auto side = docked.find(dockName(entry));
+        if (entry.mFloater.empty() || side == docked.end())
         {
             continue;
         }
-        LLFloater* pane = LLFloaterReg::findInstance(entry.mFloater);
+        LLFloater* pane = LLFloaterReg::findInstance(dockName(entry));
         if (!pane || !pane->getVisible() || pane->isMinimized() || pane->getHost()
             || pane->getParent() != getParent() || (captor && captor->hasAncestor(pane)))
         {

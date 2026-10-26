@@ -17,6 +17,7 @@
 #include "llfloater.h"
 
 #include <functional>
+#include <map>
 #include <vector>
 
 class LLButton;
@@ -46,8 +47,16 @@ private:
         LLTextBox* mStatus = nullptr;
         std::string mLabel;
         std::string mFloater;                  // empty: not built yet
+        std::string mProxy;                    // header-only stand-in for an oversized AyaneStorm floater
         std::function<std::string()> mStatusText;
     };
+    // What docks for an entry: its pane, or the proxy header of an oversized floater.
+    static const std::string& dockName(const Entry& entry) { return entry.mProxy.empty() ? entry.mFloater : entry.mProxy; }
+    // Docked panes and their side (true = right), plus every proxy (always left).
+    std::map<std::string, bool> dockedPanes() const;
+    // A button for an oversized AyaneStorm floater: closes it (and its proxy) when it is in
+    // front; otherwise opens its proxy header in its slot and the floater itself in front.
+    void onProxyButton(const Entry& entry);
 
     void addEntry(const std::string& key, const std::string& floater,
                   std::function<std::string()> status_text = {},

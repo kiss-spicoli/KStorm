@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- KStorm Viewer; author: Kissmy Spicoli -->
+<!-- KStorm Lighting proxy header (KSFloaterLightingProxy): a header-only stand-in, docked left of
+     the launcher, for an AyaneStorm floater too large to dock. Registered three times
+     (ks_lighting_proxy_env_effects, _viewer_lights, _camera_effects); the title comes from code.
+     Height 0: the 38 px header is the whole floater. -->
+<floater can_close="true" can_dock="false" can_minimize="false" can_resize="false" header_height="38" height="0" layout="topleft" name="ks_lighting_proxy" single_instance="true" title="" width="300" />

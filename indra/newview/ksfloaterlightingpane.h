@@ -76,12 +76,32 @@ public:
 protected:
     // Changes the pane's full height (Quick's note row), also while collapsed.
     void changeExpandedHeight(S32 delta);
+    // What a header click does: collapse or expand.
+    virtual void onHeaderClicked() { setCollapsed(!mCollapsed); }
 
 private:
     bool mCollapsed = false;
     S32 mExpandedHeight = 0;
     bool mHeaderClickPending = false;
     LLRect mHeaderClickRect;
+};
+
+// A header-only stand-in, docked left of the launcher, for an AyaneStorm floater too large to
+// dock (Environment Effects, Viewer Lights, Camera Effects). A click on its header opens that
+// floater in front, or closes it. One XUI file, one registered instance per floater.
+class KSFloaterLightingProxy : public KSFloaterLightingPaneBase
+{
+public:
+    explicit KSFloaterLightingProxy(const LLSD& key);
+
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+
+    // The AyaneStorm floater a proxy stands for ("" if the name is not a proxy).
+    static std::string targetOf(const std::string& proxy_name);
+
+protected:
+    void onHeaderClicked() override;
 };
 
 class KSFloaterLightingPane : public KSFloaterLightingPaneBase
