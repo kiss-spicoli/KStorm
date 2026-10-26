@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- KStorm Viewer; author: Kissmy Spicoli -->
+<!-- KStorm Lighting pane "Shadows" (KSFloaterLightingPane; design doc/kstorm2-lighting-UI-design.md section 10).
+     Generated layout: rows are 10 px from the left, 280 px wide. -->
+<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="310" layout="topleft" name="ks_lighting_shadows" save_rect="true" single_instance="true" title="Shadows" width="300">
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_shadow_detail_label" top="9" width="116">Shadows</text>
+  <combo_box control_name="RenderShadowDetail" follows="left|top" height="23" layout="topleft" left="130" name="ks_shadow_detail" top="6" width="160">
+    <combo_box.item label="None" name="v0" value="0" />
+    <combo_box.item label="Sun &amp; Moon" name="v1" value="1" />
+    <combo_box.item label="Sun &amp; Moon + Projectors" name="v2" value="2" />
+  </combo_box>
+  <slider can_edit_text="true" control_name="RenderShadowResolutionScale" decimal_digits="1" follows="left|top" height="16" increment="0.5" label="Resolution" label_width="120" layout="topleft" left="10" max_val="5" min_val="0.5" name="ks_shadow_res" show_text="true" text_width="56" top="34" width="280" tool_tip="Shadow map size relative to the screen." />
+  <slider can_edit_text="true" decimal_digits="3" follows="left|top" height="16" increment="0.001" label="Soften" label_width="120" layout="topleft" left="10" max_val="5" min_val="0.001" name="ksv_RenderShadowGaussian_x" show_text="true" text_width="56" top="56" width="280" />
+  <slider can_edit_text="true" decimal_digits="3" follows="left|top" height="16" increment="0.025" label="Clarity" label_width="120" layout="topleft" left="10" max_val="10" min_val="0" name="ksv_RenderShadowSplitExponent_y" show_text="true" text_width="56" top="78" width="280" />
+  <slider can_edit_text="true" control_name="RenderShadowBias" decimal_digits="6" follows="left|top" height="16" increment="1e-06" label="Bias" label_width="120" layout="topleft" left="10" max_val="0.001" min_val="-0.002" name="ks_shadow_bias" show_text="true" text_width="56" top="100" width="280" />
+  <slider can_edit_text="true" control_name="RenderShadowBlurSize" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Blur size" label_width="120" layout="topleft" left="10" max_val="4" min_val="0" name="ks_shadow_blur" show_text="true" text_width="56" top="122" width="280" />
+  <slider can_edit_text="true" control_name="RenderShadowBlurDistFactor" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Blur distance" label_width="120" layout="topleft" left="10" max_val="1" min_val="0" name="ks_shadow_blur_dist" show_text="true" text_width="56" top="144" width="280" />
+  <slider can_edit_text="true" control_name="RenderShadowFOVCutoff" decimal_digits="1" follows="left|top" height="16" increment="0.1" label="FOV cutoff" label_width="120" layout="topleft" left="10" max_val="100" min_val="0" name="ks_shadow_fov" show_text="true" text_width="56" top="166" width="280" />
+  <slider can_edit_text="true" control_name="RenderSpotShadowOffset" decimal_digits="4" follows="left|top" height="16" increment="0.0001" label="Spot offset" label_width="120" layout="topleft" left="10" max_val="0.04" min_val="0" name="ks_spot_offset" show_text="true" text_width="56" top="188" width="280" />
+  <slider can_edit_text="true" decimal_digits="3" follows="left|top" height="16" increment="0.001" label="AO soften" label_width="120" layout="topleft" left="10" max_val="3" min_val="0.001" name="ksv_RenderShadowGaussian_y" show_text="true" text_width="56" top="210" width="280" />
+  <check_box control_name="RenderDeferredSSAO" follows="left|top" height="16" label="Ambient occlusion" layout="topleft" left="10" name="ks_ao_quick" top="234" width="150" />
+  <button follows="left|top" height="20" label="Settings..." layout="topleft" left="166" name="ks_ao_settings" top="232" width="66" tool_tip="Opens the Ambient pane (ambient light and ambient occlusion).">
+    <button.commit_callback function="KS.CycleFloater" parameter="ks_lighting_ambient" />
+  </button>
+  <button follows="left|top" height="20" label="Hair..." layout="topleft" left="236" name="ks_hair" top="232" width="54" tool_tip="Opens Hair Occlusion.">
+    <button.commit_callback function="KS.CycleFloater" parameter="ks_hair_occlusion" />
+  </button>
+  <slider can_edit_text="true" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Ambient Brightness" label_width="120" layout="topleft" left="10" max_val="3" min_val="0" name="sky_ambient_brightness" show_text="true" text_width="56" top="258" width="280" tool_tip="Brightness of sky fill light. Its color comes from the sky; surfaces use brightness only. At Probe Fill Strength 1 or more this no longer lights surfaces. (KS Reference)" />
+  <slider can_edit_text="true" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Probe Fill Strength" label_width="120" layout="topleft" left="10" max_val="10" min_val="0.01" name="sky_probe_fill" show_text="true" text_width="56" top="280" width="280" tool_tip="Low: fill from sky ambient (uniform). High: fill from probes (bounce light, darker interiors). Reflections are unaffected. On a legacy sky, editing makes the local copy an EEP sky. (KS Reference)" />
+</floater>

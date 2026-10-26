@@ -6795,25 +6795,17 @@
       name="KStorm"
       tear_off="true"
       visible="true">
+      <!-- Environment Effects retired and Hair Occlusion moved to Shadows > Hair... (design A16). -->
       <menu_item_check
-         label="Environment Effects"
-         name="KS Environment Effects">
+         label="KStorm Lighting"
+         name="KS Lighting"
+         shortcut="alt|shift|L">
          <menu_item_check.on_check
             function="Floater.Visible"
-            parameter="ks_environment_effects" />
+            parameter="ks_lighting" />
          <menu_item_check.on_click
-            function="Floater.Toggle"
-            parameter="ks_environment_effects" />
-      </menu_item_check>
-      <menu_item_check
-         label="Hair Occlusion"
-         name="KS Hair Occlusion">
-         <menu_item_check.on_check
-            function="Floater.Visible"
-            parameter="ks_hair_occlusion" />
-         <menu_item_check.on_click
-            function="Floater.Toggle"
-            parameter="ks_hair_occlusion" />
+            function="Floater.ToggleOrBringToFront"
+            parameter="ks_lighting" />
       </menu_item_check>
    </menu>
    <!-- </KS:KS> -->

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- KStorm Viewer; author: Kissmy Spicoli -->
+<!-- KStorm Lighting pane "Ambient" (KSFloaterLightingPane; design doc/kstorm2-lighting-UI-design.md section 10).
+     Generated layout: rows are 10 px from the left, 280 px wide. -->
+<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="450" layout="topleft" name="ks_lighting_ambient" save_rect="true" single_instance="true" title="Ambient" width="300">
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_ro_probe_label" top="6" width="116" tool_tip="The probe fill the renderer uses for the current sky.">Probe Fill in use</text>
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="130" name="ks_ro_probe" text_color="EmphasisColor" top="6" width="160">-</text>
+  <slider can_edit_text="true" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Ambient Brightness" label_width="120" layout="topleft" left="10" max_val="3" min_val="0" name="sky_ambient_brightness" show_text="true" text_width="56" top="28" width="280" tool_tip="Brightness of sky fill light. Its color comes from the sky; surfaces use brightness only. At Probe Fill Strength 1 or more this no longer lights surfaces. (KS Reference)" />
+  <slider can_edit_text="true" control_name="RenderSkyAmbientScale" decimal_digits="1" follows="left|top" height="16" increment="0.1" label="Ambient Luminance" label_width="120" layout="topleft" left="10" max_val="40" min_val="-10" name="ks_ambient_scale" show_text="true" text_width="56" top="50" width="280" tool_tip="Scales all sky fill. Negative values darken lit areas. Loading a graphics preset resets it to 1." />
+  <slider can_edit_text="true" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Probe Fill Strength" label_width="120" layout="topleft" left="10" max_val="10" min_val="0.01" name="sky_probe_fill" show_text="true" text_width="56" top="72" width="280" tool_tip="Low: fill from sky ambient (uniform). High: fill from probes (bounce light, darker interiors). Reflections are unaffected. On a legacy sky, editing makes the local copy an EEP sky. (KS Reference)" />
+  <check_box control_name="RenderDeferredSSAO" follows="left|top" height="16" label="Ambient occlusion" layout="topleft" left="10" name="ks_ao" top="94" width="280" />
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_ao_tech_label" top="119" width="116">Technique</text>
+  <combo_box control_name="RenderAOTechnique" follows="left|top" height="23" layout="topleft" left="130" name="ks_ao_tech" top="116" width="160">
+    <combo_box.item label="Legacy SSAO" name="v0" value="0" />
+    <combo_box.item label="GTAO" name="v1" value="1" />
+  </combo_box>
+  <slider can_edit_text="true" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Effect" label_width="120" layout="topleft" left="10" max_val="1" min_val="-1" name="ksv_RenderSSAOEffect_x" show_text="true" text_width="56" top="144" width="280" tool_tip="One control for the active technique." />
+  <check_box control_name="RenderAODebugWhite" follows="left|top" height="16" label="White-material check" layout="topleft" left="10" name="ks_ao_white" top="166" width="280" />
+  <slider can_edit_text="true" control_name="RenderSSAOIrradianceScale" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Irradiance scale" label_width="120" layout="topleft" left="10" max_val="2" min_val="0" name="ks_irr_scale" show_text="true" text_width="56" top="188" width="280" />
+  <slider can_edit_text="true" control_name="RenderSSAOIrradianceMax" decimal_digits="3" follows="left|top" height="16" increment="0.001" label="Irradiance max" label_width="120" layout="topleft" left="10" max_val="1" min_val="0" name="ks_irr_max" show_text="true" text_width="56" top="210" width="280" />
+  <slider can_edit_text="true" control_name="RenderSSAOScale" decimal_digits="0" follows="left|top" height="16" increment="1" label="SSAO scale" label_width="120" layout="topleft" left="10" max_val="10000" min_val="0" name="ssao_scale" show_text="true" text_width="56" top="232" width="280" tool_tip="Legacy SSAO only." />
+  <slider can_edit_text="true" control_name="RenderSSAOMaxScale" decimal_digits="0" follows="left|top" height="16" increment="1" label="SSAO max scale" label_width="120" layout="topleft" left="10" max_val="10000" min_val="0" name="ssao_max_scale" show_text="true" text_width="56" top="254" width="280" tool_tip="Legacy SSAO only." />
+  <slider can_edit_text="true" control_name="RenderSSAOFactor" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="SSAO factor" label_width="120" layout="topleft" left="10" max_val="250" min_val="0" name="ssao_factor" show_text="true" text_width="56" top="276" width="280" tool_tip="Legacy SSAO only." />
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="gtao_quality_label" top="301" width="116">GTAO quality</text>
+  <combo_box control_name="RenderGTAOQuality" follows="left|top" height="23" layout="topleft" left="130" name="gtao_quality" top="298" width="160" tool_tip="GTAO only.">
+    <combo_box.item label="Medium" name="v1" value="1" />
+    <combo_box.item label="High" name="v2" value="2" />
+    <combo_box.item label="Ultra" name="v3" value="3" />
+    <combo_box.item label="Cinematic" name="v4" value="4" />
+  </combo_box>
+  <slider can_edit_text="true" control_name="RenderGTAORadius" decimal_digits="2" follows="left|top" height="16" increment="0.05" label="GTAO radius" label_width="120" layout="topleft" left="10" max_val="5" min_val="0.05" name="gtao_radius" show_text="true" text_width="56" top="326" width="280" tool_tip="GTAO only." />
+  <slider can_edit_text="true" control_name="RenderGTAOFinalValuePower" decimal_digits="2" follows="left|top" height="16" increment="0.05" label="GTAO power" label_width="120" layout="topleft" left="10" max_val="5" min_val="0.5" name="gtao_power" show_text="true" text_width="56" top="348" width="280" tool_tip="GTAO only." />
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="gtao_denoise_label" top="373" width="116">GTAO denoise</text>
+  <combo_box control_name="RenderGTAODenoisePasses" follows="left|top" height="23" layout="topleft" left="130" name="gtao_denoise" top="370" width="160" tool_tip="GTAO only.">
+    <combo_box.item label="Disabled" name="v0" value="0" />
+    <combo_box.item label="Sharp" name="v1" value="1" />
+    <combo_box.item label="Medium" name="v2" value="2" />
+    <combo_box.item label="Soft" name="v3" value="3" />
+  </combo_box>
+  <check_box control_name="RenderGTAOBentNormals" follows="left|top" height="16" label="GTAO bent normals" layout="topleft" left="10" name="gtao_bent" top="398" width="280" tool_tip="GTAO only." />
+  <slider can_edit_text="true" control_name="RenderGTAOBentNormalInfluence" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Bent normal influence" label_width="120" layout="topleft" left="10" max_val="1" min_val="0" name="gtao_bent_influence" show_text="true" text_width="56" top="420" width="280" tool_tip="GTAO only." />
+</floater>

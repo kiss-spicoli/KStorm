@@ -254,6 +254,10 @@
 // <AS:Chanayane> Viewer-local per-joint shape deformer preview.
 #include "asfloaterbonedeformer.h"
 // </AS:Chanayane>
+// <KS:KS> KStorm Lighting launch list and panes.
+#include "ksfloaterlighting.h"
+#include "ksfloaterlightingpane.h"
+// </KS:KS>
 #include "fsfloaterpartialinventory.h"
 #include "fsfloaterplacedetails.h"
 #include "fsfloaterposestand.h"
@@ -692,7 +696,23 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("as_weather", "floater_as_weather.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
     // </AS:Chanayane>
     // <KS:KS> KStorm menu floaters (controls bind settings; no floater class needed).
-    LLFloaterReg::add("ks_environment_effects", "floater_ks_environment_effects.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
+    // KStorm Environment Effects retired: replaced by KStorm Lighting (doc/kstorm2-lighting-UI-design.md, A16).
+    //LLFloaterReg::add("ks_environment_effects", "floater_ks_environment_effects.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
+    KSFloaterLightingPane::registerUICallbacks();
+    LLFloaterReg::add("ks_lighting", "floater_ks_lighting.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLighting>);
+    LLFloaterReg::add("ks_lighting_all_lights", "floater_ks_lighting_all_lights.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_shadows", "floater_ks_lighting_shadows.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_exposure", "floater_ks_lighting_exposure.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_glow", "floater_ks_lighting_glow.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_dof", "floater_ks_lighting_dof.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_vignette", "floater_ks_lighting_vignette.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_reflections", "floater_ks_lighting_reflections.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_ambient", "floater_ks_lighting_ambient.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_quick", "floater_ks_lighting_quick.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_sunmoon", "floater_ks_lighting_sunmoon.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_atmosphere", "floater_ks_lighting_atmosphere.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_clouds", "floater_ks_lighting_clouds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
+    LLFloaterReg::add("ks_lighting_water", "floater_ks_lighting_water.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
     LLFloaterReg::add("ks_hair_occlusion", "floater_ks_hair_occlusion.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
     // </KS:KS>
     // <FS:CR> Search floater is deferred to login now so we can tell what grid we're in.
