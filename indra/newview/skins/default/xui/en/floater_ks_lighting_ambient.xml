@@ -2,7 +2,7 @@
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
 <!-- KStorm Lighting pane "Ambient" (KSFloaterLightingPane; design doc/kstorm2-lighting-UI-design.md section 10).
      Generated layout: rows are 10 px from the left, 280 px wide. -->
-<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="428" layout="topleft" name="ks_lighting_ambient" save_rect="true" single_instance="true" title="Ambient" width="300">
+<floater can_close="true" header_height="38" can_dock="false" can_minimize="true" can_resize="false" height="428" layout="topleft" name="ks_lighting_ambient" save_rect="true" single_instance="true" title="Ambient" width="300">
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_ro_probe_label" top="6" width="116" tool_tip="The probe fill the renderer uses for the current sky.">Probe Fill in use</text>
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="130" name="ks_ro_probe" text_color="EmphasisColor" top="6" width="160">-</text>
   <slider can_edit_text="true" control_name="RenderSkyAmbientScale" decimal_digits="1" follows="left|top" height="16" increment="0.1" label="Surface Ambient Gain" label_width="120" layout="topleft" left="10" max_val="40" min_val="-10" name="ks_ambient_scale" show_text="true" text_width="56" top="28" width="280" tool_tip="Multiplies ambient fill on surfaces only, so it shows most up close. Does not change the sky, clouds, haze or water. At Probe Fill Strength 1 or more it no longer lights surfaces. Negative values darken lit areas. Loading a graphics preset resets it to 1." />

@@ -2,7 +2,7 @@
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
 <!-- KStorm Lighting Presets pane (KSFloaterLightingPresets; design doc/kstorm2-lighting-UI-design.md section 12.6).
      XUI tops are measured from below the 25 px header. -->
-<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="298" layout="topleft" name="ks_lighting_presets" save_rect="true" single_instance="true" title="Lighting Presets" width="300">
+<floater can_close="true" header_height="38" can_dock="false" can_minimize="true" can_resize="false" height="298" layout="topleft" name="ks_lighting_presets" save_rect="true" single_instance="true" title="Lighting Presets" width="300">
   <scroll_list column_padding="0" draw_heading="true" draw_stripes="true" follows="left|top" height="150" layout="topleft" left="10" multi_select="false" name="ks_preset_list" top="6" width="280" tool_tip="Double-click a preset to apply it or turn it off.">
     <scroll_list.columns name="lock" width="20" />
     <scroll_list.columns label="Preset" name="name" width="140" />

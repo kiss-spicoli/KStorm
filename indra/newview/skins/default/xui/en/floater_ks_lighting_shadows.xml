@@ -2,7 +2,7 @@
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
 <!-- KStorm Lighting pane "Shadows" (KSFloaterLightingPane; design doc/kstorm2-lighting-UI-design.md section 10).
      Generated layout: rows are 10 px from the left, 280 px wide. -->
-<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="288" layout="topleft" name="ks_lighting_shadows" save_rect="true" single_instance="true" title="Shadows" width="300">
+<floater can_close="true" header_height="38" can_dock="false" can_minimize="true" can_resize="false" height="288" layout="topleft" name="ks_lighting_shadows" save_rect="true" single_instance="true" title="Shadows" width="300">
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_shadow_detail_label" top="9" width="116">Shadows</text>
   <combo_box control_name="RenderShadowDetail" follows="left|top" height="23" layout="topleft" left="130" name="ks_shadow_detail" top="6" width="160">
     <combo_box.item label="None" name="v0" value="0" />

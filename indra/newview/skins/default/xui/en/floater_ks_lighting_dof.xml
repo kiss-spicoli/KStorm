@@ -2,7 +2,7 @@
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
 <!-- KStorm Lighting pane "Depth of field" (KSFloaterLightingPane; design doc/kstorm2-lighting-UI-design.md section 10).
      Generated layout: rows are 10 px from the left, 280 px wide. -->
-<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="290" layout="topleft" name="ks_lighting_dof" save_rect="true" single_instance="true" title="Depth of field" width="300">
+<floater can_close="true" header_height="38" can_dock="false" can_minimize="true" can_resize="false" height="290" layout="topleft" name="ks_lighting_dof" save_rect="true" single_instance="true" title="Depth of field" width="300">
   <check_box control_name="RenderDepthOfField" follows="left|top" height="16" label="Depth of field" layout="topleft" left="10" name="ks_dof" top="6" width="280" tool_tip="Blurs the view except at the camera focus." />
   <check_box control_name="FSFocusPointFollowsPointer" follows="left|top" height="16" label="Focus follows pointer" layout="topleft" left="10" name="ks_focus_follows" top="28" width="280" />
   <check_box control_name="FSFocusPointLocked" follows="left|top" height="16" label="Focus locked (Alt-Shift-X)" layout="topleft" left="10" name="ks_focus_locked" top="50" width="280" />
