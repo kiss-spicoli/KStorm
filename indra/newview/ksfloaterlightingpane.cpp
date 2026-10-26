@@ -125,52 +125,58 @@ void KSFloaterLightingPaneBase::setCollapsed(bool collapsed)
     {
         return;
     }
-    // Collapsed panes are also half as wide, so an expanded pane sticks out beyond them. The
-    // edge facing the launcher stays put, so a docked pane stays against it.
-    LLFloater* launcher = LLFloaterReg::findInstance("ks_lighting");
-    const bool keep_right = launcher && launcher->getParent() == getParent()
-                            && getRect().getCenterX() < launcher->getRect().getCenterX();
-    LLRect rect = getRect();
-    if (collapsed)
-    {
-        mExpandedHeight = rect.getHeight();
-        mExpandedWidth = rect.getWidth();
-        rect.mBottom = rect.mTop - getHeaderHeight();
-        const S32 width = mExpandedWidth / 2;
-        if (keep_right)
-        {
-            rect.mLeft = rect.mRight - width;
-        }
-        else
-        {
-            rect.mRight = rect.mLeft + width;
-        }
-    }
-    else
-    {
-        rect.mBottom = rect.mTop - mExpandedHeight;
-        if (keep_right)
-        {
-            rect.mLeft = rect.mRight - mExpandedWidth;
-        }
-        else
-        {
-            rect.mRight = rect.mLeft + mExpandedWidth;
-        }
-    }
     mCollapsed = collapsed;
-    setShape(rect);
+    applyPaneSize();
 }
 
 void KSFloaterLightingPaneBase::changeExpandedHeight(S32 delta)
 {
-    if (mCollapsed)
+    if (mFullWidth <= 0)
     {
-        mExpandedHeight += delta;
+        // Before initPaneSize() (still in postBuild): the XUI size is not final yet.
+        LLRect rect = getRect();
+        rect.mBottom -= delta;
+        setShape(rect);
         return;
     }
+    mFullHeight += delta;
+    applyPaneSize();
+}
+
+void KSFloaterLightingPaneBase::initPaneSize()
+{
+    mFullWidth = getRect().getWidth();
+    mFullHeight = getRect().getHeight();
+}
+
+void KSFloaterLightingPaneBase::applyPaneSize()
+{
+    if (mFullWidth <= 0 || isMinimized() || getHost())
+    {
+        return;
+    }
+    // Collapsed panes are header bars at half the width, so an expanded pane sticks out beyond
+    // them. The top edge and the side edge facing the launcher stay put, so a docked pane
+    // stays against it.
+    const S32 width = mCollapsed ? mFullWidth / 2 : mFullWidth;
+    const S32 height = mCollapsed ? getHeaderHeight() : mFullHeight;
     LLRect rect = getRect();
-    rect.mBottom -= delta;
+    if (rect.getWidth() == width && rect.getHeight() == height)
+    {
+        return;
+    }
+    LLFloater* launcher = LLFloaterReg::findInstance("ks_lighting");
+    const bool keep_right = launcher && launcher->getParent() == getParent()
+                            && rect.getCenterX() < launcher->getRect().getCenterX();
+    if (keep_right)
+    {
+        rect.mLeft = rect.mRight - width;
+    }
+    else
+    {
+        rect.mRight = rect.mLeft + width;
+    }
+    rect.mBottom = rect.mTop - height;
     setShape(rect);
 }
 
@@ -202,6 +208,8 @@ bool KSFloaterLightingPaneBase::handleMouseDown(S32 x, S32 y, MASK mask)
 
 void KSFloaterLightingPaneBase::draw()
 {
+    // The size always follows the collapsed state (a stale size from anywhere is corrected).
+    applyPaneSize();
     // The drag handle holds the mouse until the button is released; a release without
     // the pane having moved is a click.
     if (mHeaderClickPending && !gFocusMgr.getMouseCapture())
@@ -301,6 +309,7 @@ bool KSFloaterLightingProxy::postBuild()
 {
     // It stays in its slot left of the launcher: no dragging, so every header click is a click.
     setCanDrag(false);
+    initPaneSize();
     return true;
 }
 
@@ -399,6 +408,8 @@ bool KSFloaterLightingPane::postBuild()
                 [this](LLControlVariable*, const LLSD&, const LLSD&) { refreshAOTechnique(); }));
         }
     }
+    // The full (expanded) size: the XUI size after the header stretch and Quick's note row.
+    initPaneSize();
     return true;
 }
 

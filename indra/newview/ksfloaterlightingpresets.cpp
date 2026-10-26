@@ -75,6 +75,7 @@ bool KSFloaterLightingPresets::postBuild()
 
     mChangedConnection = KSLightingPresets::changedSignal().connect([this]() { refreshList(); });
     refreshList();
+    initPaneSize();
     return true;
 }
 

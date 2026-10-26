@@ -75,15 +75,20 @@ public:
                          S32 threshold, S32 padding = 0) override;
 
 protected:
+    // Records the full (expanded) size; each pane calls it at the end of postBuild().
+    void initPaneSize();
     // Changes the pane's full height (Quick's note row), also while collapsed.
     void changeExpandedHeight(S32 delta);
     // What a header click does: collapse or expand.
     virtual void onHeaderClicked() { setCollapsed(!mCollapsed); }
 
 private:
+    // Sets the size the collapsed state calls for: full, or a header bar at half the width.
+    void applyPaneSize();
+
     bool mCollapsed = false;
-    S32 mExpandedHeight = 0;
-    S32 mExpandedWidth = 0;
+    S32 mFullWidth = 0;         // from XUI (initPaneSize()); 0 until then
+    S32 mFullHeight = 0;
     bool mHeaderClickPending = false;
     LLRect mHeaderClickRect;
 };
