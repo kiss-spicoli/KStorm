@@ -241,9 +241,18 @@ void KSFloaterLighting::addEntry(const std::string& key, const std::string& floa
     entry.mStatusText = std::move(status_text);
     if (!floater.empty())
     {
-        entry.mButton->setCommitCallback([this, floater](LLUICtrl*, const LLSD&)
+        const size_t index = mEntries.size();
+        entry.mButton->setCommitCallback([this, floater, index](LLUICtrl*, const LLSD&)
             {
-                KSFloaterLightingPane::cycleFloater(floater, this);
+                // Our panes open fully or close; AyaneStorm's floaters open, come forward or close.
+                if (floater.compare(0, 12, "ks_lighting_") == 0)
+                {
+                    onPaneButton(mEntries[index]);
+                }
+                else
+                {
+                    KSFloaterLightingPane::cycleFloater(floater, this);
+                }
             });
     }
     for (const std::string& name : watched)
@@ -329,15 +338,52 @@ void KSFloaterLighting::onDockToggle()
         }
         return;
     }
-    // Each pane opens in front of the one above it, so every header stays visible.
+    // Collapsed to their headers, which line up with the buttons; top to bottom, each in front.
     for (const Entry* entry : panes)
     {
         if (LLFloater* pane = LLFloaterReg::showInstance(entry->mFloater, LLSD(), false))
         {
+            KSFloaterLightingPaneBase* ks_pane = dynamic_cast<KSFloaterLightingPaneBase*>(pane);
+            if (ks_pane)
+            {
+                ks_pane->setCollapsed(false);
+            }
             pane->setShape(paneSlot(*entry, pane->getRect(), docked.at(entry->mFloater)));
+            if (ks_pane)
+            {
+                ks_pane->setCollapsed(true);
+            }
             pane->setVisibleAndFrontmost(false);
         }
     }
+}
+
+void KSFloaterLighting::onPaneButton(const Entry& entry)
+{
+    KSFloaterLightingPaneBase* pane = dynamic_cast<KSFloaterLightingPaneBase*>(LLFloaterReg::findInstance(entry.mFloater));
+    if (pane && pane->isShown() && !pane->isMinimized() && !pane->isCollapsed()
+        && KSFloaterLightingPaneBase::topmostFloater(this) == pane)
+    {
+        pane->closeFloater();
+        return;
+    }
+    pane = dynamic_cast<KSFloaterLightingPaneBase*>(LLFloaterReg::showInstance(entry.mFloater, LLSD(), false));
+    if (!pane)
+    {
+        return;
+    }
+    if (pane->isMinimized())
+    {
+        pane->setMinimized(false);
+    }
+    pane->setCollapsed(false);
+    const std::map<std::string, bool> docked = loadDocked();
+    auto side = docked.find(entry.mFloater);
+    if (side != docked.end())
+    {
+        pane->setShape(paneSlot(entry, pane->getRect(), side->second));
+    }
+    pane->setVisibleAndFrontmost(true);
 }
 
 void KSFloaterLighting::refreshDockButton()

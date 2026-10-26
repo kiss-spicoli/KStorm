@@ -7,6 +7,7 @@
 #ifndef KS_FLOATERLIGHTINGPRESETS_H
 #define KS_FLOATERLIGHTINGPRESETS_H
 
+#include "ksfloaterlightingpane.h"
 #include "llfloater.h"
 
 #include <boost/signals2.hpp>
@@ -20,7 +21,7 @@ class LLScrollListCtrl;
 class LLTextBox;
 
 // The list of presets with Apply / Turn off and the editing buttons.
-class KSFloaterLightingPresets : public LLFloater
+class KSFloaterLightingPresets : public KSFloaterLightingPaneBase
 {
 public:
     explicit KSFloaterLightingPresets(const LLSD& key);
@@ -29,9 +30,6 @@ public:
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
 
-    // Docks beside the launcher when dragged near this pane's slot (KSFloaterLighting::findPaneSnap).
-    LLView* findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,
-                         S32 threshold, S32 padding = 0) override;
 
     // Selects a preset in the list (after Save current as...).
     void selectPreset(const std::string& name);

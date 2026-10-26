@@ -11,12 +11,16 @@
 #include "ksfloaterlighting.h"
 #include "kslightingfields.h"
 #include "ksenvironment.h"
+#include "llbutton.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
 #include "llenvironment.h"
 #include "llcombobox.h"
+#include "lldraghandle.h"
 #include "llfeaturemanager.h"
 #include "llfloaterreg.h"
+#include "llfocusmgr.h"
+#include "lllocalcliprect.h"
 #include "llselectmgr.h"
 #include "lltextbox.h"
 #include "lluictrl.h"
@@ -74,24 +78,7 @@ void KSFloaterLightingPane::cycleFloater(const std::string& name, const LLFloate
         LLFloaterReg::toggleInstanceOrBringToFront(name); // opens or restores it
         return;
     }
-    // Topmost visible floater other than the one that was clicked.
-    LLFloater* top = nullptr;
-    if (gFloaterView)
-    {
-        for (LLView* view : *gFloaterView->getChildList())
-        {
-            if (view == from_floater || !view->getVisible() || view->isDead())
-            {
-                continue;
-            }
-            top = dynamic_cast<LLFloater*>(view);
-            if (top)
-            {
-                break;
-            }
-        }
-    }
-    if (top == target)
+    if (KSFloaterLightingPaneBase::topmostFloater(from_floater) == target)
     {
         target->closeFloater();
     }
@@ -101,8 +88,140 @@ void KSFloaterLightingPane::cycleFloater(const std::string& name, const LLFloate
     }
 }
 
-KSFloaterLightingPane::KSFloaterLightingPane(const LLSD& key)
+// ---------------------------------------------------------------------------
+// KSFloaterLightingPaneBase
+
+KSFloaterLightingPaneBase::KSFloaterLightingPaneBase(const LLSD& key)
     : LLFloater(key)
+{
+}
+
+// static
+LLFloater* KSFloaterLightingPaneBase::topmostFloater(const LLFloater* ignore)
+{
+    if (!gFloaterView)
+    {
+        return nullptr;
+    }
+    for (LLView* view : *gFloaterView->getChildList())
+    {
+        if (view == ignore || !view->getVisible() || view->isDead())
+        {
+            continue;
+        }
+        if (LLFloater* floater = dynamic_cast<LLFloater*>(view))
+        {
+            return floater;
+        }
+    }
+    return nullptr;
+}
+
+void KSFloaterLightingPaneBase::setCollapsed(bool collapsed)
+{
+    if (collapsed == mCollapsed)
+    {
+        return;
+    }
+    LLRect rect = getRect();
+    if (collapsed)
+    {
+        mExpandedHeight = rect.getHeight();
+        rect.mBottom = rect.mTop - getHeaderHeight();
+    }
+    else
+    {
+        rect.mBottom = rect.mTop - mExpandedHeight;
+    }
+    mCollapsed = collapsed;
+    setShape(rect);
+}
+
+void KSFloaterLightingPaneBase::changeExpandedHeight(S32 delta)
+{
+    if (mCollapsed)
+    {
+        mExpandedHeight += delta;
+        return;
+    }
+    LLRect rect = getRect();
+    rect.mBottom -= delta;
+    setShape(rect);
+}
+
+bool KSFloaterLightingPaneBase::handleMouseDown(S32 x, S32 y, MASK mask)
+{
+    mHeaderClickPending = false;
+    const LLView* handle = getDragHandle();
+    if (handle && handle->getVisible() && handle->getRect().pointInRect(x, y)
+        && topmostFloater(LLFloaterReg::findInstance("ks_lighting")) == this)
+    {
+        // The header buttons (close, minimize) sit on the header bar.
+        bool on_button = false;
+        for (LLView* child : *getChildList())
+        {
+            if (child != handle && child->getVisible() && dynamic_cast<LLButton*>(child)
+                && child->getRect().pointInRect(x, y))
+            {
+                on_button = true;
+                break;
+            }
+        }
+        mHeaderClickPending = !on_button;
+        mHeaderClickRect = getRect();
+    }
+    return LLFloater::handleMouseDown(x, y, mask);
+}
+
+void KSFloaterLightingPaneBase::draw()
+{
+    // The drag handle holds the mouse until the button is released; a release without
+    // the pane having moved is a click.
+    if (mHeaderClickPending && !gFocusMgr.getMouseCapture())
+    {
+        mHeaderClickPending = false;
+        if (getRect().mLeft == mHeaderClickRect.mLeft && getRect().mTop == mHeaderClickRect.mTop)
+        {
+            setCollapsed(!mCollapsed);
+        }
+    }
+    if (mCollapsed)
+    {
+        // The controls keep their places below the header; clip them away.
+        LLLocalClipRect clip(getLocalRect());
+        LLFloater::draw();
+    }
+    else
+    {
+        LLFloater::draw();
+    }
+}
+
+void KSFloaterLightingPaneBase::onClose(bool app_quitting)
+{
+    setCollapsed(false);
+    LLFloater::onClose(app_quitting);
+}
+
+LLView* KSFloaterLightingPaneBase::findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,
+                                                S32 threshold, S32 padding)
+{
+    // Called on every drag step with the rect at the dragged position; within the snap radius
+    // of this pane's slot beside the launcher, the slot wins over the usual edge snapping.
+    LLRect slot;
+    if (LLFloater* launcher = KSFloaterLighting::findPaneSnap(this, getRect(), slot))
+    {
+        new_rect = slot;
+        return launcher;
+    }
+    return LLFloater::findSnapRect(new_rect, mouse_dir, snap_type, threshold, padding);
+}
+
+// ---------------------------------------------------------------------------
+// KSFloaterLightingPane
+
+KSFloaterLightingPane::KSFloaterLightingPane(const LLSD& key)
+    : KSFloaterLightingPaneBase(key)
 {
     // Before the XML binds: declares the code-only exposure settings the panes bind to, and
     // connects Use KS Reference even when a pane opens before the launch list.
@@ -154,19 +273,6 @@ bool KSFloaterLightingPane::postBuild()
     return true;
 }
 
-LLView* KSFloaterLightingPane::findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,
-                            S32 threshold, S32 padding)
-{
-    // Called on every drag step with the rect at the dragged position; within the snap radius
-    // of this pane's slot beside the launcher, the slot wins over the usual edge snapping.
-    LLRect slot;
-    if (LLFloater* launcher = KSFloaterLighting::findPaneSnap(this, getRect(), slot))
-    {
-        new_rect = slot;
-        return launcher;
-    }
-    return LLFloater::findSnapRect(new_rect, mouse_dir, snap_type, threshold, padding);
-}
 
 void KSFloaterLightingPane::onOpen(const LLSD& key)
 {
@@ -198,7 +304,7 @@ void KSFloaterLightingPane::draw()
             mShowAvatars->setValue(on);
         }
     }
-    LLFloater::draw();
+    KSFloaterLightingPaneBase::draw();
 }
 
 void KSFloaterLightingPane::connectVectorSliders()
@@ -648,7 +754,5 @@ void KSFloaterLightingPane::setPinnedVisible(bool visible)
     }
     // Grow or shrink by the note's row, keeping the top edge (and every row) in place.
     mPinnedRowShown = visible;
-    LLRect rect = getRect();
-    rect.mBottom -= visible ? ROW_HEIGHT : -ROW_HEIGHT;
-    setShape(rect);
+    changeExpandedHeight(visible ? ROW_HEIGHT : -ROW_HEIGHT);
 }

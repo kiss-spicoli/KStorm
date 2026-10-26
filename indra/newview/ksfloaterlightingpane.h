@@ -26,6 +26,10 @@
  *    list follows hers.
  *
  * Buttons that open floaters use "KS.CycleFloater" (see cycleFloater()).
+ *
+ * KSFloaterLightingPaneBase holds what every KStorm Lighting pane shares (this class and
+ * the Lighting Presets pane): docking beside the launcher, and the header click that
+ * collapses the pane to its header bar or expands it again.
  */
 #ifndef KS_FLOATERLIGHTINGPANE_H
 #define KS_FLOATERLIGHTINGPANE_H
@@ -39,7 +43,42 @@ class LLColorSwatchCtrl;
 class LLTextBox;
 class LLUICtrl;
 
-class KSFloaterLightingPane : public LLFloater
+class KSFloaterLightingPaneBase : public LLFloater
+{
+public:
+    explicit KSFloaterLightingPaneBase(const LLSD& key);
+
+    // Collapsed, only the header bar shows; the top edge stays in place either way.
+    void setCollapsed(bool collapsed);
+    bool isCollapsed() const { return mCollapsed; }
+
+    // Topmost visible floater other than ignore (the floater holding a clicked button,
+    // which the click itself brought to the front).
+    static LLFloater* topmostFloater(const LLFloater* ignore);
+
+    // A click on the header bar (not a drag, not a header button) collapses or expands the
+    // pane when it is already in front; when it is behind, the click only brings it forward.
+    bool handleMouseDown(S32 x, S32 y, MASK mask) override;
+    void draw() override;
+    // Expands before closing, so the saved size is the full one.
+    void onClose(bool app_quitting) override;
+
+    // Docks beside the launcher when dragged near this pane's slot (KSFloaterLighting::findPaneSnap).
+    LLView* findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,
+                         S32 threshold, S32 padding = 0) override;
+
+protected:
+    // Changes the pane's full height (Quick's note row), also while collapsed.
+    void changeExpandedHeight(S32 delta);
+
+private:
+    bool mCollapsed = false;
+    S32 mExpandedHeight = 0;
+    bool mHeaderClickPending = false;
+    LLRect mHeaderClickRect;
+};
+
+class KSFloaterLightingPane : public KSFloaterLightingPaneBase
 {
 public:
     explicit KSFloaterLightingPane(const LLSD& key);
@@ -56,9 +95,6 @@ public:
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
 
-    // Docks beside the launcher when dragged near this pane's slot (KSFloaterLighting::findPaneSnap).
-    LLView* findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,
-                         S32 threshold, S32 padding = 0) override;
     void draw() override;
 
 private:
