@@ -351,7 +351,7 @@ void KSFloaterLightingProxy::onHeaderClicked()
     }
     // Closed: open it in front; open behind other floaters: bring it forward; open in front:
     // close it. The proxy itself, which the click brought forward, does not count.
-    cycleFloater(target, this);
+    KSFloaterLightingPane::cycleFloater(target, this);
 }
 
 // ---------------------------------------------------------------------------
