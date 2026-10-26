@@ -31,6 +31,8 @@ public:
 
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
+    // Closing the launcher (close button, Alt+Shift+L, menu, toolbar) hides every docked pane and proxy.
+    void onClose(bool app_quitting) override;
     void draw() override;
 
     // Pane docking: the slot beside the launcher for a pane opened from it, top aligned with

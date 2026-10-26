@@ -461,6 +461,24 @@ void KSFloaterLighting::onOpen(const LLSD& key)
     refreshStatuses();
 }
 
+void KSFloaterLighting::onClose(bool app_quitting)
+{
+    if (!app_quitting)
+    {
+        // Docked panes belong to the launcher: they go with it. Undocked panes stay.
+        const std::map<std::string, bool> docked = dockedPanes();
+        for (const Entry& entry : mEntries)
+        {
+            const std::string& name = dockName(entry);
+            if (!entry.mFloater.empty() && docked.count(name) && LLFloaterReg::instanceVisible(name))
+            {
+                LLFloaterReg::hideInstance(name);
+            }
+        }
+    }
+    LLFloater::onClose(app_quitting);
+}
+
 void KSFloaterLighting::draw()
 {
     // Buttons show pressed while their pane is open (design R15).
