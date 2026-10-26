@@ -4,7 +4,8 @@
  * @brief KStorm Lighting launch list (doc/kstorm2-lighting-UI-design.md, section 10).
  *
  * The floater holds no controls: one button per pane, each with a short
- * status, a footer for the environment state, and a compact (icons only) mode.
+ * status, and a compact (icons only) mode. The environment-state footer was
+ * removed on 2026-10-26: the compact launcher has no room for it.
  * For now it always opens compact with its mode toggle hidden; the open mode and
  * KSLightingCompact are kept for later. Opened from KStorm > KStorm Lighting (Alt+Shift+L)
  * or its toolbar button.
@@ -45,16 +46,12 @@ private:
                   std::function<std::string()> status_text = {},
                   const std::vector<std::string>& watched = {});
     void refreshStatuses();
-    void refreshFooter();
     void setCompact(bool compact);
-    void onResetEnvironment();
 
     std::vector<Entry> mEntries;
     std::vector<boost::signals2::connection> mConnections;
     LLEnvironment::connection_t mEnvironmentConnection;
     LLButton* mModeButton = nullptr;
-    LLTextBox* mFooter = nullptr;
-    LLButton* mFooterReset = nullptr;
     S32 mFullWidth = 0;
     bool mCompact = false;
 };

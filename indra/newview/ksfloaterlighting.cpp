@@ -161,25 +161,13 @@ bool KSFloaterLighting::postBuild()
     mModeButton->setLabel(std::string());
     mModeButton->setHoverGlowStrength(0.33f);
 
-    mFooter = getChild<LLTextBox>("ks_footer");
-    mFooterReset = getChild<LLButton>("ks_footer_reset");
-    mFooterReset->setCommitCallback([this](LLUICtrl*, const LLSD&) { onResetEnvironment(); });
     mEnvironmentConnection = LLEnvironment::instance().setEnvironmentChanged(
-        [this](LLEnvironment::EnvSelection_t, S32) { refreshStatuses(); refreshFooter(); });
+        [this](LLEnvironment::EnvSelection_t, S32) { refreshStatuses(); });
     // Pane edits change the sky in place, which sends no environment signal.
-    mConnections.push_back(KSEnvironment::editedSignal().connect([this]() { refreshStatuses(); refreshFooter(); }));
+    mConnections.push_back(KSEnvironment::editedSignal().connect([this]() { refreshStatuses(); }));
     mConnections.push_back(KSLightingPresets::changedSignal().connect([this]() { refreshStatuses(); }));
-    for (const char* name : { "RenderSkyAutoAdjustLegacy" })
-    {
-        if (LLControlVariable* control = gSavedSettings.getControl(name))
-        {
-            mConnections.push_back(control->getSignal()->connect(
-                [this](LLControlVariable*, const LLSD&, const LLSD&) { refreshFooter(); }));
-        }
-    }
 
     refreshStatuses();
-    refreshFooter();
     // The launcher stays closed (icons only; the hover tooltip names the pane) and its
     // open/closed toggle is hidden in XUI. Open mode is kept for later: to bring it back,
     // show ks_mode and restore setCompact(gSavedSettings.getBOOL("KSLightingCompact")).
@@ -218,7 +206,6 @@ void KSFloaterLighting::addEntry(const std::string& key, const std::string& floa
 void KSFloaterLighting::onOpen(const LLSD& key)
 {
     refreshStatuses();
-    refreshFooter();
 }
 
 void KSFloaterLighting::draw()
@@ -242,24 +229,6 @@ void KSFloaterLighting::refreshStatuses()
     }
 }
 
-void KSFloaterLighting::refreshFooter()
-{
-    static LLCachedControl<bool> auto_adjust(gSavedSettings, "RenderSkyAutoAdjustLegacy", false);
-    LLEnvironment& environment = LLEnvironment::instance();
-    const LLSettingsSky::ptr_t sky = environment.getCurrentSky();
-    const bool local = environment.hasEnvironment(LLEnvironment::ENV_LOCAL);
-
-    std::string text;
-    if (sky)
-    {
-        const bool legacy = sky->canAutoAdjust() && auto_adjust();
-        text = llformat("%s sky - Fill %.2f", legacy ? "Legacy" : "EEP", sky->getReflectionProbeAmbiance(auto_adjust()));
-    }
-    text += local ? " - Local override" : " - Shared env";
-    mFooter->setText(text);
-    mFooterReset->setVisible(local && !mCompact);
-}
-
 void KSFloaterLighting::setCompact(bool compact)
 {
     mCompact = compact;
@@ -274,7 +243,6 @@ void KSFloaterLighting::setCompact(bool compact)
         rect.mRight = rect.mLeft + width - BUTTON_MARGIN;
         entry.mButton->setRect(rect);
     }
-    mFooter->setVisible(!compact);
     LLPointer<LLUIImage> arrow = LLUI::getUIImage(compact ? "Arrow_Small_Right" : "Arrow_Small_Left");
     mModeButton->setImageUnselected(arrow);
     mModeButton->setImageSelected(arrow);
@@ -289,11 +257,4 @@ void KSFloaterLighting::setCompact(bool compact)
     const S32 right = getRect().mRight;
     reshape(width, getRect().getHeight());
     translate(right - getRect().mRight, 0);
-    refreshFooter();
-}
-
-void KSFloaterLighting::onResetEnvironment()
-{
-    // Same as Quick > Use Shared; also turns Use KS Reference off (A4).
-    KSEnvironment::useShared();
 }
