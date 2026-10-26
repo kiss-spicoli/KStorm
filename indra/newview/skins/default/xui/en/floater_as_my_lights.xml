@@ -73,7 +73,10 @@
   <check_box follows="left|top" height="16" label="Only My Lights" layout="topleft" left="180" name="ks_light_only_my_lights" top="418" width="225" control_name="KSLightRigOnlyMyLights" tool_tip="Turns off every other local light: world lights, everyone's worn lights including your own, and projectors. Sun, moon and ambient light stay. Your view only." />
 
   <!-- Spotlight for the selected light (LLVOVolume backend only) -->
-  <text type="string" length="1" follows="left|top" font="SansSerifSmallBold" height="14" layout="topleft" left="15" name="ks_light_spot_label" top="448" width="300">Spotlight</text>
+  <text type="string" length="1" follows="left|top" font="SansSerifSmallBold" height="14" layout="topleft" left="15" name="ks_light_spot_label" top="448" width="140">Spotlight</text>
+  <!-- <KS:KS> Fixed aim: fixed spotlights only -->
+  <check_box follows="left|top" height="16" label="Fixed aim" layout="topleft" left="165" name="ks_light_aim_fixed" top="446" visible="false" width="240" tool_tip="Fixed lights only: the spotlight keeps pointing in one direction, set by the heading and elevation sliders, instead of following a joint of your avatar." />
+  <!-- </KS:KS> -->
   <check_box follows="left|top" height="16" label="Spotlight" layout="topleft" left="15" name="ks_light_spot" top="468" width="150" tool_tip="Turns this light into a spotlight aimed at a joint of your avatar. LLVOVolume backend only; the Shader backend keeps it a point light." />
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="165" name="ks_light_aim_joint_label" top="468" width="60">Aim at</text>
   <combo_box follows="left|top" height="23" layout="topleft" left="225" name="ks_light_aim_joint" top="464" width="180" tool_tip="Joint the spotlight points at. It follows the joint as you move and animate.">
