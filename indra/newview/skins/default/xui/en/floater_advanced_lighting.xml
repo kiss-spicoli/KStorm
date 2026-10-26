@@ -26,12 +26,24 @@
                <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="scene_gamma_label">Brightness:</text>
                <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="20"  increment="0.1"  can_edit_text="true" name="scene_gamma"
                        tool_tip=""/>
+               <!-- <KS:KS> RenderHDRSkySunlightScale is "Sunlight Gain" in the KStorm Lighting panes.
                <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="sunlight_scale_label">Sunlight scale:</text>
-               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="50"  increment="0.1"  can_edit_text="true" name="RenderHDRSkySunlightScale" control_name="RenderHDRSkySunlightScale" 
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="50"  increment="0.1"  can_edit_text="true" name="RenderHDRSkySunlightScale" control_name="RenderHDRSkySunlightScale"
                        tool_tip="Sunlight Brightness. Recommended: set the 'Sun' color swatch Luminance = 50."/>
+               -->
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="sunlight_scale_label">Sunlight Gain:</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="50"  increment="0.1"  can_edit_text="true" name="RenderHDRSkySunlightScale" control_name="RenderHDRSkySunlightScale"
+                       tool_tip="Sunlight Gain. Recommended: set the 'Sun' color swatch Luminance = 50."/>
+               <!-- </KS:KS> -->
+               <!-- <KS:KS> RenderSkyAmbientScale is "Surface Ambient Gain" in the KStorm Lighting panes; "Sky Ambient Gain" is the sky ambient color slider.
                <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="ambient_scale_label">Ambient scale:</text>
                <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="-10" max_val="40"  increment="0.1"  can_edit_text="true" name="RenderSkyAmbientScale" control_name="RenderSkyAmbientScale"
                        tool_tip="Changes to Ambient Brightness may take multiple seconds to recompute global illumination - have patience. Recommended: set the 'Ambient' color swatch Luminance = 50."/>
+               -->
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="ambient_scale_label">Surface Ambient Gain:</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="-10" max_val="40"  increment="0.1"  can_edit_text="true" name="RenderSkyAmbientScale" control_name="RenderSkyAmbientScale"
+                       tool_tip="Changes to Surface Ambient Gain may take multiple seconds to recompute global illumination - have patience. Recommended: set the 'Ambient' color swatch Luminance = 50."/>
+               <!-- </KS:KS> -->
                <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="haze_density_label">Haze Density:</text>
                <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="5"   increment="0.1"  can_edit_text="true" name="haze_density" 
                        tool_tip=""/>

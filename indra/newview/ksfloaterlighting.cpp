@@ -11,6 +11,7 @@
 #include "ksenvironment.h"
 #include "ksfloaterlightingpane.h"
 #include "kslightingfields.h"
+#include "kslightingpresets.h"
 #include "llbutton.h"
 #include "llfloaterreg.h"
 #include "lltextbox.h"
@@ -50,11 +51,15 @@ bool KSFloaterLighting::postBuild()
 
     mFullWidth = getRect().getWidth();
 
-    // Panes not built yet stay disabled in the XML (B7: Memos).
     addEntry("quick", "ks_lighting_quick",
         []() { return std::string(gSavedSettings.getBOOL("KSSetEnvironment") ? "KS Reference" : ""); },
         { "KSSetEnvironment" });
-    addEntry("memos", "");
+    addEntry("presets", "ks_lighting_presets",
+        []()
+        {
+            const std::string& active = KSLightingPresets::active();
+            return active.empty() ? std::string("none active") : active;
+        });
     addEntry("sunmoon", "ks_lighting_sunmoon",
         []()
         {
@@ -163,6 +168,7 @@ bool KSFloaterLighting::postBuild()
         [this](LLEnvironment::EnvSelection_t, S32) { refreshStatuses(); refreshFooter(); });
     // Pane edits change the sky in place, which sends no environment signal.
     mConnections.push_back(KSEnvironment::editedSignal().connect([this]() { refreshStatuses(); refreshFooter(); }));
+    mConnections.push_back(KSLightingPresets::changedSignal().connect([this]() { refreshStatuses(); }));
     for (const char* name : { "RenderSkyAutoAdjustLegacy" })
     {
         if (LLControlVariable* control = gSavedSettings.getControl(name))
@@ -174,7 +180,10 @@ bool KSFloaterLighting::postBuild()
 
     refreshStatuses();
     refreshFooter();
-    setCompact(gSavedSettings.getBOOL("KSLightingCompact"));
+    // The launcher stays closed (icons only; the hover tooltip names the pane) and its
+    // open/closed toggle is hidden in XUI. Open mode is kept for later: to bring it back,
+    // show ks_mode and restore setCompact(gSavedSettings.getBOOL("KSLightingCompact")).
+    setCompact(true);
     return true;
 }
 

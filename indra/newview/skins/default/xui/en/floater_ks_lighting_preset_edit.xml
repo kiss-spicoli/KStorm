@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- KStorm Viewer; author: Kissmy Spicoli -->
+<!-- KStorm Lighting Presets dialog: Save current as, Rename, Contents (KSFloaterLightingPresetEdit).
+     The group block (check boxes, or the read-only list for KS Reference) is dropped and the
+     floater shrinks when a mode does not use it; the note and buttons follow the bottom. -->
+<floater can_close="true" can_dock="false" can_minimize="false" can_resize="false" height="258" layout="topleft" name="ks_lighting_preset_edit" single_instance="true" title="Lighting Preset" width="300">
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_edit_name_label" top="9" width="46">Name</text>
+  <line_editor follows="left|top" height="20" layout="topleft" left="60" max_length_chars="63" name="ks_edit_name" top="6" width="230" />
+  <check_box follows="left|top" height="16" label="Sun/Moon" layout="topleft" left="10" name="ks_group_sunmoon" top="34" width="135" />
+  <check_box follows="left|top" height="16" label="Atmosphere" layout="topleft" left="10" name="ks_group_atmosphere" top="56" width="135" />
+  <check_box follows="left|top" height="16" label="Clouds" layout="topleft" left="10" name="ks_group_clouds" top="78" width="135" />
+  <check_box follows="left|top" height="16" label="Water" layout="topleft" left="10" name="ks_group_water" top="100" width="135" />
+  <check_box follows="left|top" height="16" label="Reflections" layout="topleft" left="10" name="ks_group_reflections" top="122" width="135" />
+  <check_box follows="left|top" height="16" label="All lights" layout="topleft" left="10" name="ks_group_all_lights" top="144" width="135" />
+  <check_box follows="left|top" height="16" label="Shadows" layout="topleft" left="10" name="ks_group_shadows" top="166" width="135" />
+  <check_box follows="left|top" height="16" label="Ambient" layout="topleft" left="150" name="ks_group_ambient" top="34" width="140" />
+  <check_box follows="left|top" height="16" label="Exposure" layout="topleft" left="150" name="ks_group_exposure" top="56" width="140" />
+  <check_box follows="left|top" height="16" label="Glow" layout="topleft" left="150" name="ks_group_glow" top="78" width="140" />
+  <check_box follows="left|top" height="16" label="Depth of field" layout="topleft" left="150" name="ks_group_dof" top="100" width="140" />
+  <check_box follows="left|top" height="16" label="Vignette" layout="topleft" left="150" name="ks_group_vignette" top="122" width="140" />
+  <check_box follows="left|top" height="16" label="AyaneStorm floaters" layout="topleft" left="150" name="ks_group_ayanestorm" top="144" width="140" tool_tip="Settings of AyaneStorm's Environment Effects, Camera Effects and Depth of Field floaters." />
+  <text_editor follows="left|top" height="154" layout="topleft" left="10" name="ks_edit_text" read_only="true" top="34" visible="false" width="280" word_wrap="false" />
+  <text type="string" length="1" follows="left|bottom" height="30" layout="topleft" left="10" name="ks_edit_note" text_color="LtGray_50" top="194" width="280" wrap="true" />
+  <button follows="left|bottom" height="22" label="Save" layout="topleft" left="120" name="ks_edit_ok" top="228" width="80" />
+  <button follows="left|bottom" height="22" label="Cancel" layout="topleft" left="210" name="ks_edit_cancel" top="228" width="80" />
+  <string name="title_save">Save Lighting Preset</string>
+  <string name="title_rename">Rename Lighting Preset</string>
+  <string name="title_contents">Lighting Preset Contents</string>
+</floater>

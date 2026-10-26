@@ -168,7 +168,9 @@ set(viewer_SOURCE_FILES
     ksenvironment.cpp
     ksfloaterlighting.cpp
     ksfloaterlightingpane.cpp
+    ksfloaterlightingpresets.cpp
     kslightingfields.cpp
+    kslightingpresets.cpp
     # </KS:KS>
     # <KS:KS> Dark My Lights spots.
     ksdarklight.cpp
@@ -1128,7 +1130,9 @@ set(viewer_HEADER_FILES
     ksenvironment.h
     ksfloaterlighting.h
     ksfloaterlightingpane.h
+    ksfloaterlightingpresets.h
     kslightingfields.h
+    kslightingpresets.h
     # </KS:KS>
     # <KS:KS> Dark My Lights spots.
     ksdarklight.h

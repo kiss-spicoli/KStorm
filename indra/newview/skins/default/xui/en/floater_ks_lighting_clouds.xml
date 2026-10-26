@@ -2,7 +2,7 @@
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
 <!-- KStorm Lighting pane "Clouds" (KSFloaterLightingPane; design doc/kstorm2-lighting-UI-design.md section 10).
      Generated layout: rows are 10 px from the left, 280 px wide. -->
-<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="238" layout="topleft" name="ks_lighting_clouds" save_rect="true" single_instance="true" title="Clouds" width="300">
+<floater can_close="true" header_height="38" can_dock="false" can_minimize="true" can_resize="false" height="238" layout="topleft" name="ks_lighting_clouds" save_rect="true" single_instance="true" title="Clouds" width="300">
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="skyc_cloud_color_label" top="8" width="116">Cloud color</text>
   <color_swatch can_apply_immediately="true" follows="left|top" height="20" label_height="0" layout="topleft" left="130" name="skyc_cloud_color" top="6" width="160" />
   <slider can_edit_text="true" decimal_digits="2" follows="left|top" height="16" increment="0.01" label="Coverage" label_width="120" layout="topleft" left="10" max_val="1" min_val="0" name="sky_cloud_shadow" show_text="true" text_width="56" top="32" width="280" tool_tip="Also removes sun and adds fill." />

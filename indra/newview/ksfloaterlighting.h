@@ -4,8 +4,9 @@
  * @brief KStorm Lighting launch list (doc/kstorm2-lighting-UI-design.md, section 10).
  *
  * The floater holds no controls: one button per pane, each with a short
- * status, a footer for the environment state, and a compact (icons only) mode
- * saved in KSLightingCompact. Opened from KStorm > KStorm Lighting (Alt+Shift+L)
+ * status, a footer for the environment state, and a compact (icons only) mode.
+ * For now it always opens compact with its mode toggle hidden; the open mode and
+ * KSLightingCompact are kept for later. Opened from KStorm > KStorm Lighting (Alt+Shift+L)
  * or its toolbar button.
  */
 #ifndef KS_FLOATERLIGHTING_H

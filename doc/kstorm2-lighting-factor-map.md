@@ -385,8 +385,8 @@ Five panels hold every lighting control (surfaced and currently unsurfaced). All
 
 ### P1 Environment (G2 key light, G3 fill, G5 atmosphere)
 - **Source:** Use Shared Environment, My Environments, sky/water/day presets (prev/next), reset to region default, Set KS environment (transition time stays 0 and is not exposed), "Edit as asset…" buttons. Shows the sky origin (legacy auto-adjusted / EEP, P2) and "Local override active" with Reset.
-- **Key light:** sun azimuth/elevation, moon azimuth/elevation (no trackball), **Sun & Moon Light Colour**, Sunlight Scale (`RenderHDRSkySunlightScale`), sun scale, moon scale (tooltip: larger discs fade out later at the horizon), **Moon Disk Brightness**, partial moon below horizon, star brightness.
-- **Fill:** **Ambient Brightness** (hue-preserving, 8.2), Ambient Scale (`RenderSkyAmbientScale`, negatives allowed), **Probe Fill Strength** (0.01–10, step 0.01; 11.1 tooltip; disabled when probes are off, 8.3).
+- **Key light:** sun azimuth/elevation, moon azimuth/elevation (no trackball), **Sun & Moon Light Colour**, Sunlight Gain (`RenderHDRSkySunlightScale`), sun scale, moon scale (tooltip: larger discs fade out later at the horizon), **Moon Disk Brightness**, partial moon below horizon, star brightness.
+- **Fill:** **Sky Ambient Gain** (hue-preserving, 8.2), Surface Ambient Gain (`RenderSkyAmbientScale`, negatives allowed), **Probe Fill Strength** (0.01–10, step 0.01; 11.1 tooltip; disabled when probes are off, 8.3).
 - **Haze** (one section labelled "Haze", no special highlighting; Haze Density first): Haze Density; Haze Glow Brightness (Haze Horizon); Haze Glow Strength (Glow Size); Haze Glow Focus (Glow Focus); Air Glow Colour (Blue Horizon); Air Density (Blue Density) (both 0–3 per channel, the code range). Behaviour required by 12.7: while Haze Density is 0, Haze Glow Brightness, Haze Glow Strength and Haze Glow Focus show as inactive with the note "No effect while Haze Density is 0"; the two Air controls carry the haze-0 notes.
 - **Atmosphere — other:** Atmosphere Thickness (density multiplier), Fog Distance Scale (distance multiplier), **Haze Ceiling (m)** (max altitude; renamed **Atmosphere Height (m)**, decided 2026-10-25), moisture/droplet/ice, `RenderDeferredAtmospheric`.
 - **Clouds:** coverage, scale, variance, colour, density X/Y/D, detail X/Y/D, scroll, map.
@@ -489,13 +489,13 @@ The slider wiring from section 3.2 is committed (`9b783fa6bf6`) and merged into 
 | Duplicates | Remove duplicates that control a single value within one pane (12.6). Slider + number-box pairs are allowed, including pairs whose two ranges differ. |
 | Haze group | Wherever these controls are surfaced, they appear together and show their haze-0 dependency (12.7). On screen the section is simply "Haze", with no special highlighting. |
 | 11.1 scope | Applies to the new UI (still in design) and to My Lights only. |
-| 11.2 ranges | Ambient Scale allows negatives; light count and sunlight scale keep their existing ranges. |
+| 11.2 ranges | Surface Ambient Gain allows negatives; light count and Sunlight Gain keep their existing ranges. |
 | Unresolved 11.x items | Adopted as recommended (12.8). |
 | Legacy skies | LL's default auto-adjust (mode B), forced on; replaces local conversion (8, P2). |
 | Trackball | Not in the new UI. |
-| New-UI ranges | Sunlight Scale 0–20 (the KS range); Max nearby lights 0–512. |
+| New-UI ranges | Sunlight Gain 0–20 (the KS range); Max nearby lights 0–512. |
 | NaN guards | Added on branch `fix-haze-zero-nan-guards` (uncommitted): `cloudsV.glsl`, `asHorizonCloudTintV.glsl`, `lllegacyatmospherics.cpp`. |
-| Open items | All resolved except O5 (deferred); see `doc/kstorm2-lighting-UI-design.md` §7-8. Includes: Ambient Brightness 0–3 / 0.01; My Lights curve set as recommended; dynamic-exposure ranges; Sky HDR Scale edits `RenderSkyAutoAdjustHDRScale` on legacy skies; forced settings reapplied; local lights keep LL's ×0.9 under legacy skies. |
+| Open items | All resolved except O5 (deferred); see `doc/kstorm2-lighting-UI-design.md` §7-8. Includes: Sky Ambient Gain 0–3 / 0.01; My Lights curve set as recommended; dynamic-exposure ranges; Sky HDR Scale edits `RenderSkyAutoAdjustHDRScale` on legacy skies; forced settings reapplied; local lights keep LL's ×0.9 under legacy skies. |
 
 ### 12.2 Haze Density at 0 vs above 0
 
@@ -592,7 +592,7 @@ Decided = adopted (scope: new UI, plus My Lights where marked). Declined = left 
 | sky `gamma` label | Decided | **Sky HDR Scale**; tooltip adds that auto-exposure is pinned at ≤ 0.25. |
 | sky `moon_brightness` label | Decided | **Moon Disk Brightness**. |
 | sky `sunlight_color` label | Decided (as recommended) | **Sun & Moon Light Colour**. |
-| sky `ambient` | Decided; definition Open | Ambient Brightness slider scaling the stored colour (L1). Unit, range, black-colour fallback: Open (O1). |
+| sky `ambient` | Decided; definition Open | Sky Ambient Gain slider scaling the stored colour (L1). Unit, range, black-colour fallback: Open (O1). |
 | sky `reflection_probe_ambiance` | Decided | **Probe Fill Strength**, 0.01–10, step 0.01, 11.1 tooltip, disabled when probes are off. |
 | Falloff / Softness | Decided | Shapes the curve for **My Lights only** (12.4); Build Falloff unchanged. Marker design: Open (O3). |
 | Radius ×1.5 tooltip | Decided (as recommended) | My Lights only; Build unchanged. |
@@ -607,8 +607,8 @@ Decided = adopted (scope: new UI, plus My Lights where marked). Declined = left 
 | Glow tooltips | Decided | Haze Glow Strength / Haze Glow Focus with direction tooltips (12.7). |
 | Blue/Haze/Multiplier renames | Decided | 8.5. |
 | 11.2 Exposure range | Decided | 0.5–4 (new UI). |
-| 11.2 Ambient Scale range | Decided | Negatives allowed; new UI uses −10–40. |
-| 11.2 Sunlight Scale range | Decided | Existing ranges kept; new UI uses the existing 0–50 (Advanced Lighting). |
+| 11.2 Surface Ambient Gain range | Decided | Negatives allowed; new UI uses −10–40. |
+| 11.2 Sunlight Gain range | Decided | Existing ranges kept; new UI uses the existing 0–50 (Advanced Lighting). |
 | 11.2 Light count range | Decided | Existing ranges kept; new UI uses the existing slider 0–8192 with number box 0–10000. |
 | 11.2 Shadow resolution range | Declined | Left as is (12.5). |
 | 11.2 Colour swatches ÷3/÷2 | Decided (as recommended) | Colour + intensity controls (new UI); blue colours 0–3. |
@@ -682,5 +682,5 @@ Method:
    4. Air Glow Colour / Haze Glow Brightness (fog and sky colour and brightness);
    5. Haze Glow Strength and Focus (sun halo);
    6. Sky HDR Scale last: it scales sky and haze only, not surfaces, so it is the best "haze vs scene" balance control.
-5. **Keep ambient hue** (8.2); set Ambient Brightness only where Probe Fill Strength is below 1.
+5. **Keep ambient hue** (8.2); set Sky Ambient Gain only where Probe Fill Strength is below 1.
 6. Save the tuned result as an EEP sky so the work is not repeated per region.

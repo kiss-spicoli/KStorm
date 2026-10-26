@@ -2,7 +2,7 @@
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
 <!-- KStorm Lighting pane "Reflections" (KSFloaterLightingPane; design doc/kstorm2-lighting-UI-design.md section 10).
      Generated layout: rows are 10 px from the left, 280 px wide. -->
-<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="270" layout="topleft" name="ks_lighting_reflections" save_rect="true" single_instance="true" title="Reflections" width="300">
+<floater can_close="true" header_height="38" can_dock="false" can_minimize="true" can_resize="false" height="270" layout="topleft" name="ks_lighting_reflections" save_rect="true" single_instance="true" title="Reflections" width="300">
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_probe_level_label" top="9" width="116">Coverage</text>
   <combo_box control_name="RenderReflectionProbeLevel" follows="left|top" height="23" layout="topleft" left="130" name="ks_probe_level" top="6" width="160">
     <combo_box.item label="Sky only" name="v0" value="0" />
