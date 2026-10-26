@@ -9,7 +9,7 @@
     <combo_box.item label="Sun &amp; Moon" name="v1" value="1" />
     <combo_box.item label="Sun &amp; Moon + Projectors" name="v2" value="2" />
   </combo_box>
-  <slider can_edit_text="true" control_name="RenderShadowResolutionScale" decimal_digits="1" follows="left|top" height="16" increment="0.5" label="Resolution" label_width="120" layout="topleft" left="10" max_val="5" min_val="0.5" name="ks_shadow_res" show_text="true" text_width="56" top="34" width="280" tool_tip="Shadow map size relative to the screen." />
+  <slider can_edit_text="true" control_name="RenderShadowResolutionScale" decimal_digits="1" follows="left|top" height="16" increment="0.5" label="Resolution" label_width="120" layout="topleft" left="10" max_val="5" min_val="0.5" name="ks_shadow_res" show_text="true" text_width="56" top="34" width="280" tool_tip="Shadow map size relative to the screen. (KS Reference)" />
   <slider can_edit_text="true" decimal_digits="3" follows="left|top" height="16" increment="0.001" label="Soften" label_width="120" layout="topleft" left="10" max_val="5" min_val="0.001" name="ksv_RenderShadowGaussian_x" show_text="true" text_width="56" top="56" width="280" />
   <slider can_edit_text="true" decimal_digits="3" follows="left|top" height="16" increment="0.025" label="Clarity" label_width="120" layout="topleft" left="10" max_val="10" min_val="0" name="ksv_RenderShadowSplitExponent_y" show_text="true" text_width="56" top="78" width="280" />
   <slider can_edit_text="true" control_name="RenderShadowBias" decimal_digits="6" follows="left|top" height="16" increment="1e-06" label="Bias" label_width="120" layout="topleft" left="10" max_val="0.001" min_val="-0.002" name="ks_shadow_bias" show_text="true" text_width="56" top="100" width="280" />

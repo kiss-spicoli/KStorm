@@ -9,6 +9,7 @@
 #include "ksfloaterlightingpresets.h"
 
 #include "ksenvironment.h"
+#include "ksfloaterlighting.h"
 #include "kslightingpresets.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
@@ -46,7 +47,7 @@ namespace
 // Pane
 
 KSFloaterLightingPresets::KSFloaterLightingPresets(const LLSD& key)
-    : LLFloater(key)
+    : KSFloaterLightingPaneBase(key)
 {
     KSEnvironment::init();
 }
@@ -74,8 +75,10 @@ bool KSFloaterLightingPresets::postBuild()
 
     mChangedConnection = KSLightingPresets::changedSignal().connect([this]() { refreshList(); });
     refreshList();
+    initPaneSize();
     return true;
 }
+
 
 void KSFloaterLightingPresets::onOpen(const LLSD& key)
 {

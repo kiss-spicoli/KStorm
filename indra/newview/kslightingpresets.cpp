@@ -39,12 +39,15 @@ namespace
     // KSRenderLocalLightSubjectSort comes from feat-local-light-subject-sort.
     const std::map<std::string, LLSD> KS_SETTINGS =
     {
-        { "RenderFarClip",                 LLSD(16.0) },
+        { "RenderFarClip",                 LLSD(64.0) },   // draw distance, meters (16 before 2026-10-26)
         { "RenderAvatarMaxNonImpostors",   LLSD(4) },
         { "AvatarNameTagMode",             LLSD(0) },
         { "KSRenderLocalLightSubjectSort", LLSD(true) },
         // Auto-exposure is pinned at 1 by the KS Sky HDR Scale anyway; off makes that visible.
         { "RenderDynamicExposureEnabled",  LLSD(false) },
+        // Shadow map size relative to the screen (a change resizes the shadow maps). 1.5 gives crisp
+        // shadows at 4K (sun maps 5760 x 3240, about 0.56 GB of shadow maps in all).
+        { "RenderShadowResolutionScale",   LLSD(1.5) },
     };
 
     // Reference settings (design section 12.1, approved as A14): held at their
@@ -80,7 +83,7 @@ namespace
     const std::map<std::string, LLSD> KS_REFERENCE_VALUES =
     {
         { "RenderHDREnabled",          LLSD(true) },
-        { "RenderSkyAutoAdjustLegacy", LLSD(true) },   // LL default is FALSE
+        { "RenderSkyAutoAdjustLegacy", LLSD(true) },   // LL default FALSE; KStorm default TRUE since 2026-10-26
         { "RenderDisableVintageMode",  LLSD(true) },
         { "WindLightUseAtmosShaders",  LLSD(true) },
     };

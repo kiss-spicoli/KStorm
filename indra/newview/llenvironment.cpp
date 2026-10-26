@@ -985,6 +985,15 @@ void LLEnvironment::initSingleton()
         }
     );
     LLSettingsSky::sAutoAdjustProbeAmbiance = gSavedSettings.getF32("RenderSkyAutoAdjustProbeAmbiance");
+    // <KS:KS> Probe ambiance floor (KSMinProbeAmbiance), same pattern as above
+    gSavedSettings.getControl("KSMinProbeAmbiance")->getSignal()->connect(
+        [](LLControlVariable*, const LLSD& new_val, const LLSD& old_val)
+        {
+            LLSettingsSky::sMinProbeAmbiance = llmax(0.f, (F32)new_val.asReal());
+        }
+    );
+    LLSettingsSky::sMinProbeAmbiance = llmax(0.f, gSavedSettings.getF32("KSMinProbeAmbiance"));
+    // </KS:KS>
 
     LLEventPumps::instance().obtain(PUMP_EXPERIENCE).stopListening(LISTENER_NAME);
     LLEventPumps::instance().obtain(PUMP_EXPERIENCE).listen(LISTENER_NAME, [this](LLSD message) { listenExperiencePump(message); return false; });

@@ -26,6 +26,10 @@
  *    list follows hers.
  *
  * Buttons that open floaters use "KS.CycleFloater" (see cycleFloater()).
+ *
+ * KSFloaterLightingPaneBase holds what every KStorm Lighting pane shares (this class and
+ * the Lighting Presets pane): docking beside the launcher, and the header click that
+ * collapses the pane to its header bar or expands it again.
  */
 #ifndef KS_FLOATERLIGHTINGPANE_H
 #define KS_FLOATERLIGHTINGPANE_H
@@ -39,7 +43,82 @@ class LLColorSwatchCtrl;
 class LLTextBox;
 class LLUICtrl;
 
-class KSFloaterLightingPane : public LLFloater
+class KSFloaterLightingPaneBase : public LLFloater
+{
+public:
+    explicit KSFloaterLightingPaneBase(const LLSD& key);
+
+    // Collapsed, only the header bar shows, at half the width; the top edge, and the side edge
+    // facing the launcher, stay in place either way.
+    void setCollapsed(bool collapsed);
+    bool isCollapsed() const { return mCollapsed; }
+    // Full (expanded) width from XUI; 0 before postBuild() ends.
+    S32 getFullWidth() const { return mFullWidth; }
+
+    // Topmost visible floater other than ignore (the floater holding a clicked button,
+    // which the click itself brought to the front).
+    static LLFloater* topmostFloater(const LLFloater* ignore);
+
+    // A click on the header bar (not a drag, not a header button) collapses or expands the
+    // pane when it is in front; a collapsed pane behind others expands and comes forward on
+    // the same click, an expanded one only comes forward.
+    bool handleMouseDown(S32 x, S32 y, MASK mask) override;
+    void draw() override;
+    // Docked, the minimize button collapses the pane to its header bar (or expands it again)
+    // instead of minimizing it; an undocked pane minimizes as usual.
+    void setMinimized(bool minimize) override;
+
+    // Remembers whether the pane was collapsed, then expands before closing, so the saved
+    // size is the full one.
+    void onClose(bool app_quitting) override;
+
+    // Whether a pane was collapsed when it last closed (KSLightingPaneStates); a pane never
+    // closed counts as collapsed. The launcher's dock button reopens docked panes this way.
+    static bool wasCollapsed(const std::string& name);
+
+    // Docks beside the launcher when dragged near this pane's slot (KSFloaterLighting::findPaneSnap).
+    LLView* findSnapRect(LLRect& new_rect, const LLCoordGL& mouse_dir, LLView::ESnapType snap_type,
+                         S32 threshold, S32 padding = 0) override;
+
+protected:
+    // Records the full (expanded) size; each pane calls it at the end of postBuild().
+    void initPaneSize();
+    // Changes the pane's full height (Quick's note row), also while collapsed.
+    void changeExpandedHeight(S32 delta);
+    // What a header click does: collapse or expand.
+    virtual void onHeaderClicked() { setCollapsed(!mCollapsed); }
+
+private:
+    // Sets the size the collapsed state calls for: full, or a header bar at half the width.
+    void applyPaneSize();
+
+    bool mCollapsed = false;
+    S32 mFullWidth = 0;         // from XUI (initPaneSize()); 0 until then
+    S32 mFullHeight = 0;
+    bool mHeaderClickPending = false;
+    LLRect mHeaderClickRect;
+};
+
+// A header-only stand-in, docked left of the launcher, for an AyaneStorm floater too large to
+// dock (Environment Effects, Viewer Lights, Camera Effects). A click on its header opens that
+// floater in front, brings it forward when it is behind, or closes it when it is in front.
+// One XUI file, one registered instance per floater.
+class KSFloaterLightingProxy : public KSFloaterLightingPaneBase
+{
+public:
+    explicit KSFloaterLightingProxy(const LLSD& key);
+
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+
+    // The AyaneStorm floater a proxy stands for ("" if the name is not a proxy).
+    static std::string targetOf(const std::string& proxy_name);
+
+protected:
+    void onHeaderClicked() override;
+};
+
+class KSFloaterLightingPane : public KSFloaterLightingPaneBase
 {
 public:
     explicit KSFloaterLightingPane(const LLSD& key);
@@ -55,6 +134,7 @@ public:
 
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
+
     void draw() override;
 
 private:

@@ -712,6 +712,9 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("ks_lighting_quick", "floater_ks_lighting_quick.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
     LLFloaterReg::add("ks_lighting_presets", "floater_ks_lighting_presets.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPresets>);
     LLFloaterReg::add("ks_lighting_preset_edit", "floater_ks_lighting_preset_edit.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPresetEdit>);
+    LLFloaterReg::add("ks_lighting_proxy_env_effects", "floater_ks_lighting_proxy.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingProxy>);
+    LLFloaterReg::add("ks_lighting_proxy_viewer_lights", "floater_ks_lighting_proxy.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingProxy>);
+    LLFloaterReg::add("ks_lighting_proxy_camera_effects", "floater_ks_lighting_proxy.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingProxy>);
     LLFloaterReg::add("ks_lighting_sunmoon", "floater_ks_lighting_sunmoon.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
     LLFloaterReg::add("ks_lighting_atmosphere", "floater_ks_lighting_atmosphere.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
     LLFloaterReg::add("ks_lighting_clouds", "floater_ks_lighting_clouds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);

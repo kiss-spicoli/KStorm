@@ -139,6 +139,7 @@ const LLUUID LLSettingsSky::DEFAULT_ASSET_ID("651510b8-5f4d-8991-1592-e7eeab2a5a
 
 const F32 LLSettingsSky::DEFAULT_AUTO_ADJUST_PROBE_AMBIANCE = 1.f;
 F32 LLSettingsSky::sAutoAdjustProbeAmbiance = DEFAULT_AUTO_ADJUST_PROBE_AMBIANCE;
+F32 LLSettingsSky::sMinProbeAmbiance = 0.f; // <KS:KS/> 0 = no floor until the viewer sets it
 
 static const LLUUID DEFAULT_SUN_ID("32bfbcea-24b1-fb9d-1ef9-48a28a63730f"); // dataserver
 static const LLUUID DEFAULT_MOON_ID("d07f6eed-b96a-47cd-b51d-400ad4a1c428"); // dataserver
@@ -1822,12 +1823,21 @@ F32 LLSettingsSky::getSkyIceLevel() const
 
 F32 LLSettingsSky::getReflectionProbeAmbiance(bool auto_adjust) const
 {
+    // <KS:KS> Never below the KStorm floor: a sky saved at 0 would otherwise take the
+    // classic gamma path and turn off probe fill, exposure and tone mapping.
+    //if (auto_adjust && canAutoAdjust())
+    //{
+    //    return sAutoAdjustProbeAmbiance;
+    //}
+    //
+    //return mReflectionProbeAmbiance;
     if (auto_adjust && canAutoAdjust())
     {
-        return sAutoAdjustProbeAmbiance;
+        return llmax(sAutoAdjustProbeAmbiance, sMinProbeAmbiance);
     }
 
-    return mReflectionProbeAmbiance;
+    return llmax(mReflectionProbeAmbiance, sMinProbeAmbiance);
+    // </KS:KS>
 }
 
 F32 LLSettingsSky::getSkyBottomRadius() const

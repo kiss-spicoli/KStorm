@@ -14,9 +14,13 @@
 #include "kslightingpresets.h"
 #include "llbutton.h"
 #include "llfloaterreg.h"
+#include "llfocusmgr.h"
 #include "lltextbox.h"
 #include "llui.h"
 #include "llviewercontrol.h"
+
+#include <map>
+#include <vector>
 
 namespace
 {
@@ -26,6 +30,49 @@ namespace
     std::string formatF32(F32 value, S32 digits)
     {
         return llformat("%.*f", digits, value);
+    }
+
+    // Docked panes and their side, kept in KSLightingDockedPanes as "name:R;name:L".
+    std::map<std::string, bool> loadDocked()
+    {
+        std::map<std::string, bool> docked;
+        std::vector<std::string> items;
+        LLStringUtil::getTokens(gSavedSettings.getString("KSLightingDockedPanes"), items, ";");
+        for (const std::string& item : items)
+        {
+            const size_t colon = item.rfind(':');
+            if (colon != std::string::npos && colon > 0)
+            {
+                docked[item.substr(0, colon)] = item.substr(colon + 1) == "R";
+            }
+        }
+        return docked;
+    }
+
+    void saveDocked(const std::map<std::string, bool>& docked)
+    {
+        std::string text;
+        for (const auto& [name, on_right] : docked)
+        {
+            text += (text.empty() ? "" : ";") + name + (on_right ? ":R" : ":L");
+        }
+        if (text != gSavedSettings.getString("KSLightingDockedPanes"))
+        {
+            gSavedSettings.setString("KSLightingDockedPanes", text);
+        }
+    }
+
+    // An image-only header button shows the same image in every state.
+    void setButtonImage(LLButton* button, const std::string& image_name)
+    {
+        LLPointer<LLUIImage> image = LLUI::getUIImage(image_name);
+        button->setImageUnselected(image);
+        button->setImageSelected(image);
+        button->setImageHoverUnselected(image);
+        button->setImageHoverSelected(image);
+        button->setImagePressed(image);
+        button->setImageDisabled(image);
+        button->setImageDisabledSelected(image);
     }
 }
 
@@ -100,6 +147,7 @@ bool KSFloaterLighting::postBuild()
         },
         { "RenderReflectionProbeLevel" });
     addEntry("env_effects", "as_environment_effects");
+    mEntries.back().mProxy = "ks_lighting_proxy_env_effects";
     addEntry("all_lights", "ks_lighting_all_lights",
         []()
         {
@@ -112,6 +160,7 @@ bool KSFloaterLighting::postBuild()
         },
         { "RenderLocalLightCount", "KSLightRigOnlyMyLights" });
     addEntry("viewer_lights", "as_my_lights");
+    mEntries.back().mProxy = "ks_lighting_proxy_viewer_lights";
     addEntry("shadows", "ks_lighting_shadows",
         []()
         {
@@ -144,6 +193,7 @@ bool KSFloaterLighting::postBuild()
         { "RenderDepthOfField", "CameraFNumber", "CameraFocalLength" });
     addEntry("vignette", "ks_lighting_vignette");
     addEntry("camera_effects", "as_camera_effects");
+    mEntries.back().mProxy = "ks_lighting_proxy_camera_effects";
 
     mModeButton = getChild<LLButton>("ks_mode");
     mModeButton->setCommitCallback([this](LLUICtrl*, const LLSD&) { setCompact(!mCompact); });
@@ -161,25 +211,21 @@ bool KSFloaterLighting::postBuild()
     mModeButton->setLabel(std::string());
     mModeButton->setHoverGlowStrength(0.33f);
 
-    mFooter = getChild<LLTextBox>("ks_footer");
-    mFooterReset = getChild<LLButton>("ks_footer_reset");
-    mFooterReset->setCommitCallback([this](LLUICtrl*, const LLSD&) { onResetEnvironment(); });
+    // The dock button takes the same header slot while the mode toggle is hidden.
+    mDockButton = getChild<LLButton>("ks_dock");
+    mDockButton->setRect(mode_rect);
+    mDockButton->setLabel(std::string());
+    mDockButton->setHoverGlowStrength(0.33f);
+    setButtonImage(mDockButton, "Icon_Restore_Foreground");
+    mDockButton->setCommitCallback([this](LLUICtrl*, const LLSD&) { onDockToggle(); });
+
     mEnvironmentConnection = LLEnvironment::instance().setEnvironmentChanged(
-        [this](LLEnvironment::EnvSelection_t, S32) { refreshStatuses(); refreshFooter(); });
+        [this](LLEnvironment::EnvSelection_t, S32) { refreshStatuses(); });
     // Pane edits change the sky in place, which sends no environment signal.
-    mConnections.push_back(KSEnvironment::editedSignal().connect([this]() { refreshStatuses(); refreshFooter(); }));
+    mConnections.push_back(KSEnvironment::editedSignal().connect([this]() { refreshStatuses(); }));
     mConnections.push_back(KSLightingPresets::changedSignal().connect([this]() { refreshStatuses(); }));
-    for (const char* name : { "RenderSkyAutoAdjustLegacy" })
-    {
-        if (LLControlVariable* control = gSavedSettings.getControl(name))
-        {
-            mConnections.push_back(control->getSignal()->connect(
-                [this](LLControlVariable*, const LLSD&, const LLSD&) { refreshFooter(); }));
-        }
-    }
 
     refreshStatuses();
-    refreshFooter();
     // The launcher stays closed (icons only; the hover tooltip names the pane) and its
     // open/closed toggle is hidden in XUI. Open mode is kept for later: to bring it back,
     // show ks_mode and restore setCompact(gSavedSettings.getBOOL("KSLightingCompact")).
@@ -199,9 +245,23 @@ void KSFloaterLighting::addEntry(const std::string& key, const std::string& floa
     entry.mStatusText = std::move(status_text);
     if (!floater.empty())
     {
-        entry.mButton->setCommitCallback([this, floater](LLUICtrl*, const LLSD&)
+        const size_t index = mEntries.size();
+        entry.mButton->setCommitCallback([this, floater, index](LLUICtrl*, const LLSD&)
             {
-                KSFloaterLightingPane::cycleFloater(floater, this);
+                // Our panes open fully or close; the oversized AyaneStorm floaters open with their
+                // proxy headers or close; others open, come forward or close.
+                if (floater.compare(0, 12, "ks_lighting_") == 0)
+                {
+                    onPaneButton(mEntries[index]);
+                }
+                else if (!mEntries[index].mProxy.empty())
+                {
+                    onProxyButton(mEntries[index]);
+                }
+                else
+                {
+                    KSFloaterLightingPane::cycleFloater(floater, this);
+                }
             });
     }
     for (const std::string& name : watched)
@@ -215,10 +275,239 @@ void KSFloaterLighting::addEntry(const std::string& key, const std::string& floa
     mEntries.push_back(entry);
 }
 
+// static
+LLFloater* KSFloaterLighting::findPaneSnap(LLFloater* pane, const LLRect& pane_rect, LLRect& slot)
+{
+    static LLCachedControl<S32> radius(gSavedSettings, "KSLightingPaneSnapRadius", 40);
+    KSFloaterLighting* launcher = LLFloaterReg::findTypedInstance<KSFloaterLighting>("ks_lighting");
+    if (radius() <= 0 || !pane || !launcher || !launcher->getVisible() || launcher->isMinimized()
+        || launcher->getHost() || pane->getHost() || launcher->getParent() != pane->getParent())
+    {
+        return nullptr;
+    }
+    for (const Entry& entry : launcher->mEntries)
+    {
+        if (entry.mFloater != pane->getInstanceName())
+        {
+            continue;
+        }
+        // Both floaters share a parent, so their rects are in the same coordinates.
+        const LLRect& launcher_rect = launcher->getRect();
+        const S32 button_top = launcher_rect.mBottom + entry.mButton->getRect().mTop;
+        const bool on_right = launcher->sideFor(pane, pane_rect.getCenterX() >= launcher_rect.getCenterX());
+        LLRect candidate = pane_rect;
+        candidate.translate(on_right ? launcher_rect.mRight - pane_rect.mLeft : launcher_rect.mLeft - pane_rect.mRight,
+                            button_top - pane_rect.mTop);
+        std::map<std::string, bool> docked = loadDocked();
+        if (llabs(candidate.mLeft - pane_rect.mLeft) > radius() || llabs(candidate.mTop - pane_rect.mTop) > radius())
+        {
+            docked.erase(entry.mFloater);
+            saveDocked(docked);
+            return nullptr;
+        }
+        docked[entry.mFloater] = on_right;
+        saveDocked(docked);
+        slot = candidate;
+        return launcher;
+    }
+    return nullptr;     // not a pane with a launcher button (Ambient opens from Settings...)
+}
+
+// static
+bool KSFloaterLighting::isDocked(const std::string& name)
+{
+    return loadDocked().count(name) > 0 || !KSFloaterLightingProxy::targetOf(name).empty();
+}
+
+bool KSFloaterLighting::sideFor(LLFloater* pane, bool on_right) const
+{
+    const LLView* parent = getParent();
+    if (!parent || !pane)
+    {
+        return on_right;
+    }
+    S32 width = pane->getRect().getWidth();
+    if (KSFloaterLightingPaneBase* ks_pane = dynamic_cast<KSFloaterLightingPaneBase*>(pane))
+    {
+        width = llmax(width, ks_pane->getFullWidth());
+    }
+    const bool room_right = parent->getRect().getWidth() - getRect().mRight >= width;
+    const bool room_left = getRect().mLeft >= width;
+    if (on_right && !room_right && room_left)
+    {
+        return false;
+    }
+    if (!on_right && !room_left && room_right)
+    {
+        return true;
+    }
+    return on_right;
+}
+
+LLRect KSFloaterLighting::paneSlot(const Entry& entry, const LLRect& pane_rect, bool on_right) const
+{
+    const LLRect& launcher_rect = getRect();
+    const S32 button_top = launcher_rect.mBottom + entry.mButton->getRect().mTop;
+    LLRect slot = pane_rect;
+    slot.translate(on_right ? launcher_rect.mRight - pane_rect.mLeft : launcher_rect.mLeft - pane_rect.mRight,
+                   button_top - pane_rect.mTop);
+    return slot;
+}
+
+std::map<std::string, bool> KSFloaterLighting::dockedPanes() const
+{
+    std::map<std::string, bool> docked = loadDocked();
+    for (const Entry& entry : mEntries)
+    {
+        if (!entry.mProxy.empty())
+        {
+            docked[entry.mProxy] = false;
+        }
+    }
+    return docked;
+}
+
+void KSFloaterLighting::onDockToggle()
+{
+    const std::map<std::string, bool> docked = dockedPanes();
+    std::vector<const Entry*> panes;        // launcher order: top to bottom
+    bool any_open = false;
+    for (const Entry& entry : mEntries)
+    {
+        if (!entry.mFloater.empty() && docked.count(dockName(entry)))
+        {
+            panes.push_back(&entry);
+            any_open |= LLFloaterReg::instanceVisible(dockName(entry));
+        }
+    }
+    if (any_open)
+    {
+        for (const Entry* entry : panes)
+        {
+            if (LLFloaterReg::instanceVisible(dockName(*entry)))
+            {
+                LLFloaterReg::hideInstance(dockName(*entry));
+            }
+        }
+        return;
+    }
+    // As each was when it closed (collapsed to the header or expanded); top to bottom, each in front.
+    for (const Entry* entry : panes)
+    {
+        const std::string& name = dockName(*entry);
+        if (LLFloater* pane = LLFloaterReg::showInstance(name, LLSD(), false))
+        {
+            KSFloaterLightingPaneBase* ks_pane = dynamic_cast<KSFloaterLightingPaneBase*>(pane);
+            if (ks_pane)
+            {
+                ks_pane->setCollapsed(false);
+            }
+            pane->setShape(paneSlot(*entry, pane->getRect(), sideFor(pane, docked.at(name))));
+            if (ks_pane)
+            {
+                // A proxy is only a header; a pane reopens as it was.
+                ks_pane->setCollapsed(entry->mProxy.empty() ? KSFloaterLightingPaneBase::wasCollapsed(name) : true);
+            }
+            pane->setVisibleAndFrontmost(false);
+        }
+    }
+}
+
+void KSFloaterLighting::onPaneButton(const Entry& entry)
+{
+    KSFloaterLightingPaneBase* pane = dynamic_cast<KSFloaterLightingPaneBase*>(LLFloaterReg::findInstance(entry.mFloater));
+    if (pane && pane->isShown() && !pane->isMinimized() && !pane->isCollapsed()
+        && KSFloaterLightingPaneBase::topmostFloater(this) == pane)
+    {
+        pane->closeFloater();
+        return;
+    }
+    pane = dynamic_cast<KSFloaterLightingPaneBase*>(LLFloaterReg::showInstance(entry.mFloater, LLSD(), false));
+    if (!pane)
+    {
+        return;
+    }
+    if (pane->isMinimized())
+    {
+        pane->setMinimized(false);
+    }
+    pane->setCollapsed(false);
+    const std::map<std::string, bool> docked = loadDocked();
+    auto side = docked.find(entry.mFloater);
+    if (side != docked.end())
+    {
+        pane->setShape(paneSlot(entry, pane->getRect(), sideFor(pane, side->second)));
+    }
+    pane->setVisibleAndFrontmost(true);
+}
+
+void KSFloaterLighting::onProxyButton(const Entry& entry)
+{
+    LLFloater* floater = LLFloaterReg::findInstance(entry.mFloater);
+    if (floater && floater->isShown() && !floater->isMinimized()
+        && KSFloaterLightingPaneBase::topmostFloater(this) == floater)
+    {
+        floater->closeFloater();
+        if (LLFloater* proxy = LLFloaterReg::findInstance(entry.mProxy))
+        {
+            proxy->closeFloater();
+        }
+        return;
+    }
+    if (LLFloater* proxy = LLFloaterReg::showInstance(entry.mProxy, LLSD(), false))
+    {
+        proxy->setShape(paneSlot(entry, proxy->getRect(), sideFor(proxy, false)));
+        proxy->setVisibleAndFrontmost(false);
+    }
+    if (LLFloater* opened = LLFloaterReg::showInstance(entry.mFloater, LLSD(), true))
+    {
+        if (opened->isMinimized())
+        {
+            opened->setMinimized(false);
+        }
+        opened->setVisibleAndFrontmost(true);
+    }
+}
+
+void KSFloaterLighting::refreshDockButton()
+{
+    const std::map<std::string, bool> docked = dockedPanes();
+    bool any_docked = false;
+    bool any_open = false;
+    for (const Entry& entry : mEntries)
+    {
+        if (!entry.mFloater.empty() && docked.count(dockName(entry)))
+        {
+            any_docked = true;
+            any_open |= LLFloaterReg::instanceVisible(dockName(entry));
+        }
+    }
+    mDockButton->setToolTip(std::string(!any_docked ? "No docked panes: drag a pane next to its button to dock it."
+                                        : any_open  ? "Close the docked panes"
+                                                    : "Open the docked panes"));
+}
+
 void KSFloaterLighting::onOpen(const LLSD& key)
 {
     refreshStatuses();
-    refreshFooter();
+}
+
+void KSFloaterLighting::onClose(bool app_quitting)
+{
+    if (!app_quitting)
+    {
+        // Docked panes belong to the launcher: they go with it. Undocked panes stay.
+        const std::map<std::string, bool> docked = dockedPanes();
+        for (const Entry& entry : mEntries)
+        {
+            const std::string& name = dockName(entry);
+            if (!entry.mFloater.empty() && docked.count(name) && LLFloaterReg::instanceVisible(name))
+            {
+                LLFloaterReg::hideInstance(name);
+            }
+        }
+    }
+    LLFloater::onClose(app_quitting);
 }
 
 void KSFloaterLighting::draw()
@@ -231,7 +520,39 @@ void KSFloaterLighting::draw()
             entry.mButton->setToggleState(LLFloaterReg::instanceVisible(entry.mFloater));
         }
     }
+    refreshDockButton();
+    keepDockedPanesInPlace();
     LLFloater::draw();
+}
+
+void KSFloaterLighting::keepDockedPanesInPlace()
+{
+    if (isMinimized() || getHost())
+    {
+        return;
+    }
+    const std::map<std::string, bool> docked = dockedPanes();
+    // A pane being dragged follows the mouse; findPaneSnap() decides whether it stays docked.
+    const LLView* captor = dynamic_cast<const LLView*>(gFocusMgr.getMouseCapture());
+    for (const Entry& entry : mEntries)
+    {
+        auto side = docked.find(dockName(entry));
+        if (entry.mFloater.empty() || side == docked.end())
+        {
+            continue;
+        }
+        LLFloater* pane = LLFloaterReg::findInstance(dockName(entry));
+        if (!pane || !pane->getVisible() || pane->isMinimized() || pane->getHost()
+            || pane->getParent() != getParent() || (captor && captor->hasAncestor(pane)))
+        {
+            continue;
+        }
+        const LLRect slot = paneSlot(entry, pane->getRect(), sideFor(pane, side->second));
+        if (slot.mLeft != pane->getRect().mLeft || slot.mTop != pane->getRect().mTop)
+        {
+            pane->setShape(slot);
+        }
+    }
 }
 
 void KSFloaterLighting::refreshStatuses()
@@ -240,24 +561,6 @@ void KSFloaterLighting::refreshStatuses()
     {
         entry.mStatus->setText(entry.mStatusText ? entry.mStatusText() : std::string());
     }
-}
-
-void KSFloaterLighting::refreshFooter()
-{
-    static LLCachedControl<bool> auto_adjust(gSavedSettings, "RenderSkyAutoAdjustLegacy", false);
-    LLEnvironment& environment = LLEnvironment::instance();
-    const LLSettingsSky::ptr_t sky = environment.getCurrentSky();
-    const bool local = environment.hasEnvironment(LLEnvironment::ENV_LOCAL);
-
-    std::string text;
-    if (sky)
-    {
-        const bool legacy = sky->canAutoAdjust() && auto_adjust();
-        text = llformat("%s sky - Fill %.2f", legacy ? "Legacy" : "EEP", sky->getReflectionProbeAmbiance(auto_adjust()));
-    }
-    text += local ? " - Local override" : " - Shared env";
-    mFooter->setText(text);
-    mFooterReset->setVisible(local && !mCompact);
 }
 
 void KSFloaterLighting::setCompact(bool compact)
@@ -274,26 +577,11 @@ void KSFloaterLighting::setCompact(bool compact)
         rect.mRight = rect.mLeft + width - BUTTON_MARGIN;
         entry.mButton->setRect(rect);
     }
-    mFooter->setVisible(!compact);
-    LLPointer<LLUIImage> arrow = LLUI::getUIImage(compact ? "Arrow_Small_Right" : "Arrow_Small_Left");
-    mModeButton->setImageUnselected(arrow);
-    mModeButton->setImageSelected(arrow);
-    mModeButton->setImageHoverUnselected(arrow);
-    mModeButton->setImageHoverSelected(arrow);
-    mModeButton->setImagePressed(arrow);
-    mModeButton->setImageDisabled(arrow);
-    mModeButton->setImageDisabledSelected(arrow);
+    setButtonImage(mModeButton, compact ? "Arrow_Small_Right" : "Arrow_Small_Left");
     mModeButton->setToolTip(std::string(compact ? "Show labels and status" : "Icons only"));
     setTitle(compact ? std::string() : getString("title_full"));
     // Keep the right edge in place: folding shrinks toward the right, unfolding grows to the left.
     const S32 right = getRect().mRight;
     reshape(width, getRect().getHeight());
     translate(right - getRect().mRight, 0);
-    refreshFooter();
-}
-
-void KSFloaterLighting::onResetEnvironment()
-{
-    // Same as Quick > Use Shared; also turns Use KS Reference off (A4).
-    KSEnvironment::useShared();
 }
