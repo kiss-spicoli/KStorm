@@ -232,6 +232,16 @@ void KSFloaterLightingPaneBase::draw()
     }
 }
 
+void KSFloaterLightingPaneBase::setMinimized(bool minimize)
+{
+    if (minimize && !isMinimized() && KSFloaterLighting::isDocked(getInstanceName()))
+    {
+        setCollapsed(!mCollapsed);
+        return;
+    }
+    LLFloater::setMinimized(minimize);
+}
+
 void KSFloaterLightingPaneBase::onClose(bool app_quitting)
 {
     // KSLightingPaneStates holds "name:C" (collapsed) or "name:E" (expanded), separated by ";".

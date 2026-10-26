@@ -42,6 +42,9 @@ public:
     // records whether the pane is docked, and on which side (KSLightingDockedPanes).
     static LLFloater* findPaneSnap(LLFloater* pane, const LLRect& pane_rect, LLRect& slot);
 
+    // True for a pane docked beside the launcher (KSLightingDockedPanes) and for proxy headers.
+    static bool isDocked(const std::string& name);
+
 private:
     struct Entry
     {

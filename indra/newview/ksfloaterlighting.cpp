@@ -313,6 +313,12 @@ LLFloater* KSFloaterLighting::findPaneSnap(LLFloater* pane, const LLRect& pane_r
     return nullptr;     // not a pane with a launcher button (Ambient opens from Settings...)
 }
 
+// static
+bool KSFloaterLighting::isDocked(const std::string& name)
+{
+    return loadDocked().count(name) > 0 || !KSFloaterLightingProxy::targetOf(name).empty();
+}
+
 LLRect KSFloaterLighting::paneSlot(const Entry& entry, const LLRect& pane_rect, bool on_right) const
 {
     const LLRect& launcher_rect = getRect();

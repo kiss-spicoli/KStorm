@@ -62,6 +62,10 @@ public:
     // the same click, an expanded one only comes forward.
     bool handleMouseDown(S32 x, S32 y, MASK mask) override;
     void draw() override;
+    // Docked, the minimize button collapses the pane to its header bar (or expands it again)
+    // instead of minimizing it; an undocked pane minimizes as usual.
+    void setMinimized(bool minimize) override;
+
     // Remembers whether the pane was collapsed, then expands before closing, so the saved
     // size is the full one.
     void onClose(bool app_quitting) override;
