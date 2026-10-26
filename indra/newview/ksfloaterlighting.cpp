@@ -180,7 +180,10 @@ bool KSFloaterLighting::postBuild()
 
     refreshStatuses();
     refreshFooter();
-    setCompact(gSavedSettings.getBOOL("KSLightingCompact"));
+    // The launcher stays closed (icons only; the hover tooltip names the pane) and its
+    // open/closed toggle is hidden in XUI. Open mode is kept for later: to bring it back,
+    // show ks_mode and restore setCompact(gSavedSettings.getBOOL("KSLightingCompact")).
+    setCompact(true);
     return true;
 }
 

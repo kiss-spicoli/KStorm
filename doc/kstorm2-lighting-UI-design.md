@@ -540,7 +540,7 @@ Layout variant under evaluation (2026-10-24): accordions replaced by buttons tha
 
 **This section is the implementation reference.** It is generated from the v4 mock-up (`v4-list.html`, kept local and outside the repository) after all its regrouping. §2–§6 and their dated notes remain as the decision history; where they differ from this section, this section wins.
 
-**Launch floater "KStorm Lighting".** No controls, only one button per pane; each opens its pane as its own movable floater. Each button shows a 16×16 icon, its label and a short status. A title-bar toggle switches between the full list (225 px) and an icon strip (about 44 px; the name is the hover tooltip; no footer). Footer: sky origin, Probe Fill in use, and Shared env / Local override with a separate Reset button. Exposure's list status shows the Exposure value only (A8). Opened by a toolbar button (icon TBD), the **KStorm › KStorm Lighting** menu item, and its hotkey **Alt+Shift+L** (A13; free in every menu and in code).
+**Launch floater "KStorm Lighting".** No controls, only one button per pane; each opens its pane as its own movable floater. Each button shows a 16×16 icon, its label and a short status. A title-bar toggle switches between the full list (225 px) and an icon strip (about 44 px; the name is the hover tooltip; no footer). **For now (decided 2026-10-26) the launcher is always the icon strip and the toggle is hidden**; the full list and its toggle stay in the code (A10). Footer: sky origin, Probe Fill in use, and Shared env / Local override with a separate Reset button. Exposure's list status shows the Exposure value only (A8). Opened by a toolbar button (icon TBD), the **KStorm › KStorm Lighting** menu item, and its hotkey **Alt+Shift+L** (A13; free in every menu and in code).
 
 **Tooltip suffixes.** Every control Use KS Reference writes ends its tooltip with "(KS Reference)" (A3): Sun azimuth and elevation, Moon azimuth and elevation, Sun & Moon Light, Sky Ambient Gain, Haze Density, Haze Glow Brightness, Strength and Focus, Sky HDR Scale, Probe Fill Strength, Show avatar names, Subject sort, Dynamic exposure. Exposure, Dynamic exposure, Tone mapping, Tone mapping mix and Glow end with "No effect while Build › Options › No Post-processing is on and the Build floater is open." (D3).
 
@@ -778,7 +778,7 @@ Nothing here is built. Each branch is cut from `kstorm`, one feature per branch;
 
 ### 11.1 Architecture
 
-- **Launch floater** `ks_lighting` (`floater_ks_lighting.xml`, class `KSFloaterLighting`): a `layout_stack` with a scroll list of rows (button with `image_overlay` icon, left-aligned, plus a status `text`) and a footer `text` with a separate Reset `button`. Compact toggle hides labels, statuses and footer and reshapes the width; the choice persists in a new setting `KSLightingCompact`. Statuses refresh from settings signals and from `LLEnvironment::setEnvironmentChanged` (pattern: `llfloaterenvironmentadjust.cpp:136`), not every frame.
+- **Launch floater** `ks_lighting` (`floater_ks_lighting.xml`, class `KSFloaterLighting`): a `layout_stack` with a scroll list of rows (button with `image_overlay` icon, left-aligned, plus a status `text`) and a footer `text` with a separate Reset `button`. Compact toggle hides labels, statuses and footer and reshapes the width; the choice persists in a new setting `KSLightingCompact`. For now `postBuild()` always calls `setCompact(true)` and the toggle (`ks_mode`) is `visible="false"` (A10). Statuses refresh from settings signals and from `LLEnvironment::setEnvironmentChanged` (pattern: `llfloaterenvironmentadjust.cpp:136`), not every frame.
 - **Panes:** 13 floaters of our own (Quick, Sun/Moon, Atmosphere, Clouds, Water, Reflections, All lights, Shadows, Exposure, Glow, Depth of field, Vignette, Ambient), named `ks_lighting_<pane>`. One generic class `KSFloaterLightingPane` driven by its XML:
   - viewer settings bind with `control_name` (no code);
   - sky and water values use a naming convention on the widget `name` (for example `sky_haze_density`) that the class maps to `LLSettingsSky` / `LLSettingsWater` getters and setters;
@@ -825,7 +825,7 @@ Add `RenderDynamicExposureEnabled` handling: save, set false, restore on off. Wh
 3. Status text and footer update when values change from another floater.
 4. Use KS Reference on: every surfaced value it writes shows; off: all restored; Dynamic exposure disabled only while on.
 5. Use Shared returns to the shared sky instantly and the panes follow.
-6. Compact toggle keeps its state across a restart.
+6. The launcher opens as the icon strip with no mode toggle, and each button's hover tooltip is its pane label (while A10 hides the full list; with the toggle back, the toggle keeps its state across a restart).
 
 ### 11.7 Corrections found in review
 
@@ -968,7 +968,7 @@ General rule: do not change LL, FS or AS behavior, except for whatever competes 
 | A7 | Ambient pane access | **Approved:** Ambient occlusion (with Settings…) and Probe Fill Strength are also at the bottom of Shadows (duplicates allowed). 2026-10-26: Sky Ambient Gain (was Ambient Brightness) is on Sun/Moon only. |
 | A8 | Exposure entry status | **Exposure value only.** |
 | A9 | Water labels | **Adopted:** Water fog color, Water fog density, Underwater fog multiplier. |
-| A10 | Compact mode | **Adopted.** Icons: the mock-up's placeholders stand for now; real 16×16 icons (16, including Lighting Presets and the toolbar button) are the next task. |
+| A10 | Compact mode | **Adopted.** 2026-10-26: the launcher is locked to compact mode (icon strip; hover tooltip = pane label) and the mode toggle is hidden; the full list and toggle stay in the code for later. Icons: the mock-up's placeholders stand for now; real 16×16 icons (16, including Lighting Presets and the toolbar button) are the next task. |
 | A11 | Eye mask radius | Not in AyaneStorm's My Lights floater today (`ASLightRigEyeMaskRadius`, default 0.02). **Decided 2026-10-25: add a control to her floater**, in its own session and branch (`feat-my-lights-eye-mask`). It stays a KS Reference value. |
 | A12 | O15 viewer-only light overrides | **Future** (decided 2026-10-25). Details in §12.4. |
 | A13 | Opening KStorm Lighting | **Decided 2026-10-25:** toolbar button (icon mocked; final icon with the others) and **hotkey Alt+Shift+L** (menu shortcut on a new menu item; free in every menu and in code). |
