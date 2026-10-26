@@ -127,7 +127,7 @@ namespace
             { "moon_scale", { [](LLSettingsSky& s) { return s.getMoonScale(); }, [](LLSettingsSky& s, F32 v) { s.setMoonScale(v); } } },
             { "moon_brightness", { [](LLSettingsSky& s) { return s.getMoonBrightness(); }, [](LLSettingsSky& s, F32 v) { s.setMoonBrightness(v); } } },
             { "star_brightness", { [](LLSettingsSky& s) { return s.getStarBrightness(); }, [](LLSettingsSky& s, F32 v) { s.setStarBrightness(v); } } },
-            // Ambient Brightness: luminance of the stored ambient color, hue kept (gray when black).
+            // Sky Ambient Gain: luminance of the stored ambient color, hue kept (gray when black).
             { "ambient_brightness", { [](LLSettingsSky& s) { return luminance(s.getAmbientColor()); },
                                       [](LLSettingsSky& s, F32 v)
                                       {

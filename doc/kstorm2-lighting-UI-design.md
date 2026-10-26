@@ -38,7 +38,7 @@ Search terms: KStorm2 UI, lighting panels, P1 Environment, P2 Tone, P3 Shadows O
   - [6.3 Status, presets and expert](#63-status-presets-and-expert)
 - [7. Open items](#7-open-items)
 - [8. Resolution notes](#8-resolution-notes)
-  - [8.1 Ambient Brightness: physical units (O1)](#81-ambient-brightness-physical-units-o1)
+  - [8.1 Sky Ambient Gain: physical units (O1)](#81-sky-ambient-gain-physical-units-o1)
   - [8.2 Dynamic exposure (O4)](#82-dynamic-exposure-o4)
   - [8.3 My Lights falloff (O3)](#83-my-lights-falloff-o3)
   - [8.4 Ranges confirmed (O7)](#84-ranges-confirmed-o7)
@@ -101,7 +101,7 @@ Range notation: `min–max / step`. A pair is written `slider min–max / step; 
 | My Environments… | toggle button `my_environments` (R15) | The sky, water and day-cycle asset editors are not reachable from this panel (decided 2026-10-24). |
 | Sky / Water / Day presets, prev/next | as Phototools preset combos (`quickprefs.cpp`) | |
 | ~~Reset to region default~~ | as Phototools `ResetToRegionDefault` | **Dropped 2026-10-25:** same result as Use Shared (both clear the local override via `LLEnvironment` ENV_LOCAL), but with a blended transition and no probe reset. Use Shared stays, wired as menu World › Environment › Use Shared Environment (`World.EnvSettings` "region": instant, resets probes). |
-| Set KS environment, **labelled "Use KS Reference"** (decided 2026-10-25). **Also turns Dynamic exposure off and disables its check box** (`RenderDynamicExposureEnabled` = FALSE). Its previous state is saved and restored when Use KS Reference is turned off (decided 2026-10-25, "for now"; not yet in `ksenvironment.cpp`). Reason: with Sky HDR Scale 0.1 the auto-exposure range is 1–1, so Dynamic exposure could have no effect anyway. Exposure (`RenderExposure`) stays fully effective: it multiplies the scene in the tone-map pass whatever the auto-exposure factor is. **Surfaced values it writes** (`ksenvironment.cpp`), which every open pane must show while it is on and show restored when it is off: Sun azimuth 0, Sun elevation 6, Moon azimuth 180, Moon elevation −90, Sun & Moon Light (0.48, 0.64, 0.72), Ambient Brightness 2.43 (luminance of ambient (0.88, 0.82, 0.52) × 3), Haze Density 0.1, Haze Glow Brightness 0.15, Haze Glow Strength 1.9, Haze Glow Focus 0.1, Sky HDR Scale 0.1, Probe Fill Strength 0.01, Show avatar names off (`AvatarNameTagMode` 0), Subject sort on. Not surfaced: `RenderFarClip` 16, `RenderAvatarMaxNonImpostors` 4. The code disables no control; Dynamic exposure is the only one disabled, by this design. **Legacy-sky mismatch:** the code writes the sky's `gamma` and probe ambiance directly, but for an auto-adjusted legacy sky our Sky HDR Scale shows `RenderSkyAutoAdjustHDRScale` and Probe Fill shows the auto-adjust value, so neither would show what KS set. **Resolved in review:** setting probe ambiance clears the sky's auto-adjust flag, so KS turns the local copy into an EEP sky and the panes show its values after the environment-changed rebind (§11.2). | `KSSetEnvironment` (check box) | Note: sets Sky HDR Scale 0.1, which pins auto-exposure (P2). |
+| Set KS environment, **labelled "Use KS Reference"** (decided 2026-10-25). **Also turns Dynamic exposure off and disables its check box** (`RenderDynamicExposureEnabled` = FALSE). Its previous state is saved and restored when Use KS Reference is turned off (decided 2026-10-25, "for now"; not yet in `ksenvironment.cpp`). Reason: with Sky HDR Scale 0.1 the auto-exposure range is 1–1, so Dynamic exposure could have no effect anyway. Exposure (`RenderExposure`) stays fully effective: it multiplies the scene in the tone-map pass whatever the auto-exposure factor is. **Surfaced values it writes** (`ksenvironment.cpp`), which every open pane must show while it is on and show restored when it is off: Sun azimuth 0, Sun elevation 6, Moon azimuth 180, Moon elevation −90, Sun & Moon Light (0.48, 0.64, 0.72), Sky Ambient Gain 2.43 (luminance of ambient (0.88, 0.82, 0.52) × 3), Haze Density 0.1, Haze Glow Brightness 0.15, Haze Glow Strength 1.9, Haze Glow Focus 0.1, Sky HDR Scale 0.1, Probe Fill Strength 0.01, Show avatar names off (`AvatarNameTagMode` 0), Subject sort on. Not surfaced: `RenderFarClip` 16, `RenderAvatarMaxNonImpostors` 4. The code disables no control; Dynamic exposure is the only one disabled, by this design. **Legacy-sky mismatch:** the code writes the sky's `gamma` and probe ambiance directly, but for an auto-adjusted legacy sky our Sky HDR Scale shows `RenderSkyAutoAdjustHDRScale` and Probe Fill shows the auto-adjust value, so neither would show what KS set. **Resolved in review:** setting probe ambiance clears the sky's auto-adjust flag, so KS turns the local copy into an EEP sky and the panes show its values after the environment-changed rebind (§11.2). | `KSSetEnvironment` (check box) | Note: sets Sky HDR Scale 0.1, which pins auto-exposure (P2). |
 | Sky origin | read-only: "Legacy sky (auto-adjusted)" / "EEP sky" | R2. |
 | Local override active + Reset | indicator; Reset = Personal Lighting reset | R9. |
 
@@ -112,7 +112,7 @@ Range notation: `min–max / step`. A pair is written `slider min–max / step; 
 | Sun azimuth, Sun elevation | sky `sun_rotation` | 0–359.99 / 0.01; −90–90 / 0.01 | | No trackball (R6). | `llpaneleditsky.cpp` |
 | Moon azimuth, Moon elevation | sky `moon_rotation` | same | | same | same |
 | **Sun & Moon Light Color** | sky `sunlight_color` | color + intensity, 0–3 per channel | "Light color of both the sun and the moon." | Color/intensity split replaces the ÷3 swatch. | `llsettingsvo.cpp:797-807` |
-| Sunlight Scale | `RenderHDRSkySunlightScale` | 0–20 / 0.01 | "Brightness of direct sun and moon light." | | `llsettingsvo.cpp:838` |
+| Sunlight Gain | `RenderHDRSkySunlightScale` | 0–20 / 0.01 | "Brightness of direct sun and moon light." | | `llsettingsvo.cpp:838` |
 | Sun scale | sky `sun_scale` | 0.25–20 / 0.01 | "Larger discs fade out later at the horizon." | Also moves the twilight fade. | `ascelestialtwilight.cpp` |
 | Moon scale | sky `moon_scale` | 0.25–20 / 0.01 | same | same | same |
 | **Moon Disk Brightness** | sky `moon_brightness` | 0–1 / 0.01 | "Brightness of the moon disc and night glow. Does not change moonlight on surfaces." | | `moonF.glsl:270` |
@@ -123,9 +123,9 @@ Range notation: `min–max / step`. A pair is written `slider min–max / step; 
 
 | Label | Binding | Range / step | Tooltip | Behaviour | Code site |
 |---|---|---|---|---|---|
-| **Ambient Brightness** | sky `ambient` (scales the stored color; hue kept) | 0–3 / 0.01 (Rec.709 luminance of the stored color; gray fallback when black, §8.1) | "Brightness of sky fill light. Its color comes from the sky; surfaces use brightness only. At Probe Fill Strength ≥ 1 this no longer lights surfaces." | Writes ENV_LOCAL (R9). | `atmosphericsFuncs.glsl:110-157` |
-| Ambient Scale | `RenderSkyAmbientScale` | −10–40 / 0.1 | "Scales all sky fill. Negative values darken lit areas." | Negatives allowed. | `atmosphericsFuncs.glsl:164` |
-| **Probe Fill Strength** | sky `reflection_probe_ambiance` | 0.01–10 / 0.01 | "Low: fill from sky ambient (uniform). High: fill from probes (bounce light, darker interiors). Reflections are unaffected." | Disabled when probes are off (value forced to 1.0 then, `llsettingsvo.cpp:858`). Writes ENV_LOCAL. | `reflectionProbeF.glsl:569-571`, `llreflectionmapmanager.cpp:1221` |
+| **Sky Ambient Gain** | sky `ambient` (scales the stored color; hue kept) | 0–3 / 0.01 (Rec.709 luminance of the stored color; gray fallback when black, §8.1) | "Brightness of the sky's ambient color, saved with the sky (hue kept). Reaches the sky, clouds, haze and surface fill; water only through reflected sky. Surfaces use its brightness only. At Probe Fill Strength 1 or more it no longer lights surfaces." | Writes ENV_LOCAL (R9). | `atmosphericsFuncs.glsl:110-157` |
+| Surface Ambient Gain | `RenderSkyAmbientScale` | −10–40 / 0.1 | "Multiplies ambient fill on surfaces only, so it shows most up close. Does not change the sky, clouds, haze or water. At Probe Fill Strength 1 or more it no longer lights surfaces. Negative values darken lit areas." | Negatives allowed. | `atmosphericsFuncs.glsl:164` |
+| **Probe Fill Strength** | sky `reflection_probe_ambiance` | 0.01–10 / 0.01 | "<1: fill from sky ambient (uniform). >=1: fill from probes (bounce light, darker interiors). At a probe fill of 1 or more, probe irradiance fully replaces ambient wherever probes cover the surface. Reflections are unaffected." | Disabled when probes are off (value forced to 1.0 then, `llsettingsvo.cpp:858`). Writes ENV_LOCAL. | `reflectionProbeF.glsl:569-571`, `llreflectionmapmanager.cpp:1221` |
 
 ### 2.4 Haze (section label "Haze", no special highlighting; one block, in this order)
 
@@ -367,7 +367,7 @@ Not included (decided 2026-10-24): "Enable Reflection Probe Selection" (`SelectR
 - **Display** (§6.2): its controls move to the bottom of Quick.
 - **Presets & quality:** not surfaced: no Quality slider, no Save preset… or Load preset…, and no preset-overwrite warning. Preset load is future research, O16.
 - **Presets (environment):** the Sky preset and Water preset pickers are not surfaced (§2.1). Quick starts with My Environments… and Environment Effects…, then the Use Shared button.
-- **Quick order (decided 2026-10-25):** My Environments…, Environment Effects…; Use Shared; Dynamic exposure with Use KS Reference to its right (one row); Exposure; Shadows; Sun azimuth, Sun elevation, Sunlight Scale, Haze Density, Sky HDR Scale; Ambient occlusion with a **Settings…** button that opens the **Ambient** pane; Ambient Brightness, Probe Fill Strength; Show avatars, Show avatar names. The Ambient pane is the Occlusion pane (§4.2) renamed, with the Ambient controls (§2.3: Probe Fill in use, Ambient Brightness, Ambient Scale, Probe Fill Strength and their notes) added at the top. Neither Ambient nor Occlusion is an entry in the launch list; the pane opens only from that Settings… button. Ambient Brightness on Quick and in Ambient is one control (same binding).
+- **Quick order (decided 2026-10-25):** My Environments…, Environment Effects…; Use Shared; Dynamic exposure with Use KS Reference to its right (one row); Exposure; Shadows; Sun azimuth, Sun elevation, Sunlight Gain, Haze Density, Sky HDR Scale; Ambient occlusion with a **Settings…** button that opens the **Ambient** pane; Sky Ambient Gain, Probe Fill Strength; Show avatars, Show avatar names. The Ambient pane is the Occlusion pane (§4.2) renamed, with the Ambient controls (§2.3: Probe Fill in use, Sky Ambient Gain, Surface Ambient Gain, Probe Fill Strength and their notes) added at the top. Neither Ambient nor Occlusion is an entry in the launch list; the pane opens only from that Settings… button. Sky Ambient Gain on Quick and in Ambient is one control (same binding).
 - **Status:** Sky origin moves to the top of Environment › Sun/Moon, and Probe Fill in use to the top of Environment › Ambient. HDR / post and Auto-exposure are not surfaced, as status rows or in the footer.
 
 | Item | Content |
@@ -387,13 +387,13 @@ Not included (decided 2026-10-24): "Enable Reflection Probe Selection" (`SelectR
 
 | # | Item | Status |
 |---|---|---|
-| O1 | Ambient Brightness definition | **Resolved:** Rec.709 luminance of the stored color, 0–3 / 0.01, gray fallback when black (§8.1). |
+| O1 | Sky Ambient Gain definition | **Resolved:** Rec.709 luminance of the stored color, 0–3 / 0.01, gray fallback when black (§8.1). |
 | O2 | Legacy-sky conversion | **Resolved:** LL's default auto-adjust (R2). |
 | O3 | My Lights falloff | **Resolved as recommended:** curve combo Stock / Shaped / Smooth plateau / Physical, default Shaped at Softness 1; positive out-of-range falloff value decoded in `calcLegacyDistanceAttenuation`; legacy-material alpha included via `alphaF.glsl` (§8.3). |
 | O4 | Dynamic exposure | **Resolved:** labels and ranges as proposed in §8.2 (now in §3). |
 | O5 | Expert settings with no existing UI | **Closed** (decided 2026-10-25): none are surfaced. The safe ones are held by Use KS Reference (§12.1, §12.5); glow internals and HDRI are not in the KStorm UI; Eye mask radius gets a control in AyaneStorm's My Lights (A11). |
 | O6 | NaN guard for Haze Density 0 | **Done:** committed `2c8a7e9d438` on `fix-haze-zero-nan-guards`; not merged, not built (the shader validator named in AGENTS.md is not in the repo). |
-| O7 | "As-is" ranges | **Resolved:** Sunlight Scale 0–20 / 0.01 (KS); Max nearby lights 0–512. |
+| O7 | "As-is" ranges | **Resolved:** Sunlight Gain 0–20 / 0.01 (KS); Max nearby lights 0–512. |
 | O8 | Transition time | **Resolved:** kept at 0 (instant), not exposed (R11). Effect: seconds to blend when a sky, water or day cycle is picked manually (inventory apply, World > Environment presets, preset combos); not used for region/parcel changes or day-cycle progression (`llenvironment.cpp:1391-1395`). |
 | O9 | Trackball | **Resolved:** removed from the new UI. |
 | O10 | Glow Size label | **Resolved:** Haze Glow Strength. |
@@ -408,11 +408,11 @@ Not included (decided 2026-10-24): "Enable Reflection Probe Selection" (`SelectR
 
 ## 8. Resolution notes
 
-### 8.1 Ambient Brightness: physical units (O1)
+### 8.1 Sky Ambient Gain: physical units (O1)
 
 There is no physical reference unit. The sky `ambient` field is a unitless RGB triple (validated 0–3 per channel). On its way to the screen it passes through non-photometric steps: cloud boost, `pow(x, 0.9) × 0.57`, sRGB-to-linear, reduction to Rec.709 luminance, × `RenderSkyAmbientScale` (`atmosphericsFuncs.glsl:113-164`), then exposure and tonemapping. The renderer works in arbitrary scene-referred units; the only absolute number in the chain is the 11.2 ceiling in `clampHDRRange` (`deferredUtil.glsl:83-93`), a safety clamp, not a calibration. No lux, nits or EV mapping exists.
 
-Proposal: Ambient Brightness = Rec.709 luminance of the stored color (the weights the shader uses), 0–3 / 0.01. It scales all three channels together and stops before any channel passes 3. If the stored color is black, writing a value sets neutral gray of that luminance.
+Proposal: Sky Ambient Gain = Rec.709 luminance of the stored color (the weights the shader uses), 0–3 / 0.01. It scales all three channels together and stops before any channel passes 3. If the stored color is black, writing a value sets neutral gray of that luminance.
 
 ### 8.2 Dynamic exposure (O4)
 
@@ -479,7 +479,7 @@ UI: a Curve combo (Stock / Shaped / Smooth plateau / Physical) plus the existing
 
 ### 8.4 Ranges confirmed (O7)
 
-KS Sunlight scale is 0–20 / 0.01 (Advanced Lighting is 0–50 / 0.1); the new UI uses 0–20. Max nearby lights 0–512.
+KS Sunlight Gain is 0–20 / 0.01 (Advanced Lighting is 0–50 / 0.1); the new UI uses 0–20. Max nearby lights 0–512.
 
 
 ### 8.5 Viewer-only light overrides (O15)
@@ -542,7 +542,7 @@ Layout variant under evaluation (2026-10-24): accordions replaced by buttons tha
 
 **Launch floater "KStorm Lighting".** No controls, only one button per pane; each opens its pane as its own movable floater. Each button shows a 16×16 icon, its label and a short status. A title-bar toggle switches between the full list (225 px) and an icon strip (about 44 px; the name is the hover tooltip; no footer). Footer: sky origin, Probe Fill in use, and Shared env / Local override with a separate Reset button. Exposure's list status shows the Exposure value only (A8). Opened by a toolbar button (icon TBD), the **KStorm › KStorm Lighting** menu item, and its hotkey **Alt+Shift+L** (A13; free in every menu and in code).
 
-**Tooltip suffixes.** Every control Use KS Reference writes ends its tooltip with "(KS Reference)" (A3): Sun azimuth and elevation, Moon azimuth and elevation, Sun & Moon Light, Ambient Brightness, Haze Density, Haze Glow Brightness, Strength and Focus, Sky HDR Scale, Probe Fill Strength, Show avatar names, Subject sort, Dynamic exposure. Exposure, Dynamic exposure, Tone mapping, Tone mapping mix and Glow end with "No effect while Build › Options › No Post-processing is on and the Build floater is open." (D3).
+**Tooltip suffixes.** Every control Use KS Reference writes ends its tooltip with "(KS Reference)" (A3): Sun azimuth and elevation, Moon azimuth and elevation, Sun & Moon Light, Sky Ambient Gain, Haze Density, Haze Glow Brightness, Strength and Focus, Sky HDR Scale, Probe Fill Strength, Show avatar names, Subject sort, Dynamic exposure. Exposure, Dynamic exposure, Tone mapping, Tone mapping mix and Glow end with "No effect while Build › Options › No Post-processing is on and the Build floater is open." (D3).
 
 Order: Quick; Sun/Moon, Atmosphere, Clouds, Water, Reflections, Environment Effects; All lights, Viewer Lights, Shadows, Exposure, Glow (material); Depth of field, Vignette, Camera Effects. The Ambient pane is not in the list; Quick › Ambient occlusion › **Settings…** opens it.
 
@@ -560,30 +560,32 @@ Bindings: `sky …` = a value of the current sky, written through `KSEnvironment
 | Shadows | `RenderShadowDetail` | None; Sun & Moon; Sun & Moon + Projectors | Sun & Moon + Projectors | |
 | Sun azimuth | `sky sun_rotation` | 0–359.99 / 0.01 | 180 | |
 | Sun elevation | `sky sun_rotation` | -90–90 / 0.01 | 45 | |
-| Sunlight Luminance | `RenderHDRSkySunlightScale` | 0–20 / 0.01 | 1 | Brightness of direct sun and moon light. (Renamed from Sunlight Scale 2026-10-25.) |
-| Ambient Luminance | `RenderSkyAmbientScale` | -10–40 / 0.1 | 1 | Scales all sky fill. Negative values darken lit areas. Loading a graphics preset resets it to 1. (Added 2026-10-25.) |
+| Sunlight Gain | `RenderHDRSkySunlightScale` | 0–20 / 0.01 | 1 | Brightness of direct sun and moon light. (Renamed from Sunlight Scale 2026-10-25, from Sunlight Luminance 2026-10-26.) |
+| Surface Ambient Gain | `RenderSkyAmbientScale` | -10–40 / 0.1 | 1 | Multiplies ambient fill on surfaces only, so it shows most up close. Does not change the sky, clouds, haze or water. At Probe Fill Strength 1 or more it no longer lights surfaces. Negative values darken lit areas. Loading a graphics preset resets it to 1. (Added 2026-10-25; renamed from Ambient Luminance 2026-10-26.) |
 | Haze Density | `sky haze_density` | 0–5 / 0.01 | 0.7 | At 0, Haze Glow Strength, Haze Glow Focus and Haze Glow Brightness stop working, fog takes Air Glow Color only, and distance fog depends on Air Density's red channel. |
 | Sky HDR Scale | `sky gamma` (EEP) / `RenderSkyAutoAdjustHDRScale` (legacy) | 0–20 / 0.01 | 1 | Brightness of sky and haze relative to the scene; also sets how far auto-exposure can adjust. At 0.25 or below, auto-exposure is fixed at 1. |
 | Ambient occlusion + **Settings…** (opens Ambient) | `RenderDeferredSSAO` | check box | true | |
-| Ambient Brightness | `sky ambient` (Rec.709 luminance, hue kept) | 0–3 / 0.01 | 0.25 | Brightness of sky fill light. Its color comes from the sky; surfaces use brightness only. At Probe Fill Strength ≥ 1 this no longer lights surfaces. |
-| Probe Fill Strength | `sky reflection_probe_ambiance` | 0.01–10 / 0.01 | 0.01 | Low: fill from sky ambient (uniform). High: fill from probes (bounce light, darker interiors). Reflections are unaffected. |
+| Probe Fill Strength | `sky reflection_probe_ambiance` | 0.01–10 / 0.01 | 0.01 | <1: fill from sky ambient (uniform). >=1: fill from probes (bounce light, darker interiors). At a probe fill of 1 or more, probe irradiance fully replaces ambient wherever probes cover the surface. Reflections are unaffected. (Ambient Brightness moved to Sun/Moon as Sky Ambient Gain 2026-10-26.) |
 | *note* | | | | Auto-exposure pinned at 1 (Sky HDR Scale ≤ 0.25). |
 | Show avatars | render type `character` (`Advanced.ToggleRenderType`) | check box | true | Shows or hides all avatars. |
 | Show avatar names | `AvatarNameTagMode` | check box | true | Name tags over avatars. |
 
 #### 2. Sun/Moon
 
+Row order (2026-10-26): Surface Ambient Gain; sky; sun; moon; star. Groups are not labeled.
+
 | Label | Binding | Range / type | Default | Tooltip / note |
 |---|---|---|---|---|
+| Surface Ambient Gain | `RenderSkyAmbientScale` | -10–40 / 0.1 | 1 | Multiplies ambient fill on surfaces only, so it shows most up close. Does not change the sky, clouds, haze or water. At Probe Fill Strength 1 or more it no longer lights surfaces. Negative values darken lit areas. Loading a graphics preset resets it to 1. (Added 2026-10-25; renamed from Ambient Luminance 2026-10-26.) |
+| Sky Ambient Gain | `sky ambient` (Rec.709 luminance, hue kept) | 0–3 / 0.01 | 0.25 | Brightness of the sky's ambient color, saved with the sky (hue kept). Reaches the sky, clouds, haze and surface fill; water only through reflected sky. Surfaces use its brightness only. At Probe Fill Strength 1 or more it no longer lights surfaces. (Was Ambient Brightness on Quick, Shadows and Ambient; moved here 2026-10-26 as Sky Brightness, renamed the same day.) |
 | Sky origin | read-only | "EEP" / "Legacy (auto-adjusted)" | | |
+| Sun & Moon Light | `sky sunlight_color` | color + intensity 0–3 | #d0ddff × 0.9 | Light color of both the sun and the moon (color + intensity 0–3). |
+| Sunlight Gain | `RenderHDRSkySunlightScale` | 0–20 / 0.01 | 1 | Brightness of direct sun and moon light. (Renamed from Sunlight Scale 2026-10-25, from Sunlight Luminance 2026-10-26.) |
 | Sun azimuth | `sky sun_rotation` | 0–359.99 / 0.01 | 180 | |
 | Sun elevation | `sky sun_rotation` | -90–90 / 0.01 | 45 | |
+| Sun scale | `sky sun_scale` | 0.25–20 / 0.01 | 1 | Larger discs fade out later at the horizon. |
 | Moon azimuth | `sky moon_rotation` | 0–359.99 / 0.01 | 0 | |
 | Moon elevation | `sky moon_rotation` | -90–90 / 0.01 | -45 | |
-| Sun & Moon Light | `sky sunlight_color` | color + intensity 0–3 | #d0ddff × 0.9 | Light color of both the sun and the moon (color + intensity 0–3). |
-| Sunlight Luminance | `RenderHDRSkySunlightScale` | 0–20 / 0.01 | 1 | Brightness of direct sun and moon light. (Renamed from Sunlight Scale 2026-10-25.) |
-| Ambient Luminance | `RenderSkyAmbientScale` | -10–40 / 0.1 | 1 | Scales all sky fill. Negative values darken lit areas. Loading a graphics preset resets it to 1. (Added 2026-10-25.) |
-| Sun scale | `sky sun_scale` | 0.25–20 / 0.01 | 1 | Larger discs fade out later at the horizon. |
 | Moon scale | `sky moon_scale` | 0.25–20 / 0.01 | 1 | Larger discs fade out later at the horizon. |
 | Moon Disk Brightness | `sky moon_brightness` | 0–1 / 0.01 | 0.5 | Brightness of the moon disc and night glow. Does not change moonlight on surfaces. |
 | Partial moon below horizon | `ASRenderPartialMoonBelowHorizon` | check box | true | |
@@ -688,7 +690,6 @@ AyaneStorm My Lights floater (viewer-only lights). Gains the Curve selector and 
 | Spot offset | `RenderSpotShadowOffset` | 0–0.04 / 0.0001 | 0.04 | |
 | AO soften | `RenderShadowGaussian.y` | 0.001–3 / 0.001 | 2 | |
 | Ambient occlusion + **Settings…** (opens Ambient) + **Hair…** | `RenderDeferredSSAO`; Hair… = `Floater.Toggle ks_hair_occlusion` | check box, two buttons on its row | true | Same as Quick (A7); Hair… added 2026-10-25. |
-| Ambient Brightness | (as Quick) | 0–3 / 0.01 | 0.25 | Same as Quick (A7). |
 | Probe Fill Strength | (as Quick) | 0.01–10 / 0.01 | 0.01 | Same as Quick (A7). |
 
 #### 11. Ambient (not in the list; opened from Quick › Ambient occlusion › Settings…)
@@ -696,12 +697,9 @@ AyaneStorm My Lights floater (viewer-only lights). Gains the Curve selector and 
 | Label | Binding | Range / type | Default | Tooltip / note |
 |---|---|---|---|---|
 | Probe Fill in use | read-only | | | |
-| Ambient Brightness | `sky ambient` (Rec.709 luminance, hue kept) | 0–3 / 0.01 | 0.25 | (as Quick) |
-| *note* | | | | Probe Fill ≥ 1: only sky, clouds and haze use this. |
-| Ambient Luminance | `RenderSkyAmbientScale` | -10–40 / 0.1 | 1 | Scales all sky fill. Negative values darken lit areas. (Renamed from Ambient Scale 2026-10-25; also on Quick and Sun/Moon, below Sunlight Luminance.) |
+| Surface Ambient Gain | `RenderSkyAmbientScale` | -10–40 / 0.1 | 1 | Multiplies ambient fill on surfaces only, so it shows most up close. Does not change the sky, clouds, haze or water. At Probe Fill Strength 1 or more it no longer lights surfaces. Negative values darken lit areas. (Renamed from Ambient Scale 2026-10-25, from Ambient Luminance 2026-10-26; also on Quick and at the top of Sun/Moon.) |
 | Probe Fill Strength | `sky reflection_probe_ambiance` | 0.01–10 / 0.01 | 0.01 | (as Quick) |
 | *note* | | | | Probes off: forced to 1.0, control disabled. |
-| *note* | | | | Legacy sky: auto-adjust value; editing makes this copy EEP. |
 | Ambient occlusion | `RenderDeferredSSAO` | check box | true | |
 | Technique | `RenderAOTechnique` | Legacy SSAO; GTAO | GTAO | |
 | Effect | `RenderSSAOEffect.x` | -1–1 / 0.01 | 0.8 | One control for the active technique. |
@@ -784,7 +782,7 @@ Nothing here is built. Each branch is cut from `kstorm`, one feature per branch;
 - **Panes:** 13 floaters of our own (Quick, Sun/Moon, Atmosphere, Clouds, Water, Reflections, All lights, Shadows, Exposure, Glow, Depth of field, Vignette, Ambient), named `ks_lighting_<pane>`. One generic class `KSFloaterLightingPane` driven by its XML:
   - viewer settings bind with `control_name` (no code);
   - sky and water values use a naming convention on the widget `name` (for example `sky_haze_density`) that the class maps to `LLSettingsSky` / `LLSettingsWater` getters and setters;
-  - special controls get small handlers: Ambient Brightness (luminance edit with hue kept, §8.1), Sun & Moon Light and the air colors (color + intensity), sun and moon azimuth / elevation (quaternions, as `rotationFromDegrees` in `ksenvironment.cpp`), Haze Glow Strength and Focus (`glow` mapping), Atmosphere Thickness (× 0.001), Sky HDR Scale (sky `gamma` for EEP, `RenderSkyAutoAdjustHDRScale` for a legacy sky).
+  - special controls get small handlers: Sky Ambient Gain (luminance edit with hue kept, §8.1), Sun & Moon Light and the air colors (color + intensity), sun and moon azimuth / elevation (quaternions, as `rotationFromDegrees` in `ksenvironment.cpp`), Haze Glow Strength and Focus (`glow` mapping), Atmosphere Thickness (× 0.001), Sky HDR Scale (sky `gamma` for EEP, `RenderSkyAutoAdjustHDRScale` for a legacy sky).
 - **Launches** of existing floaters: Environment Effects, Viewer Lights, Camera Effects, My Environments, Depth of Field…, Hair Occlusion… use `Floater.Toggle` (R15).
 - **Registration:** `llviewerfloaterreg.cpp` gains one `<KS:KS>` line per floater, as the existing `ks_environment_effects` line (`llviewerfloaterreg.cpp:695`).
 - **KStorm menu** (`menu_viewer.xml`, KStorm's own top-level menu): **KStorm Lighting** (`shortcut="alt|shift|L"`) replaces both current items. **Retire** KStorm Environment Effects (`ks_environment_effects`: its menu item, `floater_ks_environment_effects.xml`, `panel_ks_lighting.xml`, `kspanellighting.cpp/.h` and its registration line); every one of its controls has a home in this design. The **Hair Occlusion** menu item goes too; the floater opens from Shadows › Hair… (decided 2026-10-25).
@@ -967,7 +965,7 @@ General rule: do not change LL, FS or AS behavior, except for whatever competes 
 | A4 | Use Shared / My Environments while KS is on | **Both turn KS off** (no sky restore: the new environment replaces it). |
 | A5 | O14 | AyaneStorm's Depth of Field floater lacks all nine of our camera controls (F-number, Focal length, Field of view, Zoom, Focus follows pointer, Focus locked, Show focus point, Max blur, DoF resolution). **Keep our pane and its Depth of Field… button**; the O14 change to her floater is dropped. |
 | A6 | Quick › Environment Effects… | **Removed** from Quick. |
-| A7 | Ambient pane access | **Approved:** Ambient occlusion (with Settings…), Ambient Brightness and Probe Fill Strength are also at the bottom of Shadows (duplicates allowed). |
+| A7 | Ambient pane access | **Approved:** Ambient occlusion (with Settings…) and Probe Fill Strength are also at the bottom of Shadows (duplicates allowed). 2026-10-26: Sky Ambient Gain (was Ambient Brightness) is on Sun/Moon only. |
 | A8 | Exposure entry status | **Exposure value only.** |
 | A9 | Water labels | **Adopted:** Water fog color, Water fog density, Underwater fog multiplier. |
 | A10 | Compact mode | **Adopted.** Icons: the mock-up's placeholders stand for now; real 16×16 icons (16, including Lighting Presets and the toolbar button) are the next task. |
@@ -1082,7 +1080,7 @@ A2 (lighting preset) and A14 (KS Reference candidates) become one feature. **Use
 - *D1, D2:* `RenderQualityPerformance` and `PresetGraphicActive` (only when set to a name, which also ignores our own writes) schedule a reapply on the next idle; the values the load brought become the ones Turn off restores.
 - *List:* a lock icon for KS Reference, the active preset in bold with "(active)", and a Contains column ("built in", "full", "custom" for a copy of KS Reference, or the group names).
 - *Dropped:* the "(KS Reference)" tooltip suffix naming the active preset (tooltips are static text).
-- *Layout:* the pane is 380 px wide (not 300) so the five editing buttons fit on their own second row.
+- *Layout:* the pane and its dialog keep the common 300 px width; the seven buttons wrap to three rows (rule, 2026-10-26: panes grow taller, up to the launcher's height, never wider; AyaneStorm floaters keep their widths).
 - *Precision:* preset files store reals with the LLSD XML default precision (about 6 digits); settings are F32 anyway, and the A4 match uses a 0.001 tolerance.
 
 ### 12.7 Lighting Presets compared with My Environments
@@ -1095,7 +1093,7 @@ A2 (lighting preset) and A14 (KS Reference candidates) become one feature. **Use
 | Sky | Every sky field: sun and moon rotation and scale, colors, ambient, haze, glow, density and distance multipliers, height (`max_y`), gamma (Sky HDR Scale), probe ambiance (Probe Fill), clouds (color, coverage, scale, variance, density, scroll), moisture, droplet, ice, star and moon brightness, textures (sun, moon, cloud, bloom, halo, rainbow), atmosphere physics (Rayleigh, Mie, absorption), legacy fields | The same sky values as a snapshot of the current (local) sky, when the preset includes the sky groups |
 | Water | Every water field, including normal map and transparency texture | The same, when it includes Water |
 | Time of day | Day cycles: sky and water keyframes over the day, with altitude tracks | None: a preset holds one frozen sky |
-| Viewer settings | **None** | All the settings our panes surface: Exposure, Dynamic exposure and its tuning, tone mapping, Sunlight Luminance, Ambient Luminance, shadows, ambient occlusion, reflections and probes, glow, depth of field, vignette, light budget and filters; plus AyaneStorm floater settings and the §12.1 reference settings |
+| Viewer settings | **None** | All the settings our panes surface: Exposure, Dynamic exposure and its tuning, tone mapping, Sunlight Gain, Surface Ambient Gain, shadows, ambient occlusion, reflections and probes, glow, depth of field, vignette, light budget and filters; plus AyaneStorm floater settings and the §12.1 reference settings |
 | Applying | Replaces the environment (for you, or a parcel or region); no undo except Use Shared or another environment | Applies with a restore point; Turn off restores the previous values |
 | Built-in content | Library environments | KS Reference |
 
