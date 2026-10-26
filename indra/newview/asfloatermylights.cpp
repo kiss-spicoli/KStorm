@@ -46,6 +46,15 @@ namespace
     const std::string PRESET_SUBDIR = "as_light_presets";
     // Seconds of quiet after the last change before the autosave is written.
     const F32 AUTOSAVE_DELAY = 2.f;
+
+    // <KS:KS> Fixed aim: value of the "Fixed aim" entry in the Aim at list
+    const std::string AIM_FIXED = "fixed";
+    // A fixed light's aim shows as fixed (the rig also needs Spotlight on to use it).
+    bool showsFixedAim(const ASLightRig* rig)
+    {
+        return rig && rig->isFixed() && rig->mAimFixed;
+    }
+    // </KS:KS>
 }
 
 ASFloaterMyLights::ASFloaterMyLights(const LLSD& key)
@@ -72,10 +81,7 @@ ASFloaterMyLights::ASFloaterMyLights(const LLSD& key)
     mAimJointCombo(nullptr),
     mAimYawSlider(nullptr),
     mAimPitchSlider(nullptr),
-    // <KS:KS> Fixed aim
-    mAimFixedCheck(nullptr),
-    mAimSlidersFixed(false),
-    // </KS:KS>
+    mAimSlidersFixed(false), // <KS:KS/> Fixed aim
     mSpotFOVSlider(nullptr),
     mSpotFocusSlider(nullptr),
     mSpotAmbianceSlider(nullptr),
@@ -126,7 +132,6 @@ bool ASFloaterMyLights::postBuild()
     mAimYawSlider = getChild<LLUICtrl>("ks_light_aim_yaw");
     mAimPitchSlider = getChild<LLUICtrl>("ks_light_aim_pitch");
     // <KS:KS> Fixed aim
-    mAimFixedCheck = getChild<LLCheckBoxCtrl>("ks_light_aim_fixed");
     mAimYawToolTip = mAimYawSlider->getToolTip();
     mAimPitchToolTip = mAimPitchSlider->getToolTip();
     // </KS:KS>
@@ -178,7 +183,6 @@ bool ASFloaterMyLights::postBuild()
     {
         ctrl->setCommitCallback([this](LLUICtrl*, const LLSD&) { onSpotChanged(); });
     }
-    mAimFixedCheck->setCommitCallback([this](LLUICtrl*, const LLSD&) { onAimFixedChanged(); }); // <KS:KS/> Fixed aim
     // The picker applies immediately; "None"/cancel arrive through the cancel callback.
     mSpotTexturePicker->setCommitCallback([this](LLUICtrl*, const LLSD&) { onSpotTextureChanged(); });
     mSpotTexturePicker->setOnCancelCallback([this](LLUICtrl*, const LLSD&) { onSpotTextureChanged(); });
@@ -765,11 +769,12 @@ void ASFloaterMyLights::updateSpotControlsEnabled()
     const bool can_spot = rig && !ASLightRigRenderer::usesShaderBackend();
     const bool spot_on = can_spot && rig->mSpot;
     mSpotCheck->setEnabled(can_spot);
-    // <KS:KS> Fixed aim: offered for fixed lights; a fixed aim has no joint.
-    // mAimJointCombo->setEnabled(spot_on);
-    mAimFixedCheck->setVisible(can_spot && rig->isFixed());
-    mAimFixedCheck->setEnabled(spot_on);
-    mAimJointCombo->setEnabled(spot_on && !rig->usesFixedAim());
+    mAimJointCombo->setEnabled(spot_on);
+    // <KS:KS> Fixed aim: only a fixed light can aim in a set direction
+    if (rig)
+    {
+        mAimJointCombo->setEnabledByValue(AIM_FIXED, rig->isFixed());
+    }
     // </KS:KS>
     mAimYawSlider->setEnabled(spot_on);
     mAimPitchSlider->setEnabled(spot_on);
@@ -811,12 +816,13 @@ void ASFloaterMyLights::refreshControlsFromSelectedLight()
     mFalloffSlider->setValue(rig->mFalloff);
     mColorSwatch->set(LLColor4(rig->mColor));
     mSpotCheck->setValue(rig->mSpot);
-    mAimJointCombo->setValue(rig->mAimJoint);
-    // <KS:KS> Fixed aim: the aim sliders hold a world direction instead of joint offsets
+    // <KS:KS> Fixed aim: the list shows "Fixed aim", and the aim sliders hold a
+    // world direction instead of joint offsets
+    // mAimJointCombo->setValue(rig->mAimJoint);
     // mAimYawSlider->setValue(rig->mAimYaw);
     // mAimPitchSlider->setValue(rig->mAimPitch);
-    mAimFixedCheck->setValue(rig->mAimFixed);
-    configureAimSliders(rig->usesFixedAim());
+    mAimJointCombo->setValue(showsFixedAim(rig) ? AIM_FIXED : rig->mAimJoint);
+    configureAimSliders(showsFixedAim(rig));
     mAimYawSlider->setValue(mAimSlidersFixed ? rig->mAimHeading : rig->mAimYaw);
     mAimPitchSlider->setValue(mAimSlidersFixed ? rig->mAimElevation : rig->mAimPitch);
     // </KS:KS>
@@ -851,6 +857,12 @@ void ASFloaterMyLights::onPlacementChanged()
         // Freeze the light where it is now; a light that has never been
         // positioned (switched off since creation) goes to the camera.
         rig->makeFixedHere(gAgentCamera.getCameraPositionGlobal());
+        // <KS:KS> Fixed aim: a spot made fixed keeps its beam where it points now
+        if (rig->mSpot)
+        {
+            rig->fixAimHere();
+        }
+        // </KS:KS>
     }
     else
     {
@@ -900,14 +912,34 @@ void ASFloaterMyLights::onSpotChanged()
     ASLightRig* rig = getSelectedLight();
     if (!rig) return;
     rig->mSpot = mSpotCheck->get();
-    rig->mAimJoint = mAimJointCombo->getValue().asString();
+    // <KS:KS> Fixed aim: "Fixed aim" starts from where the beam points now; a joint
+    // aims at and follows that joint
+    // rig->mAimJoint = mAimJointCombo->getValue().asString();
+    const std::string aim = mAimJointCombo->getValue().asString();
+    if (aim == AIM_FIXED)
+    {
+        if (!rig->mAimFixed)
+        {
+            rig->fixAimHere();
+        }
+    }
+    else
+    {
+        rig->mAimFixed = false;
+        rig->mAimJoint = aim;
+    }
+    // </KS:KS>
     // <KS:KS> Fixed aim: the sliders hold the heading/elevation while they show them
     // rig->mAimYaw = (F32)mAimYawSlider->getValue().asReal();
     // rig->mAimPitch = (F32)mAimPitchSlider->getValue().asReal();
     if (mAimSlidersFixed)
     {
-        rig->mAimHeading = (F32)mAimYawSlider->getValue().asReal();
-        rig->mAimElevation = (F32)mAimPitchSlider->getValue().asReal();
+        // Unless a joint was just chosen: then the sliders still show the old heading/elevation.
+        if (rig->mAimFixed)
+        {
+            rig->mAimHeading = (F32)mAimYawSlider->getValue().asReal();
+            rig->mAimElevation = (F32)mAimPitchSlider->getValue().asReal();
+        }
     }
     else
     {
@@ -922,8 +954,8 @@ void ASFloaterMyLights::onSpotChanged()
     rig->applyParams();
     rig->updateTransform();
     updateSpotControlsEnabled();
-    // <KS:KS> Fixed aim: turning the spot on or off switches what the aim sliders show
-    if (rig->usesFixedAim() != mAimSlidersFixed)
+    // <KS:KS> Fixed aim: switching between Fixed aim and a joint changes what the aim sliders show
+    if (showsFixedAim(rig) != mAimSlidersFixed)
     {
         refreshControlsFromSelectedLight();
     }
@@ -932,25 +964,6 @@ void ASFloaterMyLights::onSpotChanged()
 }
 
 // <KS:KS> Fixed aim
-void ASFloaterMyLights::onAimFixedChanged()
-{
-    if (mUpdatingControls) return;
-    ASLightRig* rig = getSelectedLight();
-    if (!rig) return;
-    if (mAimFixedCheck->get())
-    {
-        // Start from where the beam points now, so it does not jump.
-        rig->fixAimHere();
-    }
-    else
-    {
-        rig->mAimFixed = false;
-    }
-    rig->updateTransform();
-    refreshControlsFromSelectedLight();
-    markDirty();
-}
-
 void ASFloaterMyLights::configureAimSliders(bool fixed_aim)
 {
     mAimSlidersFixed = fixed_aim;

@@ -104,9 +104,8 @@ private:
     void onSpotChanged();
     void onSpotTextureChanged();
     void updateSpotControlsEnabled();
-    // <KS:KS> Fixed aim: the check box, and the aim sliders switching between
-    // joint offsets (yaw/pitch) and a world direction (heading/elevation).
-    void onAimFixedChanged();
+    // <KS:KS> Fixed aim: "Fixed aim" in the Aim at list switches the aim sliders
+    // between joint offsets (yaw/pitch) and a world direction (heading/elevation).
     void configureAimSliders(bool fixed_aim);
     // </KS:KS>
     // Shows the spot section only with the LLVOVolume backend and resizes
@@ -167,7 +166,6 @@ private:
     LLUICtrl* mAimYawSlider;
     LLUICtrl* mAimPitchSlider;
     // <KS:KS> Fixed aim
-    LLCheckBoxCtrl* mAimFixedCheck;
     bool mAimSlidersFixed;              // the aim sliders show heading/elevation
     std::string mAimYawToolTip;         // XUI tooltips, restored for joint aim
     std::string mAimPitchToolTip;
