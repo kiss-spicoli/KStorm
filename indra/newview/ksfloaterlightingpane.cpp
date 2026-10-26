@@ -153,8 +153,10 @@ bool KSFloaterLightingPaneBase::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     mHeaderClickPending = false;
     const LLView* handle = getDragHandle();
+    // A collapsed pane expands on the click that brings it forward; an expanded pane behind
+    // others only comes forward.
     if (handle && handle->getVisible() && handle->getRect().pointInRect(x, y)
-        && topmostFloater(LLFloaterReg::findInstance("ks_lighting")) == this)
+        && (mCollapsed || topmostFloater(LLFloaterReg::findInstance("ks_lighting")) == this))
     {
         // The header buttons (close, minimize) sit on the header bar.
         bool on_button = false;

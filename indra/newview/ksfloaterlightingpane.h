@@ -57,7 +57,8 @@ public:
     static LLFloater* topmostFloater(const LLFloater* ignore);
 
     // A click on the header bar (not a drag, not a header button) collapses or expands the
-    // pane when it is already in front; when it is behind, the click only brings it forward.
+    // pane when it is in front; a collapsed pane behind others expands and comes forward on
+    // the same click, an expanded one only comes forward.
     bool handleMouseDown(S32 x, S32 y, MASK mask) override;
     void draw() override;
     // Expands before closing, so the saved size is the full one.
