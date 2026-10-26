@@ -176,6 +176,9 @@ namespace
                                    [](LLSettingsSky& s, const LLSD& v) { s.setMoonBrightness((F32)v.asReal()); } } },
             { "star_brightness", { "sunmoon", [](LLSettingsSky& s) { return realValue(s.getStarBrightness()); },
                                    [](LLSettingsSky& s, const LLSD& v) { s.setStarBrightness((F32)v.asReal()); } } },
+            // Sky Ambient Gain is on the Sun/Moon pane.
+            { "ambient", { "sunmoon", [](LLSettingsSky& s) { return s.getAmbientColor().getValue(); },
+                           [](LLSettingsSky& s, const LLSD& v) { s.setAmbientColor(LLColor3(v)); } } },
 
             { "max_y", { "atmosphere", [](LLSettingsSky& s) { return realValue(s.getMaxY()); },
                          [](LLSettingsSky& s, const LLSD& v) { s.setMaxY((F32)v.asReal()); } } },
@@ -213,8 +216,6 @@ namespace
             { "cloud_pos_density2", { "clouds", [](LLSettingsSky& s) { return s.getCloudPosDensity2().getValue(); },
                                       [](LLSettingsSky& s, const LLSD& v) { s.setCloudPosDensity2(LLColor3(v)); } } },
 
-            { "ambient", { "ambient", [](LLSettingsSky& s) { return s.getAmbientColor().getValue(); },
-                           [](LLSettingsSky& s, const LLSD& v) { s.setAmbientColor(LLColor3(v)); } } },
             // Read as the renderer uses it (a legacy sky's auto-adjusted value); setting it
             // makes a legacy copy an EEP sky, as the panes do.
             { "reflection_probe_ambiance", { "ambient",
