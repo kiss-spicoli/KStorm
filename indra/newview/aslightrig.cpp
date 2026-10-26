@@ -52,6 +52,11 @@ ASLightRig::ASLightRig()
     mSpotFocus(0.f),
     mSpotAmbiance(0.f),
     mDark(false),
+    // <KS:KS> Fixed aim: off; straight down until fixed from a live aim
+    mAimFixed(false),
+    mAimHeading(0.f),
+    mAimElevation(-90.f),
+    // </KS:KS>
     mPlacement(PLACEMENT_FOLLOW),
     mEnabled(true),
     mLightOn(true),
@@ -285,6 +290,16 @@ LLQuaternion ASLightRig::computeSpotRotation(const LLVector3& fallback_target)
     {
         forward = fallback_target - mPositionAgent;
     }
+    // <KS:KS> Fixed aim: a world direction from the heading and elevation
+    // sliders (agent axes: X east, Y north, Z up) replaces the joint aim.
+    const bool fixed_aim = usesFixedAim();
+    if (fixed_aim)
+    {
+        const F32 heading = mAimHeading * DEG_TO_RAD;
+        const F32 elevation = mAimElevation * DEG_TO_RAD;
+        forward.setVec(sinf(heading) * cosf(elevation), cosf(heading) * cosf(elevation), sinf(elevation));
+    }
+    // </KS:KS>
     if (forward.magVecSquared() < 1.e-6f)
     {
         forward.setVec(0.f, 0.f, -1.f); // light on the target: point down
@@ -304,6 +319,13 @@ LLQuaternion ASLightRig::computeSpotRotation(const LLVector3& fallback_target)
     const LLVector3 y_axis = z_axis % x_axis;
     const LLQuaternion base(x_axis, y_axis, z_axis);
 
+    // <KS:KS> A fixed aim is already the final direction.
+    if (fixed_aim)
+    {
+        return base;
+    }
+    // </KS:KS>
+
     // Offsets in the light's own frame: pitch about its X (right) axis,
     // then yaw about its Y (up) axis, so yaw stays level with the horizon.
     const LLQuaternion offset =
@@ -311,6 +333,29 @@ LLQuaternion ASLightRig::computeSpotRotation(const LLVector3& fallback_target)
         LLQuaternion(mAimYaw * DEG_TO_RAD, LLVector3::y_axis);
     return offset * base;
 }
+
+// <KS:KS> Fixed aim
+void ASLightRig::fixAimHere()
+{
+    LLVector3 direction = mAimDirection;
+    if (direction.normalize() < 1.e-6f)
+    {
+        direction.setVec(0.f, 0.f, -1.f);
+    }
+    mAimElevation = asinf(llclamp(direction.mV[VZ], -1.f, 1.f)) * RAD_TO_DEG;
+    // Straight up or down has no heading; keep the previous one.
+    if (llabs(direction.mV[VZ]) < 0.9999f)
+    {
+        F32 heading = atan2f(direction.mV[VX], direction.mV[VY]) * RAD_TO_DEG;
+        if (heading < 0.f)
+        {
+            heading += 360.f;
+        }
+        mAimHeading = heading;
+    }
+    mAimFixed = true;
+}
+// </KS:KS>
 
 bool ASLightRig::placeAt(const LLVector3d& pos_global)
 {
@@ -432,6 +477,11 @@ LLSD ASLightRig::toLLSD() const
     data["spot_ambiance"] = mSpotAmbiance;
     data["spot_texture"] = mSpotTexture;
     data["dark"] = mDark;
+    // <KS:KS> Fixed aim
+    data["aim_fixed"] = mAimFixed;
+    data["aim_heading"] = mAimHeading;
+    data["aim_elevation"] = mAimElevation;
+    // </KS:KS>
     data["placement"] = isFixed() ? "fixed" : "follow";
     if (isFixed())
     {
@@ -468,6 +518,11 @@ void ASLightRig::fromLLSD(const LLSD& data)
     if (data.has("spot_ambiance")) mSpotAmbiance = (F32)data["spot_ambiance"].asReal();
     if (data.has("spot_texture"))  mSpotTexture = data["spot_texture"].asUUID();
     if (data.has("dark"))          mDark = data["dark"].asBoolean();
+    // <KS:KS> Fixed aim
+    if (data.has("aim_fixed"))     mAimFixed = data["aim_fixed"].asBoolean();
+    if (data.has("aim_heading"))   mAimHeading = (F32)data["aim_heading"].asReal();
+    if (data.has("aim_elevation")) mAimElevation = llclamp((F32)data["aim_elevation"].asReal(), -90.f, 90.f);
+    // </KS:KS>
 
     if (data["placement"].asString() == "fixed" && data.has("pos_global"))
     {

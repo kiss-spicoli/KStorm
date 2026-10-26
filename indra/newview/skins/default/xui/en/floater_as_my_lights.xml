@@ -76,7 +76,11 @@
   <text type="string" length="1" follows="left|top" font="SansSerifSmallBold" height="14" layout="topleft" left="15" name="ks_light_spot_label" top="448" width="300">Spotlight</text>
   <check_box follows="left|top" height="16" label="Spotlight" layout="topleft" left="15" name="ks_light_spot" top="468" width="150" tool_tip="Turns this light into a spotlight aimed at a joint of your avatar. LLVOVolume backend only; the Shader backend keeps it a point light." />
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="165" name="ks_light_aim_joint_label" top="468" width="60">Aim at</text>
-  <combo_box follows="left|top" height="23" layout="topleft" left="225" name="ks_light_aim_joint" top="464" width="180" tool_tip="Joint the spotlight points at. It follows the joint as you move and animate.">
+  <!-- <KS:KS> Fixed aim: tooltip mentions it; was "Joint the spotlight points at. It follows the joint as you move and animate." </KS:KS> -->
+  <combo_box follows="left|top" height="23" layout="topleft" left="225" name="ks_light_aim_joint" top="464" width="180" tool_tip="Joint the spotlight points at; it follows the joint as you move and animate. Fixed aim (fixed lights only): a set direction, adjusted with the aim sliders.">
+    <!-- <KS:KS> Fixed aim (fixed lights only): a set direction instead of a joint -->
+    <combo_box.item label="Fixed aim" name="fixed_aim" value="fixed" />
+    <!-- </KS:KS> -->
     <combo_box.item label="Neck" name="neck" value="mNeck" />
     <combo_box.item label="Head" name="head" value="mHead" />
     <combo_box.item label="Chest" name="chest" value="mChest" />

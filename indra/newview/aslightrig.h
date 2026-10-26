@@ -94,6 +94,14 @@ public:
     // if the light has never been positioned (e.g. created while disabled).
     bool makeFixedHere(const LLVector3d& fallback_global);
     void makeFollow();
+    // <KS:KS> Fixed aim
+    // True for a fixed spotlight whose aim is fixed too: it points along
+    // mAimHeading/mAimElevation instead of at mAimJoint.
+    bool usesFixedAim() const { return isFixed() && mSpot && mAimFixed; }
+    // Fixes the aim along the current aim direction, so the beam does not
+    // jump when the aim is fixed.
+    void fixAimHere();
+    // </KS:KS>
     // Offset of a fixed light from its base location, in world axes,
     // clamped to +/- MAX_FIXED_OFFSET meters per axis. The home region stays
     // the base location's region.
@@ -139,6 +147,12 @@ public:
     // Dark spot: darkens its cone instead of lighting it (KSDarkLight).
     // Applied at render time like mBoost; the object stays an ordinary spot.
     bool mDark;
+    // <KS:KS> Fixed aim (used only by a fixed spot, see usesFixedAim()):
+    // a world direction, so the beam stays put as the avatar moves.
+    bool mAimFixed;
+    F32 mAimHeading;            // degrees, compass: 0 = north, 90 = east
+    F32 mAimElevation;          // degrees, -90 = straight down, 90 = straight up
+    // </KS:KS>
 
     // Fixed placement (meaningful when mPlacement == PLACEMENT_FIXED)
     Placement mPlacement;
@@ -150,7 +164,8 @@ public:
 private:
     // Rotation whose -Z axis points from mPositionAgent at the aim joint
     // (or at fallback_target if that joint is missing), with the yaw/pitch
-    // offsets applied in the light's own frame.
+    // offsets applied in the light's own frame. With a fixed aim, it points
+    // along mAimHeading/mAimElevation instead.
     LLQuaternion computeSpotRotation(const LLVector3& fallback_target);
 
     // Loaded region the light lives in: the agent's region when following,

@@ -232,6 +232,41 @@ Shader backend: the spot section disappears, the floater shrinks with its top
 edge fixed, and the lights become points. Switch back: the section and height
 return. Close and reopen the floater in each backend to check the saved size.
 
+### Fixed aim (fixed spotlights, branch `feat-my-lights-fixed-aim`)
+
+**Aim at** has a **Fixed aim** entry at the top of its list, available only for
+fixed lights. With it, the beam stops following the avatar and points in one
+world direction set by the two aim sliders, which become:
+
+- **Aim heading (deg)**, 0–359.9, compass: 0 north, 90 east, 180 south, 270 west;
+- **Aim elevation (deg)**, -90–90: -90 straight down, 0 level, 90 straight up.
+
+Choosing a joint aims at and follows that joint again, and the sliders return to
+the joint offsets (Aim yaw / Aim pitch), whose values are kept separately.
+Choosing Fixed aim again starts from where the beam points at that moment.
+
+- *Default:* switching a spotlight's placement to Fixed selects Fixed aim, with
+  the beam kept where it points. A light that becomes a spotlight after it was
+  fixed aims at its joint until Fixed aim is chosen.
+- *Starting direction:* `ASLightRig::fixAimHere()` converts the last aim
+  direction to heading and elevation, so the beam does not jump. A light that
+  has never been lit as a spot starts straight down.
+- *Direction:* `computeSpotRotation()` builds the aim from heading and elevation
+  in agent axes (X east, Y north, Z up) and skips the joint and the yaw/pitch
+  offsets. `usesFixedAim()` is true only for a fixed placement with Spotlight on.
+- *Follow lights:* the Fixed aim entry is disabled (`setEnabledByValue`), and
+  the list shows the light's joint.
+- *Saved* in presets and autosave as `aim_fixed`, `aim_heading` and
+  `aim_elevation`; older files load aiming at their joint.
+- *Edits* in `aslightrig.*`, `asfloatermylights.*` and `floater_as_my_lights.xml`
+  are `<KS:KS>`-tagged.
+
+Runtime check: make a spotlight, switch it to Fixed (Aim at shows Fixed aim, the
+beam does not move), walk around it (the beam stays put), drag heading and
+elevation (the beacon arm and cone turn), choose a joint (the beam aims at it
+with the old yaw/pitch), choose Fixed aim again, switch the light to Follow (the
+entry is disabled and the joint shows), save and reload a preset, relog.
+
 ## Fixed (placed) lights, per-light On, autosave on change
 
 ### Behavior
