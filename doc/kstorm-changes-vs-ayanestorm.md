@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-27, at `kstorm` merge `3d38bbee364`.
-- **KStorm's own work:** 82 commits (Kissmy Spicoli, Oct 18 to Oct 27), 107 files, about 11,600
+- **Last updated:** 2026-10-27, at `kstorm` merge `518bcc2e650`.
+- **KStorm's own work:** 84 commits (Kissmy Spicoli, Oct 18 to Oct 27), 115 files, about 11,600
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -83,15 +83,15 @@ Details: `doc/ks-hair-occlusion.md`.
   Occlusion works the same way. (`096c0a97a40`, `66b4ce8e533`)
 - **Clearer pane names.** The Glow pane is now "Material glow", so it is not confused with the
   sky's haze glow or AyaneStorm's bloom. (`096c0a97a40`)
-- **Its own icons.** Launcher buttons are getting KStorm icons instead of borrowed ones:
-  Vignette (a frame that darkens toward the corners, `88c36e93f05`), Depth of field (a lens
-  aperture, `96aa43f58ee`), Material glow (a glowing filament) and Viewer Lights (a light bulb)
-  (`9281361b4a4`), Exposure (the camera's +/- exposure symbol, `26d77b6959c`), Water
-  (three waves, `04a6fcd486c`), Atmosphere (haze layers, `16d84a6eca5`), Sun/Moon (a sky dome
-  rising over the horizon) and Quick (a lightning bolt) (`6d796f226c7`). Motion mode now shows the
-  speedometer that Exposure had, and Camera Effects the camera that Depth of field had
-  (`6d796f226c7`). Reflections shows a mirror and a reflected object (`121459cced7`). Still to come:
-  Clouds, Shadows and the KStorm Lighting toolbar button.
+- **Its own icons.** Every launcher button now has a KStorm icon, drawn as one consistent set:
+  the same light grey, similar size and similar brightness on the button. New: Quick (a
+  lightning bolt), Sun/Moon (a sky dome over the horizon), Atmosphere (haze layers), Clouds,
+  Water (waves), Reflections (a mirror), Viewer Lights (a bulb), Shadows (a light, a card and
+  its shadow), Exposure (the camera's +/- symbol), Material glow (a glowing filament), Depth of
+  field (a lens aperture) and Vignette. Lighting Presets, Camera Effects, All lights and
+  Environment Effects keep their pictures, adjusted to match. (`88c36e93f05`, `96aa43f58ee`,
+  `9281361b4a4`, `26d77b6959c`, `04a6fcd486c`, `16d84a6eca5`, `6d796f226c7`, `121459cced7`,
+  set v2 `b6d11547d45`)
 - **Layout.** The launcher is always the compact icon strip, with no footer. Pane headers are
   taller and panes are 300 px wide. A Hair... button sits on Quick. (`53138cb89d8`,
   `68d6e528bd7`, `a6785359376`, `5485d81b9f0`, `4a31d052c89`)
