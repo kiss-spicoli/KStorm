@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
-<!-- KStorm Lighting Presets dialog: Save current as, Rename, Contents (KSFloaterLightingPresetEdit).
+<!-- KStorm Look Inventory dialog: Save current as, Rename, Contents (KSFloaterLightingPresetEdit).
      The group block (check boxes, or the read-only list for KS Reference) is dropped and the
      floater shrinks when a mode does not use it; the note and buttons follow the bottom. -->
-<floater can_close="true" can_dock="false" can_minimize="false" can_resize="false" height="258" layout="topleft" name="ks_lighting_preset_edit" single_instance="true" title="Lighting Preset" width="300">
+<floater can_close="true" can_dock="false" can_minimize="false" can_resize="false" height="258" layout="topleft" name="ks_lighting_preset_edit" single_instance="true" title="Look" width="300">
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_edit_name_label" top="9" width="46">Name</text>
   <line_editor follows="left|top" height="20" layout="topleft" left="60" max_length_chars="63" name="ks_edit_name" top="6" width="230" />
   <check_box follows="left|top" height="16" label="Sun/Moon" layout="topleft" left="10" name="ks_group_sunmoon" top="34" width="135" />
@@ -23,7 +23,7 @@
   <text type="string" length="1" follows="left|bottom" height="30" layout="topleft" left="10" name="ks_edit_note" text_color="LtGray_50" top="194" width="280" wrap="true" />
   <button follows="left|bottom" height="22" label="Save" layout="topleft" left="120" name="ks_edit_ok" top="228" width="80" />
   <button follows="left|bottom" height="22" label="Cancel" layout="topleft" left="210" name="ks_edit_cancel" top="228" width="80" />
-  <string name="title_save">Save Lighting Preset</string>
-  <string name="title_rename">Rename Lighting Preset</string>
-  <string name="title_contents">Lighting Preset Contents</string>
+  <string name="title_save">Save Look</string>
+  <string name="title_rename">Rename Look</string>
+  <string name="title_contents">Look Contents</string>
 </floater>

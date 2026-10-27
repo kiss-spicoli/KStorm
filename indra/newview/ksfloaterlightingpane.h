@@ -30,7 +30,7 @@
  * Buttons that open floaters use "KS.CycleFloater" (see cycleFloater()).
  *
  * KSFloaterLightingPaneBase holds what every KStorm Lighting pane shares (this class and
- * the Lighting Presets pane): docking beside the launcher, and the header click that
+ * the Look Inventory pane): docking beside the launcher, and the header click that
  * collapses the pane to its header bar or expands it again.
  */
 #ifndef KS_FLOATERLIGHTINGPANE_H

@@ -1,7 +1,7 @@
 /**
  * @file kslightingpresets.h
  * @author Kissmy Spicoli
- * @brief KStorm Lighting Presets (doc/kstorm2-lighting-UI-design.md, section 12.6).
+ * @brief KStorm Look Inventory: lighting presets (doc/kstorm2-lighting-UI-design.md, section 12.6).
  *
  * A lighting preset holds viewer settings and values of the local sky and
  * water, by name. Applying one records a restore point (the current values of

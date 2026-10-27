@@ -1,7 +1,7 @@
 /**
  * @file kslightingpresets.cpp
  * @author Kissmy Spicoli
- * @brief KStorm Lighting Presets: storage, apply with restore point, KS Reference.
+ * @brief KStorm Look Inventory: lighting preset storage, apply with restore point, KS Reference.
  */
 
 #include "llviewerprecompiledheaders.h"
@@ -332,7 +332,7 @@ namespace
                 }
                 else
                 {
-                    LL_WARNS("KStorm") << "Lighting presets: cannot read " << file << LL_ENDL;
+                    LL_WARNS("KStorm") << "Look Inventory: cannot read " << file << LL_ENDL;
                 }
             }
         }
@@ -481,7 +481,7 @@ namespace
         LLSD data;
         if (LLSDSerialize::fromXML(data, file) == LLSDParser::PARSE_FAILURE || !data.isMap())
         {
-            LL_WARNS("KStorm") << "Lighting presets: cannot parse " << presetPath(name) << LL_ENDL;
+            LL_WARNS("KStorm") << "Look Inventory: cannot parse " << presetPath(name) << LL_ENDL;
             return false;
         }
         preset = Preset();
@@ -507,7 +507,7 @@ namespace
         llofstream file(presetPath(preset.mName).c_str());
         if (!file.is_open())
         {
-            LL_WARNS("KStorm") << "Lighting presets: cannot write " << presetPath(preset.mName) << LL_ENDL;
+            LL_WARNS("KStorm") << "Look Inventory: cannot write " << presetPath(preset.mName) << LL_ENDL;
             return false;
         }
         LLSDSerialize::toPrettyXML(toLLSD(preset), file);
@@ -611,7 +611,7 @@ namespace
             LLControlVariable* control = gSavedSettings.getControl(name);
             if (!control)
             {
-                LL_INFOS("KStorm") << "Lighting presets: no setting " << name << ", skipped" << LL_ENDL;
+                LL_INFOS("KStorm") << "Look Inventory: no setting " << name << ", skipped" << LL_ENDL;
                 continue;
             }
             sRestore.mSettings[name] = KSMotionMode::getValue(*control);
@@ -971,7 +971,7 @@ void KSLightingPresets::apply(const std::string& name)
     Preset preset;
     if (!loadPreset(name, preset))
     {
-        LL_WARNS("KStorm") << "Lighting presets: no preset " << name << LL_ENDL;
+        LL_WARNS("KStorm") << "Look Inventory: no look " << name << LL_ENDL;
         return;
     }
     applyInternal(preset);
