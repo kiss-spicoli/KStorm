@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-27, at `kstorm` merge `5f60be81a5b`.
-- **KStorm's own work:** 78 commits (Kissmy Spicoli, Oct 18 to Oct 27), 101 files, about 11,600
+- **Last updated:** 2026-10-27, at `kstorm` merge `d3b817f7a66`.
+- **KStorm's own work:** 80 commits (Kissmy Spicoli, Oct 18 to Oct 27), 105 files, about 11,600
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -87,7 +87,11 @@ Details: `doc/ks-hair-occlusion.md`.
   Vignette (a frame that darkens toward the corners, `88c36e93f05`), Depth of field (a lens
   aperture, `96aa43f58ee`), Material glow (a glowing filament) and Viewer Lights (a light bulb)
   (`9281361b4a4`), Exposure (the camera's +/- exposure symbol, `26d77b6959c`), Water
-  (three waves, `04a6fcd486c`) and Atmosphere (haze layers, `16d84a6eca5`). More panes will follow.
+  (three waves, `04a6fcd486c`), Atmosphere (haze layers, `16d84a6eca5`), Sun/Moon (a sky dome
+  rising over the horizon) and Quick (a lightning bolt) (`6d796f226c7`). Motion mode now shows the
+  speedometer that Exposure had, and Camera Effects the camera that Depth of field had
+  (`6d796f226c7`). Still to come: Clouds, Reflections, Shadows and the KStorm Lighting toolbar
+  button.
 - **Layout.** The launcher is always the compact icon strip, with no footer. Pane headers are
   taller and panes are 300 px wide. A Hair... button sits on Quick. (`53138cb89d8`,
   `68d6e528bd7`, `a6785359376`, `5485d81b9f0`, `4a31d052c89`)
