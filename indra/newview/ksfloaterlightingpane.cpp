@@ -82,11 +82,13 @@ namespace
         { "ksv_RenderShadowGaussian_y",      "RenderDeferredSSAO",           1 },
         // Exposure: read only while Dynamic exposure is on (LLPipeline::generateExposure()).
         { "ks_dyn_*",                        "RenderDynamicExposureEnabled", 1 },
-        // Material glow
+        // Glow & bloom: every control is a setting of the glow pass.
         { "ks_glow_strength",                "RenderGlow",                   1 },
         { "ks_glow_width",                   "RenderGlow",                   1 },
         { "ks_glow_res",                     "RenderGlow",                   1 },
         { "ks_glow_iter",                    "RenderGlow",                   1 },
+        { "ks_glow_threshold",               "RenderGlow",                   1 },
+        { "ks_glow_amount",                  "RenderGlow",                   1 },
         // Depth of field: all but Zoom, the camera's own field of view.
         { "ks_focus_follows",                "RenderDepthOfField",           1 },
         { "ks_focus_locked",                 "RenderDepthOfField",           1 },
