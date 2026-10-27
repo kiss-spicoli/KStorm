@@ -507,7 +507,7 @@ KS Sunlight Gain is 0–20 / 0.01 (Advanced Lighting is 0–50 / 0.1); the new U
 
 ## 9. UI approaches
 
-**Current direction (v4 mock-up, decided 2026-10-25): a single-pane launch list.** The KStorm Lighting floater holds no controls and no accordions, only one button per section; each button opens that section as its own floater. Order: Quick; Sun/Moon, Ambient, Haze, Atmosphere, Clouds, Water, Reflections, Environment Effects; All lights, Viewer Lights, Shadows, Occlusion, Exposure, Glow (material); Depth of field, Vignette, Camera Effects. Environment Effects, Viewer Lights and Camera Effects open the AyaneStorm floaters (`as_environment_effects`, `as_my_lights`, `as_camera_effects`). The section tables in §2–§6 still describe the controls; their tab grouping is superseded by this list.
+**Current direction (v4 mock-up, decided 2026-10-25): a single-pane launch list.** The KStorm Lighting floater holds no controls and no accordions, only one button per section; each button opens that section as its own floater. Order: Quick; Sun/Moon, Ambient, Haze, Atmosphere, Clouds, Water, Reflections, Environment Effects; All lights, Viewer Lights, Shadows, Occlusion, Exposure, Material glow; Depth of field, Vignette, Camera Effects. Environment Effects, Viewer Lights and Camera Effects open the AyaneStorm floaters (`as_environment_effects`, `as_my_lights`, `as_camera_effects`). The section tables in §2–§6 still describe the controls; their tab grouping is superseded by this list.
 
 **Compact mode (mocked 2026-10-25, not yet decided).** Each list button carries a 16×16 icon. A toggle in the title bar switches between the full list (icon, label, status; 225 px) and an icon strip (about 44 px) with the name as the hover tooltip and no footer. XUI: buttons with `image_overlay` (left-aligned) plus a status `text`; compact mode hides the labels and status texts and reshapes the floater; the choice can persist in a setting. The bottom and side toolbars already offer the same pair of modes (`LLToolBar` icons-with-text / icons-only, `lltoolbar.h:122`); registering each pane as a command in `commands.xml` would also let users drag panes onto a toolbar. Icons are placeholders in the mock-up; real ones are needed (some can reuse existing skin textures).
 
@@ -544,9 +544,11 @@ Layout variant under evaluation (2026-10-24): accordions replaced by buttons tha
 
 **Tooltip suffixes.** Every control Use KS Reference writes ends its tooltip with "(KS Reference)" (A3): Sun azimuth and elevation, Moon azimuth and elevation, Sun & Moon Light, Sky Ambient Gain, Haze Density, Haze Glow Brightness, Strength and Focus, Sky HDR Scale, Probe Fill Strength, Show avatar names, Subject sort, Dynamic exposure. Exposure, Dynamic exposure, Tone mapping, Tone mapping mix and Glow end with "No effect while Build › Options › No Post-processing is on and the Build floater is open." (D3).
 
-Order: Quick; Sun/Moon, Atmosphere, Clouds, Water, Reflections, Environment Effects; All lights, Viewer Lights, Shadows, Exposure, Glow (material); Depth of field, Vignette, Camera Effects. The Ambient pane is not in the list; Quick › Ambient occlusion › **Settings…** opens it.
+Order: Quick; Sun/Moon, Atmosphere, Clouds, Water, Reflections, Environment Effects; All lights, Viewer Lights, Shadows, Exposure, Material glow; Depth of field, Vignette, Camera Effects. The Ambient pane is not in the list; Quick › Ambient occlusion › **Settings…** opens it.
 
 Bindings: `sky …` = a value of the current sky, written through `KSEnvironment::getEditableSky()` / `commitSky()` (§11.2); `water …` = a value of the current water; other names are viewer settings (`control_name`).
+
+**Toggles and their dependents (2026-10-27).** A control that has no effect while a toggle on its pane is off sits directly below that toggle and is dimmed (disabled) while it is off. The rule follows the value being drawn, so it also dims what Motion mode (§12.8) or KS Reference turned off. Dimming only reads settings: KS Reference, Motion mode and lighting presets (groups, captures, restore points) are unaffected, and a dimmed control still shows a value a preset applies. The list is `DEPENDENCIES` in `ksfloaterlightingpane.cpp` (child name → setting and minimum value; several entries must all hold); Hair Occlusion, a plain floater, uses `enabled_control="KSHairOcclusionEnabled"`. Each pane's dependents are in its *Enabling* note below.
 
 #### 1. Quick
 
@@ -631,12 +633,14 @@ Row order (2026-10-26): Surface Ambient Gain; sky; sun; moon; star. Groups are n
 | Water fog color | `water fog color` | color | #0f3355 | Tints what is seen below the water surface. |
 | Water fog density | `water fog density` | 0.001–100 / 0.01 | 2.7 | How quickly things below the water surface fade. |
 | Underwater fog multiplier | `water underwater fog mod` | 0–20 / 0.01 | 0.25 | Multiplies water fog density while the camera is underwater. |
-| Transparent water | `RenderTransparentWater` | check box | true | |
 | Fresnel scale / offset | `water fresnel scale` / `offset` | 0–1 / 0.01 | 0.4 / 0.5 | |
 | Normal scale X / Y / Z | `water normal scale` | 0–10 / 0.01 | 2 | |
-| Refraction above / below | `water scale above` / `below` | 0–3 / 0.01 | 0.03 / 0.2 | |
 | Blur | `water blur multiplier` | 0–0.5 / 0.001 | 0.04 | |
+| Transparent water | `RenderTransparentWater` | check box | true | |
+| Refraction above / below | `water scale above` / `below` | 0–3 / 0.01 | 0.03 / 0.2 | |
 | Normal map, waves | texture picker, 2 XY pads | | | |
+
+*Enabling:* Refraction above and below are dimmed while Transparent water is off: opaque water draws no refraction (`waterF.glsl`, `underWaterF.glsl`; above still nudges where reflections are sampled, too little to tune).
 
 #### 6. Reflections
 
@@ -645,13 +649,15 @@ Row order (2026-10-26): Surface Ambient Gain; sky; sun; moon; star. Groups are n
 | Coverage | `RenderReflectionProbeLevel` | Sky only; Manual only; Manual + terrain; Full | Full | |
 | Probe detail | `RenderReflectionProbeDetail` | Static; Dynamic; Realtime | Dynamic | |
 | Screen-space reflections | `RenderScreenSpaceReflections` | check box | false | |
-| Mirrors | `RenderMirrors` | check box | false | |
 | Probe count | `RenderReflectionProbeCount` | 32; 64; 128; 256 | 256 | |
 | Probe resolution | `RenderReflectionProbeResolution` | 64; 128; 256; 512 | 128 | |
 | Probe draw distance | `RenderReflectionProbeDrawDistance` | 0–4096 / 1 | 64 | |
+| Mirrors | `RenderMirrors` | check box | false | |
 | Hero resolution | `RenderHeroProbeResolution` | 256; 512; 1024; 2048 | 1024 | |
 | Hero update rate | `RenderHeroProbeUpdateRate` | Every frame; Every 2 frames; Every 3 frames | Every 2 frames | |
 | Show probe volumes | `RenderReflectionProbeVolumes` | check box | false | |
+
+*Enabling:* Hero resolution and Hero update rate are dimmed while Mirrors is off: hero probes draw mirrors only.
 
 #### 7. Environment Effects — opens `as_environment_effects`
 
@@ -664,12 +670,14 @@ AyaneStorm floater: Volumetric Lighting, Camera Effects, Color Grading, Sun, Hor
 | Scope | read-only | | | Your view only: how server lights and Viewer Lights are rendered for you. |
 | Max nearby lights | `RenderLocalLightCount` (global) | 0–512 / 1 | 256 | Counts nearby candidates, not only visible lights. Shared with Preferences and Viewer Lights. |
 | Only Viewer Lights | `KSLightRigOnlyMyLights` | check box | false | Hides every server light; only Viewer Lights light the scene. |
+| Worn lights | `RenderAttachedLights` | check box | true | Lights in attachments, yours and other people's. Off hides them all in your view only; others still see them. |
 | Subject sort | `KSRenderLocalLightSubjectSort` | check box | false | Prioritize lights near the Alt-click focus. |
 | Alpha masks lit as opaque | `RenderAutoMaskAlphaDeferred` | check box | true | Cut-out alpha (leaves, lace, hair tips) is drawn as opaque, so it gets every light, shadows and occlusion, and Viewer Lights spot cones. |
 | Fullbright alpha masks as opaque | `RenderAutoMaskAlphaNonDeferred` | check box | false | The same for fullbright faces, which are not lit by the deferred pass. |
 | Light bounding boxes | info display "lights" | check box | false | Boxes around every light object, server lights and Viewer Lights with the LLVOVolume backend (not the Shader backend). |
-| Worn lights | `RenderAttachedLights` | check box | true | Lights in attachments, yours and other people's. Off hides them all in your view only; others still see them. |
 | Show selected light radius | `RenderLightRadius` | check box | false | Draws the reach of the light in the object selected with the Build tools, while they are open. |
+
+*Enabling:* Worn lights is dimmed while Only Viewer Lights is on, which already hides worn lights.
 
 #### 9. Viewer Lights — opens `as_my_lights`
 
@@ -679,18 +687,20 @@ AyaneStorm My Lights floater (viewer-only lights). Gains the Curve selector and 
 
 | Label | Binding | Range / type | Default | Tooltip / note |
 |---|---|---|---|---|
+| Probe Fill Strength | (as Quick) | 0.01–10 / 0.01 | 0.01 | Same as Quick (A7). |
 | Shadows | `RenderShadowDetail` | None; Sun & Moon; Sun & Moon + Projectors | Sun & Moon + Projectors | |
 | Resolution | `RenderShadowResolutionScale` | 0–5 / 0.5 | 1 | |
-| Soften | `RenderShadowGaussian.x` | 0.001–5 / 0.001 | 3 | |
 | Clarity | `RenderShadowSplitExponent.y` | 0–10 / 0.025 | 3 | |
 | Bias | `RenderShadowBias` | -0.002–0.001 / 0.000001 | -0.002 | |
-| Blur size | `RenderShadowBlurSize` | 0–4 / 0.01 | 1.4 | |
-| Blur distance | `RenderShadowBlurDistFactor` | 0–1 / 0.01 | 0 | |
 | FOV cutoff | `RenderShadowFOVCutoff` | 0–100 / 0.1 | 0.8 | |
 | Spot offset | `RenderSpotShadowOffset` | 0–0.04 / 0.0001 | 0.04 | |
-| AO soften | `RenderShadowGaussian.y` | 0.001–3 / 0.001 | 2 | |
 | Ambient occlusion + **Settings…** (opens Ambient) + **Hair…** | `RenderDeferredSSAO`; Hair… = `Floater.Toggle ks_hair_occlusion` | check box, two buttons on its row | true | Same as Quick (A7); Hair… added 2026-10-25. |
-| Probe Fill Strength | (as Quick) | 0.01–10 / 0.01 | 0.01 | Same as Quick (A7). |
+| Soften | `RenderShadowGaussian.x` | 0.001–5 / 0.001 | 3 | |
+| Blur size | `RenderShadowBlurSize` | 0–4 / 0.01 | 1.4 | |
+| Blur distance | `RenderShadowBlurDistFactor` | 0–1 / 0.01 | 0 | |
+| AO soften | `RenderShadowGaussian.y` | 0.001–3 / 0.001 | 2 | |
+
+*Order and enabling (2026-10-27):* Probe Fill Strength, which depends on neither toggle, moved to the top. Resolution, Clarity, Bias and FOV cutoff are dimmed while Shadows is None; Spot offset unless Shadows is Sun & Moon + Projectors. The soften pass runs only while Ambient occlusion is on (`LLPipeline::renderDeferredLighting()`), so Soften, Blur size, Blur distance and AO soften sit below that check box and are dimmed while it is off; Soften also needs Shadows, and AO soften Legacy SSAO (GTAO bypasses the channel it blurs, `sunLightSSAOF.glsl`). With GTAO and no shadows, Blur size and distance stay enabled but have nothing to blur.
 
 #### 11. Ambient (not in the list; opened from Quick › Ambient occlusion › Settings…)
 
@@ -714,23 +724,27 @@ AyaneStorm My Lights floater (viewer-only lights). Gains the Curve selector and 
 | GTAO bent normals | `RenderGTAOBentNormals` | check box | false | GTAO only. |
 | Bent normal influence | `RenderGTAOBentNormalInfluence` | 0–1 / 0.01 | 1 | GTAO only. |
 
+*Enabling:* everything below Ambient occlusion is dimmed while it is off; the SSAO rows also while Technique is GTAO, the GTAO rows while it is Legacy SSAO.
+
 #### 12. Exposure
 
 | Label | Binding | Range / type | Default | Tooltip / note |
 |---|---|---|---|---|
 | Sky HDR Scale | (as Quick) | 0–20 / 0.01 | 1 | (as Quick) |
 | Exposure | `RenderExposure` | 0.5–4 / 0.1 | 1 | Overall scene exposure. |
-| Dynamic exposure | `RenderDynamicExposureEnabled` | check box | true | (as Quick) |
-| *note* | | | | Auto-exposure pinned at 1 (Sky HDR Scale ≤ 0.25). |
 | Tone mapping | `RenderTonemapType` | Khronos Neutral; ACES | ACES | |
 | Tone mapping mix | `RenderTonemapMix` | 0–1 / 0.05 | 0.7 | |
+| Use sky exposure range | `RenderUseExposureSkySettings` | check box | false | Uses the sky's own exposure range (HDR offset ± min/max) instead of Sky HDR Scale. With Dynamic exposure off, exposure is held at the sky's HDR offset instead of 1. (Corrected 2026-10-25: was "fixed 0.5–3".) |
+| Dynamic exposure | `RenderDynamicExposureEnabled` | check box | true | (as Quick); the four sliders below work only while it is on. |
+| *note* | | | | Auto-exposure pinned at 1 (Sky HDR Scale ≤ 0.25). |
 | Bright-scene level | `RenderDynamicExposureCoefficient` | 0.05–2 / 0.01 | 0.5 | Scene luminance treated as fully bright; lower = darkens sooner. |
 | Settle accuracy | `RenderDynamicExposureSpeedError` | 0.01–0.5 / 0.01 | 0.1 | Fraction of the gap left after the settle time. |
 | Settle time (s) | `RenderDynamicExposureSpeedTarget` | 0.1–10 / 0.1 | 2 | Time to get within that fraction. |
 | Object weight | `RenderDiffuseLuminanceScale` | 0–2 / 0.05 | 0.5 | Weight of scene objects vs sky in metering. |
-| Use sky exposure range | `RenderUseExposureSkySettings` | check box | false | Uses the sky's own exposure range (HDR offset ± min/max) instead of Sky HDR Scale. (Corrected 2026-10-25: was "fixed 0.5–3".) |
 
-#### 13. Glow (material)
+*Order and enabling (2026-10-27):* Dynamic exposure sits below the tone mapping rows, with Use sky exposure range just above it. Bright-scene level, Settle accuracy, Settle time and Object weight (child names `ks_dyn_*`) are dimmed while Dynamic exposure is off: `LLPipeline::generateExposure()` reads them only while it is on.
+
+#### 13. Material glow
 
 | Label | Binding | Range / type | Default | Tooltip / note |
 |---|---|---|---|---|
@@ -738,12 +752,15 @@ AyaneStorm My Lights floater (viewer-only lights). Gains the Curve selector and 
 | Glow strength | `RenderGlowStrength` | 0–0.5 / 0.001 | 0.325 | |
 | Glow width | `RenderGlowWidth` | 0–50 / 0.001 | 1.3 | |
 | Glow resolution | `RenderGlowResolutionPow` | 8–10 / 1 | 9 | |
-| Glow iterations | `RenderGlowIterations` | 0–200 / 1 | 2 | |
+| Glow iterations | `RenderGlowIterations` | 0–200 / 1 | 2 | Blur rounds: higher is wider and smoother, and each round costs two passes. Preferences calls this Strength (0-3). (KS Reference) |
+
+*Enabling:* the four sliders are dimmed while Glow is off.
 
 #### 14. Depth of field
 
 | Label | Binding | Range / type | Default | Tooltip / note |
 |---|---|---|---|---|
+| Zoom | `CameraAngle` | 0.08–3.06 / 0.002 | 1.047 | |
 | Depth of field | `RenderDepthOfField` | check box | false | Blurs the view except at the camera focus. |
 | Focus follows pointer | `FSFocusPointFollowsPointer` | check box | false | |
 | Focus locked (Alt-Shift-X) | `FSFocusPointLocked` | check box | false | |
@@ -752,10 +769,11 @@ AyaneStorm My Lights floater (viewer-only lights). Gains the Curve selector and 
 | F-number | `CameraFNumber` | 0.01–22 / 0.01 | 9 | |
 | Focal length (mm) | `CameraFocalLength` | 1–300 / 1 | 50 | |
 | Field of view (deg) | `CameraFieldOfView` | 0.1–180 / 0.1 | 60 | |
-| Zoom | `CameraAngle` | 0.08–3.06 / 0.002 | 1.047 | |
 | Max blur (CoC) | `CameraMaxCoF` | 0–150 / 0.01 | 10 | |
 | DoF resolution | `CameraDoFResScale` | 0–1 / 0.01 | 0.7 | |
 | Depth of Field… | `Floater.Toggle as_depth_of_field` | floater button | | |
+
+*Order and enabling (2026-10-27):* Zoom, the camera's own field of view, moved above Depth of field; everything between Depth of field and the Depth of Field… button is dimmed while it is off (Field of view only feeds the depth of field calculation).
 
 #### 15. Vignette
 
@@ -779,7 +797,7 @@ Nothing here is built. Each branch is cut from `kstorm`, one feature per branch;
 ### 11.1 Architecture
 
 - **Launch floater** `ks_lighting` (`floater_ks_lighting.xml`, class `KSFloaterLighting`): a `layout_stack` with a scroll list of rows (button with `image_overlay` icon, left-aligned, plus a status `text`). Compact toggle hides labels and statuses and reshapes the width; the choice persists in a new setting `KSLightingCompact`. For now `postBuild()` always calls `setCompact(true)` and the toggle (`ks_mode`) is `visible="false"` (A10). Statuses refresh from settings signals and from `LLEnvironment::setEnvironmentChanged` (pattern: `llfloaterenvironmentadjust.cpp:136`), not every frame.
-- **Panes:** 13 floaters of our own (Quick, Sun/Moon, Atmosphere, Clouds, Water, Reflections, All lights, Shadows, Exposure, Glow, Depth of field, Vignette, Ambient), named `ks_lighting_<pane>`. One generic class `KSFloaterLightingPane` driven by its XML:
+- **Panes:** 13 floaters of our own (Quick, Sun/Moon, Atmosphere, Clouds, Water, Reflections, All lights, Shadows, Exposure, Material glow, Depth of field, Vignette, Ambient), named `ks_lighting_<pane>`. One generic class `KSFloaterLightingPane` driven by its XML:
   - viewer settings bind with `control_name` (no code);
   - sky and water values use a naming convention on the widget `name` (for example `sky_haze_density`) that the class maps to `LLSettingsSky` / `LLSettingsWater` getters and setters;
   - special controls get small handlers: Sky Ambient Gain (luminance edit with hue kept, §8.1), Sun & Moon Light and the air colors (color + intensity), sun and moon azimuth / elevation (quaternions, as `rotationFromDegrees` in `ksenvironment.cpp`), Haze Glow Strength and Focus (`glow` mapping), Atmosphere Thickness (× 0.001), Sky HDR Scale (sky `gamma` for EEP, `RenderSkyAutoAdjustHDRScale` for a legacy sky).
@@ -849,6 +867,7 @@ Add `RenderDynamicExposureEnabled` handling: save, set false, restore on off. Wh
 - **Collapsing panes (2026-10-26):** a click on a pane's header bar (no visible button; not a drag, not the close or minimize button) collapses the pane to its header or expands it again, when the pane is in front. Behind other floaters, a collapsed pane expands and comes forward on the same click; an expanded one only comes forward. Launcher buttons for our panes now toggle between fully open (expanded, placed in its slot when docked, in front) and closed; AyaneStorm floaters keep open / bring forward / close. The dock button reopens docked panes as they were when they closed (collapsed or expanded). A collapsed pane expands before it closes, so its saved size stays the full one. Code: `KSFloaterLightingPaneBase` (in `ksfloaterlightingpane.h`), shared by `KSFloaterLightingPane` and `KSFloaterLightingPresets`; the collapsed pane keeps its controls in place and clips them with `LLLocalClipRect`.
 - **KS Reference shadow resolution (2026-10-26):** `RenderShadowResolutionScale` = 1.5 while KS Reference is on (the prior value is restored when it is turned off). The scale multiplies the screen size: four sun/moon maps of screen size × scale and two square projector maps of screen width × scale (`LLPipeline::allocateShadowBuffer()`, `pipeline.cpp:1173`). At 3840 × 2160: 1.0 = 3840 × 2160 sun maps, about 0.25 GB of shadow maps (the same maps as 2.0 at 1080p); 1.5 = 5760 × 3240, about 0.56 GB, visibly crisper at 4K; 2.0 = 7680 × 4320, about 1 GB and four times the shadow-pass pixels of 1.0; 3.0 and above approach GPU texture limits for little visible gain. Clarity (`RenderShadowSplitExponent`) and Soften (`RenderShadowGaussian`) often change perceived sharpness more than the scale.
 - **KS Reference background texture discard (2026-10-26):** `TextureDiscardBackgroundedTime` = 0 while KS Reference is on (default 60 s; the prior value is restored when it is turned off). At the default, after 60 s unfocused the viewer forces discard bias 5 on every texture (`llviewertexture.cpp` ~614); on refocus all textures reload from cache and re-decode, causing blur and FPS dips. 0 disables it; the viewer keeps its texture memory while in the background. Preferences > Graphics shows the same setting.
+- **KS Reference glow iterations (2026-10-27):** `RenderGlowIterations` = 3 while KS Reference is on (default 2; the prior value is restored when it is turned off). Each iteration is a horizontal and a vertical blur pass over the glow buffer (`pipeline.cpp:8309`), so cost grows with the count; 3 is the most Preferences' "Strength" slider (the same setting) allows. Our Glow iterations slider still goes to 200.
 - **Probe fill never 0 (2026-10-26):** a sky at probe ambiance 0 takes LL's classic path (legacy gamma, no post-processing), which turns off Probe Fill, Exposure and tone mapping. Two changes keep every sky at 0.01 or more: (1) `RenderSkyAutoAdjustLegacy` defaults to TRUE in KStorm (`settings.xml`, tagged), so legacy skies use `RenderSkyAutoAdjustProbeAmbiance` (0.01) and LL's conversion; Firestorm resets it to its default after a graphics preset load, which now means TRUE. (2) `LLSettingsSky::getReflectionProbeAmbiance()` returns at least `LLSettingsSky::sMinProbeAmbiance`, fed from the new setting `KSMinProbeAmbiance` (0.01; 0 restores LL behavior) in `llenvironment.cpp`, so skies saved at 0 (EEP items, region and parcel skies, other editors) render at 0.01. The stored value is not changed; the sky editor and Personal Lighting show 0.01 for such skies.
 - **Findings for B7 (D1, D2):** a graphics preset load sends no event of its own (`LLPresetsManager::loadPreset`); `PresetGraphicActive` signals only when the name changes; the load resets `RenderSkyAutoAdjustLegacy` and `RenderSkyAmbientScale` to their defaults. The quality slider sets `RenderQualityPerformance` after the feature settings. Reapply on the next idle after either signal, writing only differing values.
 
@@ -1059,7 +1078,7 @@ A2 (lighting preset) and A14 (KS Reference candidates) become one feature. **Use
 
 **Rules**
 
-- *Partial presets.* A preset stores only the groups it names (Sun/Moon, Atmosphere, Clouds, Water, Reflections, All lights, Shadows, Ambient, Exposure, Glow, Depth of field, Vignette, AyaneStorm floaters). KS Reference names a fixed subset: its sky values plus the 54 settings of §12.1.
+- *Partial presets.* A preset stores only the groups it names (Sun/Moon, Atmosphere, Clouds, Water, Reflections, All lights, Shadows, Ambient, Exposure, Material glow, Depth of field, Vignette, AyaneStorm floaters). KS Reference names a fixed subset: its sky values plus the 54 settings of §12.1.
 - *Apply with a restore point.* Applying records the current values of everything the preset will change; **Turn off** restores them. One preset is active at a time; applying another first turns the active one off, so presets never stack.
 - *Carried over from KS Reference:* while a preset is active its values are reapplied after a graphics-preset load or quality change (D1, D2); Use Shared and applying an environment from My Environments turn it off without restoring the sky (A4); editing one of its values leaves it active (A3); only values that differ are written (§12.5). The "(KS Reference)" tooltip suffix shows the active preset's name.
 - *KS Reference stays special:* values defined in code (a KStorm update may change them), cannot be deleted, renamed or updated; Duplicate makes an editable copy; it keeps its Quick check box.

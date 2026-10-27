@@ -171,7 +171,7 @@ The AVBOIT colour pass and Exact/Mac OIT capture all draw through `renderAlpha()
 
 ## UI (KStorm > Hair Occlusion)
 
-Floater `ks_hair_occlusion` (`floater_ks_hair_occlusion.xml`, 300 × 380, not resizable), opened from the KStorm menu: **Hair occlusion** header, **Shade hair with head, neck, shoulders** (`KSHairOcclusionEnabled`), **Show proxies**, **Debug view** combo (Off / Local lights / Darkening / Sun/moon), sliders Shadow, Shadow softness, Darkening, Reach, Inside, Straight-in, Facing away, Head, Neck, Shoulders. Every control binds its setting with `control_name`, so no floater code is needed and changes apply live. `KSHairOcclusionHeadOffset` is a debug setting only. Works with both My Lights backends and without My Lights.
+Floater `ks_hair_occlusion` (`floater_ks_hair_occlusion.xml`, 300 × 380, not resizable), opened from the KStorm menu: **Hair occlusion** header, **Shade hair with head, neck, shoulders** (`KSHairOcclusionEnabled`), **Show proxies**, **Debug view** combo (Off / Local lights / Darkening / Sun/moon), sliders Shadow, Shadow softness, Darkening, Reach, Inside, Straight-in, Facing away, Head, Neck, Shoulders. Every control binds its setting with `control_name`, so no floater code is needed and changes apply live. Every control below the Shade hair check box is dimmed while it is off (`enabled_control="KSHairOcclusionEnabled"`, 2026-10-27): with no shapes, nothing they set is drawn, the proxies included. `KSHairOcclusionHeadOffset` is a debug setting only. Works with both My Lights backends and without My Lights.
 
 ## Show proxies (debug draw)
 

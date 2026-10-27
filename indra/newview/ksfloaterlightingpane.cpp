@@ -30,17 +30,112 @@
 #include "pipeline.h"
 
 #include <map>
+#include <set>
 
 namespace
 {
     const std::string VECTOR_PREFIX = "ksv_";
-    const std::string SSAO_PREFIX = "ssao_";
-    const std::string GTAO_PREFIX = "gtao_";
     const std::string SKY_PREFIX = "sky_";
     const std::string SKY_COLOR_PREFIX = "skyc_";
     const std::string WATER_PREFIX = "water_";
     const std::string WATER_COLOR_PREFIX = "waterc_";
     const std::string INTENSITY_SUFFIX = "_i";
+
+    // A control that has no effect unless a setting (a boolean counts as 0 or 1) is at least
+    // mMin, or with WHILE_OFF, while it is 0. A control listed more than once needs all of its
+    // entries; a name ending in '*' is a prefix. The panes dim these controls (design section 10).
+    constexpr S32 WHILE_OFF = -1;
+    struct Dependency
+    {
+        const char* mChild;
+        const char* mSetting;
+        S32 mMin;
+    };
+    const Dependency DEPENDENCIES[] =
+    {
+        // Ambient: everything under Ambient occlusion; each technique's own rows.
+        { "ks_ao_tech_label",                "RenderDeferredSSAO",           1 },
+        { "ks_ao_tech",                      "RenderDeferredSSAO",           1 },
+        { "ksv_RenderSSAOEffect_x",          "RenderDeferredSSAO",           1 },
+        { "ks_ao_white",                     "RenderDeferredSSAO",           1 },
+        { "ks_irr_scale",                    "RenderDeferredSSAO",           1 },
+        { "ks_irr_max",                      "RenderDeferredSSAO",           1 },
+        { "ssao_*",                          "RenderDeferredSSAO",           1 },
+        { "ssao_*",                          "RenderAOTechnique",            WHILE_OFF },
+        { "gtao_*",                          "RenderDeferredSSAO",           1 },
+        { "gtao_*",                          "RenderAOTechnique",            1 },
+        // Shadows: the shadow maps; spot offset needs projector shadows. The soften pass (Soften,
+        // Blur size, Blur distance, AO soften) runs only with ambient occlusion on, and AO soften
+        // blurs the legacy SSAO channel only (LLPipeline::renderDeferredLighting()).
+        { "ks_shadow_res",                   "RenderShadowDetail",           1 },
+        { "ksv_RenderShadowSplitExponent_y", "RenderShadowDetail",           1 },
+        { "ks_shadow_bias",                  "RenderShadowDetail",           1 },
+        { "ks_shadow_fov",                   "RenderShadowDetail",           1 },
+        { "ks_spot_offset",                  "RenderShadowDetail",           2 },
+        { "ksv_RenderShadowGaussian_x",      "RenderShadowDetail",           1 },
+        { "ksv_RenderShadowGaussian_x",      "RenderDeferredSSAO",           1 },
+        { "ks_shadow_blur",                  "RenderDeferredSSAO",           1 },
+        { "ks_shadow_blur_dist",             "RenderDeferredSSAO",           1 },
+        { "ksv_RenderShadowGaussian_y",      "RenderDeferredSSAO",           1 },
+        { "ksv_RenderShadowGaussian_y",      "RenderAOTechnique",            WHILE_OFF },
+        // Exposure: read only while Dynamic exposure is on (LLPipeline::generateExposure()).
+        { "ks_dyn_*",                        "RenderDynamicExposureEnabled", 1 },
+        // Material glow
+        { "ks_glow_strength",                "RenderGlow",                   1 },
+        { "ks_glow_width",                   "RenderGlow",                   1 },
+        { "ks_glow_res",                     "RenderGlow",                   1 },
+        { "ks_glow_iter",                    "RenderGlow",                   1 },
+        // Depth of field: all but Zoom, the camera's own field of view.
+        { "ks_focus_follows",                "RenderDepthOfField",           1 },
+        { "ks_focus_locked",                 "RenderDepthOfField",           1 },
+        { "ks_focus_show",                   "RenderDepthOfField",           1 },
+        { "ks_dof_mode_label",               "RenderDepthOfField",           1 },
+        { "ks_dof_mode",                     "RenderDepthOfField",           1 },
+        { "ks_fnumber",                      "RenderDepthOfField",           1 },
+        { "ks_focal",                        "RenderDepthOfField",           1 },
+        { "ks_fov",                          "RenderDepthOfField",           1 },
+        { "ks_max_coc",                      "RenderDepthOfField",           1 },
+        { "ks_dof_res",                      "RenderDepthOfField",           1 },
+        // Reflections: hero probes draw mirrors only.
+        { "ks_hero_res_label",               "RenderMirrors",                1 },
+        { "ks_hero_res",                     "RenderMirrors",                1 },
+        { "ks_hero_rate_label",              "RenderMirrors",                1 },
+        { "ks_hero_rate",                    "RenderMirrors",                1 },
+        // Water: refraction needs transparent water (waterF.glsl, underWaterF.glsl).
+        { "water_scale_above",               "RenderTransparentWater",       1 },
+        { "water_scale_below",               "RenderTransparentWater",       1 },
+        // All lights: Only Viewer Lights already hides worn lights.
+        { "ks_worn_lights",                  "KSLightRigOnlyMyLights",       WHILE_OFF },
+    };
+
+    bool matches(const std::string& name, const char* child)
+    {
+        const std::string pattern(child);
+        if (!pattern.empty() && pattern.back() == '*')
+        {
+            return name.compare(0, pattern.size() - 1, pattern, 0, pattern.size() - 1) == 0;
+        }
+        return name == pattern;
+    }
+
+    // Whether every dependency of the named control is met (true for a control with none).
+    bool dependenciesMet(const std::string& name)
+    {
+        for (const Dependency& dependency : DEPENDENCIES)
+        {
+            if (!matches(name, dependency.mChild))
+            {
+                continue;
+            }
+            LLControlVariable* control = gSavedSettings.getControl(dependency.mSetting);
+            const S32 value = control ? control->getValue().asInteger() : 0;
+            if (dependency.mMin == WHILE_OFF ? value != 0 : value < dependency.mMin)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     // Sky HDR Scale at or below this pins the auto-exposure range to 1 (LLPipeline::generateExposure()).
     constexpr F32 PINNED_HDR_SCALE = 0.25f;
@@ -401,14 +496,7 @@ bool KSFloaterLightingPane::postBuild()
     connectQuickControls();
     fillDoFModes();
 
-    if (findChild<LLUICtrl>("ks_ao_tech"))
-    {
-        if (LLControlVariable* control = gSavedSettings.getControl("RenderAOTechnique"))
-        {
-            mConnections.push_back(control->getSignal()->connect(
-                [this](LLControlVariable*, const LLSD&, const LLSD&) { refreshAOTechnique(); }));
-        }
-    }
+    connectDependents();
     // The full (expanded) size: the XUI size after the header stretch and Quick's note row.
     initPaneSize();
     return true;
@@ -419,7 +507,7 @@ void KSFloaterLightingPane::onOpen(const LLSD& key)
 {
     refreshVectorSliders();
     refreshShadowState();
-    refreshAOTechnique();
+    refreshDependents();
     refreshEnvironment();
     refreshKSState();
     refreshNameTags();
@@ -516,25 +604,65 @@ void KSFloaterLightingPane::refreshShadowState()
     }
 }
 
-void KSFloaterLightingPane::refreshAOTechnique()
+void KSFloaterLightingPane::connectDependents()
 {
-    if (!findChild<LLUICtrl>("ks_ao_tech"))
-    {
-        return;
-    }
-    const bool gtao = gSavedSettings.getS32("RenderAOTechnique") != 0;
+    std::set<std::string> settings;
     for (LLView* view : *getChildList())
     {
-        const std::string& name = view->getName();
-        if (startsWith(name, SSAO_PREFIX))
+        bool dependent = false;
+        for (const Dependency& dependency : DEPENDENCIES)
         {
-            view->setEnabled(!gtao);
+            if (matches(view->getName(), dependency.mChild))
+            {
+                dependent = true;
+                settings.insert(dependency.mSetting);
+            }
         }
-        else if (startsWith(name, GTAO_PREFIX))
+        if (dependent)
         {
-            view->setEnabled(gtao);
+            mDependents.push_back(view);
         }
     }
+    for (const std::string& setting : settings)
+    {
+        if (LLControlVariable* control = gSavedSettings.getControl(setting))
+        {
+            mConnections.push_back(control->getSignal()->connect(
+                [this](LLControlVariable*, const LLSD&, const LLSD&) { refreshDependents(); }));
+        }
+    }
+    refreshDependents();
+}
+
+void KSFloaterLightingPane::refreshDependents()
+{
+    bool env_dependents = false;
+    for (LLView* view : mDependents)
+    {
+        // Sky and water fields also need an environment to edit: refreshEnvironment() sets them.
+        if (isEnvBinding(view))
+        {
+            env_dependents = true;
+            continue;
+        }
+        view->setEnabled(dependenciesMet(view->getName()));
+    }
+    if (env_dependents)
+    {
+        refreshEnvironment();
+    }
+}
+
+bool KSFloaterLightingPane::isEnvBinding(const LLView* view) const
+{
+    for (const EnvBinding& binding : mEnvBindings)
+    {
+        if (binding.mCtrl == view || binding.mIntensity == view)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void KSFloaterLightingPane::connectEnvironment()
@@ -641,10 +769,12 @@ void KSFloaterLightingPane::refreshEnvironment()
     for (const EnvBinding& binding : mEnvBindings)
     {
         const bool available = binding.mWater ? water != nullptr : sky != nullptr;
-        binding.mCtrl->setEnabled(available);
+        // Dimmed too while a toggle it depends on is off (DEPENDENCIES).
+        const bool enabled = available && dependenciesMet(binding.mCtrl->getName());
+        binding.mCtrl->setEnabled(enabled);
         if (binding.mIntensity)
         {
-            binding.mIntensity->setEnabled(available);
+            binding.mIntensity->setEnabled(enabled);
         }
         if (!available)
         {
