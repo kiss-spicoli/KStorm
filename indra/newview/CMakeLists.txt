@@ -171,6 +171,7 @@ set(viewer_SOURCE_FILES
     ksfloaterlightingpresets.cpp
     kslightingfields.cpp
     kslightingpresets.cpp
+    ksmotionmode.cpp
     # </KS:KS>
     # <KS:KS> Dark My Lights spots.
     ksdarklight.cpp
@@ -1133,6 +1134,7 @@ set(viewer_HEADER_FILES
     ksfloaterlightingpresets.h
     kslightingfields.h
     kslightingpresets.h
+    ksmotionmode.h
     # </KS:KS>
     # <KS:KS> Dark My Lights spots.
     ksdarklight.h

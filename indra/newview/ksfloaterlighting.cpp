@@ -12,6 +12,7 @@
 #include "ksfloaterlightingpane.h"
 #include "kslightingfields.h"
 #include "kslightingpresets.h"
+#include "ksmotionmode.h"
 #include "llbutton.h"
 #include "llfloaterreg.h"
 #include "llfocusmgr.h"
@@ -194,6 +195,12 @@ bool KSFloaterLighting::postBuild()
     addEntry("vignette", "ks_lighting_vignette");
     addEntry("camera_effects", "as_camera_effects");
     mEntries.back().mProxy = "ks_lighting_proxy_camera_effects";
+    // Motion mode is a switch, not a pane: no floater, pressed while on.
+    addEntry("motion", "", []() { return std::string(KSMotionMode::isOn() ? "on" : ""); }, { "KSMotionMode" });
+    mEntries.back().mButton->setCommitCallback([](LLUICtrl*, const LLSD&)
+        {
+            KSMotionMode::setOn(!KSMotionMode::isOn());
+        });
 
     mModeButton = getChild<LLButton>("ks_mode");
     mModeButton->setCommitCallback([this](LLUICtrl*, const LLSD&) { setCompact(!mCompact); });
@@ -518,6 +525,10 @@ void KSFloaterLighting::draw()
         if (!entry.mFloater.empty())
         {
             entry.mButton->setToggleState(LLFloaterReg::instanceVisible(entry.mFloater));
+        }
+        else
+        {
+            entry.mButton->setToggleState(KSMotionMode::isOn());     // Motion mode, a switch
         }
     }
     refreshDockButton();

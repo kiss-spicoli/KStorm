@@ -9,6 +9,7 @@
 #include "kslightingpresets.h"
 
 #include "ksenvironment.h"
+#include "ksmotionmode.h"
 #include "llcallbacklist.h"
 #include "lldiriterator.h"
 #include "llenvironment.h"
@@ -151,8 +152,9 @@ namespace
     };
     // Settings AyaneStorm's color grading and weather panels set in code (per band, per effect).
     const char* const AYANESTORM_PREFIXES[] = { "ASColorGrade", "ASWeather" };
-    // Never part of a preset: the switch of KS Reference itself.
-    const char* const EXCLUDED_SETTINGS[] = { "KSSetEnvironment" };
+    // Never part of a preset: the switch of KS Reference itself, and Motion mode (a layer that
+    // applying a preset turns off; both are check boxes on the Quick pane).
+    const char* const EXCLUDED_SETTINGS[] = { "KSSetEnvironment", "KSMotionMode" };
 
     template <typename T>
     struct EnvField
@@ -582,6 +584,9 @@ namespace
 
     void applyInternal(const Preset& preset)
     {
+        // Motion mode off first, so its values are restored and the restore point below
+        // holds the real ones.
+        KSMotionMode::setOn(false);
         sBusy = true;
         sRestore = RestorePoint();
         for (const auto& [name, value] : llsd::inMap(preset.mSettings))
@@ -592,11 +597,11 @@ namespace
                 LL_INFOS("KStorm") << "Lighting presets: no setting " << name << ", skipped" << LL_ENDL;
                 continue;
             }
-            sRestore.mSettings[name] = control->getValue();
+            sRestore.mSettings[name] = KSMotionMode::getValue(*control);
             // Only values that differ: several settings rebuild GPU buffers on any write (section 12.5).
-            if (!llsd_equals(control->getValue(), value))
+            if (!llsd_equals(KSMotionMode::getValue(*control), value))
             {
-                control->setValue(value);
+                KSMotionMode::setValue(*control, value);
             }
         }
         if (preset.hasEnvironment())
@@ -615,9 +620,9 @@ namespace
         for (const auto& [name, value] : llsd::inMap(sRestore.mSettings))
         {
             LLControlVariable* control = gSavedSettings.getControl(name);
-            if (control && !llsd_equals(control->getValue(), value))
+            if (control && !llsd_equals(KSMotionMode::getValue(*control), value))
             {
-                control->setValue(value);
+                KSMotionMode::setValue(*control, value);
             }
         }
     }
@@ -744,10 +749,10 @@ namespace
         for (const auto& [name, value] : llsd::inMap(sActivePreset.mSettings))
         {
             LLControlVariable* control = gSavedSettings.getControl(name);
-            if (control && !llsd_equals(control->getValue(), value))
+            if (control && !llsd_equals(KSMotionMode::getValue(*control), value))
             {
-                sRestore.mSettings[name] = control->getValue();
-                control->setValue(value);
+                sRestore.mSettings[name] = KSMotionMode::getValue(*control);
+                KSMotionMode::setValue(*control, value);
             }
         }
         sBusy = false;
@@ -775,7 +780,7 @@ namespace
             {
                 if (LLControlVariable* control = gSavedSettings.getControl(setting))
                 {
-                    preset.mSettings[setting] = control->getValue();
+                    preset.mSettings[setting] = KSMotionMode::getValue(*control);
                 }
             }
         }
@@ -1015,7 +1020,7 @@ bool KSLightingPresets::update(const std::string& name)
     {
         if (LLControlVariable* control = gSavedSettings.getControl(setting))
         {
-            preset.mSettings[setting] = control->getValue();
+            preset.mSettings[setting] = KSMotionMode::getValue(*control);
         }
     }
     LLSettingsSky::ptr_t sky = KSEnvironment::getDisplaySky();
