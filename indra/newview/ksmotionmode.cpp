@@ -8,6 +8,8 @@
 
 #include "ksmotionmode.h"
 
+#include "llapp.h"
+#include "llcallbacklist.h"
 #include "llsdutil.h"
 #include "llviewercontrol.h"
 
@@ -192,6 +194,22 @@ void KSMotionMode::setValue(LLControlVariable& control, const LLSD& value)
     {
         control.setValue(value);
     }
+}
+
+void KSMotionMode::onTeleportStarted()
+{
+    static LLCachedControl<bool> on_teleport(gSavedSettings, "KSMotionModeOnTeleport", true);
+    if (!on_teleport || sOn)
+    {
+        return;
+    }
+    doOnIdleOneTime([]()
+        {
+            if (!LLApp::isExiting())
+            {
+                KSMotionMode::setOn(true);
+            }
+        });
 }
 
 void KSMotionMode::restoreForShutdown()

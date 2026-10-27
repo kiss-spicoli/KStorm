@@ -118,6 +118,7 @@
 #include "llpresetsmanager.h"
 #include "NACLantispam.h"
 #include "aoengine.h"
+#include "ksmotionmode.h"   // <KS:KS/> Motion mode on teleport
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -5551,6 +5552,13 @@ void LLAgent::setTeleportState(ETeleportState state)
                           << teleportStateName(mTeleportState) << "(" << mTeleportState << ")"
                           << LL_ENDL;
     mTeleportState = state;
+    // <KS:KS> Motion mode on any teleport: START (viewer requested, or the server's TeleportStart),
+    // REQUESTED (a finish that arrived without a start) and LOCAL (in-region, e.g. the minimap).
+    if (state == TELEPORT_START || state == TELEPORT_REQUESTED || state == TELEPORT_LOCAL)
+    {
+        KSMotionMode::onTeleportStarted();
+    }
+    // </KS:KS>
     // <FS:PP> Speed optimisation
     // if (mTeleportState > TELEPORT_NONE && gSavedSettings.getBOOL("FreezeTime"))
     static LLCachedControl<bool> freeze_time(gSavedSettings, "FreezeTime");
