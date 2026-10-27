@@ -548,7 +548,7 @@ Order: Quick; Sun/Moon, Atmosphere, Clouds, Water, Reflections, Environment Effe
 
 Bindings: `sky …` = a value of the current sky, written through `KSEnvironment::getEditableSky()` / `commitSky()` (§11.2); `water …` = a value of the current water; other names are viewer settings (`control_name`).
 
-**Toggles and their dependents (2026-10-27).** A control that has no effect while a toggle on its pane is off sits directly below that toggle and is dimmed (disabled) while it is off. The rule follows the value being drawn, so it also dims what Motion mode (§12.8) or KS Reference turned off. Dimming only reads settings: KS Reference, Motion mode and lighting presets (groups, captures, restore points) are unaffected, and a dimmed control still shows a value a preset applies. The list is `DEPENDENCIES` in `ksfloaterlightingpane.cpp` (child name → setting and minimum value; several entries must all hold); Hair Occlusion, a plain floater, uses `enabled_control="KSHairOcclusionEnabled"`. Each pane's dependents are in its *Enabling* note below.
+**Toggles and their dependents (2026-10-27).** A control that has no effect while a toggle on its pane is off sits directly below that toggle, indented 10 px (its right edge kept), and is dimmed (disabled) while it is off. A control is never dimmed by a toggle on another pane; such a condition goes in its tooltip instead (AO soften). The rule follows the value being drawn, so it also dims what Motion mode (§12.8) or KS Reference turned off. Dimming only reads settings: KS Reference, Motion mode and lighting presets (groups, captures, restore points) are unaffected, and a dimmed control still shows a value a preset applies. The list is `DEPENDENCIES` in `ksfloaterlightingpane.cpp` (child name → setting and minimum value; several entries must all hold); Hair Occlusion, a plain floater, uses `enabled_control="KSHairOcclusionEnabled"`. Each pane's dependents are in its *Enabling* note below.
 
 #### 1. Quick
 
@@ -698,9 +698,9 @@ AyaneStorm My Lights floater (viewer-only lights). Gains the Curve selector and 
 | Soften | `RenderShadowGaussian.x` | 0.001–5 / 0.001 | 3 | |
 | Blur size | `RenderShadowBlurSize` | 0–4 / 0.01 | 1.4 | |
 | Blur distance | `RenderShadowBlurDistFactor` | 0–1 / 0.01 | 0 | |
-| AO soften | `RenderShadowGaussian.y` | 0.001–3 / 0.001 | 2 | |
+| AO soften | `RenderShadowGaussian.y` | 0.001–3 / 0.001 | 2 | Softens ambient occlusion. Legacy SSAO only: GTAO (Ambient pane, Technique) bypasses it. |
 
-*Order and enabling (2026-10-27):* Probe Fill Strength, which depends on neither toggle, moved to the top. Resolution, Clarity, Bias and FOV cutoff are dimmed while Shadows is None; Spot offset unless Shadows is Sun & Moon + Projectors. The soften pass runs only while Ambient occlusion is on (`LLPipeline::renderDeferredLighting()`), so Soften, Blur size, Blur distance and AO soften sit below that check box and are dimmed while it is off; Soften also needs Shadows, and AO soften Legacy SSAO (GTAO bypasses the channel it blurs, `sunLightSSAOF.glsl`). With GTAO and no shadows, Blur size and distance stay enabled but have nothing to blur.
+*Order and enabling (2026-10-27):* Probe Fill Strength, which depends on neither toggle, moved to the top. Resolution, Clarity, Bias and FOV cutoff are dimmed while Shadows is None; Spot offset unless Shadows is Sun & Moon + Projectors. The soften pass runs only while Ambient occlusion is on (`LLPipeline::renderDeferredLighting()`), so Soften, Blur size, Blur distance and AO soften sit below that check box and are dimmed while it is off; Soften also needs Shadows. AO soften also needs Legacy SSAO (GTAO bypasses the channel it blurs, `sunLightSSAOF.glsl`), but Technique is on the Ambient pane, so its tooltip says so and it is not dimmed for it. With GTAO and no shadows, Blur size and distance stay enabled but have nothing to blur.
 
 #### 11. Ambient (not in the list; opened from Quick › Ambient occlusion › Settings…)
 

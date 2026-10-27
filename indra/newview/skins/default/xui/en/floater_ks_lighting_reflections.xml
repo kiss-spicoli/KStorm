@@ -36,14 +36,14 @@
   </combo_box>
   <slider can_edit_text="true" control_name="RenderReflectionProbeDrawDistance" decimal_digits="0" follows="left|top" height="16" increment="1" label="Probe draw distance" label_width="120" layout="topleft" left="10" max_val="4096" min_val="0" name="ks_probe_dist" show_text="true" text_width="56" top="140" width="280" />
   <check_box control_name="RenderMirrors" follows="left|top" height="16" label="Mirrors" layout="topleft" left="10" name="ks_mirrors" top="162" width="280" />
-  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_hero_res_label" top="187" width="116">Hero resolution</text>
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="20" name="ks_hero_res_label" top="187" width="106">Hero resolution</text>
   <combo_box control_name="RenderHeroProbeResolution" follows="left|top" height="23" layout="topleft" left="130" name="ks_hero_res" top="184" width="160">
     <combo_box.item label="256" name="v256" value="256" />
     <combo_box.item label="512" name="v512" value="512" />
     <combo_box.item label="1024" name="v1024" value="1024" />
     <combo_box.item label="2048" name="v2048" value="2048" />
   </combo_box>
-  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_hero_rate_label" top="215" width="116">Hero update rate</text>
+  <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="20" name="ks_hero_rate_label" top="215" width="106">Hero update rate</text>
   <combo_box control_name="RenderHeroProbeUpdateRate" follows="left|top" height="23" layout="topleft" left="130" name="ks_hero_rate" top="212" width="160">
     <combo_box.item label="Every 6 frames" name="v6" value="6" />
     <combo_box.item label="Every 3 frames" name="v3" value="3" />

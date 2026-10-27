@@ -44,6 +44,8 @@ namespace
     // A control that has no effect unless a setting (a boolean counts as 0 or 1) is at least
     // mMin, or with WHILE_OFF, while it is 0. A control listed more than once needs all of its
     // entries; a name ending in '*' is a prefix. The panes dim these controls (design section 10).
+    // Every setting here has its toggle on the same pane as the control, which sits indented
+    // below it.
     constexpr S32 WHILE_OFF = -1;
     struct Dependency
     {
@@ -65,8 +67,9 @@ namespace
         { "gtao_*",                          "RenderDeferredSSAO",           1 },
         { "gtao_*",                          "RenderAOTechnique",            1 },
         // Shadows: the shadow maps; spot offset needs projector shadows. The soften pass (Soften,
-        // Blur size, Blur distance, AO soften) runs only with ambient occlusion on, and AO soften
-        // blurs the legacy SSAO channel only (LLPipeline::renderDeferredLighting()).
+        // Blur size, Blur distance, AO soften) runs only with ambient occlusion on
+        // (LLPipeline::renderDeferredLighting()). AO soften also needs Legacy SSAO, but Technique is
+        // on the Ambient pane, so its tooltip says so instead.
         { "ks_shadow_res",                   "RenderShadowDetail",           1 },
         { "ksv_RenderShadowSplitExponent_y", "RenderShadowDetail",           1 },
         { "ks_shadow_bias",                  "RenderShadowDetail",           1 },
@@ -77,7 +80,6 @@ namespace
         { "ks_shadow_blur",                  "RenderDeferredSSAO",           1 },
         { "ks_shadow_blur_dist",             "RenderDeferredSSAO",           1 },
         { "ksv_RenderShadowGaussian_y",      "RenderDeferredSSAO",           1 },
-        { "ksv_RenderShadowGaussian_y",      "RenderAOTechnique",            WHILE_OFF },
         // Exposure: read only while Dynamic exposure is on (LLPipeline::generateExposure()).
         { "ks_dyn_*",                        "RenderDynamicExposureEnabled", 1 },
         // Material glow
