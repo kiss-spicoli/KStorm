@@ -52,9 +52,12 @@ namespace
         // Default 60 s. 0 disables the drop of all textures to low resolution after that long
         // unfocused, which reloads every texture on refocus (blur, FPS dips) (since 2026-10-26).
         { "TextureDiscardBackgroundedTime", LLSD(0.0) },
-        // Material glow blur rounds, two full-buffer passes each (default 2). 3 is the most
+        // Glow blur rounds, two full-buffer passes each (default 2). 3 is the most
         // Preferences' "Strength" slider allows (since 2026-10-27).
         { "RenderGlowIterations",           LLSD(3) },
+        // Glow buffer height 1024 rows (default 9 = 512), so wide glow and bloom stay smooth; the
+        // buffer is always 1024 wide (since 2026-10-27).
+        { "RenderGlowResolutionPow",        LLSD(10) },
     };
 
     // Reference settings (design section 12.1, approved as A14): held at their
@@ -127,7 +130,7 @@ namespace
         { "sunmoon", "Sun/Moon" }, { "atmosphere", "Atmosphere" }, { "clouds", "Clouds" },
         { "water", "Water" }, { "reflections", "Reflections" }, { "all_lights", "All lights" },
         { "shadows", "Shadows" }, { "ambient", "Ambient" }, { "exposure", "Exposure" },
-        { "glow", "Material glow" }, { "dof", "Depth of field" }, { "vignette", "Vignette" },
+        { "glow", "Glow & bloom" }, { "dof", "Depth of field" }, { "vignette", "Vignette" },
         { "ayanestorm", "AyaneStorm floaters" },
     };
 
