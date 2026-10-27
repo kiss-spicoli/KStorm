@@ -146,8 +146,9 @@ namespace
     };
     // Settings AyaneStorm's color grading and weather panels set in code (per band, per effect).
     const char* const AYANESTORM_PREFIXES[] = { "ASColorGrade", "ASWeather" };
-    // Never part of a preset: the switch of KS Reference itself.
-    const char* const EXCLUDED_SETTINGS[] = { "KSSetEnvironment" };
+    // Never part of a preset: the switch of KS Reference itself, and Motion mode (a layer that
+    // applying a preset turns off; both are check boxes on the Quick pane).
+    const char* const EXCLUDED_SETTINGS[] = { "KSSetEnvironment", "KSMotionMode" };
 
     template <typename T>
     struct EnvField
