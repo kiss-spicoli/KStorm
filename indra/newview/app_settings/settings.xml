@@ -11206,7 +11206,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>KSMotionMode</key>
   <map>
     <key>Comment</key>
-    <string>KStorm Motion mode: turns off shadows, ambient occlusion, screen space reflections, mirrors, glow, depth of field, particles, local lights and the AyaneStorm Environment and Camera effects, and freezes reflection probes, for frame rate while moving; turning it off restores the previous values. Applying a lighting preset turns it off. Never persisted: every session starts with it off</string>
+    <string>KStorm Motion mode: turns off shadows, ambient occlusion, screen space reflections, mirrors, glow, depth of field, particles, local lights and the AyaneStorm Environment and Camera effects, and freezes reflection probes, for frame rate while moving; turning it off restores the previous values. Applying a look turns it off. Never persisted: every session starts with it off</string>
     <key>Persist</key>
     <integer>0</integer>
     <key>Type</key>
@@ -11261,7 +11261,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>KSSetEnvironment</key>
   <map>
     <key>Comment</key>
-    <string>If TRUE, applies KS Reference, the built-in KStorm lighting preset (kslightingpresets.cpp); FALSE turns it off and restores the values from before it was applied</string>
+    <string>If TRUE, applies KS Reference, the built-in KStorm look (Look Inventory, kslightingpresets.cpp); FALSE turns it off and restores the values from before it was applied</string>
     <key>Persist</key>
     <integer>0</integer>
     <key>Type</key>

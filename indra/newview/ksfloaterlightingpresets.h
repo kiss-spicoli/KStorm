@@ -1,7 +1,7 @@
 /**
  * @file ksfloaterlightingpresets.h
  * @author Kissmy Spicoli
- * @brief Lighting Presets pane and its Save as / Rename / Contents dialog
+ * @brief Look Inventory pane and its Save as / Rename / Contents dialog
  *        (doc/kstorm2-lighting-UI-design.md, section 12.6).
  */
 #ifndef KS_FLOATERLIGHTINGPRESETS_H

@@ -1,7 +1,7 @@
 /**
  * @file ksfloaterlightingpresets.cpp
  * @author Kissmy Spicoli
- * @brief Lighting Presets pane and its Save as / Rename / Contents dialog.
+ * @brief Look Inventory pane and its Save as / Rename / Contents dialog.
  */
 
 #include "llviewerprecompiledheaders.h"
@@ -197,7 +197,7 @@ void KSFloaterLightingPresets::onDelete()
     {
         return;
     }
-    std::string message = "Delete the lighting preset \"" + name + "\"? This cannot be undone.";
+    std::string message = "Delete the look \"" + name + "\"? This cannot be undone.";
     if (name == KSLightingPresets::active())
     {
         message += " It is active: the values from before it was applied are restored first.";
@@ -371,11 +371,11 @@ void KSFloaterLightingPresetEdit::refreshOK()
         else if (KSLightingPresets::isBuiltIn(name))
         {
             ok = false;
-            note = "\"" + name + "\" is reserved for the built-in preset.";
+            note = "\"" + name + "\" is reserved for the built-in look.";
         }
         else if (KSLightingPresets::exists(name))
         {
-            note = "A preset with this name exists; saving replaces it.";
+            note = "A look with this name exists; saving replaces it.";
         }
         if (checkedGroups().empty())
         {
@@ -420,7 +420,7 @@ void KSFloaterLightingPresetEdit::save(const std::string& name, const std::vecto
     }
     else
     {
-        mNote->setText(std::string("The preset could not be saved."));
+        mNote->setText(std::string("The look could not be saved."));
     }
 }
 
@@ -434,7 +434,7 @@ void KSFloaterLightingPresetEdit::onOK()
         if (KSLightingPresets::exists(name))
         {
             LLHandle<KSFloaterLightingPresetEdit> handle = getDerivedHandle<KSFloaterLightingPresetEdit>();
-            confirm("Replace the lighting preset \"" + name + "\"?", [handle, name, groups]()
+            confirm("Replace the look \"" + name + "\"?", [handle, name, groups]()
                 {
                     if (KSFloaterLightingPresetEdit* self = handle.get())
                     {
@@ -457,7 +457,7 @@ void KSFloaterLightingPresetEdit::onOK()
         }
         else
         {
-            mNote->setText(std::string("The preset could not be renamed."));
+            mNote->setText(std::string("The look could not be renamed."));
         }
     }
     else if (mMode == "contents" && !KSLightingPresets::isBuiltIn(mName))
@@ -468,7 +468,7 @@ void KSFloaterLightingPresetEdit::onOK()
         }
         else
         {
-            mNote->setText(std::string("The preset could not be saved."));
+            mNote->setText(std::string("The look could not be saved."));
         }
     }
 }
