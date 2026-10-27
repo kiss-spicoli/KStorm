@@ -31,6 +31,11 @@ namespace KSMotionMode
     // owns the control, otherwise to the control (only when it differs).
     void setValue(LLControlVariable& control, const LLSD& value);
 
+    // A teleport started (remote or local): turns Motion mode on when KSMotionModeOnTeleport
+    // is set, on the next idle (not inside the teleport bookkeeping). Called from
+    // LLAgent::setTeleportState().
+    void onTeleportStarted();
+
     // Restores the previous values before settings are saved at quit.
     void restoreForShutdown();
 }
