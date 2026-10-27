@@ -48,6 +48,9 @@ namespace
         // Shadow map size relative to the screen (a change resizes the shadow maps). 1.5 gives crisp
         // shadows at 4K (sun maps 5760 x 3240, about 0.56 GB of shadow maps in all).
         { "RenderShadowResolutionScale",   LLSD(1.5) },
+        // Default 60 s. 0 disables the drop of all textures to low resolution after that long
+        // unfocused, which reloads every texture on refocus (blur, FPS dips) (since 2026-10-26).
+        { "TextureDiscardBackgroundedTime", LLSD(0.0) },
     };
 
     // Reference settings (design section 12.1, approved as A14): held at their
@@ -86,6 +89,9 @@ namespace
         { "RenderSkyAutoAdjustLegacy", LLSD(true) },   // LL default FALSE; KStorm default TRUE since 2026-10-26
         { "RenderDisableVintageMode",  LLSD(true) },
         { "WindLightUseAtmosShaders",  LLSD(true) },
+        // Default 3. 2 skips the farthest sun cascade: at the 64 m draw distance shadows end
+        // about 16-27 m out, and the widest, most costly cascade is not drawn (since 2026-10-26).
+        { "RenderShadowSplits",        LLSD(2) },
     };
 
     // Personal Lighting values. Colors are the RGB equivalents of the color
