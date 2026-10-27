@@ -1098,6 +1098,10 @@ void LLShaderMgr::initShaderCache(bool enabled, const LLUUID& old_cache_version,
             {
                 LL_INFOS("ShaderMgr") << "Shader cache version mismatch detected. Purging." << LL_ENDL;
                 clearShaderCache();
+                // <KS:KS> clearShaderCache() removes the folder; without it the cache cannot be
+                // saved this session (every shader rebuild compiles from scratch).
+                LLFile::mkdir(mShaderCacheDir);
+                // </KS:KS>
             }
             else
             {
