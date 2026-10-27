@@ -10,7 +10,9 @@
  *  - "ks_light_boxes": the "lights" info display (pipeline debug mask);
  *  - "ks_light_radius": also updates LLSelectMgr::sRenderLightRadius;
  *  - "ks_shadow_detail": feature-manager availability, as in Preferences;
- *  - "ssao_*" / "gtao_*": enabled for the matching RenderAOTechnique;
+ *  - controls listed in DEPENDENCIES (ksfloaterlightingpane.cpp): dimmed while a toggle they
+ *    depend on is off, e.g. the "ssao_*" / "gtao_*" rows for Ambient occlusion and the
+ *    matching RenderAOTechnique, "ks_dyn_*" for Dynamic exposure;
  *  - "sky_<key>" / "water_<key>": a sky or water value (KSLightingFields), edited
  *    on the local environment through KSEnvironment;
  *  - "skyc_<key>" / "waterc_<key>": a color swatch, with an optional "<name>_i"
@@ -148,7 +150,8 @@ private:
     void connectVectorSliders();
     void refreshVectorSliders();
     void refreshShadowState();
-    void refreshAOTechnique();
+    void connectDependents();
+    void refreshDependents();
     void connectQuickControls();
     void refreshKSState();
     void refreshNameTags();
@@ -167,6 +170,7 @@ private:
     void connectEnvironment();
     void refreshEnvironment();
     void onEnvCommit(const EnvBinding& binding);
+    bool isEnvBinding(const LLView* view) const;
 
     std::vector<VectorSlider> mVectorSliders;
     std::vector<boost::signals2::connection> mConnections;
@@ -179,6 +183,7 @@ private:
     bool mPinnedRowShown = true;    // the floater's height includes that row
     LLCheckBoxCtrl* mShowAvatars = nullptr;
     LLCheckBoxCtrl* mNameTags = nullptr;
+    std::vector<LLView*> mDependents;   // children listed in DEPENDENCIES
     bool mRefreshing = false;
 };
 

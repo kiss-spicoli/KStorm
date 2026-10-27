@@ -15,7 +15,7 @@
   <check_box follows="left|top" height="16" label="Shadows" layout="topleft" left="10" name="ks_group_shadows" top="166" width="135" />
   <check_box follows="left|top" height="16" label="Ambient" layout="topleft" left="150" name="ks_group_ambient" top="34" width="140" />
   <check_box follows="left|top" height="16" label="Exposure" layout="topleft" left="150" name="ks_group_exposure" top="56" width="140" />
-  <check_box follows="left|top" height="16" label="Glow" layout="topleft" left="150" name="ks_group_glow" top="78" width="140" />
+  <check_box follows="left|top" height="16" label="Material glow" layout="topleft" left="150" name="ks_group_glow" top="78" width="140" />
   <check_box follows="left|top" height="16" label="Depth of field" layout="topleft" left="150" name="ks_group_dof" top="100" width="140" />
   <check_box follows="left|top" height="16" label="Vignette" layout="topleft" left="150" name="ks_group_vignette" top="122" width="140" />
   <check_box follows="left|top" height="16" label="AyaneStorm floaters" layout="topleft" left="150" name="ks_group_ayanestorm" top="144" width="140" tool_tip="Settings of AyaneStorm's Environment Effects, Camera Effects and Depth of Field floaters." />
