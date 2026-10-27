@@ -50,6 +50,13 @@ void create_graphics_group(LLControlGroup& group);
 // <FS:Ansariel> Expose handleSetShaderChanged()
 bool handleSetShaderChanged(const LLSD& newvalue);
 
+// <KS:KS> Batched render setting writes (KStorm Motion mode): between begin and end, the
+// buffer, shader and reflection probe rebuilds that setting changes trigger are recorded and
+// run once at the end (not at all while the viewer is quitting).
+void ks_begin_render_settings_batch();
+void ks_end_render_settings_batch();
+// </KS:KS>
+
 // saved at end of session
 extern LLControlGroup gSavedSettings;
 extern LLControlGroup gSavedPerAccountSettings;

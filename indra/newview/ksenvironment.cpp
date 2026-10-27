@@ -9,6 +9,7 @@
 #include "ksenvironment.h"
 
 #include "kslightingpresets.h"
+#include "ksmotionmode.h"
 #include "llenvironment.h"
 #include "llviewercontrol.h"
 #include "pipeline.h"
@@ -71,6 +72,7 @@ void KSEnvironment::init()
     declareCodeSettings();
     // Use KS Reference is the built-in lighting preset.
     KSLightingPresets::init();
+    KSMotionMode::init();
 }
 
 LLSettingsSky::ptr_t KSEnvironment::getEditableSky()
@@ -137,6 +139,8 @@ void KSEnvironment::useShared()
 
 void KSEnvironment::restoreForShutdown()
 {
+    // Motion mode first, so the presets restore over the real values.
+    KSMotionMode::restoreForShutdown();
     KSLightingPresets::restoreForShutdown();
 }
 

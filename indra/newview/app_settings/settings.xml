@@ -11203,6 +11203,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <string />
   </map>
+  <key>KSMotionMode</key>
+  <map>
+    <key>Comment</key>
+    <string>KStorm Motion mode: turns off shadows, ambient occlusion, screen space reflections, mirrors, glow, depth of field, particles, local lights and the AyaneStorm Environment and Camera effects, and freezes reflection probes, for frame rate while moving; turning it off restores the previous values. Applying a lighting preset turns it off. Never persisted: every session starts with it off</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>KSLightingPaneStates</key>
   <map>
     <key>Comment</key>

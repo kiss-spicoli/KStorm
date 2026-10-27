@@ -258,9 +258,23 @@ static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
 
 // <FS:Ansariel> Expose handleSetShaderChanged()
 //static bool handleSetShaderChanged(const LLSD& newvalue)
+// <KS:KS> Batched render setting writes (see llviewercontrol.h).
+static S32 sKSBatchDepth = 0;
+static bool sKSPendingBuffers = false;
+static bool sKSPendingShaders = false;
+static bool sKSPendingProbes = false;
+// </KS:KS>
+
 bool handleSetShaderChanged(const LLSD& newvalue)
 // </FS:Ansariel>
 {
+    // <KS:KS>
+    if (sKSBatchDepth > 0)
+    {
+        sKSPendingShaders = true;
+        return true;
+    }
+    // </KS:KS>
     // changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
     gBumpImageList.destroyGL();
     gBumpImageList.restoreGL();
@@ -339,6 +353,13 @@ static bool handleWindowResized(const LLSD& newvalue)
 
 static bool handleReleaseGLBufferChanged(const LLSD& newvalue)
 {
+    // <KS:KS>
+    if (sKSBatchDepth > 0)
+    {
+        sKSPendingBuffers = true;
+        return true;
+    }
+    // </KS:KS>
     if (gPipeline.isInit())
     {
         gPipeline.releaseGLBuffers();
@@ -576,6 +597,13 @@ static bool handleRenderDynamicLODChanged(const LLSD& newvalue)
 
 static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
 {
+    // <KS:KS>
+    if (sKSBatchDepth > 0)
+    {
+        sKSPendingProbes = true;
+        return true;
+    }
+    // </KS:KS>
     gPipeline.mReflectionMapManager.refreshSettings();
     if (gPipeline.isInit())
     {
@@ -588,6 +616,47 @@ static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
     }
     return true;
 }
+
+// <KS:KS>
+void ks_begin_render_settings_batch()
+{
+    ++sKSBatchDepth;
+}
+
+void ks_end_render_settings_batch()
+{
+    if (sKSBatchDepth <= 0 || --sKSBatchDepth > 0)
+    {
+        return;
+    }
+    const bool probes = sKSPendingProbes;
+    const bool buffers = sKSPendingBuffers;
+    const bool shaders = sKSPendingShaders;
+    sKSPendingProbes = sKSPendingBuffers = sKSPendingShaders = false;
+    if (LLApp::isExiting())
+    {
+        return;
+    }
+    if (probes)
+    {
+        // Also releases and recreates the buffers and sets the shaders.
+        handleReflectionProbeDetailChanged(LLSD());
+        if (shaders)
+        {
+            handleSetShaderChanged(LLSD());     // the bump map cache refresh
+        }
+        return;
+    }
+    if (buffers)
+    {
+        handleReleaseGLBufferChanged(LLSD());
+    }
+    if (shaders)
+    {
+        handleSetShaderChanged(LLSD());
+    }
+}
+// </KS:KS>
 
 static bool handleReflectionProbeCountChanged(const LLSD& newvalue)
 {
