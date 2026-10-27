@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-27, at `kstorm` merge `91056a48874`.
-- **KStorm's own work:** 62 commits (Kissmy Spicoli, Oct 18 to Oct 27), 85 files, about 11,000
+- **Last updated:** 2026-10-27, at `kstorm` merge `7e27e864db1`.
+- **KStorm's own work:** 66 commits (Kissmy Spicoli, Oct 18 to Oct 27), 86 files, about 11,500
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -76,6 +76,13 @@ Details: `doc/ks-hair-occlusion.md`.
 - **AyaneStorm's large floaters stay unchanged.** Environment Effects, Viewer Lights and Camera
   Effects get a small header stand-in that docks beside the launcher and opens or closes the
   real floater. (`0ca3ba92b77`, `189dbf95bb4`, `ec9768e8a89`)
+- **Controls that would do nothing are dimmed.** Each on/off switch has the controls it governs
+  indented directly below it, and they grey out while it is off: for example the shadow sliders
+  under Shadows, the glow sliders under Glow, the Dynamic exposure tuning under Dynamic exposure,
+  and Worn lights under Only Viewer Lights. This also shows what Motion mode turned off. Hair
+  Occlusion works the same way. (`096c0a97a40`, `66b4ce8e533`)
+- **Clearer pane names.** The Glow pane is now "Material glow", so it is not confused with the
+  sky's haze glow or AyaneStorm's bloom. (`096c0a97a40`)
 - **Layout.** The launcher is always the compact icon strip, with no footer. Pane headers are
   taller and panes are 300 px wide. A Hair... button sits on Quick. (`53138cb89d8`,
   `68d6e528bd7`, `a6785359376`, `5485d81b9f0`, `4a31d052c89`)
@@ -93,6 +100,8 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   - shadow resolution 1.5x (`ec7c5ce1f88`, `3b28af09464`, tooltip `f68c8bcea06`)
   - textures no longer reload when you switch back to the viewer, and two shadow layers
     instead of three (`177dfbf963a`)
+  - material glow blurred 3 times, the most Preferences allows, instead of the default 2
+    (`096c0a97a40`)
 - **Saving a preset makes it the active one** (`aba9a069ceb`). The save took about 90 seconds
   and is now near-instant. Each preset switch does one graphics rebuild instead of dozens. A
   Second Life bug that kept the shader cache from saving after each new build is fixed.
@@ -126,6 +135,7 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 - **Design and research docs.** Lighting factors, UI design, decisions and an AI-render idea; no
   code. (`a24c8275c11`, `a9dcf435756`, `78125eea578`, `fc115c89c70`, `ff95fe874e5`,
   `29f7828dc63`, `1fc45fbd589`)
+- **This document.** (`7f8dcd24e29`)
 
 ## Where AyaneStorm's own files were touched
 
