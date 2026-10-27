@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-27, at `kstorm` merge `ab84de25201`.
-- **KStorm's own work:** 86 commits (Kissmy Spicoli, Oct 18 to Oct 27), 115 files, about 11,600
+- **Last updated:** 2026-10-27, at `kstorm` merge `03a528a8162`.
+- **KStorm's own work:** 88 commits (Kissmy Spicoli, Oct 18 to Oct 27), 115 files, about 11,700
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -91,7 +91,7 @@ Details: `doc/ks-hair-occlusion.md`.
   lightning bolt), Sun/Moon (a sky dome over the horizon), Atmosphere (haze layers), Clouds,
   Water (waves), Reflections (a mirror), Viewer Lights (a bulb), Shadows (a light, a card and
   its shadow), Exposure (the camera's +/- symbol), Glow & bloom (a glowing filament), Depth of
-  field (a lens aperture) and Vignette. Lighting Presets, Camera Effects, All lights and
+  field (a lens aperture) and Vignette. Look Inventory, Camera Effects, All lights and
   Environment Effects keep their pictures, adjusted to match. (`88c36e93f05`, `96aa43f58ee`,
   `9281361b4a4`, `26d77b6959c`, `04a6fcd486c`, `16d84a6eca5`, `6d796f226c7`, `121459cced7`,
   set v2 `b6d11547d45`)
@@ -101,12 +101,13 @@ Details: `doc/ks-hair-occlusion.md`.
 
 Details: `doc/kstorm2-lighting-UI-design.md`.
 
-## 5. Lighting presets and KS Reference
+## 5. Look Inventory and KS Reference
 
-- **Lighting presets.** Save your lighting settings as a named preset, then apply or turn it
-  off. Turning a preset off puts everything back as it was. The pane also has rename, duplicate
-  and contents views. (`79a3ce0ee5b`, `d8ffd8d668b`, `47ec7d2fa1d`)
-- **KS Reference** is the built-in preset: a neutral, predictable lighting setup to work from.
+- **Look Inventory** (named Lighting Presets until Oct 27). Save your lighting settings as a
+  named look, then apply or turn it off. Turning a look off puts everything back as it was.
+  The pane also has rename, duplicate and contents views. (`79a3ce0ee5b`, `d8ffd8d668b`,
+  `47ec7d2fa1d`; renamed `d6a1cd28377`)
+- **KS Reference** is the built-in look: a neutral, predictable lighting setup to work from.
   It sets the sky and about 54 settings. Its values were tuned along the way:
   - draw distance 64 m (`e5d1fe07c2c`)
   - shadow resolution 1.5x (`ec7c5ce1f88`, `3b28af09464`, tooltip `f68c8bcea06`)
@@ -114,8 +115,8 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
     instead of three (`177dfbf963a`)
   - glow blurred 3 times, the most Preferences allows, instead of the default 2
     (`096c0a97a40`), at full glow resolution, 1024 rows instead of 512 (`5ec4b3d7f6e`)
-- **Saving a preset makes it the active one** (`aba9a069ceb`). The save took about 90 seconds
-  and is now near-instant. Each preset switch does one graphics rebuild instead of dozens. A
+- **Saving a look makes it the active one** (`aba9a069ceb`). The save took about 90 seconds
+  and is now near-instant. Each look switch does one graphics rebuild instead of dozens. A
   Second Life bug that kept the shader cache from saving after each new build is fixed.
   (`226663fd6c0`)
 
@@ -125,7 +126,7 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   reflections, mirrors, glow, depth of field, particles, local lights, and AyaneStorm's
   environment and camera effects. Turning it off restores them. Antialiasing and HDR stay on.
   Measured about 8 to about 65 FPS. (`b43fa8df854`)
-- **Presets.** Presets never save Motion mode, and applying a preset turns it off first.
+- **Looks.** Looks never save Motion mode, and applying a look turns it off first.
   (`dcb5db0440f`)
 - **Teleports.** It turns on by itself whenever you teleport, to another region or within one
   (for example a minimap click). The `KSMotionModeOnTeleport` setting turns this off.
