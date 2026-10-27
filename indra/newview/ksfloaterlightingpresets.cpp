@@ -228,7 +228,8 @@ namespace
         }
         std::string saved = name;
         LLStringUtil::trim(saved);
-        KSLightingPresets::apply(saved);
+        // The values are already the preset's: no turn off and apply (each a full rebuild).
+        KSLightingPresets::activateSaved(saved);
         if (KSFloaterLightingPresets* pane = LLFloaterReg::findTypedInstance<KSFloaterLightingPresets>("ks_lighting_presets"))
         {
             pane->selectPreset(saved);

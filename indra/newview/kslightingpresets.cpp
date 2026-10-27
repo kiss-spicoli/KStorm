@@ -364,6 +364,16 @@ namespace
         bool hasEnvironment() const { return mSky.size() > 0 || mWater.size() > 0; }
     };
 
+    // Batches the buffer, shader and probe rebuilds that setting writes trigger, so one preset
+    // operation rebuilds once instead of once per setting (ks_begin_render_settings_batch).
+    struct RenderBatch
+    {
+        RenderBatch() { ks_begin_render_settings_batch(); }
+        ~RenderBatch() { ks_end_render_settings_batch(); }
+        RenderBatch(const RenderBatch&) = delete;
+        RenderBatch& operator=(const RenderBatch&) = delete;
+    };
+
     struct RestorePoint
     {
         LLSD mSettings = LLSD::emptyMap();
@@ -587,6 +597,7 @@ namespace
         // Motion mode off first, so its values are restored and the restore point below
         // holds the real ones.
         KSMotionMode::setOn(false);
+        RenderBatch batch;
         sBusy = true;
         sRestore = RestorePoint();
         for (const auto& [name, value] : llsd::inMap(preset.mSettings))
@@ -633,6 +644,7 @@ namespace
         {
             return;
         }
+        RenderBatch batch;
         sBusy = true;
         restoreSettings();
         if (restore_environment && sActivePreset.hasEnvironment())
@@ -659,6 +671,7 @@ namespace
     // KSSetEnvironment is KS Reference's switch.
     void onKSSetEnvironmentChanged(const LLSD& new_value)
     {
+        RenderBatch batch;     // turning the active preset off and KS Reference on: one rebuild
         if (new_value.asBoolean())
         {
             if (sActive == KSLightingPresets::KS_REFERENCE)
@@ -745,6 +758,7 @@ namespace
         {
             return;
         }
+        RenderBatch batch;
         sBusy = true;
         for (const auto& [name, value] : llsd::inMap(sActivePreset.mSettings))
         {
@@ -933,6 +947,7 @@ void KSLightingPresets::apply(const std::string& name)
     {
         return;
     }
+    RenderBatch batch;     // turning the active preset off and this one on: one rebuild
     turnOff();
     if (name == KS_REFERENCE)
     {
@@ -971,6 +986,40 @@ void KSLightingPresets::turnOff(bool restore_environment)
     }
     // Also when the switch was already off.
     turnOffInternal(restore_environment);
+}
+
+bool KSLightingPresets::activateSaved(const std::string& name)
+{
+    init();
+    Preset preset;
+    if (isBuiltIn(name) || !loadPreset(name, preset))
+    {
+        return false;
+    }
+    // Motion mode off first, as for any preset; the preset holds the values outside it.
+    KSMotionMode::setOn(false);
+    if (name == sActive)
+    {
+        adoptActiveValues(preset);
+        changedSignal()();
+        return true;
+    }
+    // Nothing is written: the values are already the preset's. The active preset's restore point
+    // carries over, so turning the new one off returns to the values from before either.
+    const std::string previous = sActive;
+    if (preset.hasEnvironment() && (previous.empty() || !sActivePreset.hasEnvironment()))
+    {
+        sRestore.mHadLocal = LLEnvironment::instance().hasEnvironment(LLEnvironment::ENV_LOCAL);
+    }
+    sActive = preset.mName;
+    adoptActiveValues(preset);
+    if (previous == KS_REFERENCE)
+    {
+        // Quick's check box follows; the listener ignores it, KS Reference is no longer active.
+        gSavedSettings.setBOOL("KSSetEnvironment", false);
+    }
+    changedSignal()();
+    return true;
 }
 
 bool KSLightingPresets::saveCurrent(const std::string& name, const std::vector<std::string>& group_ids)

@@ -67,6 +67,11 @@ namespace KSLightingPresets
     // sky and water (used when another environment replaced them, A4).
     void turnOff(bool restore_environment = true);
 
+    // Makes a preset just saved from the current values the active one without turning the
+    // active preset off or writing any value (no rebuilds, nothing changes on screen). The
+    // active preset's restore point carries over. False for KS Reference or a missing preset.
+    bool activateSaved(const std::string& name);
+
     // Saves the current values of the given groups as a preset (replacing one of
     // the same name; an active preset of that name stays active with the new
     // values). False if the name is empty, reserved or cannot be written.
