@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="18" height="18" viewBox="0 0 18 18">
-  <!-- Quick: a lightning bolt framed by two light opposing corners. -->
-  <path d="M12.3 3.3 L6.1 9.4 H9 L6.5 14.8 L13.3 7.6 H10.3 Z" fill="#d2d2d2"/>
-  <g fill="none" stroke="#d2d2d2" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M2.8 6.3 V3.2 H5.9"/>
-    <path d="M12.1 14.8 H15.2 V11.7"/>
+  <!-- Quick: a large lightning bolt. -->
+  <g transform="translate(9 9) scale(1.2 1.06) translate(-9.2 -9)">
+    <path d="M12.9 1.6 L4.2 10.2 H8.6 L5.4 16.4 L14.2 7.6 H9.7 Z" fill="#e8e8e8"/>
   </g>
 </svg>

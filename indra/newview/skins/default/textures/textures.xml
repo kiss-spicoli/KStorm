@@ -194,6 +194,12 @@ with the same filename but different name
   <texture name="Command_KSSunMoon_Icon" file_name="toolbar_icons/ks_sunmoon.png" preload="true" />                      <!-- KS:KS -->
   <texture name="Command_KSQuick_Icon" file_name="toolbar_icons/ks_quick.png" preload="true" />                          <!-- KS:KS -->
   <texture name="Command_KSReflections_Icon" file_name="toolbar_icons/ks_reflections.png" preload="true" />              <!-- KS:KS -->
+  <texture name="Command_KSClouds_Icon" file_name="toolbar_icons/ks_clouds.png" preload="true" />                        <!-- KS:KS -->
+  <texture name="Command_KSShadows_Icon" file_name="toolbar_icons/ks_shadows.png" preload="true" />                      <!-- KS:KS -->
+  <texture name="Command_KSPresets_Icon" file_name="toolbar_icons/ks_presets.png" preload="true" />                      <!-- KS:KS -->
+  <texture name="Command_KSEnvEffects_Icon" file_name="toolbar_icons/ks_env_effects.png" preload="true" />               <!-- KS:KS -->
+  <texture name="Command_KSAllLights_Icon" file_name="toolbar_icons/ks_all_lights.png" preload="true" />                 <!-- KS:KS -->
+  <texture name="Command_KSCameraEffects_Icon" file_name="toolbar_icons/ks_camera_effects.png" preload="true" />         <!-- KS:KS -->
   <texture name="Command_Environments_Icon" file_name="toolbar_icons/environments.png" preload="true" />
   <texture name="Command_Omnifilter_Icon"   file_name="toolbar_icons/omnifilter.png"   preload="true" />     <!-- FS:Zi: Omnifilter -->
   <texture name="Command_People_Icon"       file_name="toolbar_icons/people.png"       preload="true" />

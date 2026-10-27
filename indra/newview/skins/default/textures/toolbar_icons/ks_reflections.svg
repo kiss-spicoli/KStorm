@@ -2,7 +2,7 @@
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="18" height="18" viewBox="0 0 18 18">
   <!-- Reflections: a vertical mirror divides an object from its paler reversed image. -->
-  <polygon points="2.6,14 2.6,7.4 5.4,4.1 7.1,7.7 7.1,14" fill="#d2d2d2"/>
-  <line x1="9.2" y1="2.8" x2="9.2" y2="15.2" stroke="#d2d2d2" stroke-width="1.6" stroke-linecap="round"/>
-  <polygon points="15.4,14 15.4,7.4 12.6,4.1 10.9,7.7 10.9,14" fill="#d2d2d2" fill-opacity="0.58"/>
+  <polygon points="2.6,14 2.6,7.4 5.4,4.1 7.1,7.7 7.1,14" fill="#e8e8e8"/>
+  <line x1="9.2" y1="2.8" x2="9.2" y2="15.2" stroke="#e8e8e8" stroke-width="1.6" stroke-linecap="round"/>
+  <polygon points="15.4,14 15.4,7.4 12.6,4.1 10.9,7.7 10.9,14" fill="#e8e8e8" fill-opacity="0.58"/>
 </svg>

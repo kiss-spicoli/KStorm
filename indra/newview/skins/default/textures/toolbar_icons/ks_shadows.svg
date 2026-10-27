@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KStorm Viewer; author: Kissmy Spicoli -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="18" height="18" viewBox="0 0 18 18">
+  <!-- Shadows: a near light at the upper left, a standing card, and the card's dim shadow on the
+       ground, widening down and to the right as from a point light and fading as it spreads. -->
+  <defs>
+    <linearGradient id="d" gradientUnits="userSpaceOnUse" x1="7.8" y1="12.9" x2="14.2" y2="14.6">
+      <stop offset="0" stop-color="#e8e8e8" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#e8e8e8" stop-opacity="0.25"/>
+    </linearGradient>
+  </defs>
+  <circle cx="3.2" cy="3.2" r="2.1" fill="#e8e8e8"/>
+  <polygon points="5.6,14 10,11.7 17,12.4 11.5,16.7" fill="url(#d)"/>
+  <polygon points="5.6,14 10,11.7 10,3.3 5.6,5.6" fill="#e8e8e8"/>
+</svg>
