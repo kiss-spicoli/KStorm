@@ -191,6 +191,8 @@ with the same filename but different name
   <texture name="Command_KSExposure_Icon" file_name="toolbar_icons/ks_exposure.png" preload="true" />                    <!-- KS:KS -->
   <texture name="Command_KSWater_Icon" file_name="toolbar_icons/ks_water.png" preload="true" />                          <!-- KS:KS -->
   <texture name="Command_KSAtmosphere_Icon" file_name="toolbar_icons/ks_atmosphere.png" preload="true" />                <!-- KS:KS -->
+  <texture name="Command_KSSunMoon_Icon" file_name="toolbar_icons/ks_sunmoon.png" preload="true" />                      <!-- KS:KS -->
+  <texture name="Command_KSQuick_Icon" file_name="toolbar_icons/ks_quick.png" preload="true" />                          <!-- KS:KS -->
   <texture name="Command_Environments_Icon" file_name="toolbar_icons/environments.png" preload="true" />
   <texture name="Command_Omnifilter_Icon"   file_name="toolbar_icons/omnifilter.png"   preload="true" />     <!-- FS:Zi: Omnifilter -->
   <texture name="Command_People_Icon"       file_name="toolbar_icons/people.png"       preload="true" />
