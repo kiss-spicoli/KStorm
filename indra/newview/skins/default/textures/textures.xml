@@ -185,6 +185,7 @@ with the same filename but different name
   <texture name="Command_ASWeather_Icon" file_name="toolbar_icons/weather.png" preload="true" />                       <!-- AS:Chanayane -->
   <texture name="Command_ASMyLights_Icon" file_name="toolbar_icons/my_lights.png" preload="true" />                       <!-- AS:Chanayane -->
   <texture name="Command_KSVignette_Icon" file_name="toolbar_icons/ks_vignette.png" preload="true" />                     <!-- KS:KS -->
+  <texture name="Command_KSDoF_Icon" file_name="toolbar_icons/ks_dof.png" preload="true" />                               <!-- KS:KS -->
   <texture name="Command_Environments_Icon" file_name="toolbar_icons/environments.png" preload="true" />
   <texture name="Command_Omnifilter_Icon"   file_name="toolbar_icons/omnifilter.png"   preload="true" />     <!-- FS:Zi: Omnifilter -->
   <texture name="Command_People_Icon"       file_name="toolbar_icons/people.png"       preload="true" />
