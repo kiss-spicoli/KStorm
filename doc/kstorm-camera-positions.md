@@ -68,6 +68,16 @@ the camera to the avatar.
   Constraints on (otherwise `LLAgentCamera` pulls the camera back toward the avatar), so the
   floater says so instead; a locked Apply is exact either way. Records without an origin
   (never connected since) cannot be applied. Update and Rename stay with connected sims.
+- **Region connections, as observed in the viewer** (user, 2026-10-28, the world map showing the
+  camera's position):
+  - The camera moves as expected, also several regions from the avatar.
+  - When the camera is within draw distance of a region, the simulator connects that region and
+    sends its content, also across several region hops away from the avatar.
+  - A region connected a short while ago stays visible after the camera leaves, until the
+    simulator stops sending it. The viewer keeps a region until the simulator disables it; it
+    never drops one because the camera moved away.
+  - A teleport resets the connected set to the regions around the landing point, and the
+    earlier connections time out. Lock Camera turns off on any teleport too.
 - **Closing the floater** unlocks and resets the view, like Esc x3. Teleport, disconnect and quit
   also unlock.
 - **The Lock Camera toggle off** leaves the camera at the held view, movable from there. Esc x3 is the
