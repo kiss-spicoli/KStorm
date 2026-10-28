@@ -179,6 +179,7 @@
 #include "llviewerparcelmgr.h"
 // <AS:chanayane> Stream keeper
 #include "asstreamkeeper.h"
+#include "ksmotionmode.h" // <KS:KS/> Motion mode on at login
 // </AS:chanayane>
 #include "llviewerregion.h"
 #include "llviewerstats.h"
@@ -2152,6 +2153,10 @@ bool idle_startup()
         // Note: does not happen on init of singleton because preferences can use
         // this instance without logging in
         LLConversationLog::getInstance()->initLoggingState();
+
+        // <KS:KS> Motion mode on at login, as after a teleport, before the first world frame.
+        KSMotionMode::onLogin();
+        // </KS:KS>
 
         LLStartUp::setStartupState( STATE_MULTIMEDIA_INIT );
 

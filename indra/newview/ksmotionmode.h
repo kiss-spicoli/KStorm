@@ -36,6 +36,12 @@ namespace KSMotionMode
     // LLAgent::setTeleportState().
     void onTeleportStarted();
 
+    // Login reached STATE_WORLD_INIT (llstartup.cpp): turns Motion mode on when
+    // KSMotionModeOnTeleport is set, at once. The world is first drawn at STATE_STARTED, so the
+    // first world frame already uses it and the rebuild runs behind the login progress screen;
+    // the startup settings save (window creation) is long past, so its values are never saved.
+    void onLogin();
+
     // Restores the previous values before settings are saved at quit.
     void restoreForShutdown();
 }
