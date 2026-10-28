@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-28, at `kstorm` merge `81b79d7891b`.
-- **KStorm's own work:** 108 commits (Kissmy Spicoli, Oct 18 to Oct 28), 126 files, about 13,550
+- **Last updated:** 2026-10-28, at `kstorm` merge `c9ff4f5eb78`.
+- **KStorm's own work:** 110 commits (Kissmy Spicoli, Oct 18 to Oct 28), 127 files, about 13,570
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -131,9 +131,10 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   Measured about 8 to about 65 FPS. (`b43fa8df854`)
 - **Looks.** Looks never save Motion mode, and applying a look turns it off first.
   (`dcb5db0440f`)
-- **Teleports.** It turns on by itself whenever you teleport, to another region or within one
-  (for example a minimap click). The `KSMotionModeOnTeleport` setting turns this off.
-  (`183b9769220`)
+- **Teleports and login.** It turns on by itself whenever you teleport, to another region or
+  within one (for example a minimap click), and at login, before the world is first drawn, so
+  loading starts fast and nothing renders at full quality first. The `KSMotionModeOnTeleport`
+  setting turns both off. (`183b9769220`, login `0e5a1f17218`)
 - **Icon shows the state.** On the launcher, the Motion mode gauge reads fast while on and is
   mirrored to read slow while off. (`c927b6a87c1`)
 
@@ -203,7 +204,7 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
 
 - the renderer (`pipeline.cpp`), the shader manager and a few shaders
 - My Lights (`aslightrig*`, `asfloatermylights`)
-- teleport handling (`llagent.cpp`), settings, menus, the icon list (`textures.xml`) and Advanced
+- teleport and login handling (`llagent.cpp`, `llstartup.cpp`), settings, menus, the icon list (`textures.xml`) and Advanced
   Lighting
 - camera and input, for Camera Positioning's Lock Camera: the idle camera update (`llappviewer.cpp`),
   key and mouse bindings (`llviewerinput.cpp`), Esc (`llviewerwindow.cpp`) and mouselook
