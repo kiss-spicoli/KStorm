@@ -19,8 +19,9 @@ class LLLineEditor;
 class LLScrollListCtrl;
 class LLTextBox;
 
-// The camera views of every sim (other sims' dimmed and labeled: they can only be deleted),
-// with Apply, the editing buttons and the Lock toggle. Closing it turns Lock off and resets
+// The camera views of every sim, with Apply, the editing buttons and the Lock toggle. This
+// sim's views can be applied and edited, connected sims' (labeled) applied, and other sims'
+// (dimmed and labeled) only deleted. Closing it turns Lock off and resets
 // the view.
 class KSFloaterCameraPositions : public LLFloater
 {
@@ -53,6 +54,7 @@ private:
     LLTextBox* mDetails = nullptr;
     std::vector<KSCameraPositions::Record> mRecords;   // as listed
     std::string mLastRegion;    // agent region, to refresh the list on change
+    std::string mLastConnected; // connected regions (KSCameraPositions::connectedRegions()), likewise
     boost::signals2::connection mChangedConnection;
 };
 

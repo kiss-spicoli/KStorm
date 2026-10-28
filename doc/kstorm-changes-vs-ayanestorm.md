@@ -157,7 +157,10 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 - **Disable Camera Constraints** check box in the floater, and **on by default** (AyaneStorm:
   off). The camera can go beyond draw distance from the avatar and below the ground, so Apply
   lands exactly, also across a sim boundary. It is the same setting as Preferences and the
-  Advanced menu.
+  Advanced menu. (`87dc7d7eafd`)
+- **Connected sims.** Views of a sim the viewer is connected to (a neighbour it has loaded,
+  within draw distance) can be applied from where you are. Their Sim column reads "Connected:"
+  and the sim's name.
 
 Details: `doc/kstorm-camera-positions.md`.
 

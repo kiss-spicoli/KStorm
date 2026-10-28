@@ -115,9 +115,9 @@ void KSFloaterCameraPositions::onClose(bool app_quitting)
 
 void KSFloaterCameraPositions::draw()
 {
-    // Teleports and region crossings change which views are this sim's.
-    const std::string region = KSCameraPositions::currentRegion();
-    if (region != mLastRegion)
+    // Teleports, region crossings and neighbours connecting or dropping change which views are
+    // this sim's and which can be applied.
+    if (KSCameraPositions::currentRegion() != mLastRegion || KSCameraPositions::connectedRegions() != mLastConnected)
     {
         refreshList();
     }
@@ -160,6 +160,7 @@ void KSFloaterCameraPositions::refreshList()
     const KSCameraPositions::Record* current = selectedRecord();
     const std::string selected = current ? rowValue(*current) : std::string();
     mLastRegion = KSCameraPositions::currentRegion();
+    mLastConnected = KSCameraPositions::connectedRegions();
 
     mRecords = KSCameraPositions::records();
     mList->deleteAllItems();
@@ -167,6 +168,7 @@ void KSFloaterCameraPositions::refreshList()
     for (const KSCameraPositions::Record& record : mRecords)
     {
         const bool here = KSCameraPositions::isHere(record);
+        const bool connected = !here && KSCameraPositions::isConnected(record);
         LLSD row;
         row["value"] = rowValue(record);
         LLSD& name = row["columns"][0];
@@ -175,10 +177,24 @@ void KSFloaterCameraPositions::refreshList()
         name["tool_tip"] = detailsText(record.mView);
         LLSD& sim = row["columns"][1];
         sim["column"] = "sim";
-        sim["value"] = here ? getString("here") : record.mRegion;
+        if (here)
+        {
+            sim["value"] = getString("here");
+        }
+        else if (connected)
+        {
+            LLStringUtil::format_map_t args;
+            args["[SIM]"] = record.mRegion;
+            sim["value"] = getString("connected", args);
+            sim["tool_tip"] = getString("connected_tip", args);
+        }
+        else
+        {
+            sim["value"] = record.mRegion;
+        }
         LLScrollListItem* item = mList->addElement(row);
-        // Other sims' rows are dimmed but selectable, so they can be deleted from anywhere.
-        if (item && !here)
+        // Unconnected sims' rows are dimmed but selectable, so they can be deleted from anywhere.
+        if (item && !here && !connected)
         {
             for (S32 i = 0; i < item->getNumColumns(); ++i)
             {
@@ -198,7 +214,7 @@ void KSFloaterCameraPositions::refreshButtons()
     const KSCameraPositions::Record* record = selectedRecord();
     const bool here = record && KSCameraPositions::isHere(*record);
     const bool region = !mLastRegion.empty();
-    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(here);
+    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(here || (record && KSCameraPositions::isConnected(*record)));
     getChild<LLUICtrl>("ks_camera_save")->setEnabled(region);
     getChild<LLUICtrl>("ks_camera_update")->setEnabled(here);
     getChild<LLUICtrl>("ks_camera_rename")->setEnabled(here);
@@ -210,10 +226,9 @@ void KSFloaterCameraPositions::refreshButtons()
 
 void KSFloaterCameraPositions::onApply()
 {
-    const std::string name = selectedName();
-    if (!name.empty())
+    if (const KSCameraPositions::Record* record = selectedRecord())
     {
-        KSCameraPositions::apply(name);
+        KSCameraPositions::apply(*record);
     }
 }
 

@@ -6,9 +6,10 @@
  *
  * A record is a named camera view in one region: the camera position (region-local),
  * yaw / pitch / roll and the view angle. Records live in one per-account file, each
- * tagged with its region name and grid, the way My Lights tags fixed lights; only the
- * agent's region's records can be applied or edited, but any can be deleted. Names are
- * unique within a region.
+ * tagged with its region name and grid, the way My Lights tags fixed lights. Records of the
+ * agent's region can be applied and edited; records of a connected region (a neighbour the
+ * viewer has loaded, in LLWorld's region list) can be applied too; any can be deleted. Names
+ * are unique within a region.
  *
  * Applying a record moves the camera through LLAgentCamera (focus off the avatar, roll,
  * CameraAngle), so the camera can be moved on from there as usual.
@@ -47,10 +48,15 @@ namespace KSCameraPositions
         View mView;
     };
 
-    // Every record: the agent's region's first (by name), then the others (by region, name).
+    // Every record: the agent's region's first (by name), then connected regions', then the
+    // others (each by region, name).
     std::vector<Record> records();
     // Whether a record belongs to the agent's region and grid.
     bool isHere(const Record& record);
+    // Whether a record belongs to another region the viewer is connected to (same grid).
+    bool isConnected(const Record& record);
+    // Names of the connected regions other than the agent's, sorted, one per line: to notice changes.
+    std::string connectedRegions();
     bool exists(const std::string& name);      // in the agent's region
     std::string currentRegion();               // "" when there is none
 
@@ -64,8 +70,9 @@ namespace KSCameraPositions
     bool rename(const std::string& from, const std::string& to);
     // Deletes a record of any region (matched by name, region and grid).
     bool remove(const Record& record);
-    // Moves the camera to a record of the agent's region (the held view while locked).
-    bool apply(const std::string& name);
+    // Moves the camera to a record of the agent's region or a connected one (the held view
+    // while locked).
+    bool apply(const Record& record);
 
     // Zoom shown for a view angle: the default view angle (60 degrees) over it.
     F32 zoomFactor(F32 view_angle_degrees);
