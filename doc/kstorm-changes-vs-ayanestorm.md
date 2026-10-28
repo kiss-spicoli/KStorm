@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-28, at `kstorm` merge `1ea192918a7`.
-- **KStorm's own work:** 104 commits (Kissmy Spicoli, Oct 18 to Oct 28), 126 files, about 13,300
+- **Last updated:** 2026-10-28, at `kstorm` merge `81b79d7891b`.
+- **KStorm's own work:** 108 commits (Kissmy Spicoli, Oct 18 to Oct 28), 126 files, about 13,550
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -146,9 +146,9 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   included. (`9ec2c4ca485`)
 - **Per sim.** Views are stored per sim, the way My Lights stores lights left in place. A view
   belongs to the sim the camera was over when it was saved or updated, which can be a neighbour
-  of yours. Other sims' views are dimmed and show the sim's name. They cannot be applied or
-  edited from elsewhere, but they can be deleted from anywhere. (`9ec2c4ca485`, `06b21643389`;
-  camera's sim `d504d0cafe1`)
+  of yours. Other sims' views are dimmed and show the sim's name. They cannot be edited from
+  elsewhere, but they can be deleted from anywhere, and reached by Teleport (below).
+  (`9ec2c4ca485`, `06b21643389`; camera's sim `d504d0cafe1`)
 - **Lock Camera.** Freezes the camera and the avatar. While on, the camera keys, the mouse, scripted
   and sit cameras, movement keys, click-to-walk, the joystick and mouselook do nothing.
   - Pressing Esc three times always unlocks and returns the camera to the avatar.
@@ -160,11 +160,15 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   off). The camera can go beyond draw distance from the avatar and below the ground, so Apply
   lands exactly, also across a sim boundary. It is the same setting as Preferences and the
   Advanced menu. (`87dc7d7eafd`)
-- **Connected sims.** Views of a sim the viewer is connected to (a neighbour it has loaded,
-  within draw distance) can be applied, updated and renamed from where you are. Their Sim column
-  reads "Connected:" and the sim's name. (`65dd3a3654e`, editing `d504d0cafe1`)
-- **Show disconnected** check box, on by default and remembered: off, the list shows only this
-  sim's and connected sims' views. (`d504d0cafe1`)
+- **Connected sims.** Views of a sim the viewer is connected to (one it has loaded, within
+  draw distance of the camera) can be applied, updated and renamed from where you are. Their
+  Sim column reads "Connected:" and the sim's name. (`65dd3a3654e`, editing `d504d0cafe1`)
+- **Teleport to other sims' views.** On a dimmed view the Apply button reads Teleport: after a
+  confirmation it teleports you to the view and, once you land, moves the camera to it. You stay
+  where you land. Each view keeps its sim's position on the grid; older views look their sim up
+  on the world map. (`484637bfcd1`, Teleport `9bb45147996`)
+- **Show disconnected, requires teleport** check box, on by default and remembered: off, the
+  list shows only this sim's and connected sims' views. (`d504d0cafe1`, label `9bb45147996`)
 - **Floater.** It resizes in height only and keeps its size across closing and sessions. View
   names have no tooltip, so nothing covers the list. The Lock toggle is labeled Lock Camera.
   (`d504d0cafe1`)
