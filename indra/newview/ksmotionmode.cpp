@@ -212,6 +212,15 @@ void KSMotionMode::onTeleportStarted()
         });
 }
 
+void KSMotionMode::onLogin()
+{
+    static LLCachedControl<bool> on_teleport(gSavedSettings, "KSMotionModeOnTeleport", true);
+    if (on_teleport && !sOn && !LLApp::isExiting())
+    {
+        setOn(true);
+    }
+}
+
 void KSMotionMode::restoreForShutdown()
 {
     if (sOn)
