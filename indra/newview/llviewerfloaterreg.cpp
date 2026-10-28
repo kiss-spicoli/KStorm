@@ -258,6 +258,7 @@
 #include "ksfloaterlighting.h"
 #include "ksfloaterlightingpane.h"
 #include "ksfloaterlightingpresets.h"
+#include "ksfloatercamerapositions.h"
 // </KS:KS>
 #include "fsfloaterpartialinventory.h"
 #include "fsfloaterplacedetails.h"
@@ -720,6 +721,8 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("ks_lighting_clouds", "floater_ks_lighting_clouds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
     LLFloaterReg::add("ks_lighting_water", "floater_ks_lighting_water.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterLightingPane>);
     LLFloaterReg::add("ks_hair_occlusion", "floater_ks_hair_occlusion.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
+    LLFloaterReg::add("ks_camera_positions", "floater_ks_camera_positions.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterCameraPositions>);
+    LLFloaterReg::add("ks_camera_position_edit", "floater_ks_camera_position_edit.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KSFloaterCameraPositionEdit>);
     // </KS:KS>
     // <FS:CR> Search floater is deferred to login now so we can tell what grid we're in.
     //LLFloaterReg::add("search", "floater_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearch>);

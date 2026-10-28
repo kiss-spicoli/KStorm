@@ -56,6 +56,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "fscommon.h"
+#include "kscamerapositions.h" // <KS:KS/> Camera Positioning Lock
 #include "lltrans.h"
 
 using namespace LLAvatarAppearanceDefines;
@@ -2491,7 +2492,8 @@ void LLAgentCamera::changeCameraToMouselook(bool animate)
         || ( (RlvActions::isRlvEnabled()) && (!RlvActions::canChangeToMouselook()) )
 // [/RLVa:KB]
 
-        || LLViewerJoystick::getInstance()->getOverrideCamera())
+        || LLViewerJoystick::getInstance()->getOverrideCamera()
+        || KSCameraPositions::isLocked()) // <KS:KS/> Mouselook steers the avatar: not while locked
     {
         return;
     }

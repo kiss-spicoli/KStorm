@@ -1,0 +1,91 @@
+/**
+ * @file kscamerapositions.h
+ * @author Kissmy Spicoli
+ * @brief KStorm Camera Positioning: labeled camera views per sim, and the camera Lock
+ *        (doc/kstorm-camera-positions.md).
+ *
+ * A record is a named camera view in one region: the camera position (region-local),
+ * yaw / pitch / roll and the view angle. Records live in one per-account file, each
+ * tagged with its region name and grid, the way My Lights tags fixed lights; only the
+ * agent's region's records can be applied or edited, but any can be deleted. Names are
+ * unique within a region.
+ *
+ * Applying a record moves the camera through LLAgentCamera (focus off the avatar, roll,
+ * CameraAngle), so the camera can be moved on from there as usual.
+ *
+ * Lock pins the rendered camera every frame (holdCamera(), from the idle loop) and makes
+ * avatar and camera key / mouse bindings, the joystick and mouselook do nothing. Pressing
+ * Esc three times, closing the Camera Positioning floater, a teleport, a disconnect or
+ * quitting turns it off and resets the view; the Lock toggle turns it off and leaves the
+ * camera where it is. Lock is never saved.
+ */
+#ifndef KS_CAMERAPOSITIONS_H
+#define KS_CAMERAPOSITIONS_H
+
+#include "v3math.h"
+
+#include <boost/signals2.hpp>
+#include <string>
+#include <vector>
+
+namespace KSCameraPositions
+{
+    struct View
+    {
+        LLVector3 mPosition;    // region-local, meters
+        F32 mYaw = 0.f;         // degrees, 0 = east, 90 = north
+        F32 mPitch = 0.f;       // degrees, positive looks up
+        F32 mRoll = 0.f;        // degrees, LLAgentCamera roll
+        F32 mViewAngle = 0.f;   // vertical view angle (CameraAngle), degrees
+    };
+
+    struct Record
+    {
+        std::string mName;
+        std::string mRegion;
+        std::string mGrid;
+        View mView;
+    };
+
+    // Every record: the agent's region's first (by name), then the others (by region, name).
+    std::vector<Record> records();
+    // Whether a record belongs to the agent's region and grid.
+    bool isHere(const Record& record);
+    bool exists(const std::string& name);      // in the agent's region
+    std::string currentRegion();               // "" when there is none
+
+    // The current camera view, region-local; false without a region.
+    bool currentView(View& view);
+
+    // Saves the current view under a name in the agent's region (replacing one of the same
+    // name). False if the name is empty or there is no region.
+    bool saveCurrent(const std::string& name);
+    bool update(const std::string& name);
+    bool rename(const std::string& from, const std::string& to);
+    // Deletes a record of any region (matched by name, region and grid).
+    bool remove(const Record& record);
+    // Moves the camera to a record of the agent's region (the held view while locked).
+    bool apply(const std::string& name);
+
+    // Zoom shown for a view angle: the default view angle (60 degrees) over it.
+    F32 zoomFactor(F32 view_angle_degrees);
+
+    bool isLocked();
+    // Locks at the current view, or unlocks leaving the camera there.
+    void setLocked(bool locked);
+    // Unlocks (if locked) and resets the view to the avatar.
+    void unlockAndReset();
+
+    // Called from the idle loop before the camera update; while locked, pins the camera and
+    // returns true (the caller then skips its own camera update).
+    bool holdCamera();
+    // Whether a key / mouse binding function is dead while locked (llviewerinput.cpp).
+    bool blocksAction(const std::string& function_name);
+    // Every Esc key press (llviewerwindow.cpp); three within a short time unlock and reset.
+    void noteEscapeKey();
+
+    // Records or the lock state changed.
+    boost::signals2::signal<void()>& changedSignal();
+}
+
+#endif // KS_CAMERAPOSITIONS_H

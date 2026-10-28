@@ -93,6 +93,7 @@ private:
     LLButton* mDockButton = nullptr;
     S32 mFullWidth = 0;
     bool mCompact = false;
+    bool mMotionIconOn = true;      // the XUI icon (Command_Performance_Icon) is the "on" one
 };
 
 #endif // KS_FLOATERLIGHTING_H

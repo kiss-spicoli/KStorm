@@ -179,6 +179,10 @@ set(viewer_SOURCE_FILES
     # <KS:KS> Body-proxy hair occlusion.
     kshairocclusion.cpp
     # </KS:KS>
+    # <KS:KS> Camera Positioning floater and camera Lock.
+    kscamerapositions.cpp
+    ksfloatercamerapositions.cpp
+    # </KS:KS>
     # <AS:Chanayane> Viewer-local per-joint shape deformer preview.
     asbonedeformerbaker.cpp
     asfloaterbonedeformer.cpp
@@ -1141,6 +1145,10 @@ set(viewer_HEADER_FILES
     # </KS:KS>
     # <KS:KS> Body-proxy hair occlusion.
     kshairocclusion.h
+    # </KS:KS>
+    # <KS:KS> Camera Positioning floater and camera Lock.
+    kscamerapositions.h
+    ksfloatercamerapositions.h
     # </KS:KS>
     # <AS:Chanayane> Viewer-local per-joint shape deformer preview.
     asbonedeformerbaker.h

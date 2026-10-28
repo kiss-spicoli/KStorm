@@ -528,7 +528,15 @@ void KSFloaterLighting::draw()
         }
         else
         {
-            entry.mButton->setToggleState(KSMotionMode::isOn());     // Motion mode, a switch
+            const bool on = KSMotionMode::isOn();
+            entry.mButton->setToggleState(on);     // Motion mode, a switch
+            // The meter reads fast while on and, mirrored, slow while off.
+            if (on != mMotionIconOn)
+            {
+                mMotionIconOn = on;
+                entry.mButton->setImageOverlay(on ? "Command_Performance_Icon" : "Command_KSMotionOff_Icon",
+                    entry.mButton->getImageOverlayHAlign(), LLColor4::white % 0.75f);   // the XUI default color
+            }
         }
     }
     refreshDockButton();

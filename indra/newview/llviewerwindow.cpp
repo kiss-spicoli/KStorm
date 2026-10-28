@@ -28,6 +28,7 @@
 #include "llviewerwindow.h"
 // <AS:Chanayane> Aperture DoF capture: Esc stop.
 #include "asdofrenderer.h"
+#include "kscamerapositions.h" // <KS:KS/> Camera Positioning Lock
 // </AS:Chanayane>
 
 
@@ -3278,6 +3279,7 @@ bool LLViewerWindow::handleKey(KEY key, MASK mask)
     if (key == KEY_ESCAPE)
     {
         ASDoFRenderer::noteEscapeKey();
+        KSCameraPositions::noteEscapeKey(); // <KS:KS/> Esc x3 unlocks Camera Positioning Lock
     }
     // </AS:Chanayane>
 
