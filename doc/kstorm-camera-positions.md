@@ -25,8 +25,8 @@ the camera to the avatar.
   Advanced > Disable Camera Constraints. KStorm turns it on by default (`app_settings/settings.xml`,
   tagged `<KS:KS>`). While on, `LLAgentCamera` does not pull the camera back to within draw
   distance of the avatar or above the ground, so an unlocked Apply lands exactly, also across a
-  sim boundary. A locked Apply is exact either way. Only regions the viewer is connected to (the
-  avatar's region and its neighbours within draw distance) have anything to show.
+  sim boundary. A locked Apply is exact either way. Only regions the viewer is connected to have
+  anything to show (see Connected sims below: the simulator connects the regions near the camera).
 - **Connected sims** (2026-10-28): views of a sim the viewer is connected to can be applied
   from a neighbour. Their Sim column reads "Connected: <sim>".
 - **A view belongs to the sim the camera is over** (user, 2026-10-28: a view saved with the
@@ -53,6 +53,21 @@ the camera to the avatar.
   Nothing in code clamps the setting. The range is 8 to 1024 m in steps of 8 (user, 2026-10-28):
   wider at the low end than any other viewer control (Preferences > Graphics > General allows 32
   to 1024, Advanced 64 to 512).
+- **Apply reaches disconnected sims** (user, 2026-10-28). Moving only the camera near a sim
+  boundary connects sims several regions away from the avatar. The viewer never asks for a
+  region (it adds one when the simulator sends EnableSimulator). Every AgentUpdate carries the
+  camera position (`CameraCenter`) and the draw distance (`Far`) (`llviewermessage.cpp`), so the
+  simulator connects the regions near the camera, not the avatar; this is inferred from that
+  behaviour, as the server code is not available. Each record therefore keeps its region's
+  global origin (`origin`, `LLViewerRegion::getOriginGlobal()`), set on Save and Update and
+  refreshed whenever the region is connected (`refreshOrigins()`, also for records saved
+  before origins were kept, and for a region moved on the map). A disconnected record of this
+  grid with an origin can be applied: the camera goes to origin + the region-local position, and
+  the region shows once the simulator connects it (nothing shows until then, and a region too
+  far from the avatar may never be connected). An unlocked Apply that far needs Disable Camera
+  Constraints on (otherwise `LLAgentCamera` pulls the camera back toward the avatar), so the
+  floater says so instead; a locked Apply is exact either way. Records without an origin
+  (never connected since) cannot be applied. Update and Rename stay with connected sims.
 - **Closing the floater** unlocks and resets the view, like Esc x3. Teleport, disconnect and quit
   also unlock.
 - **The Lock Camera toggle off** leaves the camera at the held view, movable from there. Esc x3 is the
@@ -75,7 +90,9 @@ the camera to the avatar.
 ## Records and storage
 
 - One file, `ks_camera_positions.xml`, in `LL_PATH_PER_SL_ACCOUNT`. It holds an LLSD array of
-  `{name, region, grid, position[3], yaw, pitch, roll, view_angle}`.
+  `{name, region, grid, position[3], yaw, pitch, roll, view_angle, origin[3]}`. `origin`, the
+  region's global origin, is missing from records saved before 2026-10-28 until their region is
+  connected again.
 - This is the My Lights approach (`as_my_lights_autosave.xml`, where `ASLightRig` stores
   `mRegionName` + `mGrid`): records are tagged with the region name and the grid id
   (`LLGridManager::getGridId()`), and their positions are region-local.
@@ -84,8 +101,9 @@ the camera to the avatar.
   over when it was saved or last updated.
 - A record is **connected** when its grid is the current one and its region is another region in
   `LLWorld::getRegionList()`: one the simulator has connected the viewer to, in Second Life a
-  neighbour within draw distance of the avatar. Only these regions have anything loaded to show.
-  The set changes as the avatar moves, as draw distance changes and as regions go up or down; the
+  region within draw distance of the camera (see "Apply reaches disconnected sims"). Only these
+  regions have anything loaded to show. The set changes as the camera and the avatar move, as
+  draw distance changes and as regions go up or down; the
   floater's `draw()` compares `KSCameraPositions::connectedRegions()` (and the agent's region)
   with the last list and rebuilds the list on a change.
 - The list puts this sim's records first, then connected sims' records, then the others; each
@@ -93,8 +111,9 @@ the camera to the avatar.
   "Connected: <sim>", and **Apply** (and double-click), **Update**, **Rename...** and
   **Delete...** are enabled on them.
   Other sims' rows are dimmed (each cell is drawn in `ScrollDisabledColor`) but stay selectable,
-  and their Sim column shows the sim's name. On such a row only **Delete...** is enabled (the
-  user, 2026-10-27: deleting must not need a visit to the sim);
+  and their Sim column shows the sim's name. On such a row **Delete...** is enabled (the user,
+  2026-10-27: deleting must not need a visit to the sim), and **Apply** when the record has an
+  origin;
   `KSCameraPositions::remove(record)` matches name, region and grid. With **Show disconnected**
   off, these rows are left out. The details line shows the selected view's values; rows have no
   tooltip.

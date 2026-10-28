@@ -181,6 +181,12 @@ const KSCameraPositions::Record* KSFloaterCameraPositions::selectedAvailable() c
     return record && KSCameraPositions::isAvailable(*record) ? record : nullptr;
 }
 
+const KSCameraPositions::Record* KSFloaterCameraPositions::selectedApplicable() const
+{
+    const KSCameraPositions::Record* record = selectedRecord();
+    return record && KSCameraPositions::canApply(*record) ? record : nullptr;
+}
+
 void KSFloaterCameraPositions::refreshList()
 {
     // The selection's value from the old list (mRecords), before it is replaced.
@@ -229,7 +235,8 @@ void KSFloaterCameraPositions::refreshList()
             sim["value"] = record.mRegion;
         }
         LLScrollListItem* item = mList->addElement(row);
-        // Unconnected sims' rows are dimmed but selectable, so they can be deleted from anywhere.
+        // Unconnected sims' rows are dimmed but selectable: they can be applied (by their stored
+        // origin) and deleted from anywhere.
         if (item && !here && !connected)
         {
             for (S32 i = 0; i < item->getNumColumns(); ++i)
@@ -250,7 +257,7 @@ void KSFloaterCameraPositions::refreshButtons()
     const KSCameraPositions::Record* record = selectedRecord();
     const bool available = selectedAvailable() != nullptr;
     const bool region = !mLastRegion.empty();
-    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(available);
+    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(selectedApplicable() != nullptr);
     getChild<LLUICtrl>("ks_camera_save")->setEnabled(region);
     getChild<LLUICtrl>("ks_camera_update")->setEnabled(available);
     getChild<LLUICtrl>("ks_camera_rename")->setEnabled(available);
@@ -262,10 +269,21 @@ void KSFloaterCameraPositions::refreshButtons()
 
 void KSFloaterCameraPositions::onApply()
 {
-    if (const KSCameraPositions::Record* record = selectedAvailable())
+    const KSCameraPositions::Record* record = selectedApplicable();
+    if (!record)
     {
-        KSCameraPositions::apply(*record);
+        return;
     }
+    // An unlocked camera far from the avatar is pulled back while the constraints are on; a
+    // locked one is placed exactly either way.
+    if (!KSCameraPositions::isAvailable(*record) && !KSCameraPositions::isLocked()
+        && !gSavedSettings.getBOOL("DisableCameraConstraints"))
+    {
+        alert(record->mRegion + " is not connected. To move the camera there, turn on Disable Camera "
+            "Constraints, or turn on Lock Camera first.");
+        return;
+    }
+    KSCameraPositions::apply(*record);
 }
 
 void KSFloaterCameraPositions::onUpdate()

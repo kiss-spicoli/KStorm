@@ -12,6 +12,11 @@
  * viewer has loaded, in LLWorld's region list) can be applied and edited; any can be
  * deleted. Names are unique within a region.
  *
+ * Each record also keeps its region's global origin, taken whenever the region is connected.
+ * With it, a record of a disconnected region on this grid can be applied too: the camera goes
+ * to the global position, and the simulator connects the regions near the camera (it receives
+ * the camera position and draw distance in every AgentUpdate).
+ *
  * Applying a record moves the camera through LLAgentCamera (focus off the avatar, roll,
  * CameraAngle), so the camera can be moved on from there as usual.
  *
@@ -24,6 +29,7 @@
 #ifndef KS_CAMERAPOSITIONS_H
 #define KS_CAMERAPOSITIONS_H
 
+#include "v3dmath.h"
 #include "v3math.h"
 
 #include <boost/signals2.hpp>
@@ -47,6 +53,8 @@ namespace KSCameraPositions
         std::string mRegion;
         std::string mGrid;
         View mView;
+        LLVector3d mOrigin;         // the region's global origin when last connected
+        bool mHasOrigin = false;    // false for records saved before origins were kept, until connected
     };
 
     // Every record: the agent's region's first (by name), then connected regions', then the
@@ -58,6 +66,8 @@ namespace KSCameraPositions
     bool isConnected(const Record& record);
     // Whether a record belongs to the agent's region or a connected one: it can be applied and edited.
     bool isAvailable(const Record& record);
+    // Whether a record can be applied: available, or of this grid with a known region origin.
+    bool canApply(const Record& record);
     // Names of the connected regions other than the agent's, sorted, one per line: to notice changes.
     std::string connectedRegions();
     bool exists(const std::string& name, const std::string& region);
@@ -78,7 +88,9 @@ namespace KSCameraPositions
     bool rename(const Record& record, const std::string& to);
     // Deletes a record of any region (matched by name, region and grid).
     bool remove(const Record& record);
-    // Moves the camera to an available record (the held view while locked).
+    // Moves the camera to a record canApply() accepts (the held view while locked). A
+    // disconnected region's record goes by its stored origin; the region appears once the
+    // simulator connects it.
     bool apply(const Record& record);
 
     // Zoom shown for a view angle: the default view angle (60 degrees) over it.

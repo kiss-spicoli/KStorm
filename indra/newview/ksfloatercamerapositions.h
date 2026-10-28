@@ -19,10 +19,11 @@ class LLLineEditor;
 class LLScrollListCtrl;
 class LLTextBox;
 
-// The camera views of every sim, with Apply, the editing buttons and the Lock Camera toggle. Views of
-// this sim and connected sims (labeled) can be applied and edited; other sims' (dimmed and
-// labeled, hidden while Show disconnected is off) only deleted. Closing it turns Lock Camera off and
-// resets the view. It resizes in height only (the list grows); its size is saved.
+// The camera views of every sim, with Apply, the editing buttons and the Lock Camera toggle. Views
+// of this sim and connected sims (labeled) can be applied and edited; other sims' (dimmed and
+// labeled, hidden while Show disconnected is off) applied by their stored origin and deleted.
+// Closing it turns Lock Camera off and resets the view. It resizes in height only (the list
+// grows); its size is saved.
 class KSFloaterCameraPositions : public LLFloater
 {
 public:
@@ -43,6 +44,8 @@ private:
     const KSCameraPositions::Record* selectedRecord() const;
     // The selected record when it can be applied and edited, else null.
     const KSCameraPositions::Record* selectedAvailable() const;
+    // The selected record when it can be applied (KSCameraPositions::canApply()), else null.
+    const KSCameraPositions::Record* selectedApplicable() const;
 
     void onApply();
     void onUpdate();

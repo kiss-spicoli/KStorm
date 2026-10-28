@@ -71,6 +71,10 @@ namespace
         data["pitch"] = record.mView.mPitch;
         data["roll"] = record.mView.mRoll;
         data["view_angle"] = record.mView.mViewAngle;
+        if (record.mHasOrigin)
+        {
+            data["origin"] = record.mOrigin.getValue();
+        }
         return data;
     }
 
@@ -85,6 +89,11 @@ namespace
         record.mView.mPitch = (F32)data["pitch"].asReal();
         record.mView.mRoll = (F32)data["roll"].asReal();
         record.mView.mViewAngle = (F32)data["view_angle"].asReal();
+        if (data.has("origin"))
+        {
+            record.mOrigin.setValue(data["origin"]);
+            record.mHasOrigin = true;
+        }
         return record;
     }
 
@@ -152,6 +161,29 @@ namespace
             }
         }
         return nullptr;
+    }
+
+    // Records the global origin of every connected record's region: records saved before origins
+    // were kept get one, and a region moved on the map gets its new one. Saves when one changed.
+    void refreshOrigins()
+    {
+        bool changed_any = false;
+        for (Record& record : sRecords)
+        {
+            if (const LLViewerRegion* region = regionOf(record))
+            {
+                if (!record.mHasOrigin || record.mOrigin != region->getOriginGlobal())
+                {
+                    record.mOrigin = region->getOriginGlobal();
+                    record.mHasOrigin = true;
+                    changed_any = true;
+                }
+            }
+        }
+        if (changed_any)
+        {
+            save();
+        }
     }
 
     // Sort rank: this sim, connected sims, the others.
@@ -282,6 +314,7 @@ namespace
 std::vector<Record> KSCameraPositions::records()
 {
     load();
+    refreshOrigins();
     std::vector<Record> list = sRecords;
     std::stable_sort(list.begin(), list.end(), [](const Record& a, const Record& b)
         {
@@ -314,6 +347,11 @@ bool KSCameraPositions::isConnected(const Record& record)
 bool KSCameraPositions::isAvailable(const Record& record)
 {
     return regionOf(record) != nullptr;
+}
+
+bool KSCameraPositions::canApply(const Record& record)
+{
+    return isAvailable(record) || (record.mHasOrigin && record.mGrid == currentGrid());
 }
 
 std::string KSCameraPositions::connectedRegions()
@@ -376,7 +414,8 @@ bool KSCameraPositions::saveCurrent(const std::string& name)
     {
         return false;
     }
-    const std::string region = cameraRegion();
+    const LLViewerRegion* region_ptr = cameraRegionPtr();
+    const std::string region = region_ptr->getName();
     auto it = findIn(label, region);
     if (it == sRecords.end())
     {
@@ -388,6 +427,8 @@ bool KSCameraPositions::saveCurrent(const std::string& name)
         it = sRecords.end() - 1;
     }
     it->mView = view;
+    it->mOrigin = region_ptr->getOriginGlobal();
+    it->mHasOrigin = true;
     save();
     changed();
     return true;
@@ -402,7 +443,8 @@ bool KSCameraPositions::update(const Record& record)
         return false;
     }
     // The view now belongs to the region the camera is over; its name must be free there.
-    const std::string region = cameraRegion();
+    const LLViewerRegion* region_ptr = cameraRegionPtr();
+    const std::string region = region_ptr->getName();
     if (region != it->mRegion && exists(it->mName, region))
     {
         return false;
@@ -410,6 +452,8 @@ bool KSCameraPositions::update(const Record& record)
     it->mRegion = region;
     it->mGrid = currentGrid();
     it->mView = view;
+    it->mOrigin = region_ptr->getOriginGlobal();
+    it->mHasOrigin = true;
     save();
     changed();
     return true;
@@ -446,14 +490,16 @@ bool KSCameraPositions::remove(const Record& record)
 bool KSCameraPositions::apply(const Record& record)
 {
     auto it = findRecord(record);
-    // Positions are local to the record's own region, which may be a connected neighbour.
-    LLViewerRegion* region = it != sRecords.end() ? regionOf(*it) : nullptr;
-    if (!region)
+    if (it == sRecords.end() || !canApply(*it))
     {
         return false;
     }
+    // Positions are local to the record's own region: a connected one gives its live origin, a
+    // disconnected one the origin stored when it was last connected.
     const View& view = it->mView;
-    const LLVector3d position = region->getPosGlobalFromRegion(view.mPosition);
+    const LLViewerRegion* region = regionOf(*it);
+    const LLVector3d position = region ? region->getPosGlobalFromRegion(view.mPosition)
+                                       : it->mOrigin + LLVector3d(view.mPosition);
     LLVector3 at;
     LLVector3 left;
     LLVector3 up;
