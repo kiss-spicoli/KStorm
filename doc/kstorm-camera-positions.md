@@ -20,7 +20,7 @@ the camera to the avatar.
   divided by the angle, so 1.00x is normal. Apply sets `CameraAngle`.
 - **Lock Camera is a full freeze**: the rendered camera is pinned every frame, and avatar/camera key and
   mouse bindings, the joystick and mouselook do nothing.
-- **Disable Camera Constraints** (check box under Lock Camera, 2026-10-28) is bound to the
+- **Disable Camera Constraints** (check box under Draw Distance, 2026-10-28) is bound to the
   `DisableCameraConstraints` setting, the same one as Preferences > Move & View > View and
   Advanced > Disable Camera Constraints. KStorm turns it on by default (`app_settings/settings.xml`,
   tagged `<KS:KS>`). While on, `LLAgentCamera` does not pull the camera back to within draw
@@ -47,6 +47,11 @@ the camera to the avatar.
   edge. `save_rect` keeps the size across closing and sessions. `min_height` is the XUI height.
 - **"Lock Camera"** (user, 2026-10-28): the Lock toggle is labeled Lock Camera, and every
   mention follows.
+- **Draw Distance** (user, 2026-10-28): a slider just below Lock Camera, bound to `RenderFarClip`
+  (`control_name`), so it follows every other setter: Preferences > Graphics > General and
+  Advanced, looks such as the Reference look, the Performance floaters, the `/dd` chat command.
+  Nothing in code clamps the setting; the range is the widest any viewer control allows,
+  32 to 1024 m in steps of 8, as in Preferences > Graphics > General (Advanced allows 64 to 512).
 - **Closing the floater** unlocks and resets the view, like Esc x3. Teleport, disconnect and quit
   also unlock.
 - **The Lock Camera toggle off** leaves the camera at the held view, movable from there. Esc x3 is the
@@ -58,7 +63,7 @@ the camera to the avatar.
 |---|---|
 | `kscamerapositions.cpp/.h` | Records (load/save, per-sim), Apply, Lock Camera state, hooks' entry points |
 | `ksfloatercamerapositions.cpp/.h` | Floater `ks_camera_positions` and name dialog `ks_camera_position_edit` |
-| `floater_ks_camera_positions.xml` | 300 px wide, height-resizable: list (View, Sim), Show disconnected, details line, Apply / Save current as... / Update / Rename... / Delete... / Lock Camera, Disable Camera Constraints |
+| `floater_ks_camera_positions.xml` | 300 px wide, height-resizable: list (View, Sim), Show disconnected, details line, Apply / Save current as... / Update / Rename... / Delete... / Lock Camera, Draw Distance, Disable Camera Constraints |
 | `floater_ks_camera_position_edit.xml` | Name dialog (Save, Rename) |
 
 `<KS:KS>`-tagged upstream edits: `menu_viewer.xml` (menu item), `llviewerfloaterreg.cpp`
