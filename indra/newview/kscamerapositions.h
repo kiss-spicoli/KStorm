@@ -12,6 +12,12 @@
  * viewer has loaded, in LLWorld's region list) can be applied and edited; any can be
  * deleted. Names are unique within a region.
  *
+ * Each record also keeps its region's global origin, taken whenever the region is connected.
+ * A record of a disconnected region on this grid is reached by teleport (teleportTo()): the
+ * avatar teleports to the view's position (by the stored origin, or the region looked up by
+ * name on the world map), and once it has landed the view is applied; the avatar stays where
+ * it landed.
+ *
  * Applying a record moves the camera through LLAgentCamera (focus off the avatar, roll,
  * CameraAngle), so the camera can be moved on from there as usual.
  *
@@ -24,6 +30,7 @@
 #ifndef KS_CAMERAPOSITIONS_H
 #define KS_CAMERAPOSITIONS_H
 
+#include "v3dmath.h"
 #include "v3math.h"
 
 #include <boost/signals2.hpp>
@@ -47,6 +54,8 @@ namespace KSCameraPositions
         std::string mRegion;
         std::string mGrid;
         View mView;
+        LLVector3d mOrigin;         // the region's global origin when last connected
+        bool mHasOrigin = false;    // false for records saved before origins were kept, until connected
     };
 
     // Every record: the agent's region's first (by name), then connected regions', then the
@@ -58,6 +67,8 @@ namespace KSCameraPositions
     bool isConnected(const Record& record);
     // Whether a record belongs to the agent's region or a connected one: it can be applied and edited.
     bool isAvailable(const Record& record);
+    // Whether a record can be reached by teleport: of this grid (any region, known or not).
+    bool canTeleport(const Record& record);
     // Names of the connected regions other than the agent's, sorted, one per line: to notice changes.
     std::string connectedRegions();
     bool exists(const std::string& name, const std::string& region);
@@ -80,6 +91,10 @@ namespace KSCameraPositions
     bool remove(const Record& record);
     // Moves the camera to an available record (the held view while locked).
     bool apply(const Record& record);
+    // Teleports the avatar to a record's position and applies the view after landing. Without a
+    // stored origin the region is looked up by name on the world map first. False if the record
+    // is gone or of another grid. A failed teleport or lookup cancels it (with a message).
+    bool teleportTo(const Record& record);
 
     // Zoom shown for a view angle: the default view angle (60 degrees) over it.
     F32 zoomFactor(F32 view_angle_degrees);

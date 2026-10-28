@@ -229,7 +229,8 @@ void KSFloaterCameraPositions::refreshList()
             sim["value"] = record.mRegion;
         }
         LLScrollListItem* item = mList->addElement(row);
-        // Unconnected sims' rows are dimmed but selectable, so they can be deleted from anywhere.
+        // Unconnected sims' rows are dimmed but selectable: they can be applied (by their stored
+        // origin) and deleted from anywhere.
         if (item && !here && !connected)
         {
             for (S32 i = 0; i < item->getNumColumns(); ++i)
@@ -250,7 +251,12 @@ void KSFloaterCameraPositions::refreshButtons()
     const KSCameraPositions::Record* record = selectedRecord();
     const bool available = selectedAvailable() != nullptr;
     const bool region = !mLastRegion.empty();
-    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(available);
+    // Apply on this sim's and connected sims' views; Teleport on the others (same grid).
+    LLButton* apply = getChild<LLButton>("ks_camera_apply");
+    const bool teleport = record && !available;
+    apply->setLabel(getString(teleport ? "teleport_label" : "apply_label"));
+    apply->setToolTip(getString(teleport ? "teleport_tip" : "apply_tip"));
+    apply->setEnabled(available || (record && KSCameraPositions::canTeleport(*record)));
     getChild<LLUICtrl>("ks_camera_save")->setEnabled(region);
     getChild<LLUICtrl>("ks_camera_update")->setEnabled(available);
     getChild<LLUICtrl>("ks_camera_rename")->setEnabled(available);
@@ -262,9 +268,22 @@ void KSFloaterCameraPositions::refreshButtons()
 
 void KSFloaterCameraPositions::onApply()
 {
-    if (const KSCameraPositions::Record* record = selectedAvailable())
+    const KSCameraPositions::Record* selected = selectedRecord();
+    if (!selected)
     {
-        KSCameraPositions::apply(*record);
+        return;
+    }
+    if (KSCameraPositions::isAvailable(*selected))
+    {
+        KSCameraPositions::apply(*selected);
+        return;
+    }
+    // A disconnected sim's view: teleport there, and the view is applied after landing.
+    if (KSCameraPositions::canTeleport(*selected))
+    {
+        const KSCameraPositions::Record record = *selected;
+        confirm("Teleport to " + record.mRegion + " and move the camera to \"" + record.mName + "\"?",
+            [record]() { KSCameraPositions::teleportTo(record); });
     }
 }
 
