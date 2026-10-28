@@ -5,10 +5,10 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-27, on branch `feat-ks-camera-positions` (`06b21643389`), not yet
+- **Last updated:** 2026-10-27, on branch `feat-ks-camera-positions` (`c927b6a87c1`), not yet
   merged into `kstorm`. The last `kstorm` merge is `03a528a8162`.
-- **KStorm's own work:** 92 commits (Kissmy Spicoli, Oct 18 to Oct 27), 125 files, about 13,000
-  lines added. These counts include the unmerged Camera Positioning branch.
+- **KStorm's own work:** 94 commits (Kissmy Spicoli, Oct 18 to Oct 27), 126 files, about 13,000
+  lines added. These counts include the unmerged `feat-ks-camera-positions` branch.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
 
@@ -132,6 +132,9 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 - **Teleports.** It turns on by itself whenever you teleport, to another region or within one
   (for example a minimap click). The `KSMotionModeOnTeleport` setting turns this off.
   (`183b9769220`)
+- **Icon shows the state.** On the launcher, the Motion mode gauge reads fast while on and is
+  mirrored to read slow while off. (`c927b6a87c1`, on the unmerged `feat-ks-camera-positions`
+  branch)
 
 ## 7. Camera Positioning: saved camera views and camera Lock
 
