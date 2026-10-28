@@ -19,10 +19,10 @@ class LLLineEditor;
 class LLScrollListCtrl;
 class LLTextBox;
 
-// The camera views of every sim, with Apply, the editing buttons and the Lock toggle. This
-// sim's views can be applied and edited, connected sims' (labeled) applied, and other sims'
-// (dimmed and labeled) only deleted. Closing it turns Lock off and resets
-// the view.
+// The camera views of every sim, with Apply, the editing buttons and the Lock Camera toggle. Views of
+// this sim and connected sims (labeled) can be applied and edited; other sims' (dimmed and
+// labeled, hidden while Show disconnected is off) only deleted. Closing it turns Lock Camera off and
+// resets the view. It resizes in height only (the list grows); its size is saved.
 class KSFloaterCameraPositions : public LLFloater
 {
 public:
@@ -34,15 +34,15 @@ public:
     void onClose(bool app_quitting) override;
     void draw() override;
 
-    // Selects a view of this sim in the list (after Save current as... and Rename...).
-    void selectPosition(const std::string& name);
+    // Selects an available view in the list (after Save current as... and Rename...).
+    void selectPosition(const std::string& region, const std::string& name);
 
 private:
     void refreshList();
     void refreshButtons();
     const KSCameraPositions::Record* selectedRecord() const;
-    // The selected view's name when it is this sim's, else "".
-    std::string selectedName() const;
+    // The selected record when it can be applied and edited, else null.
+    const KSCameraPositions::Record* selectedAvailable() const;
 
     void onApply();
     void onUpdate();
@@ -56,9 +56,11 @@ private:
     std::string mLastRegion;    // agent region, to refresh the list on change
     std::string mLastConnected; // connected regions (KSCameraPositions::connectedRegions()), likewise
     boost::signals2::connection mChangedConnection;
+    boost::signals2::connection mShowConnection;    // KSCameraPositionsShowDisconnected
 };
 
-// Name dialog; the key holds "mode" ("save" or "rename") and "name" (the view, for rename).
+// Name dialog; the key holds "mode" ("save" or "rename") and, for rename, the view's "name",
+// "region" and "grid".
 class KSFloaterCameraPositionEdit : public LLFloater
 {
 public:
@@ -72,7 +74,7 @@ private:
     void onOK();
 
     std::string mMode;
-    std::string mName;
+    KSCameraPositions::Record mRecord;  // the view to rename
     LLLineEditor* mNameEditor = nullptr;
     LLTextBox* mNote = nullptr;
     LLButton* mOKButton = nullptr;

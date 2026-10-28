@@ -1,7 +1,7 @@
 /**
  * @file kscamerapositions.cpp
  * @author Kissmy Spicoli
- * @brief KStorm Camera Positioning: labeled camera views per sim, and the camera Lock.
+ * @brief KStorm Camera Positioning: labeled camera views per sim, and Lock Camera.
  */
 
 #include "llviewerprecompiledheaders.h"
@@ -160,11 +160,33 @@ namespace
         return KSCameraPositions::isHere(record) ? 0 : KSCameraPositions::isConnected(record) ? 1 : 2;
     }
 
-    std::vector<Record>::iterator findHere(const std::string& name)
+    // The stored record with a name in a region of the current grid.
+    std::vector<Record>::iterator findIn(const std::string& name, const std::string& region)
     {
         load();
-        return std::find_if(sRecords.begin(), sRecords.end(),
-            [&name](const Record& record) { return record.mName == name && KSCameraPositions::isHere(record); });
+        const std::string grid = currentGrid();
+        return std::find_if(sRecords.begin(), sRecords.end(), [&](const Record& record)
+            {
+                return record.mName == name && record.mRegion == region && record.mGrid == grid;
+            });
+    }
+
+    // The stored record matching a copy (name, region and grid).
+    std::vector<Record>::iterator findRecord(const Record& record)
+    {
+        load();
+        return std::find_if(sRecords.begin(), sRecords.end(), [&record](const Record& other)
+            {
+                return other.mName == record.mName && other.mRegion == record.mRegion && other.mGrid == record.mGrid;
+            });
+    }
+
+    // The connected region the camera is over, else the agent's (a camera over the void).
+    LLViewerRegion* cameraRegionPtr()
+    {
+        const LLVector3d camera = gAgent.getPosGlobalFromAgent(LLViewerCamera::getInstance()->getOrigin());
+        LLViewerRegion* region = LLWorld::getInstance()->getRegionFromPosGlobal(camera);
+        return region ? region : gAgent.getRegion();
     }
 
     // The unrolled camera frame looking along yaw / pitch, the one LLViewerCamera::updateCameraLocation()
@@ -289,6 +311,11 @@ bool KSCameraPositions::isConnected(const Record& record)
     return !isHere(record) && regionOf(record) != nullptr;
 }
 
+bool KSCameraPositions::isAvailable(const Record& record)
+{
+    return regionOf(record) != nullptr;
+}
+
 std::string KSCameraPositions::connectedRegions()
 {
     const LLViewerRegion* here = gAgent.getRegion();
@@ -309,9 +336,9 @@ std::string KSCameraPositions::connectedRegions()
     return joined;
 }
 
-bool KSCameraPositions::exists(const std::string& name)
+bool KSCameraPositions::exists(const std::string& name, const std::string& region)
 {
-    return findHere(name) != sRecords.end();
+    return findIn(name, region) != sRecords.end();
 }
 
 std::string KSCameraPositions::currentRegion()
@@ -320,9 +347,15 @@ std::string KSCameraPositions::currentRegion()
     return region ? region->getName() : std::string();
 }
 
+std::string KSCameraPositions::cameraRegion()
+{
+    const LLViewerRegion* region = cameraRegionPtr();
+    return region ? region->getName() : std::string();
+}
+
 bool KSCameraPositions::currentView(View& view)
 {
-    LLViewerRegion* region = gAgent.getRegion();
+    LLViewerRegion* region = cameraRegionPtr();
     if (!region)
     {
         return false;
@@ -343,12 +376,13 @@ bool KSCameraPositions::saveCurrent(const std::string& name)
     {
         return false;
     }
-    auto it = findHere(label);
+    const std::string region = cameraRegion();
+    auto it = findIn(label, region);
     if (it == sRecords.end())
     {
         Record record;
         record.mName = label;
-        record.mRegion = currentRegion();
+        record.mRegion = region;
         record.mGrid = currentGrid();
         sRecords.push_back(record);
         it = sRecords.end() - 1;
@@ -359,18 +393,34 @@ bool KSCameraPositions::saveCurrent(const std::string& name)
     return true;
 }
 
-bool KSCameraPositions::update(const std::string& name)
+bool KSCameraPositions::update(const Record& record)
 {
-    auto it = findHere(name);
-    return it != sRecords.end() && saveCurrent(name);
+    auto it = findRecord(record);
+    View view;
+    if (it == sRecords.end() || !isAvailable(*it) || !currentView(view))
+    {
+        return false;
+    }
+    // The view now belongs to the region the camera is over; its name must be free there.
+    const std::string region = cameraRegion();
+    if (region != it->mRegion && exists(it->mName, region))
+    {
+        return false;
+    }
+    it->mRegion = region;
+    it->mGrid = currentGrid();
+    it->mView = view;
+    save();
+    changed();
+    return true;
 }
 
-bool KSCameraPositions::rename(const std::string& from, const std::string& to)
+bool KSCameraPositions::rename(const Record& record, const std::string& to)
 {
     std::string label = to;
     LLStringUtil::trim(label);
-    auto it = findHere(from);
-    if (it == sRecords.end() || label.empty() || exists(label))
+    auto it = findRecord(record);
+    if (it == sRecords.end() || !isAvailable(*it) || label.empty() || exists(label, it->mRegion))
     {
         return false;
     }
@@ -382,11 +432,7 @@ bool KSCameraPositions::rename(const std::string& from, const std::string& to)
 
 bool KSCameraPositions::remove(const Record& record)
 {
-    load();
-    auto it = std::find_if(sRecords.begin(), sRecords.end(), [&record](const Record& other)
-        {
-            return other.mName == record.mName && other.mRegion == record.mRegion && other.mGrid == record.mGrid;
-        });
+    auto it = findRecord(record);
     if (it == sRecords.end())
     {
         return false;
@@ -399,11 +445,7 @@ bool KSCameraPositions::remove(const Record& record)
 
 bool KSCameraPositions::apply(const Record& record)
 {
-    load();
-    auto it = std::find_if(sRecords.begin(), sRecords.end(), [&record](const Record& other)
-        {
-            return other.mName == record.mName && other.mRegion == record.mRegion && other.mGrid == record.mGrid;
-        });
+    auto it = findRecord(record);
     // Positions are local to the record's own region, which may be a connected neighbour.
     LLViewerRegion* region = it != sRecords.end() ? regionOf(*it) : nullptr;
     if (!region)

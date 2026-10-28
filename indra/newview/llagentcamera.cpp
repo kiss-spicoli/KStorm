@@ -56,7 +56,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "fscommon.h"
-#include "kscamerapositions.h" // <KS:KS/> Camera Positioning Lock
+#include "kscamerapositions.h" // <KS:KS/> Camera Positioning's Lock Camera
 #include "lltrans.h"
 
 using namespace LLAvatarAppearanceDefines;

@@ -87,7 +87,7 @@
 // <KS:KS> Restore values cached by "Set KS environment" before saving settings.
 #include "ksenvironment.h"
 // </KS:KS>
-#include "kscamerapositions.h" // <KS:KS/> Camera Positioning Lock
+#include "kscamerapositions.h" // <KS:KS/> Camera Positioning's Lock Camera
 #include "llviewerparcelmedia.h"
 #include "llviewershadermgr.h"
 #include "llviewermediafocus.h"
@@ -1735,7 +1735,7 @@ bool LLAppViewer::doFrame()
                 {
                     LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df JoystickKeyboard"); // <FS:Beq/> Move this to the right place
                     LLPerfStats::RecordSceneTime T(LLPerfStats::StatType_t::RENDER_IDLE);
-                    // <KS:KS> Camera Positioning Lock: the joystick moves neither avatar nor camera.
+                    // <KS:KS> Camera Positioning's Lock Camera: the joystick moves neither avatar nor camera.
                     //joystick->scanJoystick();
                     if (!KSCameraPositions::isLocked())
                     {
@@ -6348,7 +6348,7 @@ void LLAppViewer::idle()
     }
     // </AS:Chanayane>
 
-    // <KS:KS> Camera Positioning Lock pins the camera, before any other camera update.
+    // <KS:KS> Camera Positioning's Lock Camera pins the camera, before any other camera update.
     //if (gAgentPilot.isPlaying() && gAgentPilot.getOverrideCamera())
     if (KSCameraPositions::holdCamera())
     {
