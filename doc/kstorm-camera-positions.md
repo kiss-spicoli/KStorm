@@ -20,6 +20,13 @@ the camera to the avatar.
   divided by the angle, so 1.00x is normal. Apply sets `CameraAngle`.
 - **Lock is a full freeze**: the rendered camera is pinned every frame, and avatar/camera key and
   mouse bindings, the joystick and mouselook do nothing.
+- **Disable Camera Constraints** (check box under Lock, 2026-10-28) is bound to the
+  `DisableCameraConstraints` setting, the same one as Preferences > Move & View > View and
+  Advanced > Disable Camera Constraints. KStorm turns it on by default (`app_settings/settings.xml`,
+  tagged `<KS:KS>`). While on, `LLAgentCamera` does not pull the camera back to within draw
+  distance of the avatar or above the ground, so an unlocked Apply lands exactly, also across a
+  sim boundary. A locked Apply is exact either way. Only regions the viewer is connected to (the
+  avatar's region and its neighbours within draw distance) have anything to show.
 - **Closing the floater** unlocks and resets the view, like Esc x3. Teleport, disconnect and quit
   also unlock.
 - **The Lock toggle off** leaves the camera at the held view, movable from there. Esc x3 is the
@@ -130,7 +137,8 @@ frame stays defined.
 - The Move floater's on-screen buttons call `LLAgent` directly and are not blocked while locked.
 - Applying a view while unlocked goes through `LLAgentCamera`, whose ground clamp
   (`getCameraMinOffGround()`) can lift a view saved below it, for example from flycam or a
-  locked view. The clamp is off when `DisableCameraConstraints` is on. A locked Apply is exact.
+  locked view. The clamp is off when `DisableCameraConstraints` is on, KStorm's default and the
+  floater's Disable Camera Constraints check box. A locked Apply is exact.
 - Esc x3 does not restore the view angle (`CameraAngle`) that an Apply set.
 - A single Esc while locked still runs the menu's Reset View. With `ResetViewTurnsAvatar` on,
   the avatar turns once on the way to Esc x3.

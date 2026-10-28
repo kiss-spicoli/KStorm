@@ -154,6 +154,10 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   - Turning the toggle off leaves the camera where it is.
 
   (`9ec2c4ca485`, joystick reset on unlock `ff67860fccf`)
+- **Disable Camera Constraints** check box in the floater, and **on by default** (AyaneStorm:
+  off). The camera can go beyond draw distance from the avatar and below the ground, so Apply
+  lands exactly, also across a sim boundary. It is the same setting as Preferences and the
+  Advanced menu.
 
 Details: `doc/kstorm-camera-positions.md`.
 

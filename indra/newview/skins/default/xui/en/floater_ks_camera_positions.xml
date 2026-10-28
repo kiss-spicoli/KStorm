@@ -2,7 +2,7 @@
 <!-- KStorm Viewer; author: Kissmy Spicoli -->
 <!-- KStorm Camera Positioning floater (KSFloaterCameraPositions; design doc/kstorm-camera-positions.md).
      300 px wide like the KStorm Lighting panes. -->
-<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="330" layout="topleft" name="ks_camera_positions" save_rect="true" single_instance="true" title="Camera Positioning" width="300">
+<floater can_close="true" can_dock="false" can_minimize="true" can_resize="false" height="352" layout="topleft" name="ks_camera_positions" save_rect="true" single_instance="true" title="Camera Positioning" width="300">
   <scroll_list column_padding="0" draw_heading="true" draw_stripes="true" follows="left|top" height="150" layout="topleft" left="10" multi_select="false" name="ks_camera_list" top="6" width="280" tool_tip="Double-click a view to move the camera there. Views of other sims are dimmed: they can only be deleted.">
     <scroll_list.columns label="View" name="name" width="160" />
     <scroll_list.columns label="Sim" name="sim" dynamic_width="true" />
@@ -14,6 +14,7 @@
   <button follows="left|top" height="22" label="Rename..." layout="topleft" left="105" name="ks_camera_rename" top="222" width="90" tool_tip="Renames the selected view." />
   <button follows="left|top" height="22" label="Delete..." layout="topleft" left="201" name="ks_camera_delete" top="222" width="89" tool_tip="Deletes the selected view, of this sim or another." />
   <button follows="left|top" height="22" is_toggle="true" label="Lock" layout="topleft" left="10" name="ks_camera_lock" top="250" width="280" tool_tip="Freezes the camera and your avatar: camera and movement controls do nothing. Press Esc three times to unlock and return to your avatar." />
-  <text type="string" length="1" follows="left|top" height="44" layout="topleft" left="10" name="ks_camera_note" text_color="LtGray_50" top="278" width="280" wrap="true">Double-click a view to move the camera there. Esc three times, closing this floater or a teleport unlocks and returns to your avatar.</text>
+  <check_box control_name="DisableCameraConstraints" follows="left|top" height="16" label="Disable Camera Constraints" layout="topleft" left="10" name="ks_camera_constraints" top="278" width="280" tool_tip="Lets the camera go farther from your avatar than your draw distance and below the ground, and lifts the zoom limits, so Apply moves the camera exactly to the view, also across a sim boundary. On by default in KStorm. The same setting as Preferences &gt; Move &amp; View &gt; View and Advanced &gt; Disable Camera Constraints." />
+  <text type="string" length="1" follows="left|top" height="44" layout="topleft" left="10" name="ks_camera_note" text_color="LtGray_50" top="300" width="280" wrap="true">Double-click a view to move the camera there. Esc three times, closing this floater or a teleport unlocks and returns to your avatar.</text>
   <string name="here">this sim</string>
 </floater>

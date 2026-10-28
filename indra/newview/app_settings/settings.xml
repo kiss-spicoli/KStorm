@@ -5065,7 +5065,10 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <!-- <KS:KS> On by default, so Camera Positioning views apply exactly (doc/kstorm-camera-positions.md) -->
+      <!-- <integer>0</integer> -->
+      <integer>1</integer>
+      <!-- </KS:KS> -->
     </map>
     <key>DisableCrashLogger</key>
     <map>
