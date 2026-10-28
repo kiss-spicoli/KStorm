@@ -22,6 +22,7 @@
 #include "llviewermenu.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
+#include "llworld.h"
 
 #include <algorithm>
 #include <set>
@@ -136,6 +137,29 @@ namespace
         KSCameraPositions::changedSignal()();
     }
 
+    // The connected region (the agent's included) a record belongs to, or null.
+    LLViewerRegion* regionOf(const Record& record)
+    {
+        if (record.mGrid != currentGrid())
+        {
+            return nullptr;
+        }
+        for (LLViewerRegion* region : LLWorld::getInstance()->getRegionList())
+        {
+            if (region && region->getName() == record.mRegion)
+            {
+                return region;
+            }
+        }
+        return nullptr;
+    }
+
+    // Sort rank: this sim, connected sims, the others.
+    int rank(const Record& record)
+    {
+        return KSCameraPositions::isHere(record) ? 0 : KSCameraPositions::isConnected(record) ? 1 : 2;
+    }
+
     std::vector<Record>::iterator findHere(const std::string& name)
     {
         load();
@@ -239,11 +263,11 @@ std::vector<Record> KSCameraPositions::records()
     std::vector<Record> list = sRecords;
     std::stable_sort(list.begin(), list.end(), [](const Record& a, const Record& b)
         {
-            const bool a_here = isHere(a);
-            const bool b_here = isHere(b);
-            if (a_here != b_here)
+            const int a_rank = rank(a);
+            const int b_rank = rank(b);
+            if (a_rank != b_rank)
             {
-                return a_here;
+                return a_rank < b_rank;
             }
             if (a.mRegion != b.mRegion)
             {
@@ -258,6 +282,31 @@ bool KSCameraPositions::isHere(const Record& record)
 {
     const LLViewerRegion* region = gAgent.getRegion();
     return region && record.mRegion == region->getName() && record.mGrid == currentGrid();
+}
+
+bool KSCameraPositions::isConnected(const Record& record)
+{
+    return !isHere(record) && regionOf(record) != nullptr;
+}
+
+std::string KSCameraPositions::connectedRegions()
+{
+    const LLViewerRegion* here = gAgent.getRegion();
+    std::vector<std::string> names;
+    for (const LLViewerRegion* region : LLWorld::getInstance()->getRegionList())
+    {
+        if (region && region != here)
+        {
+            names.push_back(region->getName());
+        }
+    }
+    std::sort(names.begin(), names.end());
+    std::string joined;
+    for (const std::string& name : names)
+    {
+        joined += name + "\n";
+    }
+    return joined;
 }
 
 bool KSCameraPositions::exists(const std::string& name)
@@ -348,11 +397,16 @@ bool KSCameraPositions::remove(const Record& record)
     return true;
 }
 
-bool KSCameraPositions::apply(const std::string& name)
+bool KSCameraPositions::apply(const Record& record)
 {
-    auto it = findHere(name);
-    LLViewerRegion* region = gAgent.getRegion();
-    if (it == sRecords.end() || !region)
+    load();
+    auto it = std::find_if(sRecords.begin(), sRecords.end(), [&record](const Record& other)
+        {
+            return other.mName == record.mName && other.mRegion == record.mRegion && other.mGrid == record.mGrid;
+        });
+    // Positions are local to the record's own region, which may be a connected neighbour.
+    LLViewerRegion* region = it != sRecords.end() ? regionOf(*it) : nullptr;
+    if (!region)
     {
         return false;
     }

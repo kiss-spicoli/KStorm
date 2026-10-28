@@ -20,6 +20,16 @@ the camera to the avatar.
   divided by the angle, so 1.00x is normal. Apply sets `CameraAngle`.
 - **Lock is a full freeze**: the rendered camera is pinned every frame, and avatar/camera key and
   mouse bindings, the joystick and mouselook do nothing.
+- **Disable Camera Constraints** (check box under Lock, 2026-10-28) is bound to the
+  `DisableCameraConstraints` setting, the same one as Preferences > Move & View > View and
+  Advanced > Disable Camera Constraints. KStorm turns it on by default (`app_settings/settings.xml`,
+  tagged `<KS:KS>`). While on, `LLAgentCamera` does not pull the camera back to within draw
+  distance of the avatar or above the ground, so an unlocked Apply lands exactly, also across a
+  sim boundary. A locked Apply is exact either way. Only regions the viewer is connected to (the
+  avatar's region and its neighbours within draw distance) have anything to show.
+- **Connected sims** (2026-10-28): views of a sim the viewer is connected to can be applied
+  from a neighbour. Their Sim column reads "Connected: <sim>". Editing stays with the sim's own
+  records (Save, Update, Rename work on this sim's views only).
 - **Closing the floater** unlocks and resets the view, like Esc x3. Teleport, disconnect and quit
   also unlock.
 - **The Lock toggle off** leaves the camera at the held view, movable from there. Esc x3 is the
@@ -48,10 +58,18 @@ the camera to the avatar.
   (`LLGridManager::getGridId()`), and their positions are region-local.
 - A record belongs **here** when its region and grid match the agent's region. Names are unique
   per sim, so the same label can exist on several sims.
-- The list puts this sim's records first, sorted by name, then other sims' records sorted by sim
-  and name. Other sims' rows are dimmed (each cell is drawn in `ScrollDisabledColor`) but stay
-  selectable, and their Sim column shows the sim's name. On such a row only **Delete...** is
-  enabled (the user, 2026-10-27: deleting must not need a visit to the sim);
+- A record is **connected** when its grid is the current one and its region is another region in
+  `LLWorld::getRegionList()`: one the simulator has connected the viewer to, in Second Life a
+  neighbour within draw distance of the avatar. Only these regions have anything loaded to show.
+  The set changes as the avatar moves, as draw distance changes and as regions go up or down; the
+  floater's `draw()` compares `KSCameraPositions::connectedRegions()` (and the agent's region)
+  with the last list and rebuilds the list on a change.
+- The list puts this sim's records first, then connected sims' records, then the others; each
+  group is sorted by sim and name. Connected sims' rows are drawn normally, their Sim column reads
+  "Connected: <sim>", and **Apply** (and double-click) and **Delete...** are enabled on them.
+  Other sims' rows are dimmed (each cell is drawn in `ScrollDisabledColor`) but stay selectable,
+  and their Sim column shows the sim's name. On such a row only **Delete...** is enabled (the
+  user, 2026-10-27: deleting must not need a visit to the sim);
   `KSCameraPositions::remove(record)` matches name, region and grid. Every row's tooltip, and
   the details line, show its values.
 - Angles are in degrees:
@@ -75,6 +93,10 @@ roll = atan2(left . up0, left . left0). Pitch is clamped to +/-89.5 degrees, whe
 frame stays defined.
 
 ## Apply
+
+`KSCameraPositions::apply(record)` finds the record's region among the connected regions
+(`regionOf()`) and converts its region-local position with that region's origin
+(`getPosGlobalFromRegion()`), so a connected neighbour's view lands where it was saved.
 
 - **Unlocked** (`moveAgentCamera()`):
   1. Turn flycam off and leave mouselook.
@@ -130,7 +152,8 @@ frame stays defined.
 - The Move floater's on-screen buttons call `LLAgent` directly and are not blocked while locked.
 - Applying a view while unlocked goes through `LLAgentCamera`, whose ground clamp
   (`getCameraMinOffGround()`) can lift a view saved below it, for example from flycam or a
-  locked view. The clamp is off when `DisableCameraConstraints` is on. A locked Apply is exact.
+  locked view. The clamp is off when `DisableCameraConstraints` is on, KStorm's default and the
+  floater's Disable Camera Constraints check box. A locked Apply is exact.
 - Esc x3 does not restore the view angle (`CameraAngle`) that an Apply set.
 - A single Esc while locked still runs the menu's Reset View. With `ResetViewTurnsAvatar` on,
   the avatar turns once on the way to Esc x3.
