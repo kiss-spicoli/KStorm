@@ -1356,7 +1356,7 @@ std::string KSLightingPresets::scopeText(const std::string& name)
 {
     if (isBuiltIn(name))
     {
-        return "built in";
+        return "Reference";
     }
     const std::vector<std::string> ids = presetGroups(name);
     if (ids.empty())

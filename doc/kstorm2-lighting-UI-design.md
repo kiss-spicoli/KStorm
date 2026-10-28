@@ -840,7 +840,7 @@ Add `RenderDynamicExposureEnabled` handling: save, set false, restore on off. Wh
 | B4 | `feat-local-light-325` | Converge local-light constants on 3.25 (forward 3.0 → 3.25), as decided earlier | Shader change. |
 | B5 | merge `fix-haze-zero-nan-guards` | Already committed on its branch | Shaders unvalidated: glslang is not in the repository. Validate by a build and a run with Haze Density 0, or install `glslangValidator` and run it on the three files. |
 | B6 | (optional) toolbar commands | Register panes in `commands.xml` so they can sit on toolbars | Only if A13 says so. |
-| B7 | `feat-ks-lighting-presets` | Look Inventory (§12.6): look files, Look Inventory pane and dialogs, apply with restore point, KS Reference as the built-in look (absorbs B2's `ksenvironment.cpp` work and the §12.1 settings once A14 is approved) | After B1. Save to My Environments postponed. |
+| B7 | `feat-ks-lighting-presets` | Look Inventory (§12.6): look files, Look Inventory pane and dialogs, apply with restore point, KS Reference as the Reference look (absorbs B2's `ksenvironment.cpp` work and the §12.1 settings once A14 is approved) | After B1. Save to My Environments postponed. |
 
 ### 11.6 Verification per pane (user, after each build)
 
@@ -1010,7 +1010,7 @@ General rule: do not change LL, FS or AS behavior, except for whatever competes 
 | A13 | Opening KStorm Lighting | **Decided 2026-10-25:** toolbar button (icon mocked; final icon with the others) and **hotkey Alt+Shift+L** (menu shortcut on a new menu item; free in every menu and in code). |
 | A16 | KStorm menu | **Decided 2026-10-25:** keep KStorm's top-level menu (its own, so no LL menu edits) with **KStorm Lighting** (Alt+Shift+L). Retire KStorm Environment Effects. Remove the Hair Occlusion item; Hair Occlusion opens from a **Hair…** button to the right of Settings… on the Shadows pane's Ambient occlusion row, and leaves the Ambient pane. |
 | A15 | Use sky exposure range | **Approved 2026-10-25:** the relabel of "Use fixed range" (§11.7). |
-| A14 | §12.1 candidates | **Approved 2026-10-25:** KS Reference (the built-in look, §12.6) sets the 54 settings of §12.1. **Every value it sets, sky and settings alike, must be restored to its prior value when it is turned off.** |
+| A14 | §12.1 candidates | **Approved 2026-10-25:** KS Reference (the Reference look, §12.6) sets the 54 settings of §12.1. **Every value it sets, sky and settings alike, must be restored to its prior value when it is turned off.** |
 
 ### 12.4 Restated items
 
@@ -1084,6 +1084,8 @@ Totals for the 64 candidates: 48 safe (45 once the three no-effect settings are 
 
 A2 (look) and A14 (KS Reference candidates) become one feature. **Use KS Reference is the first look**: built in and read-only. Looks you make can be created, updated, renamed, duplicated and deleted.
 
+**KS Reference is the Reference look (2026-10-27).** It is a *reference*, and the UI labels it so: "Reference" in the Look Inventory's Contains column, "The Reference look, set by KStorm" in its Contents dialog, the Use KS Reference tooltip, and "(KS Reference)" at the end of the tooltip of every value it sets. Its purpose: a fixed, known configuration of sky, lighting and rendering that builders use as a base for textures, lighting and looks, judging their work against it and making their changes as deltas from it. That is why its values are defined in code, why it cannot be updated, renamed or deleted, and why turning it off restores exactly what it changed: the base must be the same every time. To vary it, Duplicate it and change the copy; the reference stays intact. A KStorm update may retune its values; `doc/kstorm-changes-vs-ayanestorm.md` lists each change, so a builder can tell which reference a result was judged against.
+
 **Rules**
 
 - *Partial looks.* A look stores only the groups it names (Sun/Moon, Atmosphere, Clouds, Water, Reflections, All lights, Shadows, Ambient, Exposure, Glow & bloom, Depth of field, Vignette, AyaneStorm floaters). KS Reference names a fixed subset: its sky values plus the 54 settings of §12.1.
@@ -1095,9 +1097,9 @@ A2 (look) and A14 (KS Reference candidates) become one feature. **Use KS Referen
 **Where it is surfaced and how it looks (mock-up v4)**
 
 - **Launch list:** a **Look Inventory** entry directly under Quick (icon placeholder 🗂); its status shows the active look or "none active".
-- **Quick:** unchanged — the Use KS Reference check box is the shortcut for the built-in look. Applying any look from the Look Inventory pane updates that check box.
+- **Quick:** unchanged — the Use KS Reference check box is the shortcut for the Reference look. Applying any look from the Look Inventory pane updates that check box.
 - **Look Inventory pane:**
-  - a list (XUI `scroll_list`): lock icon for read-only, name, scope ("full", a list of groups, or "partial (built in)"); the active look is bold with "● active". KS Reference is always first. Double-click applies or turns off.
+  - a list (XUI `scroll_list`): lock icon for read-only, name, scope ("full", a list of groups, or "Reference" for KS Reference); the active look is bold with "● active". KS Reference is always first. Double-click applies or turns off.
   - buttons, row 1: **Apply** (becomes **Turn off** for the active look), **Save current as…**
   - buttons, row 2: **Update**, **Rename…**, **Duplicate**, **Delete…**, **Contents…**. Update, Rename and Delete are disabled for KS Reference.
   - a note: "Double-click a look to apply it or turn it off. One look is active at a time; Use Shared and My Environments turn it off."
@@ -1118,7 +1120,7 @@ A2 (look) and A14 (KS Reference candidates) become one feature. **Use KS Referen
 - *Shader cache (2026-10-27):* after each new build LL purges the shader cache, which deletes its folder, and nothing recreated it, so no shader binaries were saved in that session and every rebuild compiled all shaders. `LLShaderMgr::initShaderCache()` now recreates the folder after the purge (tagged).
 - *A4:* only looks holding sky or water values react to environment changes; an unversioned change keeps the look while the local sky and water still hold its values.
 - *D1, D2:* `RenderQualityPerformance` and `PresetGraphicActive` (only when set to a name, which also ignores our own writes) schedule a reapply on the next idle; the values the load brought become the ones Turn off restores.
-- *List:* a lock icon for KS Reference, the active look in bold with "(active)", and a Contains column ("built in", "full", "custom" for a copy of KS Reference, or the group names).
+- *List:* a lock icon for KS Reference, the active look in bold with "(active)", and a Contains column ("Reference" for KS Reference, "built in" until 2026-10-27; "full", "custom" for a copy of KS Reference, or the group names).
 - *Dropped:* the "(KS Reference)" tooltip suffix naming the active look (tooltips are static text).
 - *Layout:* the pane and its dialog keep the common 300 px width; the seven buttons wrap to three rows (rule, 2026-10-26: panes grow taller, up to the launcher's height, never wider; AyaneStorm floaters keep their widths).
 - *Precision:* look files store reals with the LLSD XML default precision (about 6 digits); settings are F32 anyway, and the A4 match uses a 0.001 tolerance.
@@ -1135,7 +1137,7 @@ A2 (look) and A14 (KS Reference candidates) become one feature. **Use KS Referen
 | Time of day | Day cycles: sky and water keyframes over the day, with altitude tracks | None: a look holds one frozen sky |
 | Viewer settings | **None** | All the settings our panes surface: Exposure, Dynamic exposure and its tuning, tone mapping, Sunlight Gain, Surface Ambient Gain, shadows, ambient occlusion, reflections and probes, glow, depth of field, vignette, light budget and filters; plus AyaneStorm floater settings and the §12.1 reference settings |
 | Applying | Replaces the environment (for you, or a parcel or region); no undo except Use Shared or another environment | Applies with a restore point; Turn off restores the previous values |
-| Built-in content | Library environments | KS Reference |
+| Built-in content | Library environments | KS Reference, the Reference look |
 
 **Consequences**
 
