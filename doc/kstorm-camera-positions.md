@@ -127,5 +127,11 @@ frame stays defined.
 - The Move floater's on-screen buttons call `LLAgent` directly and are not blocked while locked.
 - There is no bulk delete for other sims' records: they cannot be selected. Delete them from the
   sim they belong to.
+- Applying a view while unlocked goes through `LLAgentCamera`, whose ground clamp
+  (`getCameraMinOffGround()`) can lift a view saved below it, for example from flycam or a
+  locked view. The clamp is off when `DisableCameraConstraints` is on. A locked Apply is exact.
+- Esc x3 does not restore the view angle (`CameraAngle`) that an Apply set.
+- A single Esc while locked still runs the menu's Reset View. With `ResetViewTurnsAvatar` on,
+  the avatar turns once on the way to Esc x3.
 - Moving the avatar by other means while locked (a scripted push, or a sit target moving a
   vehicle) still moves it; only the camera stays.

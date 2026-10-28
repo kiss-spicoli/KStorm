@@ -223,6 +223,8 @@ namespace
         // Off first: while locked the camera update is skipped, so a reset would not show.
         sLocked = false;
         sEscapeCount = 0;
+        // The joystick was not scanned while locked: no spurious motion from stale deltas.
+        LLViewerJoystick::getInstance()->setNeedsReset();
         if (reset)
         {
             handle_reset_view();
