@@ -5,18 +5,17 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-27, on branch `feat-ks-camera-positions` (`c927b6a87c1`), not yet
-  merged into `kstorm`. The last `kstorm` merge is `03a528a8162`.
-- **KStorm's own work:** 94 commits (Kissmy Spicoli, Oct 18 to Oct 27), 126 files, about 13,000
-  lines added. These counts include the unmerged `feat-ks-camera-positions` branch.
+- **Last updated:** 2026-10-27, at `kstorm` merge `2b1a7df42f4`.
+- **KStorm's own work:** 95 commits (Kissmy Spicoli, Oct 18 to Oct 27), 126 files, about 13,000
+  lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
 
 To refresh the numbers:
 
 ```
-git log --reverse --no-merges --format="%h %ad %s" --date=short upstream/master..feat-ks-camera-positions
-git diff --shortstat upstream/master feat-ks-camera-positions
+git log --reverse --no-merges --format="%h %ad %s" --date=short upstream/master..kstorm
+git diff --shortstat upstream/master kstorm
 git rev-list --count upstream/master..upstream/ayanestorm-dev
 ```
 
@@ -133,12 +132,9 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   (for example a minimap click). The `KSMotionModeOnTeleport` setting turns this off.
   (`183b9769220`)
 - **Icon shows the state.** On the launcher, the Motion mode gauge reads fast while on and is
-  mirrored to read slow while off. (`c927b6a87c1`, on the unmerged `feat-ks-camera-positions`
-  branch)
+  mirrored to read slow while off. (`c927b6a87c1`)
 
 ## 7. Camera Positioning: saved camera views and camera Lock
-
-Not yet merged into `kstorm`; on branch `feat-ks-camera-positions`.
 
 - **Camera Positioning floater.** KStorm menu > Camera Positioning opens a 300 px floater laid
   out like Look Inventory. It saves the current camera view under a name: position, yaw, pitch,
