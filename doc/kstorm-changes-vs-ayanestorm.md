@@ -6,7 +6,7 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
 - **Last updated:** 2026-10-28, at `kstorm` merge `c9ff4f5eb78`.
-- **KStorm's own work:** 110 commits (Kissmy Spicoli, Oct 18 to Oct 28), 127 files, about 13,570
+- **KStorm's own work:** 111 commits (Kissmy Spicoli, Oct 18 to Oct 28), 127 files, about 13,570
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -167,7 +167,8 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 - **Teleport to other sims' views.** On a dimmed view the Apply button reads Teleport: after a
   confirmation it teleports you to the view and, once you land, moves the camera to it. You stay
   where you land. Each view keeps its sim's position on the grid; older views look their sim up
-  on the world map. (`484637bfcd1`, Teleport `9bb45147996`)
+  on the world map. (`484637bfcd1`, Teleport `9bb45147996`, observed region connections
+  `c773353e82b`)
 - **Show disconnected, requires teleport** check box, on by default and remembered: off, the
   list shows only this sim's and connected sims' views. (`d504d0cafe1`, label `9bb45147996`)
 - **Floater.** It resizes in height only and keeps its size across closing and sessions. View
