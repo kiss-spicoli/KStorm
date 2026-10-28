@@ -54,6 +54,7 @@
 #include "llfloaterwebcontent.h"
 #include "fsfloatersearch.h"
 #include "llvoiceclient.h"
+#include "kscamerapositions.h" // <KS:KS/> Camera Positioning Lock
 
 //
 // Constants
@@ -1691,6 +1692,12 @@ bool LLViewerInput::scanKey(const std::vector<LLKeyboardBinding> &binding,
         {
             if ((binding[i].mMask & mask) == binding[i].mMask)
             {
+                // <KS:KS> Camera Positioning Lock: avatar and camera keys do nothing.
+                if (KSCameraPositions::blocksAction(binding[i].mFunctionName))
+                {
+                    return true;
+                }
+                // </KS:KS>
                 bool res = false;
                 if (key_down && !repeat)
                 {
@@ -1838,6 +1845,12 @@ bool LLViewerInput::scanMouse(
     {
         if (binding[i].mMouse == mouse && (ignore_additional_masks ? (binding[i].mMask & mask) == binding[i].mMask : binding[i].mMask == mask))
         {
+            // <KS:KS> Camera Positioning Lock: click to walk / teleport and the like do nothing.
+            if (KSCameraPositions::blocksAction(binding[i].mFunctionName))
+            {
+                return true;
+            }
+            // </KS:KS>
             bool res = false;
             switch (state)
             {
