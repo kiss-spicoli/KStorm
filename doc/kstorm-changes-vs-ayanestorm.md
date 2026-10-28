@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-27, at `kstorm` merge `0640c0c3456`.
-- **KStorm's own work:** 96 commits (Kissmy Spicoli, Oct 18 to Oct 27), 126 files, about 13,000
+- **Last updated:** 2026-10-28, at `kstorm` merge `3e941f29195`.
+- **KStorm's own work:** 99 commits (Kissmy Spicoli, Oct 18 to Oct 28), 126 files, about 13,000
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -160,7 +160,7 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   Advanced menu. (`87dc7d7eafd`)
 - **Connected sims.** Views of a sim the viewer is connected to (a neighbour it has loaded,
   within draw distance) can be applied from where you are. Their Sim column reads "Connected:"
-  and the sim's name.
+  and the sim's name. (`65dd3a3654e`)
 
 Details: `doc/kstorm-camera-positions.md`.
 
