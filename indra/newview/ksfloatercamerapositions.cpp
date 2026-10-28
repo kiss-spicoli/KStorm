@@ -181,12 +181,6 @@ const KSCameraPositions::Record* KSFloaterCameraPositions::selectedAvailable() c
     return record && KSCameraPositions::isAvailable(*record) ? record : nullptr;
 }
 
-const KSCameraPositions::Record* KSFloaterCameraPositions::selectedApplicable() const
-{
-    const KSCameraPositions::Record* record = selectedRecord();
-    return record && KSCameraPositions::canApply(*record) ? record : nullptr;
-}
-
 void KSFloaterCameraPositions::refreshList()
 {
     // The selection's value from the old list (mRecords), before it is replaced.
@@ -257,7 +251,12 @@ void KSFloaterCameraPositions::refreshButtons()
     const KSCameraPositions::Record* record = selectedRecord();
     const bool available = selectedAvailable() != nullptr;
     const bool region = !mLastRegion.empty();
-    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(selectedApplicable() != nullptr);
+    // Apply on this sim's and connected sims' views; Teleport on the others (same grid).
+    LLButton* apply = getChild<LLButton>("ks_camera_apply");
+    const bool teleport = record && !available;
+    apply->setLabel(getString(teleport ? "teleport_label" : "apply_label"));
+    apply->setToolTip(getString(teleport ? "teleport_tip" : "apply_tip"));
+    apply->setEnabled(available || (record && KSCameraPositions::canTeleport(*record)));
     getChild<LLUICtrl>("ks_camera_save")->setEnabled(region);
     getChild<LLUICtrl>("ks_camera_update")->setEnabled(available);
     getChild<LLUICtrl>("ks_camera_rename")->setEnabled(available);
@@ -269,21 +268,23 @@ void KSFloaterCameraPositions::refreshButtons()
 
 void KSFloaterCameraPositions::onApply()
 {
-    const KSCameraPositions::Record* record = selectedApplicable();
-    if (!record)
+    const KSCameraPositions::Record* selected = selectedRecord();
+    if (!selected)
     {
         return;
     }
-    // An unlocked camera far from the avatar is pulled back while the constraints are on; a
-    // locked one is placed exactly either way.
-    if (!KSCameraPositions::isAvailable(*record) && !KSCameraPositions::isLocked()
-        && !gSavedSettings.getBOOL("DisableCameraConstraints"))
+    if (KSCameraPositions::isAvailable(*selected))
     {
-        alert(record->mRegion + " is not connected. To move the camera there, turn on Disable Camera "
-            "Constraints, or turn on Lock Camera first.");
+        KSCameraPositions::apply(*selected);
         return;
     }
-    KSCameraPositions::apply(*record);
+    // A disconnected sim's view: teleport there, and the view is applied after landing.
+    if (KSCameraPositions::canTeleport(*selected))
+    {
+        const KSCameraPositions::Record record = *selected;
+        confirm("Teleport to " + record.mRegion + " and move the camera to \"" + record.mName + "\"?",
+            [record]() { KSCameraPositions::teleportTo(record); });
+    }
 }
 
 void KSFloaterCameraPositions::onUpdate()

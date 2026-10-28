@@ -13,7 +13,10 @@
 #include "llapp.h"
 #include "llfile.h"
 #include "lldir.h"
+#include "llcallbacklist.h"
 #include "llframetimer.h"
+#include "llnotificationsutil.h"
+#include "llregionhandle.h"
 #include "llsdserialize.h"
 #include "llstartup.h"
 #include "llviewercamera.h"
@@ -21,8 +24,10 @@
 #include "llviewerjoystick.h"
 #include "llviewermenu.h"
 #include "llviewernetwork.h"
+#include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llworld.h"
+#include "llworldmapmessage.h"
 
 #include <algorithm>
 #include <set>
@@ -49,6 +54,16 @@ namespace
 
     S32 sEscapeCount = 0;
     LLFrameTimer sEscapeTimer;
+
+    // A teleport started by teleportTo(): the record whose view is applied once the avatar lands.
+    const F32 ARRIVAL_SETTLE = 2.f;     // seconds after landing: the arrival camera reset is done
+    const F32 LOOKUP_TIMEOUT = 15.f;    // seconds for the world map's region-name reply
+    bool sTeleportPending = false;
+    bool sLookupPending = false;
+    Record sTeleportRecord;
+    U32 sTeleportSerial = 0;            // ignores replies and timers of an older teleportTo()
+    boost::signals2::connection sTeleportFinished;
+    boost::signals2::connection sTeleportFailed;
 
     std::string currentGrid()
     {
@@ -292,6 +307,50 @@ namespace
         gSavedSettings.setF32("CameraAngle", clampView(view));
     }
 
+    void alert(const std::string& message)
+    {
+        LLSD args;
+        args["MESSAGE"] = message;
+        LLNotificationsUtil::add("GenericAlert", args);
+    }
+
+    // The avatar landed: apply the pending view once the arrival has settled.
+    void onTeleportFinished()
+    {
+        if (!sTeleportPending)
+        {
+            return;
+        }
+        sTeleportPending = false;
+        const Record record = sTeleportRecord;
+        const U32 serial = sTeleportSerial;
+        doAfterInterval([record, serial]()
+            {
+                if (serial != sTeleportSerial)
+                {
+                    return;
+                }
+                if (!KSCameraPositions::apply(record))
+                {
+                    alert("The teleport did not reach " + record.mRegion + ", so the view \"" + record.mName
+                        + "\" was not applied.");
+                }
+            }, ARRIVAL_SETTLE);
+    }
+
+    void connectTeleportSignals()
+    {
+        if (sTeleportFinished.connected())
+        {
+            return;
+        }
+        sTeleportFinished = LLViewerParcelMgr::getInstance()->setTeleportFinishedCallback(
+            [](const LLVector3d&, const bool&) { onTeleportFinished(); });
+        // The viewer reports why a teleport failed; only the pending view is dropped here.
+        sTeleportFailed = LLViewerParcelMgr::getInstance()->setTeleportFailedCallback(
+            []() { sTeleportPending = false; });
+    }
+
     void unlock(bool reset)
     {
         if (!sLocked)
@@ -349,9 +408,9 @@ bool KSCameraPositions::isAvailable(const Record& record)
     return regionOf(record) != nullptr;
 }
 
-bool KSCameraPositions::canApply(const Record& record)
+bool KSCameraPositions::canTeleport(const Record& record)
 {
-    return isAvailable(record) || (record.mHasOrigin && record.mGrid == currentGrid());
+    return record.mGrid == currentGrid();
 }
 
 std::string KSCameraPositions::connectedRegions()
@@ -490,16 +549,14 @@ bool KSCameraPositions::remove(const Record& record)
 bool KSCameraPositions::apply(const Record& record)
 {
     auto it = findRecord(record);
-    if (it == sRecords.end() || !canApply(*it))
+    // Positions are local to the record's own region, which may be a connected neighbour.
+    LLViewerRegion* region = it != sRecords.end() ? regionOf(*it) : nullptr;
+    if (!region)
     {
         return false;
     }
-    // Positions are local to the record's own region: a connected one gives its live origin, a
-    // disconnected one the origin stored when it was last connected.
     const View& view = it->mView;
-    const LLViewerRegion* region = regionOf(*it);
-    const LLVector3d position = region ? region->getPosGlobalFromRegion(view.mPosition)
-                                       : it->mOrigin + LLVector3d(view.mPosition);
+    const LLVector3d position = region->getPosGlobalFromRegion(view.mPosition);
     LLVector3 at;
     LLVector3 left;
     LLVector3 up;
@@ -518,6 +575,60 @@ bool KSCameraPositions::apply(const Record& record)
     {
         moveAgentCamera(position, at, view.mRoll * DEG_TO_RAD, view.mViewAngle * DEG_TO_RAD, true);
     }
+    return true;
+}
+
+bool KSCameraPositions::teleportTo(const Record& record)
+{
+    auto it = findRecord(record);
+    if (it == sRecords.end() || !canTeleport(*it))
+    {
+        return false;
+    }
+    connectTeleportSignals();
+    const U32 serial = ++sTeleportSerial;
+    sTeleportRecord = *it;
+    sTeleportPending = true;
+    // The avatar lands at the camera position (or where the region's landing point sends it).
+    const LLVector3d local(it->mView.mPosition);
+    if (it->mHasOrigin)
+    {
+        sLookupPending = false;
+        gAgent.teleportViaLocation(it->mOrigin + local);
+        return true;
+    }
+    // No origin yet (never connected since origins were kept): ask the world map for the region.
+    sLookupPending = true;
+    LLWorldMapMessage::getInstance()->sendNamedRegionRequest(it->mRegion,
+        [serial, local](U64 handle, const std::string&, const LLUUID&, bool)
+        {
+            if (serial != sTeleportSerial || !sLookupPending)
+            {
+                return;
+            }
+            sLookupPending = false;
+            const LLVector3d origin = from_region_handle(handle);
+            auto stored = findRecord(sTeleportRecord);
+            if (stored != sRecords.end())
+            {
+                stored->mOrigin = origin;
+                stored->mHasOrigin = true;
+                save();
+            }
+            sTeleportRecord.mOrigin = origin;
+            sTeleportRecord.mHasOrigin = true;
+            gAgent.teleportViaLocation(origin + local);
+        },
+        std::string(), true);
+    doAfterInterval([serial]()
+        {
+            if (serial == sTeleportSerial && sLookupPending)
+            {
+                sLookupPending = false;
+                sTeleportPending = false;
+                alert("The world map did not find " + sTeleportRecord.mRegion + ".");
+            }
+        }, LOOKUP_TIMEOUT);
     return true;
 }
 

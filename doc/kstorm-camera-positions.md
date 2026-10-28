@@ -38,8 +38,8 @@ the camera to the avatar.
 - **No coordinate tooltips** (user, 2026-10-28): the names have no tooltip and the list has
   none, because a tooltip covered the names below. The details line under the list shows the
   selected view's values.
-- **Show disconnected** (user, 2026-10-28): a check box under the list, on by default and
-  remembered (setting `KSCameraPositionsShowDisconnected`, `<KS:KS>` in
+- **Show disconnected, requires teleport** (user, 2026-10-28): a check box under the list, on
+  by default and remembered (setting `KSCameraPositionsShowDisconnected`, `<KS:KS>` in
   `app_settings/settings.xml`). Off, the list holds only this sim's and connected sims' views.
 - **Height-only resize** (user, 2026-10-28): the floater resizes in height only
   (`enableResizeCtrls(true, false, true)`: no side bars or corner handles, as in
@@ -61,13 +61,29 @@ the camera to the avatar.
   behaviour, as the server code is not available. Each record therefore keeps its region's
   global origin (`origin`, `LLViewerRegion::getOriginGlobal()`), set on Save and Update and
   refreshed whenever the region is connected (`refreshOrigins()`, also for records saved
-  before origins were kept, and for a region moved on the map). A disconnected record of this
-  grid with an origin can be applied: the camera goes to origin + the region-local position, and
-  the region shows once the simulator connects it (nothing shows until then, and a region too
-  far from the avatar may never be connected). An unlocked Apply that far needs Disable Camera
-  Constraints on (otherwise `LLAgentCamera` pulls the camera back toward the avatar), so the
-  floater says so instead; a locked Apply is exact either way. Records without an origin
-  (never connected since) cannot be applied. Update and Rename stay with connected sims.
+  before origins were kept, and for a region moved on the map).
+  The first version applied a disconnected record by moving the camera to origin + position
+  and waiting for the simulator to connect the region. It is replaced by Teleport (below): a
+  camera jump to a region no connected region borders may never get it connected (inferred, not
+  verified), and the grid
+  is too large for a hop-by-hop camera travel (user, 2026-10-28).
+- **Teleport for disconnected sims** (user, 2026-10-28). Every row stays active; disconnected
+  rows stay dimmed. On a disconnected row of this grid the Apply button reads **Teleport**
+  (double-click does the same), after a confirmation. `KSCameraPositions::teleportTo()`:
+  1. teleports the avatar to the view's camera position (`gAgent.teleportViaLocation()`),
+     global = the stored origin + the region-local position. Without an origin it first asks the
+     world map for the region by name (`LLWorldMapMessage::sendNamedRegionRequest()`), stores the
+     origin from the reply's region handle, then teleports; no reply within 15 s cancels it with
+     a message;
+  2. once the teleport finishes (`LLViewerParcelMgr` teleport-finished signal) and 2 s more,
+     after the arrival camera reset, applies the view as Apply does (unlocked: through
+     `LLAgentCamera`). The avatar stays where it landed: a landing point or telehub may place it
+     away from the camera;
+  3. a failed teleport (the viewer shows why) drops the pending view. A landing in another,
+     unconnected region says the view was not applied.
+
+  Lock Camera turns off with the teleport, as on any teleport. Update and Rename stay with
+  connected sims.
 - **Region connections, as observed in the viewer** (user, 2026-10-28, the world map showing the
   camera's position):
   - The camera moves as expected, also several regions from the avatar.
@@ -89,7 +105,7 @@ the camera to the avatar.
 |---|---|
 | `kscamerapositions.cpp/.h` | Records (load/save, per-sim), Apply, Lock Camera state, hooks' entry points |
 | `ksfloatercamerapositions.cpp/.h` | Floater `ks_camera_positions` and name dialog `ks_camera_position_edit` |
-| `floater_ks_camera_positions.xml` | 300 px wide, height-resizable: list (View, Sim), Show disconnected, details line, Apply / Save current as... / Update / Rename... / Delete... / Lock Camera, Draw Distance, Disable Camera Constraints |
+| `floater_ks_camera_positions.xml` | 300 px wide, height-resizable: list (View, Sim), Show disconnected (requires teleport), details line, Apply / Save current as... / Update / Rename... / Delete... / Lock Camera, Draw Distance, Disable Camera Constraints |
 | `floater_ks_camera_position_edit.xml` | Name dialog (Save, Rename) |
 
 `<KS:KS>`-tagged upstream edits: `menu_viewer.xml` (menu item), `llviewerfloaterreg.cpp`
@@ -122,8 +138,8 @@ the camera to the avatar.
   **Delete...** are enabled on them.
   Other sims' rows are dimmed (each cell is drawn in `ScrollDisabledColor`) but stay selectable,
   and their Sim column shows the sim's name. On such a row **Delete...** is enabled (the user,
-  2026-10-27: deleting must not need a visit to the sim), and **Apply** when the record has an
-  origin;
+  2026-10-27: deleting must not need a visit to the sim), and **Teleport** (the Apply button,
+  relabeled) on any record of this grid;
   `KSCameraPositions::remove(record)` matches name, region and grid. With **Show disconnected**
   off, these rows are left out. The details line shows the selected view's values; rows have no
   tooltip.

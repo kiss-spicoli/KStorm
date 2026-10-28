@@ -9,9 +9,9 @@
     <scroll_list.columns label="View" name="name" width="160" />
     <scroll_list.columns label="Sim" name="sim" dynamic_width="true" />
   </scroll_list>
-  <check_box control_name="KSCameraPositionsShowDisconnected" follows="left|bottom" height="16" label="Show disconnected" layout="topleft" left="10" name="ks_camera_show_disconnected" top="160" width="280" tool_tip="Lists the views of sims the viewer is not connected to (dimmed: they can be applied and deleted). Off lists only this sim's and connected sims' views." />
+  <check_box control_name="KSCameraPositionsShowDisconnected" follows="left|bottom" height="16" label="Show disconnected, requires teleport" layout="topleft" left="10" name="ks_camera_show_disconnected" top="160" width="280" tool_tip="Lists the views of sims the viewer is not connected to, dimmed. Their Apply button reads Teleport: it teleports you to the sim and moves the camera to the view once you land. Off lists only this sim's and connected sims' views." />
   <text type="string" length="1" follows="left|bottom" height="30" layout="topleft" left="10" name="ks_camera_details" top="180" width="280" wrap="true" />
-  <button follows="left|bottom" height="22" label="Apply" layout="topleft" left="10" name="ks_camera_apply" top="214" width="137" tool_tip="Moves the camera to the selected view. A view of a sim that is not connected goes by where that sim was when last connected; the sim appears once the simulator connects it (it connects the sims near the camera)." />
+  <button follows="left|bottom" height="22" label="Apply" layout="topleft" left="10" name="ks_camera_apply" top="214" width="137" tool_tip="Moves the camera to the selected view." />
   <button follows="left|bottom" height="22" label="Save current as..." layout="topleft" left="153" name="ks_camera_save" top="214" width="137" tool_tip="Saves the current camera view under a name, for the sim the camera is over." />
   <button follows="left|bottom" height="22" label="Update" layout="topleft" left="10" name="ks_camera_update" top="242" width="89" tool_tip="Replaces the selected view with the current camera view; it moves to the sim the camera is over." />
   <button follows="left|bottom" height="22" label="Rename..." layout="topleft" left="105" name="ks_camera_rename" top="242" width="90" tool_tip="Renames the selected view." />
@@ -21,6 +21,10 @@
   <check_box control_name="DisableCameraConstraints" follows="left|bottom" height="16" label="Disable Camera Constraints" layout="topleft" left="10" name="ks_camera_constraints" top="320" width="280" tool_tip="Lets the camera go farther from your avatar than your draw distance and below the ground, and lifts the zoom limits, so Apply moves the camera exactly to the view, also across a sim boundary. On by default in KStorm. The same setting as Preferences &gt; Move &amp; View &gt; View and Advanced &gt; Disable Camera Constraints." />
   <text type="string" length="1" follows="left|bottom" height="44" layout="topleft" left="10" name="ks_camera_note" text_color="LtGray_50" top="342" width="280" wrap="true">Double-click a view to move the camera there. Esc three times, closing this floater or a teleport unlocks and returns to your avatar.</text>
   <string name="here">this sim</string>
+  <string name="apply_label">Apply</string>
+  <string name="apply_tip">Moves the camera to the selected view.</string>
+  <string name="teleport_label">Teleport</string>
+  <string name="teleport_tip">The view's sim is not connected: teleports you there and moves the camera to the view once you land. You stay where you land.</string>
   <string name="connected">Connected: [SIM]</string>
   <string name="connected_tip">[SIM] is connected: the viewer has it loaded (a neighbour within draw distance), so its views can be applied. Edit them from [SIM].</string>
 </floater>
