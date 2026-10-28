@@ -7,18 +7,21 @@
 #ifndef KS_FLOATERCAMERAPOSITIONS_H
 #define KS_FLOATERCAMERAPOSITIONS_H
 
+#include "kscamerapositions.h"
 #include "llfloater.h"
 
 #include <boost/signals2.hpp>
 #include <string>
+#include <vector>
 
 class LLButton;
 class LLLineEditor;
 class LLScrollListCtrl;
 class LLTextBox;
 
-// The camera views of every sim (other sims' disabled and labeled), with Apply, the editing
-// buttons and the Lock toggle. Closing it turns Lock off and resets the view.
+// The camera views of every sim (other sims' dimmed and labeled: they can only be deleted),
+// with Apply, the editing buttons and the Lock toggle. Closing it turns Lock off and resets
+// the view.
 class KSFloaterCameraPositions : public LLFloater
 {
 public:
@@ -36,6 +39,8 @@ public:
 private:
     void refreshList();
     void refreshButtons();
+    const KSCameraPositions::Record* selectedRecord() const;
+    // The selected view's name when it is this sim's, else "".
     std::string selectedName() const;
 
     void onApply();
@@ -46,6 +51,7 @@ private:
     LLScrollListCtrl* mList = nullptr;
     LLButton* mLockButton = nullptr;
     LLTextBox* mDetails = nullptr;
+    std::vector<KSCameraPositions::Record> mRecords;   // as listed
     std::string mLastRegion;    // agent region, to refresh the list on change
     boost::signals2::connection mChangedConnection;
 };

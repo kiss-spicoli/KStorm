@@ -7,7 +7,7 @@ Author: Kissmy Spicoli. Branch `feat-ks-camera-positions`.
 KStorm menu > **Camera Positioning** toggles a floater modeled on Look Inventory. It saves,
 lists, updates, renames and deletes labeled camera views: position x/y/z, yaw/pitch/roll and an
 absolute zoom, per sim (as My Lights does). Views of other sims show disabled and labeled with
-their sim. Double-click (or select + **Apply**) moves the camera to the view. **Lock** makes the
+their sim; they can still be deleted. Double-click (or select + **Apply**) moves the camera to the view. **Lock** makes the
 usual camera and avatar motion do nothing; Esc pressed three times always unlocks and returns
 the camera to the avatar.
 
@@ -49,8 +49,11 @@ the camera to the avatar.
 - A record belongs **here** when its region and grid match the agent's region. Names are unique
   per sim, so the same label can exist on several sims.
 - The list puts this sim's records first, sorted by name, then other sims' records sorted by sim
-  and name. Other sims' rows are `enabled=false`, so `LLScrollListCtrl` never selects them, and
-  their Sim column shows the sim's name. Every row's tooltip shows its values.
+  and name. Other sims' rows are dimmed (each cell is drawn in `ScrollDisabledColor`) but stay
+  selectable, and their Sim column shows the sim's name. On such a row only **Delete...** is
+  enabled (the user, 2026-10-27: deleting must not need a visit to the sim);
+  `KSCameraPositions::remove(record)` matches name, region and grid. Every row's tooltip, and
+  the details line, show its values.
 - Angles are in degrees:
   - yaw = atan2(at.y, at.x), where 0 is east and 90 is north;
   - pitch = asin(at.z), positive looks up;
@@ -125,8 +128,6 @@ frame stays defined.
 ## Not covered / follow-ups
 
 - The Move floater's on-screen buttons call `LLAgent` directly and are not blocked while locked.
-- There is no bulk delete for other sims' records: they cannot be selected. Delete them from the
-  sim they belong to.
 - Applying a view while unlocked goes through `LLAgentCamera`, whose ground clamp
   (`getCameraMinOffGround()`) can lift a view saved below it, for example from flycam or a
   locked view. The clamp is off when `DisableCameraConstraints` is on. A locked Apply is exact.

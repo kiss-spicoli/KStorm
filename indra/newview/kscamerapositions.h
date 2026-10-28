@@ -7,7 +7,8 @@
  * A record is a named camera view in one region: the camera position (region-local),
  * yaw / pitch / roll and the view angle. Records live in one per-account file, each
  * tagged with its region name and grid, the way My Lights tags fixed lights; only the
- * agent's region's records can be applied or edited. Names are unique within a region.
+ * agent's region's records can be applied or edited, but any can be deleted. Names are
+ * unique within a region.
  *
  * Applying a record moves the camera through LLAgentCamera (focus off the avatar, roll,
  * CameraAngle), so the camera can be moved on from there as usual.
@@ -61,7 +62,8 @@ namespace KSCameraPositions
     bool saveCurrent(const std::string& name);
     bool update(const std::string& name);
     bool rename(const std::string& from, const std::string& to);
-    bool remove(const std::string& name);
+    // Deletes a record of any region (matched by name, region and grid).
+    bool remove(const Record& record);
     // Moves the camera to a record of the agent's region (the held view while locked).
     bool apply(const std::string& name);
 

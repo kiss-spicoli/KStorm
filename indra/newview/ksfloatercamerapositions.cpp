@@ -16,6 +16,7 @@
 #include "llscrolllistctrl.h"
 #include "llscrolllistitem.h"
 #include "lltextbox.h"
+#include "lluicolortable.h"
 
 namespace
 {
@@ -43,6 +44,12 @@ namespace
             view.mPosition.mV[VX], view.mPosition.mV[VY], view.mPosition.mV[VZ],
             view.mYaw, DEGREE.c_str(), view.mPitch, DEGREE.c_str(), view.mRoll, DEGREE.c_str(),
             KSCameraPositions::zoomFactor(view.mViewAngle));
+    }
+
+    // List value of a record: the name for this sim's, unique across sims for the others.
+    std::string rowValue(const KSCameraPositions::Record& record)
+    {
+        return KSCameraPositions::isHere(record) ? record.mName : record.mGrid + "/" + record.mRegion + "/" + record.mName;
     }
 
     void selectInPane(const std::string& name)
@@ -123,25 +130,45 @@ void KSFloaterCameraPositions::selectPosition(const std::string& name)
     refreshButtons();
 }
 
-std::string KSFloaterCameraPositions::selectedName() const
+const KSCameraPositions::Record* KSFloaterCameraPositions::selectedRecord() const
 {
     const LLScrollListItem* item = mList->getFirstSelected();
-    return item && item->getEnabled() ? item->getValue().asString() : std::string();
+    if (!item)
+    {
+        return nullptr;
+    }
+    const std::string value = item->getValue().asString();
+    for (const KSCameraPositions::Record& record : mRecords)
+    {
+        if (rowValue(record) == value)
+        {
+            return &record;
+        }
+    }
+    return nullptr;
+}
+
+std::string KSFloaterCameraPositions::selectedName() const
+{
+    const KSCameraPositions::Record* record = selectedRecord();
+    return record && KSCameraPositions::isHere(*record) ? record->mName : std::string();
 }
 
 void KSFloaterCameraPositions::refreshList()
 {
+    // The selection's value from the old list (mRecords), before it is replaced.
+    const KSCameraPositions::Record* current = selectedRecord();
+    const std::string selected = current ? rowValue(*current) : std::string();
     mLastRegion = KSCameraPositions::currentRegion();
-    const std::string selected = selectedName();
 
+    mRecords = KSCameraPositions::records();
     mList->deleteAllItems();
-    for (const KSCameraPositions::Record& record : KSCameraPositions::records())
+    const LLColor4 dimmed = LLUIColorTable::instance().getColor("ScrollDisabledColor").get();
+    for (const KSCameraPositions::Record& record : mRecords)
     {
         const bool here = KSCameraPositions::isHere(record);
         LLSD row;
-        // Other sims' rows are disabled (never selected); their value only has to be unique.
-        row["value"] = here ? record.mName : record.mGrid + "/" + record.mRegion + "/" + record.mName;
-        row["enabled"] = here;
+        row["value"] = rowValue(record);
         LLSD& name = row["columns"][0];
         name["column"] = "name";
         name["value"] = record.mName;
@@ -149,7 +176,15 @@ void KSFloaterCameraPositions::refreshList()
         LLSD& sim = row["columns"][1];
         sim["column"] = "sim";
         sim["value"] = here ? getString("here") : record.mRegion;
-        mList->addElement(row);
+        LLScrollListItem* item = mList->addElement(row);
+        // Other sims' rows are dimmed but selectable, so they can be deleted from anywhere.
+        if (item && !here)
+        {
+            for (S32 i = 0; i < item->getNumColumns(); ++i)
+            {
+                item->getColumn(i)->setColor(dimmed);
+            }
+        }
     }
     if (selected.empty() || !mList->selectByValue(LLSD(selected)))
     {
@@ -160,30 +195,17 @@ void KSFloaterCameraPositions::refreshList()
 
 void KSFloaterCameraPositions::refreshButtons()
 {
-    const std::string name = selectedName();
-    const bool selected = !name.empty();
+    const KSCameraPositions::Record* record = selectedRecord();
+    const bool here = record && KSCameraPositions::isHere(*record);
     const bool region = !mLastRegion.empty();
-    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(selected);
+    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(here);
     getChild<LLUICtrl>("ks_camera_save")->setEnabled(region);
-    getChild<LLUICtrl>("ks_camera_update")->setEnabled(selected);
-    getChild<LLUICtrl>("ks_camera_rename")->setEnabled(selected);
-    getChild<LLUICtrl>("ks_camera_delete")->setEnabled(selected);
+    getChild<LLUICtrl>("ks_camera_update")->setEnabled(here);
+    getChild<LLUICtrl>("ks_camera_rename")->setEnabled(here);
+    getChild<LLUICtrl>("ks_camera_delete")->setEnabled(record != nullptr);
     mLockButton->setToggleState(KSCameraPositions::isLocked());
     mLockButton->setEnabled(region || KSCameraPositions::isLocked());
-
-    std::string details;
-    if (selected)
-    {
-        for (const KSCameraPositions::Record& record : KSCameraPositions::records())
-        {
-            if (record.mName == name && KSCameraPositions::isHere(record))
-            {
-                details = detailsText(record.mView);
-                break;
-            }
-        }
-    }
-    mDetails->setText(details);
+    mDetails->setText(record ? detailsText(record->mView) : std::string());
 }
 
 void KSFloaterCameraPositions::onApply()
@@ -206,12 +228,18 @@ void KSFloaterCameraPositions::onUpdate()
 
 void KSFloaterCameraPositions::onDelete()
 {
-    const std::string name = selectedName();
-    if (!name.empty())
+    const KSCameraPositions::Record* selected = selectedRecord();
+    if (!selected)
     {
-        confirm("Delete the view \"" + name + "\"? This cannot be undone.",
-            [name]() { KSCameraPositions::remove(name); });
+        return;
     }
+    const KSCameraPositions::Record record = *selected;
+    std::string message = "Delete the view \"" + record.mName + "\"";
+    if (!KSCameraPositions::isHere(record))
+    {
+        message += " of " + record.mRegion;
+    }
+    confirm(message + "? This cannot be undone.", [record]() { KSCameraPositions::remove(record); });
 }
 
 void KSFloaterCameraPositions::openEditor(const std::string& mode)

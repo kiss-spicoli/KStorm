@@ -331,9 +331,13 @@ bool KSCameraPositions::rename(const std::string& from, const std::string& to)
     return true;
 }
 
-bool KSCameraPositions::remove(const std::string& name)
+bool KSCameraPositions::remove(const Record& record)
 {
-    auto it = findHere(name);
+    load();
+    auto it = std::find_if(sRecords.begin(), sRecords.end(), [&record](const Record& other)
+        {
+            return other.mName == record.mName && other.mRegion == record.mRegion && other.mGrid == record.mGrid;
+        });
     if (it == sRecords.end())
     {
         return false;
