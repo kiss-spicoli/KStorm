@@ -371,7 +371,7 @@ void KSFloaterLightingPresetEdit::refreshOK()
         else if (KSLightingPresets::isBuiltIn(name))
         {
             ok = false;
-            note = "\"" + name + "\" is reserved for the built-in look.";
+            note = "\"" + name + "\" is reserved for the Reference look.";
         }
         else if (KSLightingPresets::exists(name))
         {
@@ -396,7 +396,7 @@ void KSFloaterLightingPresetEdit::refreshOK()
     }
     else if (KSLightingPresets::isBuiltIn(mName))
     {
-        note = "Built in: its values are set by KStorm. Duplicate it to make an editable copy.";
+        note = "The Reference look, set by KStorm. Duplicate it to make an editable copy.";
     }
     else
     {

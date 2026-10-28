@@ -107,7 +107,9 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   named look, then apply or turn it off. Turning a look off puts everything back as it was.
   The pane also has rename, duplicate and contents views. (`79a3ce0ee5b`, `d8ffd8d668b`,
   `47ec7d2fa1d`; renamed `d6a1cd28377`)
-- **KS Reference** is the built-in look: a neutral, predictable lighting setup to work from.
+- **KS Reference** is the Reference look, and the viewer labels it so: a fixed, known setup of
+  sky, lighting and rendering. Builders use it as a base for textures, lighting and looks, and
+  make their changes as deltas from it. It cannot be edited; Duplicate makes a copy to vary.
   It sets the sky and about 54 settings. Its values were tuned along the way:
   - draw distance 64 m (`e5d1fe07c2c`)
   - shadow resolution 1.5x (`ec7c5ce1f88`, `3b28af09464`, tooltip `f68c8bcea06`)

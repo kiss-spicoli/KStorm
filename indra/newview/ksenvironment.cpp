@@ -70,7 +70,7 @@ void KSEnvironment::init()
     }
     sConnected = true;
     declareCodeSettings();
-    // Use KS Reference is the built-in lighting preset.
+    // Use KS Reference applies the Reference look, the built-in lighting preset.
     KSLightingPresets::init();
     KSMotionMode::init();
 }
