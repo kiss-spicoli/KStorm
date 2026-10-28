@@ -1,4 +1,4 @@
-# KStorm Camera Positioning: per-sim camera views and camera Lock
+# KStorm Camera Positioning: per-sim camera views and Lock Camera
 
 Author: Kissmy Spicoli. Branch `feat-ks-camera-positions`.
 
@@ -7,7 +7,7 @@ Author: Kissmy Spicoli. Branch `feat-ks-camera-positions`.
 KStorm menu > **Camera Positioning** toggles a floater modeled on Look Inventory. It saves,
 lists, updates, renames and deletes labeled camera views: position x/y/z, yaw/pitch/roll and an
 absolute zoom, per sim (as My Lights does). Views of other sims show disabled and labeled with
-their sim; they can still be deleted. Double-click (or select + **Apply**) moves the camera to the view. **Lock** makes the
+their sim; they can still be deleted. Double-click (or select + **Apply**) moves the camera to the view. **Lock Camera** makes the
 usual camera and avatar motion do nothing; Esc pressed three times always unlocks and returns
 the camera to the avatar.
 
@@ -18,9 +18,9 @@ the camera to the avatar.
 - **Zoom** = the view angle (`CameraAngle`, the vertical FOV that Ctrl+0/8/9 and right-click
   zoom change). It is stored in degrees and shown as a factor: 60 degrees (`DEFAULT_FIELD_OF_VIEW`)
   divided by the angle, so 1.00x is normal. Apply sets `CameraAngle`.
-- **Lock is a full freeze**: the rendered camera is pinned every frame, and avatar/camera key and
+- **Lock Camera is a full freeze**: the rendered camera is pinned every frame, and avatar/camera key and
   mouse bindings, the joystick and mouselook do nothing.
-- **Disable Camera Constraints** (check box under Lock, 2026-10-28) is bound to the
+- **Disable Camera Constraints** (check box under Lock Camera, 2026-10-28) is bound to the
   `DisableCameraConstraints` setting, the same one as Preferences > Move & View > View and
   Advanced > Disable Camera Constraints. KStorm turns it on by default (`app_settings/settings.xml`,
   tagged `<KS:KS>`). While on, `LLAgentCamera` does not pull the camera back to within draw
@@ -28,20 +28,37 @@ the camera to the avatar.
   sim boundary. A locked Apply is exact either way. Only regions the viewer is connected to (the
   avatar's region and its neighbours within draw distance) have anything to show.
 - **Connected sims** (2026-10-28): views of a sim the viewer is connected to can be applied
-  from a neighbour. Their Sim column reads "Connected: <sim>". Editing stays with the sim's own
-  records (Save, Update, Rename work on this sim's views only).
+  from a neighbour. Their Sim column reads "Connected: <sim>".
+- **A view belongs to the sim the camera is over** (user, 2026-10-28: a view saved with the
+  camera over a neighbour showed "this sim"). Save and Update tag the record with the connected
+  region containing the camera (`LLWorld::getRegionFromPosGlobal()` of the camera origin, else
+  the agent's region), with the position local to it. Views of this sim and of connected sims
+  can be applied, updated and renamed. Update moves a view to the sim the camera is over now; if
+  another view there has its name, Update refuses and says so.
+- **No coordinate tooltips** (user, 2026-10-28): the names have no tooltip and the list has
+  none, because a tooltip covered the names below. The details line under the list shows the
+  selected view's values.
+- **Show disconnected** (user, 2026-10-28): a check box under the list, on by default and
+  remembered (setting `KSCameraPositionsShowDisconnected`, `<KS:KS>` in
+  `app_settings/settings.xml`). Off, the list holds only this sim's and connected sims' views.
+- **Height-only resize** (user, 2026-10-28): the floater resizes in height only
+  (`enableResizeCtrls(true, false, true)`: no side bars or corner handles, as in
+  `llfloatersettingscolor.cpp`). The list grows, and the controls below it follow the bottom
+  edge. `save_rect` keeps the size across closing and sessions. `min_height` is the XUI height.
+- **"Lock Camera"** (user, 2026-10-28): the Lock toggle is labeled Lock Camera, and every
+  mention follows.
 - **Closing the floater** unlocks and resets the view, like Esc x3. Teleport, disconnect and quit
   also unlock.
-- **The Lock toggle off** leaves the camera at the held view, movable from there. Esc x3 is the
+- **The Lock Camera toggle off** leaves the camera at the held view, movable from there. Esc x3 is the
   way back to the avatar.
 
 ## Files
 
 | File | Role |
 |---|---|
-| `kscamerapositions.cpp/.h` | Records (load/save, per-sim), Apply, Lock state, hooks' entry points |
+| `kscamerapositions.cpp/.h` | Records (load/save, per-sim), Apply, Lock Camera state, hooks' entry points |
 | `ksfloatercamerapositions.cpp/.h` | Floater `ks_camera_positions` and name dialog `ks_camera_position_edit` |
-| `floater_ks_camera_positions.xml` | 300 px wide: list (View, Sim), details line, Apply / Save current as... / Update / Rename... / Delete... / Lock |
+| `floater_ks_camera_positions.xml` | 300 px wide, height-resizable: list (View, Sim), Show disconnected, details line, Apply / Save current as... / Update / Rename... / Delete... / Lock Camera, Disable Camera Constraints |
 | `floater_ks_camera_position_edit.xml` | Name dialog (Save, Rename) |
 
 `<KS:KS>`-tagged upstream edits: `menu_viewer.xml` (menu item), `llviewerfloaterreg.cpp`
@@ -57,7 +74,8 @@ the camera to the avatar.
   `mRegionName` + `mGrid`): records are tagged with the region name and the grid id
   (`LLGridManager::getGridId()`), and their positions are region-local.
 - A record belongs **here** when its region and grid match the agent's region. Names are unique
-  per sim, so the same label can exist on several sims.
+  per sim, so the same label can exist on several sims. A record's sim is the one the camera was
+  over when it was saved or last updated.
 - A record is **connected** when its grid is the current one and its region is another region in
   `LLWorld::getRegionList()`: one the simulator has connected the viewer to, in Second Life a
   neighbour within draw distance of the avatar. Only these regions have anything loaded to show.
@@ -66,12 +84,14 @@ the camera to the avatar.
   with the last list and rebuilds the list on a change.
 - The list puts this sim's records first, then connected sims' records, then the others; each
   group is sorted by sim and name. Connected sims' rows are drawn normally, their Sim column reads
-  "Connected: <sim>", and **Apply** (and double-click) and **Delete...** are enabled on them.
+  "Connected: <sim>", and **Apply** (and double-click), **Update**, **Rename...** and
+  **Delete...** are enabled on them.
   Other sims' rows are dimmed (each cell is drawn in `ScrollDisabledColor`) but stay selectable,
   and their Sim column shows the sim's name. On such a row only **Delete...** is enabled (the
   user, 2026-10-27: deleting must not need a visit to the sim);
-  `KSCameraPositions::remove(record)` matches name, region and grid. Every row's tooltip, and
-  the details line, show its values.
+  `KSCameraPositions::remove(record)` matches name, region and grid. With **Show disconnected**
+  off, these rows are left out. The details line shows the selected view's values; rows have no
+  tooltip.
 - Angles are in degrees:
   - yaw = atan2(at.y, at.x), where 0 is east and 90 is north;
   - pitch = asin(at.z), positive looks up;
@@ -109,7 +129,7 @@ frame stays defined.
   The camera then behaves as after any camera move: moving the avatar resets it, as usual.
 - **Locked**: Apply replaces the held view (and sets `CameraAngle` for after the lock).
 
-## Lock
+## Lock Camera
 
 - **On**: the current rendered frame is held (global position, axes, view angle). Autopilot
   stops, and mouselook is left.
@@ -144,7 +164,7 @@ frame stays defined.
     belongs to the region being left;
   - no region, startup state not `STATE_STARTED`, or the app exiting unlocks without a reset.
 
-  Closing the floater unlocks and resets. Lock is a static flag, never saved, so every session
+  Closing the floater unlocks and resets. Lock Camera is a static flag, never saved, so every session
   starts unlocked.
 
 ## Not covered / follow-ups

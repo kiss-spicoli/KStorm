@@ -11273,6 +11273,19 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
   <!-- </KS:KS> -->
+  <!-- <KS:KS> Camera Positioning (doc/kstorm-camera-positions.md) -->
+  <key>KSCameraPositionsShowDisconnected</key>
+  <map>
+    <key>Comment</key>
+    <string>Camera Positioning lists the views of sims the viewer is not connected to (dimmed, delete only); off lists only this sim's and connected sims' views</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <!-- </KS:KS> -->
   <!-- <KS:KS> Body-proxy hair occlusion (doc/ks-hair-occlusion.md) -->
   <key>KSHairOcclusionEnabled</key>
   <map>

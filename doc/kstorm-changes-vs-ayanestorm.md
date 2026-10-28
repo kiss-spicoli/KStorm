@@ -137,7 +137,7 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 - **Icon shows the state.** On the launcher, the Motion mode gauge reads fast while on and is
   mirrored to read slow while off. (`c927b6a87c1`)
 
-## 7. Camera Positioning: saved camera views and camera Lock
+## 7. Camera Positioning: saved camera views and Lock Camera
 
 - **Camera Positioning floater.** KStorm menu > Camera Positioning opens a 300 px floater laid
   out like Look Inventory. It saves the current camera view under a name: position, yaw, pitch,
@@ -147,7 +147,7 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 - **Per sim.** Views are stored per sim, the way My Lights stores lights left in place. Other
   sims' views are dimmed and show the sim's name. They cannot be applied or edited from
   elsewhere, but they can be deleted from anywhere. (`9ec2c4ca485`, `06b21643389`)
-- **Lock.** Freezes the camera and the avatar. While on, the camera keys, the mouse, scripted
+- **Lock Camera.** Freezes the camera and the avatar. While on, the camera keys, the mouse, scripted
   and sit cameras, movement keys, click-to-walk, the joystick and mouselook do nothing.
   - Pressing Esc three times always unlocks and returns the camera to the avatar.
   - Closing the floater, a teleport, a disconnect or quitting also unlock.
@@ -191,6 +191,6 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
 - My Lights (`aslightrig*`, `asfloatermylights`)
 - teleport handling (`llagent.cpp`), settings, menus, the icon list (`textures.xml`) and Advanced
   Lighting
-- camera and input, for Camera Positioning's Lock: the idle camera update (`llappviewer.cpp`),
+- camera and input, for Camera Positioning's Lock Camera: the idle camera update (`llappviewer.cpp`),
   key and mouse bindings (`llviewerinput.cpp`), Esc (`llviewerwindow.cpp`) and mouselook
   (`llagentcamera.cpp`)

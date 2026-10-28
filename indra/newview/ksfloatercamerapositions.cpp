@@ -17,6 +17,7 @@
 #include "llscrolllistitem.h"
 #include "lltextbox.h"
 #include "lluicolortable.h"
+#include "llviewercontrol.h"
 
 namespace
 {
@@ -46,18 +47,28 @@ namespace
             KSCameraPositions::zoomFactor(view.mViewAngle));
     }
 
-    // List value of a record: the name for this sim's, unique across sims for the others.
+    const std::string SHOW_DISCONNECTED = "KSCameraPositionsShowDisconnected";
+
+    // List value of a record: unique across regions and grids.
     std::string rowValue(const KSCameraPositions::Record& record)
     {
-        return KSCameraPositions::isHere(record) ? record.mName : record.mGrid + "/" + record.mRegion + "/" + record.mName;
+        return record.mGrid + "/" + record.mRegion + "/" + record.mName;
     }
 
-    void selectInPane(const std::string& name)
+    void selectInPane(const std::string& region, const std::string& name)
     {
         if (KSFloaterCameraPositions* pane = LLFloaterReg::findTypedInstance<KSFloaterCameraPositions>("ks_camera_positions"))
         {
-            pane->selectPosition(name);
+            pane->selectPosition(region, name);
         }
+    }
+
+    // Says why something did not happen.
+    void alert(const std::string& message)
+    {
+        LLSD args;
+        args["MESSAGE"] = message;
+        LLNotificationsUtil::add("GenericAlert", args);
     }
 }
 
@@ -72,6 +83,7 @@ KSFloaterCameraPositions::KSFloaterCameraPositions(const LLSD& key)
 KSFloaterCameraPositions::~KSFloaterCameraPositions()
 {
     mChangedConnection.disconnect();
+    mShowConnection.disconnect();
 }
 
 bool KSFloaterCameraPositions::postBuild()
@@ -94,6 +106,14 @@ bool KSFloaterCameraPositions::postBuild()
         });
 
     mChangedConnection = KSCameraPositions::changedSignal().connect([this]() { refreshList(); });
+    // The Show disconnected check box binds the setting (control_name); the list follows it.
+    if (LLControlVariable* control = gSavedSettings.getControl(SHOW_DISCONNECTED))
+    {
+        mShowConnection = control->getSignal()->connect([this](LLControlVariable*, const LLSD&, const LLSD&) { refreshList(); });
+    }
+    // KStorm panes grow taller, never wider: only the top and bottom edges drag (no side bars or
+    // corner handles). save_rect keeps the height across closing and sessions.
+    enableResizeCtrls(true, false, true);
     refreshList();
     return true;
 }
@@ -105,7 +125,7 @@ void KSFloaterCameraPositions::onOpen(const LLSD& key)
 
 void KSFloaterCameraPositions::onClose(bool app_quitting)
 {
-    // Lock never outlives the floater that shows it.
+    // Lock Camera never outlives the floater that shows it.
     if (!app_quitting)
     {
         KSCameraPositions::unlockAndReset();
@@ -124,9 +144,16 @@ void KSFloaterCameraPositions::draw()
     LLFloater::draw();
 }
 
-void KSFloaterCameraPositions::selectPosition(const std::string& name)
+void KSFloaterCameraPositions::selectPosition(const std::string& region, const std::string& name)
 {
-    mList->selectByValue(LLSD(name));
+    for (const KSCameraPositions::Record& record : mRecords)
+    {
+        if (record.mRegion == region && record.mName == name && KSCameraPositions::isAvailable(record))
+        {
+            mList->selectByValue(LLSD(rowValue(record)));
+            break;
+        }
+    }
     refreshButtons();
 }
 
@@ -148,10 +175,10 @@ const KSCameraPositions::Record* KSFloaterCameraPositions::selectedRecord() cons
     return nullptr;
 }
 
-std::string KSFloaterCameraPositions::selectedName() const
+const KSCameraPositions::Record* KSFloaterCameraPositions::selectedAvailable() const
 {
     const KSCameraPositions::Record* record = selectedRecord();
-    return record && KSCameraPositions::isHere(*record) ? record->mName : std::string();
+    return record && KSCameraPositions::isAvailable(*record) ? record : nullptr;
 }
 
 void KSFloaterCameraPositions::refreshList()
@@ -162,7 +189,16 @@ void KSFloaterCameraPositions::refreshList()
     mLastRegion = KSCameraPositions::currentRegion();
     mLastConnected = KSCameraPositions::connectedRegions();
 
-    mRecords = KSCameraPositions::records();
+    // Only the listed records are kept: selection and buttons work on mRecords.
+    const bool show_disconnected = gSavedSettings.getBOOL(SHOW_DISCONNECTED);
+    mRecords.clear();
+    for (const KSCameraPositions::Record& record : KSCameraPositions::records())
+    {
+        if (show_disconnected || KSCameraPositions::isAvailable(record))
+        {
+            mRecords.push_back(record);
+        }
+    }
     mList->deleteAllItems();
     const LLColor4 dimmed = LLUIColorTable::instance().getColor("ScrollDisabledColor").get();
     for (const KSCameraPositions::Record& record : mRecords)
@@ -171,10 +207,10 @@ void KSFloaterCameraPositions::refreshList()
         const bool connected = !here && KSCameraPositions::isConnected(record);
         LLSD row;
         row["value"] = rowValue(record);
+        // No tooltip on the name: it would cover the names below (the details line shows the values).
         LLSD& name = row["columns"][0];
         name["column"] = "name";
         name["value"] = record.mName;
-        name["tool_tip"] = detailsText(record.mView);
         LLSD& sim = row["columns"][1];
         sim["column"] = "sim";
         if (here)
@@ -212,12 +248,12 @@ void KSFloaterCameraPositions::refreshList()
 void KSFloaterCameraPositions::refreshButtons()
 {
     const KSCameraPositions::Record* record = selectedRecord();
-    const bool here = record && KSCameraPositions::isHere(*record);
+    const bool available = selectedAvailable() != nullptr;
     const bool region = !mLastRegion.empty();
-    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(here || (record && KSCameraPositions::isConnected(*record)));
+    getChild<LLUICtrl>("ks_camera_apply")->setEnabled(available);
     getChild<LLUICtrl>("ks_camera_save")->setEnabled(region);
-    getChild<LLUICtrl>("ks_camera_update")->setEnabled(here);
-    getChild<LLUICtrl>("ks_camera_rename")->setEnabled(here);
+    getChild<LLUICtrl>("ks_camera_update")->setEnabled(available);
+    getChild<LLUICtrl>("ks_camera_rename")->setEnabled(available);
     getChild<LLUICtrl>("ks_camera_delete")->setEnabled(record != nullptr);
     mLockButton->setToggleState(KSCameraPositions::isLocked());
     mLockButton->setEnabled(region || KSCameraPositions::isLocked());
@@ -226,7 +262,7 @@ void KSFloaterCameraPositions::refreshButtons()
 
 void KSFloaterCameraPositions::onApply()
 {
-    if (const KSCameraPositions::Record* record = selectedRecord())
+    if (const KSCameraPositions::Record* record = selectedAvailable())
     {
         KSCameraPositions::apply(*record);
     }
@@ -234,10 +270,22 @@ void KSFloaterCameraPositions::onApply()
 
 void KSFloaterCameraPositions::onUpdate()
 {
-    const std::string name = selectedName();
-    if (!name.empty())
+    const KSCameraPositions::Record* selected = selectedAvailable();
+    if (!selected)
     {
-        KSCameraPositions::update(name);
+        return;
+    }
+    const KSCameraPositions::Record record = *selected;
+    const std::string region = KSCameraPositions::cameraRegion();
+    if (KSCameraPositions::update(record))
+    {
+        selectPosition(region, record.mName);
+    }
+    else if (region != record.mRegion && KSCameraPositions::exists(record.mName, region))
+    {
+        // The camera is over another sim now, where a different view has this name.
+        alert("The camera is over " + region + ", which already has a view named \"" + record.mName
+            + "\". Rename one of them first.");
     }
 }
 
@@ -261,7 +309,12 @@ void KSFloaterCameraPositions::openEditor(const std::string& mode)
 {
     LLSD key;
     key["mode"] = mode;
-    key["name"] = selectedName();
+    if (const KSCameraPositions::Record* record = selectedAvailable())
+    {
+        key["name"] = record->mName;
+        key["region"] = record->mRegion;
+        key["grid"] = record->mGrid;
+    }
     LLFloaterReg::showInstance(EDITOR, key, true);
 }
 
@@ -287,11 +340,13 @@ bool KSFloaterCameraPositionEdit::postBuild()
 void KSFloaterCameraPositionEdit::onOpen(const LLSD& key)
 {
     mMode = key["mode"].asString() == "rename" ? "rename" : "save";
-    mName = key["name"].asString();
+    mRecord.mName = key["name"].asString();
+    mRecord.mRegion = key["region"].asString();
+    mRecord.mGrid = key["grid"].asString();
     if (mMode == "rename")
     {
         setTitle(getString("title_rename"));
-        mNameEditor->setText(mName);
+        mNameEditor->setText(mRecord.mName);
         mOKButton->setLabel(std::string("Rename"));
     }
     else
@@ -310,27 +365,29 @@ void KSFloaterCameraPositionEdit::refreshOK()
     LLStringUtil::trim(name);
     std::string note;
     bool ok = !name.empty();
-    if (KSCameraPositions::currentRegion().empty())
+    // A view belongs to the sim the camera is over, which can be a neighbour of yours.
+    const std::string region = KSCameraPositions::cameraRegion();
+    if (region.empty())
     {
         ok = false;
         note = "Not in a region.";
     }
     else if (mMode == "save")
     {
-        note = "Saves the current camera view for " + KSCameraPositions::currentRegion() + ".";
-        if (ok && KSCameraPositions::exists(name))
+        note = "Saves the current camera view for " + region + ", the sim the camera is over.";
+        if (ok && KSCameraPositions::exists(name, region))
         {
-            note = "A view with this name exists in this sim; saving replaces it.";
+            note = "A view with this name exists in " + region + "; saving replaces it.";
         }
     }
-    else if (name == mName)
+    else if (name == mRecord.mName)
     {
         ok = false;
     }
-    else if (ok && KSCameraPositions::exists(name))
+    else if (ok && KSCameraPositions::exists(name, mRecord.mRegion))
     {
         ok = false;
-        note = "\"" + name + "\" is taken in this sim.";
+        note = "\"" + name + "\" is taken in " + mRecord.mRegion + ".";
     }
     mNote->setText(note);
     mOKButton->setEnabled(ok);
@@ -342,13 +399,15 @@ void KSFloaterCameraPositionEdit::onOK()
     LLStringUtil::trim(name);
     if (mMode == "save")
     {
-        if (KSCameraPositions::exists(name))
+        const std::string region = KSCameraPositions::cameraRegion();
+        if (KSCameraPositions::exists(name, region))
         {
-            confirm("Replace the view \"" + name + "\"?", [name]()
+            confirm("Replace the view \"" + name + "\" of " + region + "?", [name]()
                 {
+                    // Saved for the sim the camera is over when Yes is pressed.
                     if (KSCameraPositions::saveCurrent(name))
                     {
-                        selectInPane(name);
+                        selectInPane(KSCameraPositions::cameraRegion(), name);
                     }
                 });
             closeFloater();
@@ -356,7 +415,7 @@ void KSFloaterCameraPositionEdit::onOK()
         }
         if (KSCameraPositions::saveCurrent(name))
         {
-            selectInPane(name);
+            selectInPane(region, name);
             closeFloater();
         }
         else
@@ -364,9 +423,9 @@ void KSFloaterCameraPositionEdit::onOK()
             mNote->setText(std::string("The view could not be saved."));
         }
     }
-    else if (KSCameraPositions::rename(mName, name))
+    else if (KSCameraPositions::rename(mRecord, name))
     {
-        selectInPane(name);
+        selectInPane(mRecord.mRegion, name);
         closeFloater();
     }
     else
