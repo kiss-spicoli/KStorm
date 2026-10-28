@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-27, at `kstorm` merge `2b1a7df42f4`.
-- **KStorm's own work:** 95 commits (Kissmy Spicoli, Oct 18 to Oct 27), 126 files, about 13,000
+- **Last updated:** 2026-10-27, at `kstorm` merge `0640c0c3456`.
+- **KStorm's own work:** 96 commits (Kissmy Spicoli, Oct 18 to Oct 27), 126 files, about 13,000
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -109,7 +109,8 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   `47ec7d2fa1d`; renamed `d6a1cd28377`)
 - **KS Reference** is the Reference look, and the viewer labels it so: a fixed, known setup of
   sky, lighting and rendering. Builders use it as a base for textures, lighting and looks, and
-  make their changes as deltas from it. It cannot be edited; Duplicate makes a copy to vary.
+  make their changes as deltas from it. It cannot be edited; Duplicate makes a copy to vary
+  (`f471888a20e`).
   It sets the sky and about 54 settings. Its values were tuned along the way:
   - draw distance 64 m (`e5d1fe07c2c`)
   - shadow resolution 1.5x (`ec7c5ce1f88`, `3b28af09464`, tooltip `f68c8bcea06`)
