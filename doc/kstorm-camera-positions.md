@@ -50,8 +50,9 @@ the camera to the avatar.
 - **Draw Distance** (user, 2026-10-28): a slider just below Lock Camera, bound to `RenderFarClip`
   (`control_name`), so it follows every other setter: Preferences > Graphics > General and
   Advanced, looks such as the Reference look, the Performance floaters, the `/dd` chat command.
-  Nothing in code clamps the setting; the range is the widest any viewer control allows,
-  32 to 1024 m in steps of 8, as in Preferences > Graphics > General (Advanced allows 64 to 512).
+  Nothing in code clamps the setting. The range is 8 to 1024 m in steps of 8 (user, 2026-10-28):
+  wider at the low end than any other viewer control (Preferences > Graphics > General allows 32
+  to 1024, Advanced 64 to 512).
 - **Closing the floater** unlocks and resets the view, like Esc x3. Teleport, disconnect and quit
   also unlock.
 - **The Lock Camera toggle off** leaves the camera at the held view, movable from there. Esc x3 is the
