@@ -5,17 +5,18 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-27, at `kstorm` merge `03a528a8162`.
-- **KStorm's own work:** 88 commits (Kissmy Spicoli, Oct 18 to Oct 27), 115 files, about 11,700
-  lines added.
+- **Last updated:** 2026-10-27, on branch `feat-ks-camera-positions` (`06b21643389`), not yet
+  merged into `kstorm`. The last `kstorm` merge is `03a528a8162`.
+- **KStorm's own work:** 92 commits (Kissmy Spicoli, Oct 18 to Oct 27), 125 files, about 13,000
+  lines added. These counts include the unmerged Camera Positioning branch.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
 
 To refresh the numbers:
 
 ```
-git log --reverse --no-merges --format="%h %ad %s" --date=short upstream/master..kstorm
-git diff --shortstat upstream/master kstorm
+git log --reverse --no-merges --format="%h %ad %s" --date=short upstream/master..feat-ks-camera-positions
+git diff --shortstat upstream/master feat-ks-camera-positions
 git rev-list --count upstream/master..upstream/ayanestorm-dev
 ```
 
@@ -132,7 +133,29 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   (for example a minimap click). The `KSMotionModeOnTeleport` setting turns this off.
   (`183b9769220`)
 
-## 7. Fixes to existing behavior
+## 7. Camera Positioning: saved camera views and camera Lock
+
+Not yet merged into `kstorm`; on branch `feat-ks-camera-positions`.
+
+- **Camera Positioning floater.** KStorm menu > Camera Positioning opens a 300 px floater laid
+  out like Look Inventory. It saves the current camera view under a name: position, yaw, pitch,
+  roll and zoom (the view angle, shown as a factor where 1.00x is normal). You can apply,
+  update, rename and delete views. Double-click or Apply moves the camera there, roll
+  included. (`9ec2c4ca485`)
+- **Per sim.** Views are stored per sim, the way My Lights stores lights left in place. Other
+  sims' views are dimmed and show the sim's name. They cannot be applied or edited from
+  elsewhere, but they can be deleted from anywhere. (`9ec2c4ca485`, `06b21643389`)
+- **Lock.** Freezes the camera and the avatar. While on, the camera keys, the mouse, scripted
+  and sit cameras, movement keys, click-to-walk, the joystick and mouselook do nothing.
+  - Pressing Esc three times always unlocks and returns the camera to the avatar.
+  - Closing the floater, a teleport, a disconnect or quitting also unlock.
+  - Turning the toggle off leaves the camera where it is.
+
+  (`9ec2c4ca485`, joystick reset on unlock `ff67860fccf`)
+
+Details: `doc/kstorm-camera-positions.md`.
+
+## 8. Fixes to existing behavior
 
 - **Advanced Lighting.** Three atmosphere sliders (Density, Distance, Maximum Altitude) were
   hidden in AyaneStorm; they are shown and working. (`9b783fa6bf6`)
@@ -141,7 +164,7 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 - **Older skies.** They no longer look darker than they should, because probe fill can never
   drop to zero. (`456bd1193ec`)
 
-## 8. Renames and documentation
+## 9. Renames and documentation
 
 - **Naming.** All KStorm code uses `ks*` names and `<KS:KS>` tags, so it is easy to tell apart
   from AyaneStorm's. (`230af14da33`)
@@ -159,3 +182,6 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
 - My Lights (`aslightrig*`, `asfloatermylights`)
 - teleport handling (`llagent.cpp`), settings, menus, the icon list (`textures.xml`) and Advanced
   Lighting
+- camera and input, for Camera Positioning's Lock: the idle camera update (`llappviewer.cpp`),
+  key and mouse bindings (`llviewerinput.cpp`), Esc (`llviewerwindow.cpp`) and mouselook
+  (`llagentcamera.cpp`)
