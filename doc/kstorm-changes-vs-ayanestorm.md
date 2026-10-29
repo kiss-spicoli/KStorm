@@ -235,6 +235,20 @@ Details: `doc/kstorm-clear-view.md`.
   `29f7828dc63`, `1fc45fbd589`)
 - **This document.** (`7f8dcd24e29`)
 
+## Keyboard shortcuts
+
+Every key KStorm adds or changes. KStorm adds no Preferences > Controls key bindings.
+
+| Keys | What it does | Where |
+|---|---|---|
+| Alt+Shift+L | KStorm menu > KStorm Lighting: opens the launcher, or closes it and its docked panes (`435f28b859a`) | section 4 |
+| Alt+Shift+U | KStorm menu > KS Clear View: hides all UI, name tags and HUDs, and shows them again (`397213d4450`) | section 9 |
+| Alt+Shift+Y | View > Show User Interface, moved from Alt+Shift+U (`397213d4450`) | section 9 |
+| Esc three times | Turns Lock Camera off and returns the camera to the avatar (`9ec2c4ca485`) | section 7 |
+
+While Lock Camera is on, the movement and camera keys do nothing; chat, gestures, media and
+voice keys still work.
+
 ## Where AyaneStorm's own files were touched
 
 Most KStorm work lives in new `ks*` files. AyaneStorm's and Second Life's own files were changed
