@@ -200,6 +200,15 @@ shows in your own nearby chat only; it is never said aloud or sent to a script c
   single frame, packets per second, packet loss, data received, ping, the sim's frame rate and
   time dilation, and memory and VRAM, with the lowest free texture memory during the sample.
   It says so if the look or Motion mode changed while it ran.
+- **Delta.** `ksperf delta` compares with the last `ksperf` or `ksperf delta` report and
+  shows how long ago that was, then only what changed: the look, the mode, toggles, and KS
+  Reference values that moved away, moved again or came back (each with what it was). The
+  figures now always show, each with its signed change, e.g. `FPS: 42.1 (+6.3)`. The last
+  report is kept in memory until logout; timed samples do not replace it. With no report yet,
+  it gives the full report.
+- **End marker.** Each report ends with a row of `=` (the sample's after its figures, not
+  when it starts).
+- Any other word after `ksperf` gets a one-line usage reminder.
 
 ## 9. Clear View: only the world on screen
 

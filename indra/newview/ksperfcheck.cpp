@@ -13,6 +13,7 @@
 #include "kslightingpresets.h"
 #include "ksmotionmode.h"
 #include "llcallbacklist.h"
+#include "llframetimer.h"
 #include "llgl.h"
 #include "llimagegl.h"
 #include "llmemory.h"
@@ -22,6 +23,8 @@
 #include "llviewertexture.h"
 #include "pipeline.h"
 
+#include <cmath>
+#include <map>
 #include <memory>
 #include <string>
 
@@ -48,6 +51,7 @@ namespace
         // AvatarNameTagMode: 0 is off, any other value a display mode.
         { "Show avatar names",                 "AvatarNameTagMode",            LLSD() },
     };
+    constexpr size_t TOGGLE_COUNT = sizeof(TOGGLES) / sizeof(TOGGLES[0]);
 
     const char* onOff(bool on)
     {
@@ -60,7 +64,15 @@ namespace
         FSCommon::report_to_nearby_chat(line);
     }
 
-    std::string toggleLine(const Toggle& toggle)
+    // The last line of a report, so its end is plain among other chat.
+    void sayEnd()
+    {
+        say("==================");
+    }
+
+    // A toggle's state as shown after its label: on or off, its KS Reference state and what
+    // Motion mode holds.
+    std::string toggleValue(const Toggle& toggle)
     {
         bool on = false;
         std::string motion;
@@ -90,7 +102,7 @@ namespace
         }
         else
         {
-            return llformat("  %s: no setting %s", toggle.mLabel, toggle.mSetting);
+            return llformat("no setting %s", toggle.mSetting);
         }
 
         std::string annotation;
@@ -106,64 +118,310 @@ namespace
         {
             annotation = llformat("Reference: %s", onOff(reference.asBoolean()));
         }
-        return llformat("  %s: %s (%s)%s", toggle.mLabel, onOff(on), annotation.c_str(), motion.c_str());
+        return llformat("%s (%s)%s", onOff(on), annotation.c_str(), motion.c_str());
+    }
+
+    std::string lookName(const std::string& look)
+    {
+        return look.empty() ? "none" : look;
+    }
+
+    const char* modeName(bool motion)
+    {
+        return motion ? "Motion (fast)" : "Photo (slow)";
     }
 
     std::string lookAndMode()
     {
-        const std::string& look = KSLightingPresets::active();
-        return llformat("Look: %s. Mode: %s.", look.empty() ? "none" : look.c_str(),
-                        KSMotionMode::isOn() ? "Motion (fast)" : "Photo (slow)");
+        return llformat("Look: %s. Mode: %s.", lookName(KSLightingPresets::active()).c_str(), modeName(KSMotionMode::isOn()));
     }
 
-    void stateReport()
+    // Everything the state report shows, kept so a later delta can compare with it.
+    struct State
     {
-        say("KStorm performance check. " + lookAndMode());
+        std::string mLook;
+        bool mMotion = false;
+        std::string mToggles[TOGGLE_COUNT];     // toggleValue() of each TOGGLES entry
+        std::vector<KSLightingPresets::ReferenceDifference> mMoved;
+        S32 mTotal = 0;
+        bool mSky = false;
+    };
+
+    State readState()
+    {
+        State state;
+        state.mLook = KSLightingPresets::active();
+        state.mMotion = KSMotionMode::isOn();
+        for (size_t t = 0; t < TOGGLE_COUNT; ++t)
+        {
+            state.mToggles[t] = toggleValue(TOGGLES[t]);
+        }
+        state.mMoved = KSLightingPresets::referenceDifferences(state.mTotal);
+        state.mSky = KSEnvironment::getDisplaySky() != nullptr;
+        return state;
+    }
+
+    const char* skyScope(bool sky)
+    {
+        return sky ? "" : " (no sky yet: settings only)";
+    }
+
+    std::string differenceLine(const KSLightingPresets::ReferenceDifference& difference)
+    {
+        std::string line = "  " + difference.mName + ": " + difference.mCurrent + " (Reference " + difference.mReference + ")";
+        if (!difference.mOutsideMotion.empty())
+        {
+            line += " [Motion mode; " + difference.mOutsideMotion + " outside it]";
+        }
+        return line;
+    }
+
+    void sayState(const State& state)
+    {
+        say(llformat("KStorm performance check. Look: %s. Mode: %s.", lookName(state.mLook).c_str(), modeName(state.mMotion)));
 
         say("Toggles:");
-        for (const Toggle& toggle : TOGGLES)
+        for (size_t t = 0; t < TOGGLE_COUNT; ++t)
         {
-            say(toggleLine(toggle));
+            say(llformat("  %s: %s", TOGGLES[t].mLabel, state.mToggles[t].c_str()));
         }
 
-        S32 total = 0;
-        const std::vector<KSLightingPresets::ReferenceDifference> differences = KSLightingPresets::referenceDifferences(total);
-        const char* scope = KSEnvironment::getDisplaySky() ? "" : " (no sky yet: settings only)";
-        if (differences.empty())
+        if (state.mMoved.empty())
         {
-            say(llformat("All %d KS Reference values conform%s.", total, scope));
+            say(llformat("All %d KS Reference values conform%s.", state.mTotal, skyScope(state.mSky)));
             return;
         }
-        say(llformat("Moved from KS Reference: %d of %d values%s:", (S32)differences.size(), total, scope));
-        for (const KSLightingPresets::ReferenceDifference& difference : differences)
+        say(llformat("Moved from KS Reference: %d of %d values%s:", (S32)state.mMoved.size(), state.mTotal, skyScope(state.mSky)));
+        for (const KSLightingPresets::ReferenceDifference& difference : state.mMoved)
         {
-            std::string line = "  " + difference.mName + ": " + difference.mCurrent + " (Reference " + difference.mReference + ")";
-            if (!difference.mOutsideMotion.empty())
-            {
-                line += " [Motion mode; " + difference.mOutsideMotion + " outside it]";
-            }
-            say(line);
+            say(differenceLine(difference));
         }
     }
 
-    // Memory and VRAM now; lowest_free_vram < 0 when there is no window to report a low for.
-    void sayMemory(F32 lowest_free_vram)
+    // Memory and VRAM.
+    struct Memory
+    {
+        F64 mViewer;        // MB
+        F64 mFree;          // MB of system memory
+        F64 mMax;           // MB
+        F64 mVRAMUsed;      // MB, estimated
+        U32 mVRAM;          // MB
+        F64 mTextureFree;   // MB left in the texture budget
+    };
+
+    Memory readMemory()
     {
         LLMemory::updateMemoryInfo();
-        say(llformat("  Memory: viewer %.0f MB, system %.0f of %.0f MB free",
-                     LLMemory::getAllocatedMemKB().value() / 1024.0,
-                     LLMemory::getAvailableMemKB().value() / 1024.0,
-                     LLMemory::getMaxMemKB().value() / 1024.0));
+        Memory memory;
+        memory.mViewer = LLMemory::getAllocatedMemKB().value() / 1024.0;
+        memory.mFree = LLMemory::getAvailableMemKB().value() / 1024.0;
+        memory.mMax = LLMemory::getMaxMemKB().value() / 1024.0;
         // The viewer's own VRAM estimate (llviewertexture.cpp): its byte counts miss about half
         // of what is used, so it doubles them.
-        const F64 vram_used = (LLImageGL::getTextureBytesAllocated() + LLVertexBuffer::getBytesAllocated()) / 1024.0 / 512.0;
+        memory.mVRAMUsed = (LLImageGL::getTextureBytesAllocated() + LLVertexBuffer::getBytesAllocated()) / 1024.0 / 512.0;
+        memory.mVRAM = gGLManager.mVRAM;
+        memory.mTextureFree = LLViewerTexture::sFreeVRAMMegabytes;
+        return memory;
+    }
+
+    // lowest_free_vram < 0 when there is no window to report a low for.
+    void sayMemory(const Memory& memory, F32 lowest_free_vram)
+    {
+        say(llformat("  Memory: viewer %.0f MB, system %.0f of %.0f MB free", memory.mViewer, memory.mFree, memory.mMax));
         std::string line = llformat("  VRAM: about %.0f of %u MB used, texture budget %.0f MB free",
-                                    vram_used, gGLManager.mVRAM, LLViewerTexture::sFreeVRAMMegabytes);
+                                    memory.mVRAMUsed, memory.mVRAM, memory.mTextureFree);
         if (lowest_free_vram >= 0.f)
         {
             line += llformat(" (lowest %.0f)", lowest_free_vram);
         }
         say(line);
+    }
+
+    // The figures now. FPS over the frame recording's last 200 frames, as the statistics bar shows it.
+    struct Figures
+    {
+        F64 mFPS;
+        F64 mPing;          // ms
+        F64 mSimFPS;
+        F64 mDilation;
+        Memory mMemory;
+    };
+
+    Figures readFigures()
+    {
+        LLTrace::PeriodicRecording& frames = LLTrace::get_frame_recording();
+        LLTrace::Recording& last = frames.getLastRecording();
+        const F64Milliseconds ping = last.getLastValue(LLStatViewer::SIM_PING);
+        Figures figures;
+        figures.mFPS = frames.getPeriodMeanPerSec(LLStatViewer::FPS);
+        figures.mPing = ping.value();
+        figures.mSimFPS = last.getLastValue(LLStatViewer::SIM_FPS);
+        figures.mDilation = last.getLastValue(LLStatViewer::SIM_TIME_DILATION);
+        figures.mMemory = readMemory();
+        return figures;
+    }
+
+    void sayFigures(const Figures& figures)
+    {
+        say("Now:");
+        say(llformat("  FPS: %.1f (last 200 frames). Ping: %.0f ms", figures.mFPS, figures.mPing));
+        say(llformat("  Sim: %.1f FPS, time dilation %.2f", figures.mSimFPS, figures.mDilation));
+        sayMemory(figures.mMemory, -1.f);
+    }
+
+    // ---------------------------------------------------------------------
+    // Delta: the last report (ksperf or ksperf delta), for the next delta to compare with.
+    // Timed samples do not set it; it lasts until logout.
+
+    struct Report
+    {
+        State mState;
+        Figures mFigures;
+        F64 mTime;          // LLFrameTimer::getElapsedSeconds() when it was read, s
+    };
+    std::unique_ptr<Report> sLast;
+
+    void keep(State state, const Figures& figures)
+    {
+        sLast = std::make_unique<Report>(Report{ std::move(state), figures, LLFrameTimer::getElapsedSeconds().value() });
+    }
+
+    // Signed change rounded as the figure is shown, "+0" when the rounding hides it.
+    std::string change(F64 now, F64 before, S32 decimals)
+    {
+        const F64 scale = std::pow(10.0, decimals);
+        F64 difference = std::round((now - before) * scale) / scale;
+        if (difference == 0.0)
+        {
+            difference = 0.0;   // no "-0"
+        }
+        return llformat("%+.*f", decimals, difference);
+    }
+
+    std::string ago(F64 seconds)
+    {
+        const S32 whole = (S32)std::lround(seconds);
+        return whole < 60 ? llformat("%d s", whole) : llformat("%d min %d s", whole / 60, whole % 60);
+    }
+
+    // The state lines that changed; false when none did.
+    bool sayStateChanges(const State& before, const State& now)
+    {
+        bool changed = false;
+        if (now.mLook != before.mLook)
+        {
+            say(llformat("  Look: %s (was %s)", lookName(now.mLook).c_str(), lookName(before.mLook).c_str()));
+            changed = true;
+        }
+        if (now.mMotion != before.mMotion)
+        {
+            say(llformat("  Mode: %s (was %s)", modeName(now.mMotion), modeName(before.mMotion)));
+            changed = true;
+        }
+
+        bool header = false;
+        for (size_t t = 0; t < TOGGLE_COUNT; ++t)
+        {
+            if (now.mToggles[t] == before.mToggles[t])
+            {
+                continue;
+            }
+            if (!header)
+            {
+                say("Toggles:");
+                header = true;
+            }
+            say(llformat("  %s: %s, was %s", TOGGLES[t].mLabel, now.mToggles[t].c_str(), before.mToggles[t].c_str()));
+        }
+        changed |= header;
+
+        // KS Reference values moved away, moved again, or back.
+        std::map<std::string, const KSLightingPresets::ReferenceDifference*> earlier;
+        for (const KSLightingPresets::ReferenceDifference& difference : before.mMoved)
+        {
+            earlier[difference.mName] = &difference;
+        }
+        std::vector<std::string> lines;
+        for (const KSLightingPresets::ReferenceDifference& difference : now.mMoved)
+        {
+            auto found = earlier.find(difference.mName);
+            if (found == earlier.end())
+            {
+                lines.push_back(differenceLine(difference) + ", was Reference");
+                continue;
+            }
+            const KSLightingPresets::ReferenceDifference& old = *found->second;
+            if (difference.mCurrent != old.mCurrent || difference.mReference != old.mReference
+                || difference.mOutsideMotion != old.mOutsideMotion)
+            {
+                lines.push_back(differenceLine(difference) + ", was " + old.mCurrent);
+            }
+            earlier.erase(found);
+        }
+        for (const auto& entry : earlier)
+        {
+            const KSLightingPresets::ReferenceDifference& old = *entry.second;
+            lines.push_back("  " + old.mName + ": back to Reference " + old.mReference + ", was " + old.mCurrent);
+        }
+        if (!lines.empty() || now.mTotal != before.mTotal || now.mSky != before.mSky)
+        {
+            say(llformat("Moved from KS Reference: %d of %d values%s (was %d of %d):", (S32)now.mMoved.size(), now.mTotal,
+                         skyScope(now.mSky), (S32)before.mMoved.size(), before.mTotal));
+            for (const std::string& line : lines)
+            {
+                say(line);
+            }
+            changed = true;
+        }
+        return changed;
+    }
+
+    void sayFigureChanges(const Figures& before, const Figures& now)
+    {
+        const Memory& was = before.mMemory;
+        const Memory& is = now.mMemory;
+        say("Now (change):");
+        say(llformat("  FPS: %.1f (%s, last 200 frames). Ping: %.0f ms (%s)", now.mFPS, change(now.mFPS, before.mFPS, 1).c_str(),
+                     now.mPing, change(now.mPing, before.mPing, 0).c_str()));
+        say(llformat("  Sim: %.1f FPS (%s), time dilation %.2f (%s)", now.mSimFPS, change(now.mSimFPS, before.mSimFPS, 1).c_str(),
+                     now.mDilation, change(now.mDilation, before.mDilation, 2).c_str()));
+        say(llformat("  Memory: viewer %.0f MB (%s), system %.0f MB free (%s)", is.mViewer, change(is.mViewer, was.mViewer, 0).c_str(),
+                     is.mFree, change(is.mFree, was.mFree, 0).c_str()));
+        say(llformat("  VRAM: about %.0f MB used (%s), texture budget %.0f MB free (%s)", is.mVRAMUsed,
+                     change(is.mVRAMUsed, was.mVRAMUsed, 0).c_str(), is.mTextureFree,
+                     change(is.mTextureFree, was.mTextureFree, 0).c_str()));
+    }
+
+    // The state report and the figures now; kept for the next delta.
+    void report()
+    {
+        State state = readState();
+        const Figures figures = readFigures();
+        sayState(state);
+        sayFigures(figures);
+        sayEnd();
+        keep(std::move(state), figures);
+    }
+
+    // Only what changed since the last report; a full report when there is none yet.
+    void reportDelta()
+    {
+        if (!sLast)
+        {
+            say("No earlier KStorm report this session to compare with; the full report:");
+            report();
+            return;
+        }
+        State state = readState();
+        const Figures figures = readFigures();
+        say(llformat("KStorm changes since the report %s ago.", ago(LLFrameTimer::getElapsedSeconds().value() - sLast->mTime).c_str()));
+        if (!sayStateChanges(sLast->mState, state))
+        {
+            say("  Look, mode, toggles and KS Reference values: no change.");
+        }
+        sayFigureChanges(sLast->mFigures, figures);
+        sayEnd();
+        keep(std::move(state), figures);
     }
 
     // ---------------------------------------------------------------------
@@ -232,7 +490,8 @@ namespace
                      total.getMean(LLStatViewer::SIM_FPS),
                      total.getMean(LLStatViewer::SIM_TIME_DILATION),
                      total.getMin(LLStatViewer::SIM_TIME_DILATION)));
-        sayMemory(sample.mLowestFreeVRAM);
+        sayMemory(readMemory(), sample.mLowestFreeVRAM);
+        sayEnd();
     }
 
     // Once a second: closes a period, and reports when the window is done.
@@ -255,37 +514,44 @@ namespace
         sSample.reset();
         return true;
     }
+
+    void startSample(S32 seconds)
+    {
+        if (sSample)
+        {
+            say(llformat("A KStorm sample is already running: %d s left.", sSample->mSeconds - sSample->mElapsed));
+            return;
+        }
+        if (seconds < 1 || seconds > MAX_SAMPLE_SECONDS)
+        {
+            say(llformat("Sample length is 1 to %d seconds.", MAX_SAMPLE_SECONDS));
+            return;
+        }
+        sayState(readState());
+        sSample = std::make_unique<Sample>(seconds);
+        say(llformat("Sampling for %d s.", seconds));
+        doPeriodically(onSampleSecond, 1.f);
+    }
 }
 
-void KSPerfCheck::report()
+void KSPerfCheck::run(const std::string& argument)
 {
-    stateReport();
-
-    // Figures now. FPS over the frame recording's last 200 frames, as the statistics bar shows it.
-    LLTrace::PeriodicRecording& frames = LLTrace::get_frame_recording();
-    LLTrace::Recording& last = frames.getLastRecording();
-    const F64Milliseconds ping = last.getLastValue(LLStatViewer::SIM_PING);
-    say("Now:");
-    say(llformat("  FPS: %.1f (last 200 frames). Ping: %.0f ms", frames.getPeriodMeanPerSec(LLStatViewer::FPS), ping.value()));
-    say(llformat("  Sim: %.1f FPS, time dilation %.2f",
-                 last.getLastValue(LLStatViewer::SIM_FPS), last.getLastValue(LLStatViewer::SIM_TIME_DILATION)));
-    sayMemory(-1.f);
-}
-
-void KSPerfCheck::startSample(S32 seconds)
-{
-    if (sSample)
+    S32 seconds;
+    if (argument.empty())
     {
-        say(llformat("A KStorm sample is already running: %d s left.", sSample->mSeconds - sSample->mElapsed));
-        return;
+        report();
     }
-    if (seconds < 1 || seconds > MAX_SAMPLE_SECONDS)
+    else if (LLStringUtil::compareInsensitive(argument, "delta") == 0)
     {
-        say(llformat("Sample length is 1 to %d seconds.", MAX_SAMPLE_SECONDS));
-        return;
+        reportDelta();
     }
-    stateReport();
-    sSample = std::make_unique<Sample>(seconds);
-    say(llformat("Sampling for %d s.", seconds));
-    doPeriodically(onSampleSecond, 1.f);
+    else if (LLStringUtil::convertToS32(argument, seconds))
+    {
+        startSample(seconds);
+    }
+    else
+    {
+        say(llformat("%s takes no word, a number of seconds (1 to %d), or delta.",
+                     gSavedSettings.getString("KSCmdLinePerf").c_str(), MAX_SAMPLE_SECONDS));
+    }
 }

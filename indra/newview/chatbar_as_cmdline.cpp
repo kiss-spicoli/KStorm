@@ -844,18 +844,13 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 }
             }
             // <KS:KS> Performance check: look, mode, toggles and KS Reference differences, then
-            // a snapshot of the figures, or with a number of seconds a timed sample of them
+            // a snapshot of the figures; with a number of seconds a timed sample of them, with
+            // "delta" only what changed since the last report
             else if (command == sKSCmdLinePerf())
             {
-                S32 seconds;
-                if (i >> seconds)
-                {
-                    KSPerfCheck::startSample(seconds);
-                }
-                else
-                {
-                    KSPerfCheck::report();
-                }
+                std::string argument;
+                i >> argument;
+                KSPerfCheck::run(argument);
                 return false;
             }
             // </KS:KS>
