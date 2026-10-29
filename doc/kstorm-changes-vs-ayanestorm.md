@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, at `kstorm` commit `6893457c26b`.
-- **KStorm's own work:** 119 commits (Kissmy Spicoli, Oct 18 to Oct 29), 173 files, about 15,340
+- **Last updated:** 2026-10-29, at `kstorm` commit `b5ba3b6596c`.
+- **KStorm's own work:** 121 commits (Kissmy Spicoli, Oct 18 to Oct 29), 177 files, about 15,560
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -259,6 +259,16 @@ is built on. (`97d6a932d1f`)
 - **Ayane's names stay.** Features Ayane created keep their AyaneStorm names: the AyaneStorm
   menu and Preferences tab, AyaneStorm Depth of Field, AyaneStorm stars and the rest.
 - **README.** Rewritten for KStorm; AyaneStorm's README is kept as `doc/ayanestorm-README.md`.
+- **Login screen.** A minimal KStorm page loaded from disk, not from a web site, so nothing is
+  sent anywhere before you log in: "KStorm" in heavy type, "Research" spaced out beneath it,
+  an optional background picture (`background.jpg` in
+  `skins/default/html/en-us/kstorm-login/`) and a small version, build number and build-time
+  label in the corner. One background fills the screen. The username, password, location and
+  Log In controls sit centred, their bottom on the lower-third line. The firebird logo, Mode
+  selector, Create an account and Forgot password? are gone, and so is Firestorm's page with
+  its tiles, blogs and splash-screen settings. (`85d2fbcfbae`)
+- **No Report Problem.** Help > Report Problem, which files bugs with Firestorm, is hidden on
+  the login screen and in world. (`85d2fbcfbae`)
 
 Details: `doc/kstorm-rebrand-plan.md`.
 
@@ -318,3 +328,5 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
   `CMakeLists.txt`, the Windows installer), the exe resources (`viewerRes.rc`), About and Search
   (`floater_about.xml`, `floater_fs_search.xml`), Growl notifications, and the macOS and Linux
   display text
+- for the login screen: the login panel (`fspanellogin.cpp`, `panel_fs_nui_login.xml`) and the
+  Help menus (`menu_login.xml`, `menu_viewer.xml`)
