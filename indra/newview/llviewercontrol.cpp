@@ -122,6 +122,7 @@
 // <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 #include "llanimationstates.h"
 #include "ksclearview.h" // <KS:KS/> KStorm Clear View
+#include "ksshadernotice.h" // <KS:KS/> Shader-compile notice
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -287,7 +288,10 @@ bool handleSetShaderChanged(const LLSD& newvalue)
     }
 
     // else, leave terrain detail as is
-    LLViewerShaderMgr::instance()->setShaders();
+    // <KS:KS> Shader-compile notice: shown before the reload (ksshadernotice.h).
+    //LLViewerShaderMgr::instance()->setShaders();
+    KSShaderNotice::requestReload();
+    // </KS:KS>
     return true;
 }
 
@@ -333,7 +337,10 @@ bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
         gPipeline.updateRenderTransparentWater();
         gPipeline.releaseGLBuffers();
         gPipeline.createGLBuffers();
-        LLViewerShaderMgr::instance()->setShaders();
+        // <KS:KS> Shader-compile notice: shown before the reload (ksshadernotice.h).
+        //LLViewerShaderMgr::instance()->setShaders();
+        KSShaderNotice::requestReload();
+        // </KS:KS>
     }
     LLWorld::getInstance()->updateWaterObjects();
     return true;
@@ -613,7 +620,10 @@ static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
         gPipeline.mHeroProbeManager.reset();
         gPipeline.releaseGLBuffers();
         gPipeline.createGLBuffers();
-        LLViewerShaderMgr::instance()->setShaders();
+        // <KS:KS> Shader-compile notice: shown before the reload (ksshadernotice.h).
+        //LLViewerShaderMgr::instance()->setShaders();
+        KSShaderNotice::requestReload();
+        // </KS:KS>
     }
     return true;
 }

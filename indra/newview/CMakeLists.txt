@@ -183,6 +183,9 @@ set(viewer_SOURCE_FILES
     # <KS:KS> KStorm Clear View.
     ksclearview.cpp
     # </KS:KS>
+    # <KS:KS> Shader-compile notice.
+    ksshadernotice.cpp
+    # </KS:KS>
     # <KS:KS> Camera Positioning floater and camera Lock.
     kscamerapositions.cpp
     ksfloatercamerapositions.cpp
@@ -1153,6 +1156,9 @@ set(viewer_HEADER_FILES
     # </KS:KS>
     # <KS:KS> KStorm Clear View.
     ksclearview.h
+    # </KS:KS>
+    # <KS:KS> Shader-compile notice.
+    ksshadernotice.h
     # </KS:KS>
     # <KS:KS> Camera Positioning floater and camera Lock.
     kscamerapositions.h
