@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, at `kstorm` commit `bec38aa7d62`.
-- **KStorm's own work:** 117 commits (Kissmy Spicoli, Oct 18 to Oct 29), 138 files, about 14,590
+- **Last updated:** 2026-10-29, at `kstorm` commit `6893457c26b`.
+- **KStorm's own work:** 119 commits (Kissmy Spicoli, Oct 18 to Oct 29), 173 files, about 15,340
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -236,7 +236,33 @@ screen first, so the pause is explained, then compiles and draws the world again
 
 Details: `doc/kstorm-shader-notice.md`.
 
-## 11. Fixes to existing behavior
+## 11. The KStorm name
+
+KStorm now calls itself KStorm wherever the viewer's own name shows, and credits the viewers it
+is built on. (`97d6a932d1f`)
+
+- **Name and channel.** The window title, About, the exe's file details and the name sent to
+  the grid at login say KStorm. The channel is `KStorm-Research`: an unsupported research viewer.
+- **Second Life only.** OpenSim support is off: no grid selector, no OpenSim tab in
+  Preferences, no grid list downloaded at startup, and no Vivox voice (Second Life uses WebRTC).
+- **New data folders.** Settings, logins and chat logs live in `%APPDATA%\KStorm_x64`, the cache
+  in `%LOCALAPPDATA%\KStorm_x64`. The AyaneStorm settings were copied over once; the AyaneStorm
+  folders are kept as a backup.
+- **About.** A new KStorm Credits tab tells the lineage: AyaneStorm by Chanayane, Firestorm,
+  and Linden Lab's Second Life viewer. The tab AyaneStorm had named after itself, which holds
+  Firestorm's credits, is now Firestorm Credits. Release Notes open the KStorm GitHub home.
+- **No support links.** The About Info line and the crash, freeze and upload-error messages say
+  KStorm is an unsupported research viewer, instead of sending you to Firestorm support.
+- **Search.** The Search window is titled KStorm Search.
+- **Icons.** The `kstorm_*` icons hold AyaneStorm's art for now, until KStorm artwork replaces
+  them.
+- **Ayane's names stay.** Features Ayane created keep their AyaneStorm names: the AyaneStorm
+  menu and Preferences tab, AyaneStorm Depth of Field, AyaneStorm stars and the rest.
+- **README.** Rewritten for KStorm; AyaneStorm's README is kept as `doc/ayanestorm-README.md`.
+
+Details: `doc/kstorm-rebrand-plan.md`.
+
+## 12. Fixes to existing behavior
 
 - **Advanced Lighting.** Three atmosphere sliders (Density, Distance, Maximum Altitude) were
   hidden in AyaneStorm; they are shown and working. (`9b783fa6bf6`)
@@ -245,7 +271,7 @@ Details: `doc/kstorm-shader-notice.md`.
 - **Older skies.** They no longer look darker than they should, because probe fill can never
   drop to zero. (`456bd1193ec`)
 
-## 12. Renames and documentation
+## 13. Renames and documentation
 
 - **Naming.** All KStorm code uses `ks*` names and `<KS:KS>` tags, so it is easy to tell apart
   from AyaneStorm's. (`230af14da33`)
@@ -287,3 +313,8 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
 - for the shader-compile notice: the three settings handlers that reload shaders
   (`llviewercontrol.cpp`) and the main loop, which draws the notice in place of a frame
   (`llappviewer.cpp`)
+- for the KStorm name: the app name (`indra_constants.h`, `strings.xml`), the build and
+  packaging scripts (`llmanifest.py`, `fs_viewer_manifest.py`, `configure_firestorm.sh`,
+  `CMakeLists.txt`, the Windows installer), the exe resources (`viewerRes.rc`), About and Search
+  (`floater_about.xml`, `floater_fs_search.xml`), Growl notifications, and the macOS and Linux
+  display text
