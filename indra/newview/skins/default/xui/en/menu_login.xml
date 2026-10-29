@@ -127,8 +127,10 @@
                function="Floater.Show"
                parameter="fs_whitelist_floater" />
         </menu_item_call>
+        <!-- <KS:KS> rebrand: Report Problem hidden (reports go to Firestorm, which does not support KStorm) -->
         <menu_item_call
              label="Report Problem"
+             visible="false"
              name="Report Bug">
                 <menu_item_call.on_click
                  function="Advanced.ReportBug"/>

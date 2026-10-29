@@ -16,6 +16,8 @@
   <string name="ServerComboTooltip">
     An existing grid or a grid URI
   </string>
+  <!-- <KS:KS> rebrand: the page fills the whole area (was height="598"), so the controls sit on
+       one unified background instead of a gray footer band -->
   <web_browser
     tab_stop="false"
     trusted_content="true"
@@ -26,36 +28,64 @@
     name="login_html"
     start_url=""
     top="18"
-    height="598"
+    height="750"
     width="1024" />
+  <!-- KStorm: ui_stack (was bottom-anchored, follows="left|right|bottom", bottom="-1") now sits
+       in a fixed row between two elastic spacers. The stack shares spare height 410:188, which
+       keeps the bottom of the visible controls (86 px into the row) on the lower-third line at
+       any window height. -->
   <layout_stack
-  follows="left|right|bottom"
+    follows="all"
+    left="0"
+    top="18"
+    height="750"
+    width="1024"
+    name="ks_ui_vstack"
+    orientation="vertical"
+    animate="false">
+    <layout_panel
+      auto_resize="true"
+      min_dim="0"
+      name="ks_ui_pad_top"
+      height="410"
+      width="1024" />
+    <layout_panel
+      auto_resize="false"
+      name="ks_ui_row"
+      height="152"
+      width="1024">
+  <layout_stack
+  follows="left|right|top"
   height="152"
   left="0"
   name="ui_stack"
   orientation="horizontal"
-  bottom="-1"
+  top="0"
   width="1024">
     <layout_panel
       height="152"
       auto_resize="true"
       name="ui_elastic_pad_left"
       width="27" />
+    <!-- <KS:KS> rebrand: firebird logo removed (was width="125", visible); container was
+         width/min_width="970", vert_stack_left left_pad="10" -->
     <layout_panel
       auto_resize="false"
       follows="left|right|top"
       name="ui_container"
       layout="topleft"
-      width="970"
-      min_width="970"
+      width="835"
+      min_width="835"
       height="152">
   <icon
     height="125"
-    width="125"
+    width="0"
     image_name="login_fs_logo"
     left="0"
     top="10"
+    visible="false"
     name="sl_logo_small" />
+    <!-- </KS:KS> -->
 
     <layout_stack
       animate="false"
@@ -65,7 +95,7 @@
       layout="topleft"
       orientation="vertical"
       top="0"
-      left_pad="10"
+      left_pad="0"
       width="685"
       height="152">
     <layout_panel
@@ -320,11 +350,13 @@
     + Click to add more grids
     </text>
     </layout_panel>
+    <!-- <KS:KS> rebrand: Mode selector hidden (was visible) -->
     <layout_panel
       follows="left|top|right"
       name="mode_selection"
       width="342"
-      height="66">
+      height="66"
+      visible="false">
     <text
       follows="right|top"
       font="SansSerifLarge"
@@ -380,6 +412,7 @@
     </layout_stack> <!-- 2nd_row_stack -->
     </layout_panel>  <!-- 2nd_row -->
     </layout_stack> <!-- vert_stack -->
+  <!-- <KS:KS> rebrand: Create an account and Forgot password? below are hidden (visible="false") -->
   <button
     follows="left|top|right"
     image_unselected="PushButton_Login"
@@ -401,6 +434,7 @@
       height="16"
       name="create_new_account_text"
       top_pad="14"
+      visible="false"
       width="140">
         Create an account
     </text>
@@ -412,6 +446,7 @@
       height="16"
       name="forgot_password_text"
       top_pad="5"
+      visible="false"
       width="140">
         Forgot password?
     </text>
@@ -422,4 +457,13 @@
       name="ui_elastic_pad_right"
       width="27" />
   </layout_stack>
+    </layout_panel> <!-- ks_ui_row -->
+    <layout_panel
+      auto_resize="true"
+      min_dim="0"
+      name="ks_ui_pad_bottom"
+      height="188"
+      width="1024" />
+  </layout_stack> <!-- ks_ui_vstack -->
+  <!-- </KS:KS> -->
 </panel>
