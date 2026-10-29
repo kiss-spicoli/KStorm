@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, at `kstorm` commit `451693e63a7`.
-- **KStorm's own work:** 114 commits (Kissmy Spicoli, Oct 18 to Oct 29), 135 files, about 14,270
+- **Last updated:** 2026-10-29, at `kstorm` commit `bec38aa7d62`.
+- **KStorm's own work:** 117 commits (Kissmy Spicoli, Oct 18 to Oct 29), 138 files, about 14,590
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -217,7 +217,26 @@ shortcut works while you type in chat. (`397213d4450`)
 
 Details: `doc/kstorm-clear-view.md`.
 
-## 10. Fixes to existing behavior
+## 10. Shader-compile notice
+
+Turning on a setting that needs new shaders (shadows, ambient occlusion, reflections, transparent
+water, or a look, Motion mode or KStorm Lighting change that includes one) can freeze the viewer
+for 10 to 90 seconds while they compile. KStorm now shows "Compiling shaders..." on a black
+screen first, so the pause is explained, then compiles and draws the world again. (`9510c258777`)
+
+- **Black, not over the scene.** The world can't be drawn while it waits: a frame with the new
+  settings and the old shaders could crash the viewer.
+- **One compile per batch.** Several settings changed together, such as applying Graphics
+  preferences, compile once.
+- **Timing in the log.** Each compile writes a line such as `KS shader reload took 23410 ms
+  (3 requests)` to the log; search for "KS shader reload".
+- **No notice when it can't help.** Before login, while quitting or minimized, while the UI is
+  hidden (Clear View or Ctrl+Alt+F1), during teleport, for the Preferences quality slider, and
+  when the viewer itself reloads shaders, they compile at once as before.
+
+Details: `doc/kstorm-shader-notice.md`.
+
+## 11. Fixes to existing behavior
 
 - **Advanced Lighting.** Three atmosphere sliders (Density, Distance, Maximum Altitude) were
   hidden in AyaneStorm; they are shown and working. (`9b783fa6bf6`)
@@ -226,7 +245,7 @@ Details: `doc/kstorm-clear-view.md`.
 - **Older skies.** They no longer look darker than they should, because probe fill can never
   drop to zero. (`456bd1193ec`)
 
-## 11. Renames and documentation
+## 12. Renames and documentation
 
 - **Naming.** All KStorm code uses `ks*` names and `<KS:KS>` tags, so it is easy to tell apart
   from AyaneStorm's. (`230af14da33`)
@@ -265,3 +284,6 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
 - for Clear View: the settings listener (`llviewercontrol.cpp`), the snapshot UI restore
   (`llviewerwindow.cpp`), the Show User Interface shortcut notice (`llviewermenu.cpp`) and the
   depth-of-field progress counter (`asdofrenderer.cpp`)
+- for the shader-compile notice: the three settings handlers that reload shaders
+  (`llviewercontrol.cpp`) and the main loop, which draws the notice in place of a frame
+  (`llappviewer.cpp`)
