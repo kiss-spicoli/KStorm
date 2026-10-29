@@ -87,6 +87,7 @@
 // <KS:KS> Restore values cached by "Set KS environment" before saving settings.
 #include "ksenvironment.h"
 // </KS:KS>
+#include "ksshadernotice.h" // <KS:KS/> Shader-compile notice
 #include "kscamerapositions.h" // <KS:KS/> Camera Positioning's Lock Camera
 #include "llviewerparcelmedia.h"
 #include "llviewershadermgr.h"
@@ -1804,6 +1805,16 @@ bool LLAppViewer::doFrame()
                 pingMainloopTimeout("Main:Display");
                 gGLActive = true;
 
+                // <KS:KS> Shader-compile notice: a held shader reload takes the frame, and no
+                // world frame (display() or the updates after it) runs before it (ksshadernotice.h).
+                if (KSShaderNotice::runFrame())
+                {
+                    gGLActive = false;
+                }
+                else
+                {
+                KSShaderNotice::FrameScope ks_frame_scope;
+                // </KS:KS>
                 display();
 
                 if (LLStartUp::getStartupState() == STATE_STARTED) // <FS:Beq/> FIRE-34590 - Bugsplat caused by updating maps before world is loaded.
@@ -1818,6 +1829,9 @@ bool LLAppViewer::doFrame()
                     FSFloaterPrimfeed::update(); // <FS:Beq/> Primfeed support
                     gGLActive = false;
                 }
+                // <KS:KS> Shader-compile notice
+                }
+                // </KS:KS>
 
                 if (LLViewerStatsRecorder::instanceExists())
                 {
