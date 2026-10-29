@@ -36,6 +36,9 @@
 #include "aoengine.h"
 #include "fscommon.h"
 #include "fsradar.h"
+// <KS:KS> Performance check command
+#include "ksperfcheck.h"
+// </KS:KS>
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llavataractions.h"
@@ -789,6 +792,9 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
     static LLCachedControl<std::string> sFSCmdLinePasteCam(gSavedSettings, "FSCmdLinePasteCam");
     static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings, "FSCmdLineRollDice");
     static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings, "FSCmdLineBandWidth");
+    // <KS:KS> Performance check command
+    static LLCachedControl<std::string> sKSCmdLinePerf(gSavedSettings, "KSCmdLinePerf");
+    // </KS:KS>
 
     if (sFSCmdLine)
     {
@@ -837,6 +843,22 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     return false;
                 }
             }
+            // <KS:KS> Performance check: look, mode, toggles and KS Reference differences, then
+            // a snapshot of the figures, or with a number of seconds a timed sample of them
+            else if (command == sKSCmdLinePerf())
+            {
+                S32 seconds;
+                if (i >> seconds)
+                {
+                    KSPerfCheck::startSample(seconds);
+                }
+                else
+                {
+                    KSPerfCheck::report();
+                }
+                return false;
+            }
+            // </KS:KS>
             else if (command == sFSCmdTeleportToCam())
             {
                 gAgent.teleportViaLocation(gAgentCamera.getCameraPositionGlobal());

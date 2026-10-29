@@ -19,6 +19,7 @@
 #include "lluictrlfactory.h"
 #include "lluri.h"
 #include "llviewercontrol.h"
+#include "llvirtualtrackball.h"
 #include "llxmlnode.h"
 
 #include <algorithm>
@@ -548,6 +549,29 @@ namespace
             return fabs(a.asReal() - b.asReal()) < TOLERANCE;
         }
         return llsd_equals(a, b);
+    }
+
+    // A preset value as text (Contents, the ksperf chat command).
+    std::string formatValue(const LLSD& value)
+    {
+        if (value.isArray())
+        {
+            std::string text;
+            for (const LLSD& item : llsd::inArray(value))
+            {
+                text += (text.empty() ? "" : ", ") + (item.isReal() ? llformat("%.3f", item.asReal()) : item.asString());
+            }
+            return text;
+        }
+        if (value.isReal())
+        {
+            return llformat("%g", value.asReal());
+        }
+        if (value.isBoolean())
+        {
+            return std::string(value.asBoolean() ? "TRUE" : "FALSE");
+        }
+        return value.asString();
     }
 
     // ---------------------------------------------------------------------
@@ -1303,34 +1327,13 @@ std::string KSLightingPresets::contentsText(const std::string& name)
     {
         return std::string();
     }
-    auto format = [](const LLSD& value)
-    {
-        if (value.isArray())
-        {
-            std::string text;
-            for (const LLSD& item : llsd::inArray(value))
-            {
-                text += (text.empty() ? "" : ", ") + (item.isReal() ? llformat("%.3f", item.asReal()) : item.asString());
-            }
-            return text;
-        }
-        if (value.isReal())
-        {
-            return llformat("%g", value.asReal());
-        }
-        if (value.isBoolean())
-        {
-            return std::string(value.asBoolean() ? "TRUE" : "FALSE");
-        }
-        return value.asString();
-    };
     std::string text;
     if (preset.mSky.size() > 0)
     {
         text += "Sky\n";
         for (const auto& [key, value] : llsd::inMap(preset.mSky))
         {
-            text += "  " + key + ": " + format(value) + "\n";
+            text += "  " + key + ": " + formatValue(value) + "\n";
         }
     }
     if (preset.mWater.size() > 0)
@@ -1338,7 +1341,7 @@ std::string KSLightingPresets::contentsText(const std::string& name)
         text += "Water\n";
         for (const auto& [key, value] : llsd::inMap(preset.mWater))
         {
-            text += "  " + key + ": " + format(value) + "\n";
+            text += "  " + key + ": " + formatValue(value) + "\n";
         }
     }
     if (preset.mSettings.size() > 0)
@@ -1346,7 +1349,7 @@ std::string KSLightingPresets::contentsText(const std::string& name)
         text += "Settings\n";
         for (const auto& [key, value] : llsd::inMap(preset.mSettings))
         {
-            text += "  " + key + ": " + format(value) + "\n";
+            text += "  " + key + ": " + formatValue(value) + "\n";
         }
     }
     return text;
@@ -1376,6 +1379,96 @@ std::string KSLightingPresets::scopeText(const std::string& name)
         }
     }
     return text;
+}
+
+std::vector<KSLightingPresets::ReferenceDifference> KSLightingPresets::referenceDifferences(S32& total)
+{
+    const Preset& reference = ksReference();
+    std::vector<ReferenceDifference> differences;
+    total = 0;
+    for (const auto& [name, value] : llsd::inMap(reference.mSettings))
+    {
+        LLControlVariable* control = gSavedSettings.getControl(name);
+        if (!control)
+        {
+            continue;
+        }
+        ++total;
+        // The live value is what renders; Motion mode may hold another one it will restore.
+        // All three in the setting's own type, so Integer 1 matches TRUE and "0" matches 0.
+        const LLSD current = controlValue(*control, control->getValue());
+        const LLSD outside = controlValue(*control, KSMotionMode::getValue(*control));
+        const LLSD reference_value = controlValue(*control, value);
+        const bool motion = !approxEqual(outside, current);
+        if (!approxEqual(current, reference_value) || (motion && !approxEqual(outside, reference_value)))
+        {
+            // on/off as the command's toggle lines show switches.
+            auto text = [](const LLSD& v) { return v.isBoolean() ? std::string(v.asBoolean() ? "on" : "off") : formatValue(v); };
+            differences.push_back({ name, text(current), text(reference_value), motion ? text(outside) : std::string() });
+        }
+    }
+
+    LLSettingsSky::ptr_t sky = KSEnvironment::getDisplaySky();
+    if (!sky)
+    {
+        return differences;
+    }
+    auto rotation_text = [](const LLQuaternion& rotation)
+    {
+        F32 azimuth, elevation;
+        LLVirtualTrackball::getAzimuthAndElevationDeg(rotation, azimuth, elevation);
+        return llformat("azimuth %.1f, elevation %.1f", azimuth, elevation);
+    };
+    for (const auto& [key, value] : llsd::inMap(reference.mSky))
+    {
+        auto field = skyFields().find(key);
+        if (field == skyFields().end())
+        {
+            continue;
+        }
+        ++total;
+        const LLSD current = field->second.get(*sky);
+        if (key == "sun_rotation" || key == "moon_rotation")
+        {
+            LLQuaternion current_rotation, reference_rotation;
+            current_rotation.setValue(current);
+            reference_rotation.setValue(value);
+            // q and -q are the same rotation; 0.999999 is within about 0.2 degrees.
+            if (fabs(dot(current_rotation, reference_rotation)) < 0.999999f)
+            {
+                differences.push_back({ "Sky " + key, rotation_text(current_rotation),
+                                        rotation_text(reference_rotation), std::string() });
+            }
+        }
+        else if (!approxEqual(current, value))
+        {
+            // Colors are the raw RGB the preset stores, not the panes' display values.
+            differences.push_back({ "Sky " + key, formatValue(current), formatValue(value), std::string() });
+        }
+    }
+    return differences;
+}
+
+LLSD KSLightingPresets::controlValue(LLControlVariable& control, const LLSD& value)
+{
+    switch (control.type())
+    {
+    case TYPE_BOOLEAN:
+        return LLSD(value.asBoolean());
+    case TYPE_S32:
+    case TYPE_U32:
+        return LLSD(value.asInteger());     // a String "0" gives 0 (asBoolean would give TRUE)
+    case TYPE_F32:
+        return LLSD(value.asReal());
+    default:
+        return value;
+    }
+}
+
+LLSD KSLightingPresets::referenceSetting(const std::string& name)
+{
+    const LLSD& settings = ksReference().mSettings;
+    return settings.has(name) ? settings[name] : LLSD();
 }
 
 void KSLightingPresets::onUseShared()

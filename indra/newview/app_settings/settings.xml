@@ -11228,6 +11228,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1</integer>
   </map>
+  <key>KSCmdLinePerf</key>
+  <map>
+    <key>Comment</key>
+    <string>Chat command that reports to nearby chat the active look, Photo or Motion mode, the Quick pane toggles, every KS Reference value the current one differs from, and frame rate, network, sim and memory figures: now, or followed by a number of seconds (1 to 600) over that window</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>ksperf</string>
+  </map>
   <key>KSLightingPaneStates</key>
   <map>
     <key>Comment</key>

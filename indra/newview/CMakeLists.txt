@@ -172,6 +172,7 @@ set(viewer_SOURCE_FILES
     kslightingfields.cpp
     kslightingpresets.cpp
     ksmotionmode.cpp
+    ksperfcheck.cpp
     # </KS:KS>
     # <KS:KS> Dark My Lights spots.
     ksdarklight.cpp
@@ -1139,6 +1140,7 @@ set(viewer_HEADER_FILES
     kslightingfields.h
     kslightingpresets.h
     ksmotionmode.h
+    ksperfcheck.h
     # </KS:KS>
     # <KS:KS> Dark My Lights spots.
     ksdarklight.h

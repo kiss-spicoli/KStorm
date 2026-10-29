@@ -32,6 +32,8 @@
 #include <string>
 #include <vector>
 
+class LLControlVariable;
+
 namespace KSLightingPresets
 {
     // Name of the built-in preset (reserved: no saved preset can use it).
@@ -104,6 +106,26 @@ namespace KSLightingPresets
 
     // Short description for the list: "built in", "full", "custom" or group labels.
     std::string scopeText(const std::string& name);
+
+    // A KS Reference value the current one differs from (the ksperf chat command).
+    struct ReferenceDifference
+    {
+        std::string mName;          // setting name, or "Sky <key>"
+        std::string mCurrent;       // as shown: sun and moon rotations in degrees, colors raw RGB
+        std::string mReference;
+        std::string mOutsideMotion; // the value Motion mode restores, "" when it does not hold it
+    };
+    // Compares every KS Reference value with the current one: viewer settings, then the sky the
+    // panes show (none when there is no sky yet). total is set to the number of values compared.
+    std::vector<ReferenceDifference> referenceDifferences(S32& total);
+
+    // KS Reference's value of a viewer setting; undefined when it does not set it.
+    LLSD referenceSetting(const std::string& name);
+
+    // A setting's value in the LLSD type the setting declares. Settings keep values as they
+    // were given: a Boolean one can hold Integer 1 (settings and graphics preset files), an
+    // S32 one a String (combo boxes), so compare and show values through this.
+    LLSD controlValue(LLControlVariable& control, const LLSD& value);
 
     // Use Shared Environment: turns off an active preset that holds sky or water
     // values (A4) without restoring them.
