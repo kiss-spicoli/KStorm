@@ -71,6 +71,8 @@ Placeholder art for now (decided below); the user supplies real KStorm artwork l
 
 Decided (2026-10-29): placeholder art. Copy each referenced `ayanestorm_*` icon to a `kstorm_*` file of identical content and repoint references; the user supplies real KStorm artwork later, which then replaces the `kstorm_*` files in place (no reference changes). Copy only the files the Windows build uses: `icons/private/` and `icons/private-os/` (either OpenSim setting works), `installers/windows/`, `res/ayanestorm_icon.png`, `skins/default/textures/`, `win_crash_logger/`. Other channel folders, `res-sdl/` and the `.icns` files keep only their `ayanestorm_*` files.
 
+Decided (2026-10-29): real art in `icons/private/` (Firebird, head C; source `kstorm_icon.svg`, generator `kstorm_make_icons.py`, both kept outside the repository). PNG/ICO/ICNS are transparent; the 24-bit BMPs are on black. Files with names the build still references (`ayanestorm_256.{bmp,png}`, `ayanestorm_icon.icns`, `firestorm_icon.{ico,icns}`) hold the same art under their old names. The unreferenced `ayanestorm_*`/`firestorm_*` files in `icons/private/` were deleted (accepts modify/delete conflicts if upstream changes them). Other placeholder copies listed above still hold the old art.
+
 ### 3.3 Installer, packaging, platforms (Tier A)
 
 - `installers/windows/installer_template.nsi:1018-1039`: uninstall cleanup paths `AppData\Roaming\AyaneStorm*` / `Local\AyaneStorm*` -> `KStorm*`. Installer title/shortcut names come from `APP_NAME`/channel via the manifest; verify after the change.
