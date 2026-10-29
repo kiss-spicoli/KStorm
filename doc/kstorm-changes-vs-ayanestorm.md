@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-28, at `kstorm` merge `c9ff4f5eb78`.
-- **KStorm's own work:** 111 commits (Kissmy Spicoli, Oct 18 to Oct 28), 127 files, about 13,570
+- **Last updated:** 2026-10-29, at `kstorm` commit `7b342044043`.
+- **KStorm's own work:** 112 commits (Kissmy Spicoli, Oct 18 to Oct 29), 130 files, about 14,040
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -180,7 +180,28 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 
 Details: `doc/kstorm-camera-positions.md`.
 
-## 8. Fixes to existing behavior
+## 8. Performance check: the `ksperf` chat command
+
+Type `ksperf` in nearby chat (the command word is the `KSCmdLinePerf` setting). The answer
+shows in your own nearby chat only; it is never said aloud or sent to a script channel.
+(`7b342044043`)
+
+- **State.** Which look is on (or none), and Photo (slow) or Motion (fast) mode.
+- **Toggles.** Every Quick pane check box, and Motion mode at login and teleport, on or off,
+  each marked as matching KS Reference, what KS Reference has instead, or not part of it.
+- **Moved from KS Reference.** Only the KS Reference values that the current ones differ from,
+  with the Reference value beside each; the rest are counted as conforming. A value Motion mode
+  is holding says what it goes back to. Values are compared by the type each setting declares,
+  so a setting saved as 1 matches "on".
+- **Figures now.** Frame rate over the last 200 frames, ping, the sim's frame rate and time
+  dilation, the viewer's memory, free system memory and VRAM.
+- **Timed sample.** `ksperf 10` (1 to 600 seconds) measures for that long and then reports
+  once: average frame rate with the worst and best second, average frame time and the worst
+  single frame, packets per second, packet loss, data received, ping, the sim's frame rate and
+  time dilation, and memory and VRAM, with the lowest free texture memory during the sample.
+  It says so if the look or Motion mode changed while it ran.
+
+## 9. Fixes to existing behavior
 
 - **Advanced Lighting.** Three atmosphere sliders (Density, Distance, Maximum Altitude) were
   hidden in AyaneStorm; they are shown and working. (`9b783fa6bf6`)
@@ -189,7 +210,7 @@ Details: `doc/kstorm-camera-positions.md`.
 - **Older skies.** They no longer look darker than they should, because probe fill can never
   drop to zero. (`456bd1193ec`)
 
-## 9. Renames and documentation
+## 10. Renames and documentation
 
 - **Naming.** All KStorm code uses `ks*` names and `<KS:KS>` tags, so it is easy to tell apart
   from AyaneStorm's. (`230af14da33`)
@@ -207,6 +228,7 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
 - My Lights (`aslightrig*`, `asfloatermylights`)
 - teleport and login handling (`llagent.cpp`, `llstartup.cpp`), settings, menus, the icon list (`textures.xml`) and Advanced
   Lighting
+- the chat command line (`chatbar_as_cmdline.cpp`), for `ksperf`
 - camera and input, for Camera Positioning's Lock Camera: the idle camera update (`llappviewer.cpp`),
   key and mouse bindings (`llviewerinput.cpp`), Esc (`llviewerwindow.cpp`) and mouselook
   (`llagentcamera.cpp`)
