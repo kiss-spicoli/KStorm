@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, at `kstorm` commit `7b342044043`.
-- **KStorm's own work:** 112 commits (Kissmy Spicoli, Oct 18 to Oct 29), 130 files, about 14,040
+- **Last updated:** 2026-10-29, at `kstorm` commit `451693e63a7`.
+- **KStorm's own work:** 114 commits (Kissmy Spicoli, Oct 18 to Oct 29), 135 files, about 14,270
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -201,7 +201,23 @@ shows in your own nearby chat only; it is never said aloud or sent to a script c
   time dilation, and memory and VRAM, with the lowest free texture memory during the sample.
   It says so if the look or Motion mode changed while it ran.
 
-## 9. Fixes to existing behavior
+## 9. Clear View: only the world on screen
+
+KStorm menu > KS Clear View, or **Alt+Shift+U**, hides everything but the world, for screen
+shots taken outside the viewer: menus, bars, toolbars, floaters, chat, notifications, avatar name
+tags, hover text and HUD attachments. The world fills the whole window. Press it again to bring
+everything back; a HUD or UI you had already hidden stays hidden. It always starts off, and the
+shortcut works while you type in chat. (`397213d4450`)
+
+- **Show User Interface moved.** View > Show User Interface, which had Alt+Shift+U, is now
+  **Alt+Shift+Y**, and its confirmation names the new key.
+- **Snapshots keep the UI hidden.** A snapshot taken while the UI is hidden (Clear View or
+  Ctrl+Alt+F1) no longer turns it back on.
+- **Depth of field.** The aperture progress counter hides along with the UI.
+
+Details: `doc/kstorm-clear-view.md`.
+
+## 10. Fixes to existing behavior
 
 - **Advanced Lighting.** Three atmosphere sliders (Density, Distance, Maximum Altitude) were
   hidden in AyaneStorm; they are shown and working. (`9b783fa6bf6`)
@@ -210,7 +226,7 @@ shows in your own nearby chat only; it is never said aloud or sent to a script c
 - **Older skies.** They no longer look darker than they should, because probe fill can never
   drop to zero. (`456bd1193ec`)
 
-## 10. Renames and documentation
+## 11. Renames and documentation
 
 - **Naming.** All KStorm code uses `ks*` names and `<KS:KS>` tags, so it is easy to tell apart
   from AyaneStorm's. (`230af14da33`)
@@ -232,3 +248,6 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
 - camera and input, for Camera Positioning's Lock Camera: the idle camera update (`llappviewer.cpp`),
   key and mouse bindings (`llviewerinput.cpp`), Esc (`llviewerwindow.cpp`) and mouselook
   (`llagentcamera.cpp`)
+- for Clear View: the settings listener (`llviewercontrol.cpp`), the snapshot UI restore
+  (`llviewerwindow.cpp`), the Show User Interface shortcut notice (`llviewermenu.cpp`) and the
+  depth-of-field progress counter (`asdofrenderer.cpp`)
