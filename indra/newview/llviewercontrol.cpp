@@ -121,6 +121,7 @@
 #include "nd/ndlogthrottle.h"
 // <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 #include "llanimationstates.h"
+#include "ksclearview.h" // <KS:KS/> KStorm Clear View
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -1659,6 +1660,10 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "SDL2IMEEnabled", handleSDL2IMEEnabledChanged);
 #endif
     // </FS:Zi>
+
+    // <KS:KS> KStorm Clear View: hides all UI, name tags and HUDs.
+    setting_setup_signal_listener(gSavedSettings, "KSClearView", KSClearView::onSettingChanged);
+    // </KS:KS>
 }
 
 #if TEST_CACHED_CONTROL

@@ -687,10 +687,12 @@
              function="View.EnableHUDAttachments" />
          </menu_item_check>
 
+         <!-- <KS:KS> Alt+Shift+U is KStorm > KS Clear View; was shortcut="alt|shift|U" -->
          <menu_item_check
          label="Show User Interface"
          name="Show User Interface"
-         shortcut="alt|shift|U">
+         shortcut="alt|shift|Y">
+         <!-- </KS:KS> -->
            <menu_item_check.on_check
             function="View.CheckToggleUI" />
             <menu_item_check.on_click
@@ -6816,6 +6818,17 @@
          <menu_item_check.on_click
             function="Floater.Toggle"
             parameter="ks_camera_positions" />
+      </menu_item_check>
+      <menu_item_check
+         label="KS Clear View"
+         name="KS Clear View"
+         shortcut="alt|shift|U">
+         <menu_item_check.on_check
+            function="CheckControl"
+            parameter="KSClearView" />
+         <menu_item_check.on_click
+            function="ToggleControl"
+            parameter="KSClearView" />
       </menu_item_check>
    </menu>
    <!-- </KS:KS> -->

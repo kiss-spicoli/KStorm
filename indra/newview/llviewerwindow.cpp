@@ -6515,7 +6515,11 @@ bool LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
     gDepthDirty = true;
 
     // POST SNAPSHOT
-    if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    // <KS:KS> Restore the UI only if it was shown before (as simpleSnapshot() does), so a
+    // snapshot taken in KStorm Clear View or with the UI off leaves it hidden.
+    //if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    if (prev_draw_ui && !gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    // </KS:KS>
     {
         LLPipeline::toggleRenderDebugFeature(LLPipeline::RENDER_DEBUG_FEATURE_UI);
     }

@@ -180,6 +180,9 @@ set(viewer_SOURCE_FILES
     # <KS:KS> Body-proxy hair occlusion.
     kshairocclusion.cpp
     # </KS:KS>
+    # <KS:KS> KStorm Clear View.
+    ksclearview.cpp
+    # </KS:KS>
     # <KS:KS> Camera Positioning floater and camera Lock.
     kscamerapositions.cpp
     ksfloatercamerapositions.cpp
@@ -1147,6 +1150,9 @@ set(viewer_HEADER_FILES
     # </KS:KS>
     # <KS:KS> Body-proxy hair occlusion.
     kshairocclusion.h
+    # </KS:KS>
+    # <KS:KS> KStorm Clear View.
+    ksclearview.h
     # </KS:KS>
     # <KS:KS> Camera Positioning floater and camera Lock.
     kscamerapositions.h

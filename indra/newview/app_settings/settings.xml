@@ -11206,6 +11206,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <string />
   </map>
+  <key>KSClearView</key>
+  <map>
+    <key>Comment</key>
+    <string>KStorm Clear View: hides all UI (menus, toolbars, floaters, chat, notifications), avatar name tags, hover text and HUD attachments, leaving only the world view, for screen shots; turning it off shows them again. KStorm > KS Clear View (Alt+Shift+U). Never persisted: every session starts with it off</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>KSMotionMode</key>
   <map>
     <key>Comment</key>
