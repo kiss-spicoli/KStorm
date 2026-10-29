@@ -869,9 +869,12 @@ sind erlaubt.
 	<string name="AssetUploadServerUnavaliable">
 		Dienst nicht verfügbar oder Zeitüberschreitung beim Upload.
 	</string>
+	<!-- <KS:KS> rebrand: support-URL sentence removed (unsupported research viewer); was: -->
+	<!-- Fehler in der Upload-Anforderung. Bitte besuchen Sie -->
+	<!-- https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems. -->
+	<!-- </KS:KS> -->
 	<string name="AssetUploadRequestInvalid">
-Fehler in der Upload-Anforderung. Bitte besuchen Sie
-https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
+Fehler in der Upload-Anforderung.
 	</string>
 	<string name="SettingValidationError">
 		Validierung für das Importieren der Einstellungen [NAME] fehlgeschlagen
@@ -3242,8 +3245,11 @@ Falls diese Nachricht erneut angezeigt wird, starten Sie Ihren Computer bitte ne
 		[APP_NAME] scheint eingefroren zu sein oder ist abgestürzt.
 Möchten Sie einen Absturz-Bericht einschicken?
 	</string>
+	<!-- <KS:KS> rebrand: support-URL sentence removed (unsupported research viewer); was: -->
+	<!-- [APP_NAME] scheint eingefroren zu sein. Falls dieses Problem regelmäßig auftritt, kontaktieren Sie den Support unter https://www.firestormviewer.org/support. -->
+	<!-- </KS:KS> -->
 	<string name="MBFreezeDetected">
-		[APP_NAME] scheint eingefroren zu sein. Falls dieses Problem regelmäßig auftritt, kontaktieren Sie den Support unter https://www.firestormviewer.org/support.
+		[APP_NAME] scheint eingefroren zu sein.
 	</string>
 	<string name="MBAlert">
 		Benachrichtigung

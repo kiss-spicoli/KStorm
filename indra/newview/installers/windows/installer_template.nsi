@@ -89,8 +89,12 @@ Name ${INSTNAME}
 # <FS:Ansariel> FIRE-24335: Use different icon for OpenSim version
 #!define MUI_ICON   "%%SOURCE%%\installers\windows\ayanestorm_icon_os.ico"
 #!define MUI_UNICON "%%SOURCE%%\installers\windows\ayanestorm_icon_os.ico"
-!define MUI_ICON   "%%SOURCE%%\installers\windows\ayanestorm_icon${ICON_SUFFIX}.ico"
-!define MUI_UNICON "%%SOURCE%%\installers\windows\ayanestorm_icon${ICON_SUFFIX}.ico"
+# <KS:KS> rebrand
+#!define MUI_ICON   "%%SOURCE%%\installers\windows\ayanestorm_icon${ICON_SUFFIX}.ico"
+#!define MUI_UNICON "%%SOURCE%%\installers\windows\ayanestorm_icon${ICON_SUFFIX}.ico"
+!define MUI_ICON   "%%SOURCE%%\installers\windows\kstorm_icon${ICON_SUFFIX}.ico"
+!define MUI_UNICON "%%SOURCE%%\installers\windows\kstorm_icon${ICON_SUFFIX}.ico"
+# </KS:KS>
 # </FS:Ansariel>
 
 BrandingText " "						# Bottom of window text
@@ -1015,30 +1019,56 @@ Push $2
 # Required since ProfileImagePath is of type REG_EXPAND_SZ
     ExpandEnvStrings $2 $2
 
-# Delete files in \Users\<User>\AppData\Roaming\AyaneStorm
+# <KS:KS> rebrand: AppData cleanup paths AyaneStorm -> KStorm
+## Delete files in \Users\<User>\AppData\Roaming\AyaneStorm
+## Remove all settings files but leave any other .txt files to preserve the chat logs
+#    RMDir /r "$2\AppData\Roaming\AyaneStorm\logs"
+#    RMDir /r "$2\AppData\Roaming\AyaneStorm\browser_profile"
+#    RMDir /r "$2\AppData\Roaming\AyaneStorm\user_settings"
+#    Delete  "$2\AppData\Roaming\AyaneStorm\*.xml"
+#    Delete  "$2\AppData\Roaming\AyaneStorm\*.bmp"
+#    Delete  "$2\AppData\Roaming\AyaneStorm\search_history.txt"
+#    Delete  "$2\AppData\Roaming\AyaneStorm\plugin_cookies.txt"
+#    Delete  "$2\AppData\Roaming\AyaneStorm\typed_locations.txt"
+## Delete files in \Users\<User>\AppData\Local\AyaneStorm
+#    ${If} ${ISOPENSIM} == "0"
+#        ${If} ${IS64BIT} == "0"
+#            RMDir /r "$2\AppData\Local\AyaneStorm"				#Delete the Havok cache folder
+#        ${Else}
+#            RMDir /r "$2\AppData\Local\AyaneStorm_x64"			#Delete the OpenSim cache folder
+#        ${EndIf}
+#    ${Else}
+#        ${If} ${IS64BIT} == "0"
+#            RMDir /r "$2\AppData\Local\AyaneStormOS"			#Delete the Havok cache folder
+#        ${Else}
+#            RMDir /r "$2\AppData\Local\AyaneStormOS_x64"		#Delete the OpenSim cache folder
+#        ${EndIf}
+#    ${EndIf}
+# Delete files in \Users\<User>\AppData\Roaming\KStorm
 # Remove all settings files but leave any other .txt files to preserve the chat logs
-    RMDir /r "$2\AppData\Roaming\AyaneStorm\logs"
-    RMDir /r "$2\AppData\Roaming\AyaneStorm\browser_profile"
-    RMDir /r "$2\AppData\Roaming\AyaneStorm\user_settings"
-    Delete  "$2\AppData\Roaming\AyaneStorm\*.xml"
-    Delete  "$2\AppData\Roaming\AyaneStorm\*.bmp"
-    Delete  "$2\AppData\Roaming\AyaneStorm\search_history.txt"
-    Delete  "$2\AppData\Roaming\AyaneStorm\plugin_cookies.txt"
-    Delete  "$2\AppData\Roaming\AyaneStorm\typed_locations.txt"
-# Delete files in \Users\<User>\AppData\Local\AyaneStorm
+    RMDir /r "$2\AppData\Roaming\KStorm\logs"
+    RMDir /r "$2\AppData\Roaming\KStorm\browser_profile"
+    RMDir /r "$2\AppData\Roaming\KStorm\user_settings"
+    Delete  "$2\AppData\Roaming\KStorm\*.xml"
+    Delete  "$2\AppData\Roaming\KStorm\*.bmp"
+    Delete  "$2\AppData\Roaming\KStorm\search_history.txt"
+    Delete  "$2\AppData\Roaming\KStorm\plugin_cookies.txt"
+    Delete  "$2\AppData\Roaming\KStorm\typed_locations.txt"
+# Delete files in \Users\<User>\AppData\Local\KStorm
     ${If} ${ISOPENSIM} == "0"
         ${If} ${IS64BIT} == "0"
-            RMDir /r "$2\AppData\Local\AyaneStorm"				#Delete the Havok cache folder
+            RMDir /r "$2\AppData\Local\KStorm"				#Delete the Havok cache folder
         ${Else}
-            RMDir /r "$2\AppData\Local\AyaneStorm_x64"			#Delete the OpenSim cache folder
+            RMDir /r "$2\AppData\Local\KStorm_x64"			#Delete the OpenSim cache folder
         ${EndIf}
     ${Else}
         ${If} ${IS64BIT} == "0"
-            RMDir /r "$2\AppData\Local\AyaneStormOS"			#Delete the Havok cache folder
+            RMDir /r "$2\AppData\Local\KStormOS"			#Delete the Havok cache folder
         ${Else}
-            RMDir /r "$2\AppData\Local\AyaneStormOS_x64"		#Delete the OpenSim cache folder
+            RMDir /r "$2\AppData\Local\KStormOS_x64"		#Delete the OpenSim cache folder
         ${EndIf}
     ${EndIf}
+# </KS:KS>
 
   CONTINUE:
     IntOp $0 $0 + 1

@@ -94,7 +94,10 @@ def get_default_platform(dummy):
             }[sys.platform]
 
 DEFAULT_SRCTREE = os.path.dirname(sys.argv[0])
-CHANNEL_VENDOR_BASE = 'AyaneStorm'
+# <KS:KS> rebrand
+# CHANNEL_VENDOR_BASE = 'AyaneStorm'
+CHANNEL_VENDOR_BASE = 'KStorm'
+# </KS:KS>
 RELEASE_CHANNEL = CHANNEL_VENDOR_BASE + ' Development'
 
 BASE_ARGUMENTS=[

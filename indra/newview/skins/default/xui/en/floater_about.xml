@@ -23,24 +23,28 @@
       label="Info"
       help_topic="about_support_tab"
       name="support_panel">
+      <!-- <KS:KS> rebrand: unsupported research viewer; was height="30" and text: -->
+      <!-- For the latest information about Firestorm, visit https://www.firestormviewer.org -->
       <text
         follows="top|left|right"
         font="SansSerif"
-        height="30"
+        height="58"
         layout="topleft"
         left="11"
         name="support_intro"
         top="16"
         width="434"
         wrap="true">
-For the latest information about Firestorm, visit 
-https://www.firestormviewer.org
+KStorm is an unsupported research viewer: no support is available from KStorm, Firestorm or AyaneStorm.
+Built on AyaneStorm and Firestorm (https://www.firestormviewer.org).
       </text>
+      <!-- </KS:KS> -->
+      <!-- <KS:KS> rebrand: was height="468" (support_intro grew by 28) -->
       <text_editor
         parse_urls="true"
         follows="top|left"
         font="SansSerif"
-        height="468"
+        height="440"
         bg_readonly_color="Transparent"
         left="5"
         max_length="65536"
@@ -57,6 +61,35 @@ https://www.firestormviewer.org
         height="25"
         width="180" />
     </panel>
+    <!-- <KS:KS> rebrand: KStorm credits tab -->
+    <panel
+      border="true"
+      label="KStorm Credits"
+      help_topic="about_credits_tab"
+      name="ks_credits_panel">
+      <text
+        follows="all"
+        font="SansSerif"
+        layout="topleft"
+        left="11"
+        name="ks_credits_text"
+        parse_urls="true"
+        top="16"
+        right="-11"
+        bottom="-10"
+        wrap="true">
+KStorm is a personal research viewer by Kissmy Spicoli: an unsupported experiment.
+
+KStorm is built on AyaneStorm by Chanayane, a Firestorm-based viewer for photographers; most of KStorm's rendering and photography features come from AyaneStorm.
+
+AyaneStorm is built on Firestorm by The Phoenix Firestorm Project, Inc. (https://www.firestormviewer.org).
+
+Firestorm is built on the Second Life viewer source code released by Linden Lab.
+
+KStorm is distributed under the GNU LGPL 2.1, like its upstream projects. All upstream copyright notices are retained.
+      </text>
+    </panel>
+    <!-- </KS:KS> -->
     <panel
       border="true"
       label="Linden Lab Credits"
@@ -90,10 +123,11 @@ with open source contributions from:
 Dummy Name replaced at run time
       </text_editor>
     </panel>
+    <!-- <KS:KS> rebrand: was label="AyaneStorm Credits" -->
     <panel
       height="1250"
       border="true"
-      label="AyaneStorm Credits"
+      label="Firestorm Credits"
       help_topic="about_fscredits_tab"
       name="fs_credits_panel">
         <scroll_container

@@ -2259,13 +2259,21 @@ if (WINDOWS)
     message(STATUS "Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/ayanestorm_icon.ico"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res/ayanestorm_icon.ico"
+        # <KS:KS> rebrand
+        #"${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/ayanestorm_icon.ico"
+        #"${CMAKE_CURRENT_SOURCE_DIR}/res/ayanestorm_icon.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/kstorm_icon.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/kstorm_icon.ico"
+        # </KS:KS>
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/ayanestorm_256.BMP"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res/ayanestorm_icon.BMP"
+        # <KS:KS> rebrand
+        #"${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/ayanestorm_256.BMP"
+        #"${CMAKE_CURRENT_SOURCE_DIR}/res/ayanestorm_icon.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/kstorm_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/kstorm_icon.BMP"
+        # </KS:KS>
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -2306,8 +2314,12 @@ if (WINDOWS)
         res/lltooltranslate.cur
         res/lltoolzoomin.cur
         res/lltoolzoomout.cur
-        res/ayanestorm_icon.BMP
-        res/ayanestorm_icon.ico
+        # <KS:KS> rebrand
+        #res/ayanestorm_icon.BMP
+        #res/ayanestorm_icon.ico
+        res/kstorm_icon.BMP
+        res/kstorm_icon.ico
+        # </KS:KS>
         res-sdl/ayanestorm_icon.BMP
         res/ll_icon_small.ico
         res/resource.h

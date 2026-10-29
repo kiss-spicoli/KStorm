@@ -1,4 +1,4 @@
-# AyaneStorm Agent Instructions
+# KStorm Agent Instructions
 
 These instructions apply to the entire repository.
 
@@ -18,16 +18,19 @@ These instructions apply to the entire repository.
 - Any edit to Firestorm-owned files (`fs*.cpp`, `fs*.h`, and `fs*.xml`) or Second-Life-owned files (`ll*.cpp`, `ll*.h`, and `ll*.xml`) MUST be kept as minimal as possible and only if strictly needed and MUST be enclosed in ownership-tag comments using this form:
 
 ```cpp
-// <AS:Chanayane> explanatory comment
+// <KS:KS> explanatory comment
 // original code commented here;
 new code here;
-// </AS:Chanayane>
+// </KS:KS>
 ```
+
+- Existing `<AS:Chanayane>` tags come from AyaneStorm, the viewer KStorm is built on. Keep them as credit; do not rename them.
+- KStorm-owned files, classes, settings and widgets use `ks*` / `KS*` / `ks_` names. AyaneStorm-owned ones keep `as*` / `AS*`.
 
 - Files that we created ourselves need no tag comments. But they do need comments
 - Keep the original code commented inside the ownership tags when replacing existing code.
 - Substantial functionality must be placed in a new module instead of enlarging an existing upstream or shared module. For example, `fsexactoit` offloads functionality to avoid polluting `llpoolalpha` and `llpipeline`.
-- Author should be "chanayane@firestorm"
+- Author should be "Kissmy Spicoli"
 - Use LF, not CRLF, for line endings.
 
 ## Documentation and Research
@@ -64,7 +67,7 @@ new code here;
 
 ## Logs
 
-Logs can be checked at %APPDATA%\AyaneStorm_x64\logs and in particular AyaneStorm.log
+Logs can be checked at %APPDATA%\KStorm_x64\logs and in particular KStorm.log
 
 ## Plan mode
 When asked to make a plan, as soon as plan is approved, the agent should copy the raw plan file to the /doc folder with a meaningful name that mimic the other AyaneStorm documents. I said copy: the agent should not generate again the same plan in a new file for any reason. Generating the plan again is a waste of token. Use copy commands! DO NOT USE apply_patch! Use copy or cp whichever is available!

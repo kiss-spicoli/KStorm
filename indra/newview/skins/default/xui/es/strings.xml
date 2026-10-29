@@ -3,12 +3,14 @@
 	<string name="SECOND_LIFE">
 		[CURRENT_GRID]
 	</string>
+	<!-- <KS:KS> rebrand: was AyaneStorm / AYANESTORM -->
 	<string name="APP_NAME">
-		AyaneStorm
+		KStorm
 	</string>
 	<string name="CAPITALIZED_APP_NAME">
-		AYANESTORM
+		KSTORM
 	</string>
+	<!-- </KS:KS> -->
 	<string name="SECOND_LIFE_GRID">
 		Red de Second Life
 	</string>
