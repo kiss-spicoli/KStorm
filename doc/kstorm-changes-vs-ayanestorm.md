@@ -5,7 +5,7 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, at `kstorm` commit `7f295fb9eed`.
+- **Last updated:** 2026-10-29, at `kstorm` commit `87744f514bd`.
 - **KStorm's own work:** 127 commits (Kissmy Spicoli, Oct 18 to Oct 29), 202 files, about 15,975
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
@@ -268,7 +268,7 @@ is built on. (`bec2dd7807c`)
   with no background behind it (the small Windows/Linux bitmap is on black). It is the window,
   taskbar and exe icon, and the macOS and installer icons in the same folder. AyaneStorm's
   unused icon files there are gone. The installer, crash reporter and other copies elsewhere
-  still show AyaneStorm's art. (`015a0a73276`)
+  still show AyaneStorm's art. (`6f18c98526c`)
 - **Ayane's names stay.** Features Ayane created keep their AyaneStorm names: the AyaneStorm
   menu and Preferences tab, AyaneStorm Depth of Field, AyaneStorm stars and the rest.
 - **README.** Rewritten for KStorm; AyaneStorm's README is kept as `doc/ayanestorm-README.md`.
