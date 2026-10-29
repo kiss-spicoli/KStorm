@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, at `kstorm` commit `b5ba3b6596c`.
-- **KStorm's own work:** 121 commits (Kissmy Spicoli, Oct 18 to Oct 29), 177 files, about 15,560
+- **Last updated:** 2026-10-29, at `kstorm` commit `afa5b436a16`.
+- **KStorm's own work:** 124 commits (Kissmy Spicoli, Oct 18 to Oct 29), 179 files, about 15,960
   lines added.
 - **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
   VBAO, an improved ambient occlusion).
@@ -30,7 +30,7 @@ AyaneStorm's My Lights only hung simple lights on your avatar. KStorm adds:
   so each region keeps its own lighting setup. These lights switch off while you are away and
   come back when you return. Lights also autosave every few seconds. (`95500628365`)
 - **Fixed direction.** A fixed spotlight can point in a set compass direction and angle instead
-  of at a joint. (`a0fcd0bfbde`, `a0b6ed8737f`)
+  of at a joint. (`d7e4c1e2708`, `dc8f47b919a`)
 - **Only My Lights.** One switch hides every other light in the scene, including other people's
   worn lights. A "Max lights" slider limits how many lights draw at once. (`beafaf4d788`)
 - **Boost.** Each light can be up to 4x brighter than Second Life normally allows.
@@ -38,7 +38,7 @@ AyaneStorm's My Lights only hung simple lights on your avatar. KStorm adds:
 - **Dark spots.** A spotlight can darken where it points instead of lighting it, like a
   photographer's flag. (`7d3ff22f4bc`)
 - **Eye mask radius.** A slider for this setting, which was reachable only in Debug Settings.
-  (`185f5d7a020`)
+  (`fe2eb1e096a`)
 
 Details: `doc/my-lights.md`.
 
@@ -64,40 +64,40 @@ Details: `doc/ks-hair-occlusion.md`.
   new **KStorm** menu. (`5d25edd5bd9`, `622f591182f`, `ef6f7178d56`)
 - **It became KStorm Lighting (Alt+Shift+L).** A narrow launcher with one button per topic opens
   13 small panes, such as Quick, Sun/Moon, Ambient and Shadows. They gather controls that were
-  spread across Preferences, Personal Lighting and AyaneStorm's floaters. (`435f28b859a`)
+  spread across Preferences, Personal Lighting and AyaneStorm's floaters. (`e318823d8ef`)
 - **Clearer names.** Controls say what they do, for example Sunlight Gain, Sky Ambient Gain and
-  Surface Ambient Gain. (`4c5c8bf967e`, `b5c7271685f`)
+  Surface Ambient Gain. (`bf99a63f579`, `d05934c43e6`)
 - **Docking.** Panes snap beside the launcher and line up with their buttons. They switch sides
   near a screen edge and stay aligned when the launcher moves. They collapse to a header bar with
   a click on the header or the minimize button. One dock button opens or closes them all, as you
-  left them. Closing the launcher hides them. (`1890bf513da`, `4a351f236cf`, `e189f9b6d59`,
-  `a985c238a36`, `bcfa9b8c829`, `7728a821232`, `eca710f5508`, `fb85a2cff4a`, `d597cf4ebe9`,
-  `86f7625cff8`, `5d3981aa505`, `6bef1529b1f`)
+  left them. Closing the launcher hides them. (`21623128823`, `c2b7c1e0672`, `f9e28a210fa`,
+  `07209cfaec9`, `2f74d67480a`, `97164858c4c`, `7ac7bf0832d`, `d3332f741f4`, `1a45619d730`,
+  `2db5c3b7530`, `73279192aac`, `fddc0db6eba`)
 - **AyaneStorm's large floaters stay unchanged.** Environment Effects, Viewer Lights and Camera
   Effects get a small header stand-in that docks beside the launcher and opens or closes the
-  real floater. (`0ca3ba92b77`, `189dbf95bb4`, `ec9768e8a89`)
+  real floater. (`56527ac08c4`, `abf22e4256c`, `7fc00618756`)
 - **Controls that would do nothing are dimmed.** Each on/off switch has the controls it governs
   indented directly below it, and they grey out while it is off: for example the shadow sliders
   under Shadows, the glow sliders under Glow, the Dynamic exposure tuning under Dynamic exposure,
   and Worn lights under Only Viewer Lights. This also shows what Motion mode turned off. Hair
-  Occlusion works the same way. (`096c0a97a40`, `66b4ce8e533`)
+  Occlusion works the same way. (`33a0ee86463`, `cecc6964294`)
 - **Glow & bloom.** The Glow pane is now "Glow & bloom" and says what it really controls: the
   viewer's one glow pass, which blurs glowing faces, anything brighter than a threshold (the
   sun and the sky around it included) and AyaneStorm's bright-surface bloom. Two new sliders,
   Bloom threshold and Bloom amount, set how much of the bright scene blooms, and the tooltips
-  explain that a wide glow at low resolution turns blocky. (`096c0a97a40`, `5ec4b3d7f6e`)
+  explain that a wide glow at low resolution turns blocky. (`33a0ee86463`, `5f59bfaa171`)
 - **Its own icons.** Every launcher button now has a KStorm icon, drawn as one consistent set:
   the same light grey, similar size and similar brightness on the button. New: Quick (a
   lightning bolt), Sun/Moon (a sky dome over the horizon), Atmosphere (haze layers), Clouds,
   Water (waves), Reflections (a mirror), Viewer Lights (a bulb), Shadows (a light, a card and
   its shadow), Exposure (the camera's +/- symbol), Glow & bloom (a glowing filament), Depth of
   field (a lens aperture) and Vignette. Look Inventory, Camera Effects, All lights and
-  Environment Effects keep their pictures, adjusted to match. (`88c36e93f05`, `96aa43f58ee`,
-  `9281361b4a4`, `26d77b6959c`, `04a6fcd486c`, `16d84a6eca5`, `6d796f226c7`, `121459cced7`,
-  set v2 `b6d11547d45`)
+  Environment Effects keep their pictures, adjusted to match. (`067b41bb7f1`, `b1721e6625d`,
+  `814adae5867`, `2168bc72190`, `d8b9f22f074`, `1fc9be7488c`, `220f0d7bd57`, `bdf7c3d391b`,
+  set v2 `a46e7bf9ece`)
 - **Layout.** The launcher is always the compact icon strip, with no footer. Pane headers are
-  taller and panes are 300 px wide. A Hair... button sits on Quick. (`53138cb89d8`,
-  `68d6e528bd7`, `a6785359376`, `5485d81b9f0`, `4a31d052c89`)
+  taller and panes are 300 px wide. A Hair... button sits on Quick. (`9e1b82d95eb`,
+  `9d6fb037720`, `1bc54f71a9a`, `e6a66d52c02`, `c6396e99275`)
 
 Details: `doc/kstorm2-lighting-UI-design.md`.
 
@@ -105,38 +105,38 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 
 - **Look Inventory** (named Lighting Presets until Oct 27). Save your lighting settings as a
   named look, then apply or turn it off. Turning a look off puts everything back as it was.
-  The pane also has rename, duplicate and contents views. (`79a3ce0ee5b`, `d8ffd8d668b`,
-  `47ec7d2fa1d`; renamed `d6a1cd28377`)
+  The pane also has rename, duplicate and contents views. (`d9e7566ee87`, `f5c0b26bb71`,
+  `5a519b7773f`; renamed `54738b6d031`)
 - **KS Reference** is the Reference look, and the viewer labels it so: a fixed, known setup of
   sky, lighting and rendering. Builders use it as a base for textures, lighting and looks, and
   make their changes as deltas from it. It cannot be edited; Duplicate makes a copy to vary
-  (`f471888a20e`).
+  (`e4f46d4cbe7`).
   It sets the sky and about 54 settings. Its values were tuned along the way:
-  - draw distance 64 m (`e5d1fe07c2c`)
-  - shadow resolution 1.5x (`ec7c5ce1f88`, `3b28af09464`, tooltip `f68c8bcea06`)
+  - draw distance 64 m (`e006d4510b1`)
+  - shadow resolution 1.5x (`2910f3d06fb`, `0d11c7ca960`, tooltip `d5dc16ebdec`)
   - textures no longer reload when you switch back to the viewer, and two shadow layers
-    instead of three (`177dfbf963a`)
+    instead of three (`c7cf1908bff`)
   - glow blurred 3 times, the most Preferences allows, instead of the default 2
-    (`096c0a97a40`), at full glow resolution, 1024 rows instead of 512 (`5ec4b3d7f6e`)
-- **Saving a look makes it the active one** (`aba9a069ceb`). The save took about 90 seconds
+    (`33a0ee86463`), at full glow resolution, 1024 rows instead of 512 (`5f59bfaa171`)
+- **Saving a look makes it the active one** (`e5b8a6a0540`). The save took about 90 seconds
   and is now near-instant. Each look switch does one graphics rebuild instead of dozens. A
   Second Life bug that kept the shader cache from saving after each new build is fixed.
-  (`226663fd6c0`)
+  (`d898cca3a2b`)
 
 ## 6. Motion mode: fast frame rate while moving
 
 - **One switch.** Turns off the expensive effects: shadows, god rays, ambient occlusion,
   reflections, mirrors, glow, depth of field, particles, local lights, and AyaneStorm's
   environment and camera effects. Turning it off restores them. Antialiasing and HDR stay on.
-  Measured about 8 to about 65 FPS. (`b43fa8df854`)
+  Measured about 8 to about 65 FPS. (`4a62270d22c`)
 - **Looks.** Looks never save Motion mode, and applying a look turns it off first.
-  (`dcb5db0440f`)
+  (`d0f2fdd15a1`)
 - **Teleports and login.** It turns on by itself whenever you teleport, to another region or
   within one (for example a minimap click), and at login, before the world is first drawn, so
   loading starts fast and nothing renders at full quality first. The `KSMotionModeOnTeleport`
-  setting turns both off. (`183b9769220`, login `0e5a1f17218`)
+  setting turns both off. (`71c539f94fc`, login `d5b8f560452`)
 - **Icon shows the state.** On the launcher, the Motion mode gauge reads fast while on and is
-  mirrored to read slow while off. (`c927b6a87c1`)
+  mirrored to read slow while off. (`494a77b9dcc`)
 
 ## 7. Camera Positioning: saved camera views and Lock Camera
 
@@ -144,39 +144,39 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
   out like Look Inventory. It saves the current camera view under a name: position, yaw, pitch,
   roll and zoom (the view angle, shown as a factor where 1.00x is normal). You can apply,
   update, rename and delete views. Double-click or Apply moves the camera there, roll
-  included. (`9ec2c4ca485`)
+  included. (`009b14166b9`)
 - **Per sim.** Views are stored per sim, the way My Lights stores lights left in place. A view
   belongs to the sim the camera was over when it was saved or updated, which can be a neighbour
   of yours. Other sims' views are dimmed and show the sim's name. They cannot be edited from
   elsewhere, but they can be deleted from anywhere, and reached by Teleport (below).
-  (`9ec2c4ca485`, `06b21643389`; camera's sim `d504d0cafe1`)
+  (`009b14166b9`, `3601962070e`; camera's sim `335882a6511`)
 - **Lock Camera.** Freezes the camera and the avatar. While on, the camera keys, the mouse, scripted
   and sit cameras, movement keys, click-to-walk, the joystick and mouselook do nothing.
   - Pressing Esc three times always unlocks and returns the camera to the avatar.
   - Closing the floater, a teleport, a disconnect or quitting also unlock.
   - Turning the toggle off leaves the camera where it is.
 
-  (`9ec2c4ca485`, joystick reset on unlock `ff67860fccf`)
+  (`009b14166b9`, joystick reset on unlock `31572e12f84`)
 - **Disable Camera Constraints** check box in the floater, and **on by default** (AyaneStorm:
   off). The camera can go beyond draw distance from the avatar and below the ground, so Apply
   lands exactly, also across a sim boundary. It is the same setting as Preferences and the
-  Advanced menu. (`87dc7d7eafd`)
+  Advanced menu. (`8fe04811e12`)
 - **Connected sims.** Views of a sim the viewer is connected to (one it has loaded, within
   draw distance of the camera) can be applied, updated and renamed from where you are. Their
-  Sim column reads "Connected:" and the sim's name. (`65dd3a3654e`, editing `d504d0cafe1`)
+  Sim column reads "Connected:" and the sim's name. (`52e6ad416ad`, editing `335882a6511`)
 - **Teleport to other sims' views.** On a dimmed view the Apply button reads Teleport: after a
   confirmation it teleports you to the view and, once you land, moves the camera to it. You stay
   where you land. Each view keeps its sim's position on the grid; older views look their sim up
-  on the world map. (`484637bfcd1`, Teleport `9bb45147996`, observed region connections
-  `c773353e82b`)
+  on the world map. (`2f1f6339da8`, Teleport `9e2d11eb4e9`, observed region connections
+  `6686f047046`)
 - **Show disconnected, requires teleport** check box, on by default and remembered: off, the
-  list shows only this sim's and connected sims' views. (`d504d0cafe1`, label `9bb45147996`)
+  list shows only this sim's and connected sims' views. (`335882a6511`, label `9e2d11eb4e9`)
 - **Floater.** It resizes in height only and keeps its size across closing and sessions. View
   names have no tooltip, so nothing covers the list. The Lock toggle is labeled Lock Camera.
-  (`d504d0cafe1`)
+  (`335882a6511`)
 - **Draw Distance** slider below Lock Camera, 8 to 1024 m. It is the same setting as
   Preferences and follows every other setter, such as the Reference look and `/dd`.
-  (`d83720c41ec`, range `56bdf6f78a8`)
+  (`baf89dee7c3`, range `b3bb171d4d6`)
 
 Details: `doc/kstorm-camera-positions.md`.
 
@@ -184,7 +184,7 @@ Details: `doc/kstorm-camera-positions.md`.
 
 Type `ksperf` in nearby chat (the command word is the `KSCmdLinePerf` setting). The answer
 shows in your own nearby chat only; it is never said aloud or sent to a script channel.
-(`7b342044043`)
+(`af0091b04b2`)
 
 - **State.** Which look is on (or none), and Photo (slow) or Motion (fast) mode.
 - **Toggles.** Every Quick pane check box, and Motion mode at login and teleport, on or off,
@@ -216,7 +216,7 @@ KStorm menu > KS Clear View, or **Alt+Shift+U**, hides everything but the world,
 shots taken outside the viewer: menus, bars, toolbars, floaters, chat, notifications, avatar name
 tags, hover text and HUD attachments. The world fills the whole window. Press it again to bring
 everything back; a HUD or UI you had already hidden stays hidden. It always starts off, and the
-shortcut works while you type in chat. (`397213d4450`)
+shortcut works while you type in chat. (`04540691948`)
 
 - **Show User Interface moved.** View > Show User Interface, which had Alt+Shift+U, is now
   **Alt+Shift+Y**, and its confirmation names the new key.
@@ -231,7 +231,7 @@ Details: `doc/kstorm-clear-view.md`.
 Turning on a setting that needs new shaders (shadows, ambient occlusion, reflections, transparent
 water, or a look, Motion mode or KStorm Lighting change that includes one) can freeze the viewer
 for 10 to 90 seconds while they compile. KStorm now shows "Compiling shaders..." on a black
-screen first, so the pause is explained, then compiles and draws the world again. (`9510c258777`)
+screen first, so the pause is explained, then compiles and draws the world again. (`4b20e5431d8`)
 
 - **Black, not over the scene.** The world can't be drawn while it waits: a frame with the new
   settings and the old shaders could crash the viewer.
@@ -248,7 +248,7 @@ Details: `doc/kstorm-shader-notice.md`.
 ## 11. The KStorm name
 
 KStorm now calls itself KStorm wherever the viewer's own name shows, and credits the viewers it
-is built on. (`97d6a932d1f`)
+is built on. (`bec2dd7807c`)
 
 - **Name and channel.** The window title, About, the exe's file details and the name sent to
   the grid at login say KStorm. The channel is `KStorm-Research`: an unsupported research viewer.
@@ -268,16 +268,19 @@ is built on. (`97d6a932d1f`)
 - **Ayane's names stay.** Features Ayane created keep their AyaneStorm names: the AyaneStorm
   menu and Preferences tab, AyaneStorm Depth of Field, AyaneStorm stars and the rest.
 - **README.** Rewritten for KStorm; AyaneStorm's README is kept as `doc/ayanestorm-README.md`.
-- **Login screen.** A minimal KStorm page loaded from disk, not from a web site, so nothing is
-  sent anywhere before you log in: "KStorm" in heavy type, "Research" spaced out beneath it,
-  an optional background picture (`background.jpg` in
-  `skins/default/html/en-us/kstorm-login/`) and a small version, build number and build-time
-  label in the corner. One background fills the screen. The username, password, location and
+- **Login screen.** Drawn by the viewer itself, with no web page, so the built-in browser does
+  not even start before you log in and nothing is sent anywhere. One background fills the
+  screen (a purple gradient, `ks_login_bg`). The KStorm logo sits centred near 40% of the
+  height: "KStorm" in heavy type, an orange beam (the Log In button's colour, `#F97D00`) running
+  past its end into a starburst, and "Research" spaced out beneath. A small label at the bottom
+  right shows the version, build number and build time. The username, password, location and
   Log In controls sit centred, their bottom on the lower-third line. The firebird logo, Mode
   selector, Create an account and Forgot password? are gone, and so is Firestorm's page with
-  its tiles, blogs and splash-screen settings. (`85d2fbcfbae`)
+  its tiles, blogs and splash-screen settings. Maximizing no longer letterboxes or flashes.
+  The pictures are redrawn with `scripts/content_tools/ks_render_login_art.ps1`. A first
+  version used a local web page (`38b356d272b`); this one replaced it. (`333c9578df9`)
 - **No Report Problem.** Help > Report Problem, which files bugs with Firestorm, is hidden on
-  the login screen and in world. (`85d2fbcfbae`)
+  the login screen and in world. (`38b356d272b`)
 
 Details: `doc/kstorm-rebrand-plan.md`.
 
@@ -286,18 +289,18 @@ Details: `doc/kstorm-rebrand-plan.md`.
 - **Advanced Lighting.** Three atmosphere sliders (Density, Distance, Maximum Altitude) were
   hidden in AyaneStorm; they are shown and working. (`9b783fa6bf6`)
 - **Haze bug.** Setting Haze Density to 0 could break the sky math (a divide-by-zero).
-  (`2c8a7e9d438`)
+  (`050e76568c6`)
 - **Older skies.** They no longer look darker than they should, because probe fill can never
-  drop to zero. (`456bd1193ec`)
+  drop to zero. (`1ab58b32acf`)
 
 ## 13. Renames and documentation
 
 - **Naming.** All KStorm code uses `ks*` names and `<KS:KS>` tags, so it is easy to tell apart
   from AyaneStorm's. (`230af14da33`)
 - **Design and research docs.** Lighting factors, UI design, decisions and an AI-render idea; no
-  code. (`a24c8275c11`, `a9dcf435756`, `78125eea578`, `fc115c89c70`, `ff95fe874e5`,
-  `29f7828dc63`, `1fc45fbd589`)
-- **This document.** (`7f8dcd24e29`)
+  code. (`4021fdef70b`, `a2b60aab0a5`, `e50cb8c5bf4`, `fe7408a911f`, `9f792bb029d`,
+  `ce6c107f8fd`, `32b90e5408d`)
+- **This document.** (`674dcaf5b67`)
 
 ## Keyboard shortcuts
 
@@ -305,10 +308,10 @@ Every key KStorm adds or changes. KStorm adds no Preferences > Controls key bind
 
 | Keys | What it does | Where |
 |---|---|---|
-| Alt+Shift+L | KStorm menu > KStorm Lighting: opens the launcher, or closes it and its docked panes (`435f28b859a`) | section 4 |
-| Alt+Shift+U | KStorm menu > KS Clear View: hides all UI, name tags and HUDs, and shows them again (`397213d4450`) | section 9 |
-| Alt+Shift+Y | View > Show User Interface, moved from Alt+Shift+U (`397213d4450`) | section 9 |
-| Esc three times | Turns Lock Camera off and returns the camera to the avatar (`9ec2c4ca485`) | section 7 |
+| Alt+Shift+L | KStorm menu > KStorm Lighting: opens the launcher, or closes it and its docked panes (`e318823d8ef`) | section 4 |
+| Alt+Shift+U | KStorm menu > KS Clear View: hides all UI, name tags and HUDs, and shows them again (`04540691948`) | section 9 |
+| Alt+Shift+Y | View > Show User Interface, moved from Alt+Shift+U (`04540691948`) | section 9 |
+| Esc three times | Turns Lock Camera off and returns the camera to the avatar (`009b14166b9`) | section 7 |
 
 While Lock Camera is on, the movement and camera keys do nothing; chat, gestures, media and
 voice keys still work.
@@ -337,5 +340,5 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
   `CMakeLists.txt`, the Windows installer), the exe resources (`viewerRes.rc`), About and Search
   (`floater_about.xml`, `floater_fs_search.xml`), Growl notifications, and the macOS and Linux
   display text
-- for the login screen: the login panel (`fspanellogin.cpp`, `panel_fs_nui_login.xml`) and the
-  Help menus (`menu_login.xml`, `menu_viewer.xml`)
+- for the login screen: the login panel (`fspanellogin.cpp`, `panel_fs_nui_login.xml`), the icon
+  list (`textures.xml`) and the Help menus (`menu_login.xml`, `menu_viewer.xml`)
