@@ -209,7 +209,7 @@ Optional: a small code migration on startup (copy if `KStorm_x64` is missing). N
 
 - Executable name `firestorm-bin.exe` (Firestorm build-wide; renaming touches CMake, manifest, installer, run script). Optional later.
 - Firestorm service URLs (`phoenixviewer.com` fsdata, grids, client tags, wiki help, JIRA): functional; leave. The help/JIRA links point to Firestorm, which does not support KStorm; consider removing the "file a bug" link.
-- Login/splash page: corrected after execution. OpenSim builds loaded AyaneStorm's page (`storm.ayane.li`, `fsgridhandler.cpp`); OpenSim off switched it to Firestorm's (`phoenixviewer.com/app/loginV3`, `llviewernetwork.cpp`). Replaced by a local KStorm page on `feat-ks-login-page` (`85d2fbcfbae`).
+- Login/splash page: corrected after execution. OpenSim builds loaded AyaneStorm's page (`storm.ayane.li`, `fsgridhandler.cpp`); OpenSim off switched it to Firestorm's (`phoenixviewer.com/app/loginV3`, `llviewernetwork.cpp`). Replaced by a local KStorm page on `feat-ks-login-page` (`38b356d272b`).
 - Viewer version numbers: keep upstream numbering.
 - `AYAstorm` transparency mode name: an algorithm name, keep.
 

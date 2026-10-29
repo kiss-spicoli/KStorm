@@ -1,8 +1,8 @@
 # KStorm2 lighting factor map (HDR mode C only)
 
-Author: Kissmy Spicoli. Date: 2026-10-24. Branch `kstorm` at `d892f8560a7` (after the ks-rename, slider-fix and docs merges; KStorm files, classes and settings use `ks*`/`KS*`, ownership tags `<KS:KS>`).
+Author: Kissmy Spicoli. Date: 2026-10-24. Branch `kstorm` at `b3c3ad52aa0` (after the ks-rename, slider-fix and docs merges; KStorm files, classes and settings use `ks*`/`KS*`, ownership tags `<KS:KS>`).
 
-Derived from the original lighting map (`doc/kstorm-lighting-factor-map.md`, retired 2026-10-24; in git history at `a9dcf435756` and earlier; the parts still needed are Appendices B–D), reduced to the lighting KStorm will use: EEP/PBR with HDR. EEP skies run in mode C; legacy skies use LL's default auto-adjust (mode B, the same HDR shading with LL's conversion scales), decided 2026-10-24. Content that applied only to classic, auto-adjusted legacy or hybrid skies has been removed; for that material see Appendices B–D.
+Derived from the original lighting map (`doc/kstorm-lighting-factor-map.md`, retired 2026-10-24; in git history at `a2b60aab0a5` and earlier; the parts still needed are Appendices B–D), reduced to the lighting KStorm will use: EEP/PBR with HDR. EEP skies run in mode C; legacy skies use LL's default auto-adjust (mode B, the same HDR shading with LL's conversion scales), decided 2026-10-24. Content that applied only to classic, auto-adjusted legacy or hybrid skies has been removed; for that material see Appendices B–D.
 
 This document changes no code. The one related code change, the Advanced Lighting atmosphere sliders (3.2), was made separately on `feat-al-atmosphere-sliders` and merged. Paths are relative to `indra/newview/` unless they start with `indra/`.
 
@@ -630,7 +630,7 @@ Decided = adopted (scope: new UI, plus My Lights where marked). Declined = left 
 
 ## Appendix B: The original viewer as built (all four modes)
 
-Kept from the retired `doc/kstorm-lighting-factor-map.md` (removed 2026-10-24; full text in git history at `a9dcf435756` and earlier). This is how the viewer behaves **today**, before section 8 and the UI design are implemented; useful when debugging current behaviour.
+Kept from the retired `doc/kstorm-lighting-factor-map.md` (removed 2026-10-24; full text in git history at `a2b60aab0a5` and earlier). This is how the viewer behaves **today**, before section 8 and the UI design are implemented; useful when debugging current behaviour.
 
 Four conditions select the mode. None has its own control.
 
