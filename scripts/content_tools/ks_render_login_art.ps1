@@ -17,7 +17,7 @@ $TitleColor   = [System.Drawing.Color]::FromArgb(255, 0xFF, 0xFF, 0xFF)
 $SubColor     = [System.Drawing.Color]::FromArgb(255, 0xE6, 0xDE, 0xF5)
 $TitleFont    = "Segoe UI Black"; $TitleSize = 132
 $SubFont      = "Segoe UI Light"; $SubSize   = 34
-$SpacingScale = 0.9      # "Research" tracking: 1.0 spans the width of "KStorm"
+$SpacingScale = 1.0      # "Research" ink width as a share of "KStorm" ink width (1.0: ends align)
 $Gap          = 37       # title baseline to "Research" cap top; the beam runs midway
 $BeamHeight   = 5
 $BeamReach    = 84       # beam runs this far past the end of "KStorm", to the burst centre
@@ -42,17 +42,23 @@ $pg = [System.Drawing.Graphics]::FromImage($probe)
 $subFontObj = New-Object System.Drawing.Font($SubFont, [float]($SubSize * $S), [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
 $letters = "Research".ToCharArray()
 $adv = @(); foreach ($c in $letters) { $adv += $pg.MeasureString([string]$c, $subFontObj, 10000, [System.Drawing.StringFormat]::GenericTypographic).Width }
-$natural = ($adv | Measure-Object -Sum).Sum
-$spacing = 0.0
-if ($letters.Count -gt 1 -and $natural -lt $tb.Width) { $spacing = $SpacingScale * ($tb.Width - $natural) / ($letters.Count - 1) }
-$subPath = New-Object System.Drawing.Drawing2D.GraphicsPath
-$x = 0.0
-for ($i = 0; $i -lt $letters.Count; $i++)
+function New-TrackedPath([float]$spacing)
 {
-    $p = New-TextPath ([string]$letters[$i]) $SubFont ($SubSize * $S) $x 0
-    $subPath.AddPath($p, $false)
-    $x += $adv[$i] + $spacing
+    $path = New-Object System.Drawing.Drawing2D.GraphicsPath
+    $x = 0.0
+    for ($i = 0; $i -lt $letters.Count; $i++)
+    {
+        $path.AddPath((New-TextPath ([string]$letters[$i]) $SubFont ($SubSize * $S) $x 0), $false)
+        $x += $adv[$i] + $spacing
+    }
+    return $path
 }
+# Ink width grows by exactly (letters - 1) x spacing, so solve for the spacing that makes the
+# ink of "Research" as wide as the ink of "KStorm" (times $SpacingScale)
+$inkNatural = (New-TrackedPath 0).GetBounds().Width
+$spacing = 0.0
+if ($letters.Count -gt 1 -and $inkNatural -lt $tb.Width) { $spacing = ($SpacingScale * $tb.Width - $inkNatural) / ($letters.Count - 1) }
+$subPath = New-TrackedPath $spacing
 $sb = $subPath.GetBounds()
 
 # Place "Research" centred under the title ink, $Gap below its baseline (ink bottom; no descenders)
@@ -65,9 +71,12 @@ $sb = $subPath.GetBounds()
 $beamY    = ($tb.Bottom + $sb.Top) / 2
 $beamEndX = $tb.Right + $BeamReach * $S
 $burstR   = $BurstSize * $S / 2
+# The beam starts one "K" width before the title (the width of the K glyph's outline)
+$kWidth     = (New-TextPath "K" $TitleFont ($TitleSize * $S) 0 0).GetBounds().Width
+$beamStartX = $tb.Left - $kWidth
 
 # Canvas symmetric about the title centre, so the title is centred when the image is
-$half   = [Math]::Max($tb.Width / 2, ($beamEndX + $burstR) - $titleCx) + $Pad * $S
+$half   = [Math]::Max($titleCx - $beamStartX, ($beamEndX + $burstR) - $titleCx) + $Pad * $S
 $top    = [Math]::Min($tb.Top, $beamY - $burstR) - $Pad * $S
 $bottom = [Math]::Max($sb.Bottom, $beamY + $burstR) + $Pad * $S
 $W = [int][Math]::Ceiling(2 * $half); $W += $W % 2
@@ -86,7 +95,7 @@ $g.FillPath((New-Object System.Drawing.SolidBrush($SubColor)), $subPath)
 
 # Beam and starburst: one shape in the Log In orange
 $orangeBrush = New-Object System.Drawing.SolidBrush($Orange)
-$g.FillRectangle($orangeBrush, [float]$tb.Left, [float]($beamY - $BeamHeight * $S / 2), [float]($beamEndX - $tb.Left), [float]($BeamHeight * $S))
+$g.FillRectangle($orangeBrush, [float]$beamStartX, [float]($beamY - $BeamHeight * $S / 2), [float]($beamEndX - $beamStartX), [float]($BeamHeight * $S))
 $k = $burstR / 50.0          # burst designed in a 100-unit box centred on 0,0
 $g.FillEllipse($orangeBrush, [float]($beamEndX - 19 * $k), [float]($beamY - 19 * $k), [float](38 * $k), [float](38 * $k))
 for ($i = 0; $i -lt 24; $i++)
