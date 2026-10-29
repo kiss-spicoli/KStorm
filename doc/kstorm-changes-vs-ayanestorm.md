@@ -5,11 +5,12 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, at `kstorm` commit `afa5b436a16`.
-- **KStorm's own work:** 124 commits (Kissmy Spicoli, Oct 18 to Oct 29), 179 files, about 15,960
+- **Last updated:** 2026-10-29, at `kstorm` commit `7f295fb9eed`.
+- **KStorm's own work:** 127 commits (Kissmy Spicoli, Oct 18 to Oct 29), 202 files, about 15,975
   lines added.
-- **Not yet in KStorm:** 11 newer commits on AyaneStorm's `ayanestorm-dev` branch (for example
-  VBAO, an improved ambient occlusion).
+- **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
+  example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
+  code.
 
 To refresh the numbers:
 
@@ -263,8 +264,11 @@ is built on. (`bec2dd7807c`)
 - **No support links.** The About Info line and the crash, freeze and upload-error messages say
   KStorm is an unsupported research viewer, instead of sending you to Firestorm support.
 - **Search.** The Search window is titled KStorm Search.
-- **Icons.** The `kstorm_*` icons hold AyaneStorm's art for now, until KStorm artwork replaces
-  them.
+- **App icon.** KStorm has its own icon: an orange firebird, wings spread and head thrown back,
+  with no background behind it (the small Windows/Linux bitmap is on black). It is the window,
+  taskbar and exe icon, and the macOS and installer icons in the same folder. AyaneStorm's
+  unused icon files there are gone. The installer, crash reporter and other copies elsewhere
+  still show AyaneStorm's art. (`015a0a73276`)
 - **Ayane's names stay.** Features Ayane created keep their AyaneStorm names: the AyaneStorm
   menu and Preferences tab, AyaneStorm Depth of Field, AyaneStorm stars and the rest.
 - **README.** Rewritten for KStorm; AyaneStorm's README is kept as `doc/ayanestorm-README.md`.
@@ -278,7 +282,8 @@ is built on. (`bec2dd7807c`)
   selector, Create an account and Forgot password? are gone, and so is Firestorm's page with
   its tiles, blogs and splash-screen settings. Maximizing no longer letterboxes or flashes.
   The pictures are redrawn with `scripts/content_tools/ks_render_login_art.ps1`. A first
-  version used a local web page (`38b356d272b`); this one replaced it. (`333c9578df9`)
+  version used a local web page (`38b356d272b`); this one replaced it. (`333c9578df9`,
+  `02b5d49e0ae`)
 - **No Report Problem.** Help > Report Problem, which files bugs with Firestorm, is hidden on
   the login screen and in world. (`38b356d272b`)
 
