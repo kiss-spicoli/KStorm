@@ -1725,6 +1725,12 @@ namespace ASDoFRenderer
         {
             return;
         }
+        // <KS:KS> Hidden with the UI too (KStorm Clear View, Ctrl+Alt+F1).
+        if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+        {
+            return;
+        }
+        // </KS:KS>
 
         S32 accumulated = sLive.mAccumulated;
         S32 target = sLiveMaxSamples;

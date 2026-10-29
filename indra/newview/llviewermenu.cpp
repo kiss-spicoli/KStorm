@@ -6197,7 +6197,10 @@ class LLViewToggleUI : public view_listener_t
 //#else
 //          substitutions["SHORTCUT"] = "Ctrl+Shift+U";
 //#endif
-            substitutions["SHORTCUT"] = "Alt+Shift+U";
+            // <KS:KS> Alt+Shift+U is KStorm > KS Clear View; this item moved to Alt+Shift+Y (menu_viewer.xml).
+            //substitutions["SHORTCUT"] = "Alt+Shift+U";
+            substitutions["SHORTCUT"] = "Alt+Shift+Y";
+            // </KS:KS>
             // </FS:Ansariel>
             params.substitutions = substitutions;
             if (!gSavedSettings.getBOOL("HideUIControls"))
