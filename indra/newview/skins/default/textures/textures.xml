@@ -820,6 +820,8 @@ with the same filename but different name
   <texture name="startup_logo"  file_name="windows/startup_logo.png" preload="true" />
 
   <texture name="login_fs_logo"  file_name="windows/login_fs_logo.png" preload="true" />
+  <texture name="ks_login_bg"  file_name="windows/ks_login_bg.png" preload="true" />                                     <!-- KS:KS -->
+  <texture name="ks_login_logo"  file_name="windows/ks_login_logo.png" preload="true" />                                 <!-- KS:KS -->
   <texture name="login_sl_logo"  file_name="windows/login_sl_logo.png" preload="true" />
   <texture name="login_sl_logo_horizontal"  file_name="windows/login_sl_logo_horizontal.png" preload="true" />
   <texture name="login_sl_logo_small"  file_name="windows/login_sl_logo_small.png" preload="true" />

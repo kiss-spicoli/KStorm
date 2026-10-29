@@ -899,39 +899,32 @@ void FSPanelLogin::loadLoginPage()
         login_page = LLURI(force_login_url);
     }
 
-    // <KS:KS> rebrand: show KStorm's local login page (skins/default/html/en-us/kstorm-login)
-    // instead of a web page; nothing is sent off this machine. ForceLoginURL still overrides it,
-    // and if the file is missing the web page loads as before.
+    // <KS:KS> rebrand: KStorm's login screen is native (panel_fs_nui_login.xml: ks_login_bg,
+    // ks_login_logo, ks_build_info), so no login web page is loaded and the built-in browser does
+    // not start at login. ForceLoginURL still loads a page, in the browser view shown for it.
+    if (LLTextBox* ks_build_info = sInstance->findChild<LLTextBox>("ks_build_info"))
+    {
+        // Version, build number and the executable's link time (local)
+        std::string ks_label = llformat("%s (%llu)", LLVersionInfo::instance().getShortVersion().c_str(),
+                                        (unsigned long long)LLVersionInfo::instance().getBuild());
+        llstat ks_stat;
+        if (LLFile::stat(gDirUtilp->getExecutablePathAndName(), &ks_stat) == 0)
+        {
+            std::time_t ks_time = ks_stat.st_mtime;
+            const std::tm* ks_tm = std::localtime(&ks_time);
+            char ks_buf[32];
+            if (ks_tm && std::strftime(ks_buf, sizeof(ks_buf), "%Y-%m-%d %H:%M", ks_tm))
+            {
+                ks_label += std::string("  \xC2\xB7  built ") + ks_buf;    // UTF-8 middle dot
+            }
+        }
+        ks_build_info->setText(ks_label);
+    }
     if (force_login_url.empty())
     {
-        std::string ks_page = gDirUtilp->findSkinnedFilename("html", gDirUtilp->add("kstorm-login", "index.html"));
-        if (!ks_page.empty())
-        {
-            // Build indicator: version, build number and the executable's link time (local)
-            std::string ks_built;
-            llstat ks_stat;
-            if (LLFile::stat(gDirUtilp->getExecutablePathAndName(), &ks_stat) == 0)
-            {
-                std::time_t ks_time = ks_stat.st_mtime;
-                const std::tm* ks_tm = std::localtime(&ks_time);
-                char ks_buf[32];
-                if (ks_tm && std::strftime(ks_buf, sizeof(ks_buf), "%Y-%m-%d %H:%M", ks_tm))
-                {
-                    ks_built = ks_buf;
-                }
-            }
-            std::string ks_url = "file:///" + ks_page
-                + "?version=" + LLURI::escape(LLVersionInfo::instance().getShortVersion())
-                + "&build=" + llformat("%llu", (unsigned long long)LLVersionInfo::instance().getBuild())
-                + "&built=" + LLURI::escape(ks_built);
-            LLMediaCtrl* ks_browser = sInstance->getChild<LLMediaCtrl>("login_html");
-            if (ks_browser->getCurrentNavUrl() != ks_url)
-            {
-                ks_browser->navigateTo(ks_url, HTTP_CONTENT_TEXT_HTML);
-            }
-            return;
-        }
+        return;
     }
+    sInstance->getChild<LLMediaCtrl>("login_html")->setVisible(true);
     // </KS:KS>
 
     // Language

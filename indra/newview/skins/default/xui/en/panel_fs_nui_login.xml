@@ -16,9 +16,11 @@
   <string name="ServerComboTooltip">
     An existing grid or a grid URI
   </string>
-  <!-- <KS:KS> rebrand: the page fills the whole area (was height="598"), so the controls sit on
-       one unified background instead of a gray footer band -->
+  <!-- <KS:KS> rebrand: the login screen is native (background, logo and build label below), so
+       this browser view is hidden and loads nothing; FSPanelLogin::loadLoginPage shows it only
+       for ForceLoginURL. Was visible, height="598". -->
   <web_browser
+    visible="false"
     tab_stop="false"
     trusted_content="true"
     bg_opaque_color="Black"
@@ -30,6 +32,93 @@
     top="18"
     height="750"
     width="1024" />
+  <!-- KStorm background: one picture stretched over the whole area under the menu bar -->
+  <icon
+    follows="all"
+    image_name="ks_login_bg"
+    left="0"
+    top="18"
+    height="750"
+    width="1024"
+    name="ks_login_bg" />
+  <!-- KStorm logo (title, beam, starburst, Research; textures/windows/ks_login_logo.png drawn at
+       2x by scripts/content_tools/ks_render_login_art.ps1), centred horizontally. The spacers
+       share spare height 215:358, which keeps its centre near 40% of the height. -->
+  <layout_stack
+    follows="all"
+    left="0"
+    top="18"
+    height="750"
+    width="1024"
+    name="ks_logo_vstack"
+    orientation="vertical"
+    animate="false">
+    <layout_panel
+      auto_resize="true"
+      min_dim="0"
+      name="ks_logo_pad_top"
+      height="215"
+      width="1024" />
+    <layout_panel
+      auto_resize="false"
+      name="ks_logo_row"
+      height="177"
+      width="1024">
+      <layout_stack
+        follows="all"
+        left="0"
+        top="0"
+        height="177"
+        width="1024"
+        name="ks_logo_hstack"
+        orientation="horizontal"
+        animate="false">
+        <layout_panel
+          auto_resize="true"
+          min_dim="0"
+          name="ks_logo_pad_left"
+          height="177"
+          width="135" />
+        <layout_panel
+          auto_resize="false"
+          name="ks_logo_cell"
+          height="177"
+          width="754">
+          <icon
+            follows="all"
+            image_name="ks_login_logo"
+            left="0"
+            top="0"
+            height="177"
+            width="754"
+            name="ks_login_logo" />
+        </layout_panel>
+        <layout_panel
+          auto_resize="true"
+          min_dim="0"
+          name="ks_logo_pad_right"
+          height="177"
+          width="135" />
+      </layout_stack>
+    </layout_panel>
+    <layout_panel
+      auto_resize="true"
+      min_dim="0"
+      name="ks_logo_pad_bottom"
+      height="358"
+      width="1024" />
+  </layout_stack> <!-- ks_logo_vstack -->
+  <!-- Build label, bottom right; FSPanelLogin::loadLoginPage fills it in -->
+  <text
+    follows="right|bottom"
+    font="SansSerifSmall"
+    halign="right"
+    text_color="0.9 0.87 0.96 0.6"
+    left="584"
+    top="742"
+    height="16"
+    width="426"
+    name="ks_build_info" />
   <!-- KStorm: ui_stack (was bottom-anchored, follows="left|right|bottom", bottom="-1") now sits
        in a fixed row between two elastic spacers. The stack shares spare height 410:188, which
        keeps the bottom of the visible controls (86 px into the row) on the lower-third line at
