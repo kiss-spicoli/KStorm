@@ -7,12 +7,14 @@
 	<string name="SECOND_LIFE">
 		[CURRENT_GRID]
 	</string>
+	<!-- <KS:KS> rebrand: was AyaneStorm / AYANESTORM -->
 	<string name="APP_NAME">
-		AyaneStorm
+		KStorm
 	</string>
 	<string name="CAPITALIZED_APP_NAME">
-		AYANESTORM
+		KSTORM
 	</string>
+	<!-- </KS:KS> -->
 	<string name="SECOND_LIFE_GRID">
 		Сеть Second Life
 	</string>
@@ -869,9 +871,12 @@ support@secondlife.com.
 	<string name="AssetUploadServerUnavaliable">
 		Сервис недоступен или истекло время загрузки.
 	</string>
+	<!-- <KS:KS> rebrand: support-URL sentence removed (unsupported research viewer); was: -->
+	<!-- Ошибка в запросе на загрузку.  Пожалуйста, посетите -->
+	<!-- https://www.firestormviewer.org/support за помощь в решении этой проблемы. -->
+	<!-- </KS:KS> -->
 	<string name="AssetUploadRequestInvalid">
-Ошибка в запросе на загрузку.  Пожалуйста, посетите
-https://www.firestormviewer.org/support за помощь в решении этой проблемы.
+Ошибка в запросе на загрузку.
 	</string>
 	<string name="SettingValidationError">
 		Ошибка при импорте настроек [NAME]

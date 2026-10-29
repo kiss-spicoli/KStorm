@@ -1,6 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=AyaneStorm
+# <KS:KS> rebrand
+# Name=AyaneStorm
+Name=KStorm
+# </KS:KS>
 Exec=firestorm
 Comment=Client for virtual worlds
 Icon=ayanestorm_icon

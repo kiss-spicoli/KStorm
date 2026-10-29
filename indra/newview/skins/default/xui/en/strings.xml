@@ -9,9 +9,15 @@
 	<string name="SECOND_LIFE">[CURRENT_GRID]</string>
 	<!-- <AS:Chanayane> AyaneStorm application branding. -->
 	<!-- <string name="APP_NAME">Firestorm</string> -->
-	<string name="APP_NAME">AyaneStorm</string>
+	<!-- <KS:KS> rebrand -->
+	<!-- <string name="APP_NAME">AyaneStorm</string> -->
+	<string name="APP_NAME">KStorm</string>
+	<!-- </KS:KS> -->
 	<!-- <string name="CAPITALIZED_APP_NAME">FIRESTORM</string> -->
-	<string name="CAPITALIZED_APP_NAME">AYANESTORM</string>
+	<!-- <KS:KS> rebrand -->
+	<!-- <string name="CAPITALIZED_APP_NAME">AYANESTORM</string> -->
+	<string name="CAPITALIZED_APP_NAME">KSTORM</string>
+	<!-- </KS:KS> -->
 	<!-- </AS:Chanayane> -->
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
 	<string name="SUPPORT_SITE">Firestorm Support Portal</string>
@@ -413,7 +419,10 @@ are allowed.
 
 	<string name="ReleaseNotes">Release Notes</string>
 	<!-- Always mark translate="false" for strings that are nothing but URLs, as they don't need translation. -->
-	<string name="RELEASE_NOTES_BASE_URL" translate="false">https://wiki.firestormviewer.org/changelog:firestorm_change_log_</string>
+	<!-- <KS:KS> rebrand: About release notes go to the KStorm home; the version the code appends lands after # and is ignored -->
+	<!-- <string name="RELEASE_NOTES_BASE_URL" translate="false">https://wiki.firestormviewer.org/changelog:firestorm_change_log_</string> -->
+	<string name="RELEASE_NOTES_BASE_URL" translate="false">https://github.com/kiss-spicoli/phoenix-firestorm#</string>
+	<!-- </KS:KS> -->
 
 	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
 	<string name="LoadingData">Loading...</string>
@@ -452,10 +461,13 @@ are allowed.
 	<string name="AssetUploadServerUnreacheble">Service unreachable.</string>
 	<string name="AssetUploadServerDifficulties">The server is experiencing unexpected difficulties.</string>
 	<string name="AssetUploadServerUnavaliable">Service not available or upload timeout was reached.</string>
+	<!-- <KS:KS> rebrand: unsupported research viewer; was: -->
+	<!-- Error in upload request.  Please visit https://www.firestormviewer.org/support for help fixing this problem. -->
 	<string name="AssetUploadRequestInvalid">
-Error in upload request.  Please visit 
-https://www.firestormviewer.org/support for help fixing this problem.
+Error in upload request.
+KStorm is an unsupported research viewer: no support is available from KStorm, Firestorm or AyaneStorm.
 </string>
+	<!-- </KS:KS> -->
 
 	<!-- Settings errors -->
 	<string name="SettingValidationError">Validation failed for importing settings [NAME]</string>
@@ -1520,7 +1532,10 @@ If it continues to persist, you may need to completely uninstall [APP_NAME] and 
 	</string>
 	<string name="MBFatalError">Fatal Error</string>
 	<string name="MBApplicationError">Application Error - Don't Panic</string>
-	<string name="MBApplicationErrorDetails">We are sorry, but [APP_NAME] has crashed and needs to be closed. If you see this issue happening repeatedly, please contact our support team and submit the following message:
+	<!-- <KS:KS> rebrand: unsupported research viewer; was: -->
+	<!-- We are sorry, but [APP_NAME] has crashed and needs to be closed. If you see this issue happening repeatedly, please contact our support team and submit the following message: -->
+	<!-- </KS:KS> -->
+	<string name="MBApplicationErrorDetails">We are sorry, but [APP_NAME] has crashed and needs to be closed. KStorm is an unsupported research viewer: no support is available from KStorm, Firestorm or AyaneStorm. Error details:
 
 [ERROR_DETAILS]
 	</string>
@@ -1534,8 +1549,11 @@ If this message persists, restart your computer.
 		[APP_NAME] appears to have frozen or crashed on the previous run.
 Would you like to send a crash report?
 	</string>
+    <!-- <KS:KS> rebrand: unsupported research viewer; was: -->
+    <!-- [APP_NAME] appears to have frozen. If this issue occurs regularly, please contact support at https://www.firestormviewer.org/support. -->
+    <!-- </KS:KS> -->
     <string name="MBFreezeDetected">
-        [APP_NAME] appears to have frozen. If this issue occurs regularly, please contact support at https://www.firestormviewer.org/support.
+        [APP_NAME] appears to have frozen. KStorm is an unsupported research viewer: no support is available from KStorm, Firestorm or AyaneStorm.
     </string>
 	<string name="MBAlert">Notification</string>
 	<string name="MBNoDirectX">

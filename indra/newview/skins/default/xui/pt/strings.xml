@@ -835,9 +835,12 @@ são permitidas.
 	<string name="AssetUploadServerUnavaliable">
 		Serviço indisponível ou tempo esgotado no upload.
 	</string>
+	<!-- <KS:KS> rebrand: support-URL sentence removed (unsupported research viewer); was: -->
+	<!-- Erro na solicitação de upload. Acesse -->
+	<!-- https://www.firestormviewer.org/support para obter ajuda com este problema. -->
+	<!-- </KS:KS> -->
 	<string name="AssetUploadRequestInvalid">
-Erro na solicitação de upload. Acesse
-https://www.firestormviewer.org/support para obter ajuda com este problema.
+Erro na solicitação de upload.
 	</string>
 	<string name="SettingValidationError">
 		Falha na validação ao importar a configuração [NAME]

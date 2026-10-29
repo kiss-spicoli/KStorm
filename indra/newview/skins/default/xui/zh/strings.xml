@@ -7,12 +7,14 @@
 	<string name="SECOND_LIFE">
 		[當前伺服器]
 	</string>
+	<!-- <KS:KS> rebrand: was AyaneStorm / AYANESTORM -->
 	<string name="APP_NAME">
-		AyaneStorm
+		KStorm
 	</string>
 	<string name="CAPITALIZED_APP_NAME">
-		AYANESTORM
+		KSTORM
 	</string>
+	<!-- </KS:KS> -->
 	<string name="SECOND_LIFE_GRID">
 		第二人生
 	</string>
@@ -837,8 +839,9 @@ support@secondlife.com.
 	<string name="ReleaseNotes">
 		發行說明
 	</string>
+	<!-- <KS:KS> rebrand: was https://wiki.firestormviewer.org/changelog:firestorm_change_log_ -->
 	<string name="RELEASE_NOTES_BASE_URL" translate="false">
-		https://wiki.firestormviewer.org/changelog:firestorm_change_log_
+		https://github.com/kiss-spicoli/phoenix-firestorm#
 	</string>
 	<string name="LoadingData">
 		載入中...
@@ -904,9 +907,12 @@ support@secondlife.com.
 	<string name="AssetUploadServerUnavaliable">
 		伺服器不可用或者上傳逾時。
 	</string>
+	<!-- <KS:KS> rebrand: support-URL sentence removed (unsupported research viewer); was: -->
+	<!-- 上傳請求錯誤。請存取：https://www.firestormviewer.org/support 尋求幫助。 -->
+	<!-- </KS:KS> -->
 	<string name="AssetUploadRequestInvalid">
 
-上傳請求錯誤。請存取：https://www.firestormviewer.org/support 尋求幫助。
+上傳請求錯誤。
 	</string>
 	<!-- Settings errors -->
 	<string name="SettingValidationError">

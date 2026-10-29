@@ -1,6 +1,13 @@
 /* Localized versions of Info.plist keys */
 
-CFBundleName = "AyaneStorm";
+/* <KS:KS> rebrand */
+/* CFBundleName = "AyaneStorm"; */
+CFBundleName = "KStorm";
+/* </KS:KS> */
 
-CFBundleShortVersionString = "AyaneStorm version %%VERSION%%";
-CFBundleGetInfoString = "AyaneStorm version %%VERSION%%, Copyright 2010-2026 The Phoenix Firestorm Project, Inc.";
+/* <KS:KS> rebrand */
+/* CFBundleShortVersionString = "AyaneStorm version %%VERSION%%"; */
+/* CFBundleGetInfoString = "AyaneStorm version %%VERSION%%, Copyright 2010-2026 The Phoenix Firestorm Project, Inc."; */
+CFBundleShortVersionString = "KStorm version %%VERSION%%";
+CFBundleGetInfoString = "KStorm version %%VERSION%%, Copyright 2010-2026 The Phoenix Firestorm Project, Inc.";
+/* </KS:KS> */

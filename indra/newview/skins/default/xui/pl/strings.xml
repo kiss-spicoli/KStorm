@@ -845,9 +845,12 @@ są dozwolone.
 	<string name="AssetUploadServerUnavaliable">
 		Usługa niedostępna lub osiągnięto limit czasu.
 	</string>
+	<!-- <KS:KS> rebrand: support-URL sentence removed (unsupported research viewer); was: -->
+	<!-- Błąd podczas przesyłania. Odwiedź -->
+	<!-- https://www.firestormviewer.org/support aby uzyskać pomoc. -->
+	<!-- </KS:KS> -->
 	<string name="AssetUploadRequestInvalid">
-		Błąd podczas przesyłania. Odwiedź
-https://www.firestormviewer.org/support aby uzyskać pomoc.
+		Błąd podczas przesyłania.
 	</string>
 	<string name="SettingValidationError">
 		Walidacja nie powiodła się - importowanie ustawień [NAME]
@@ -3131,8 +3134,11 @@ Jeżeli nadal otrzymujesz ten komunikat, uruchom swój komputer ponownie.
 		Aplikacja [APP_NAME] znajduje się w trybie zatrzymania lub zawieszenia po poprzedniej próbie uruchomienia.
 Czy chcesz wysłać raport na temat zawieszenia?
 	</string>
+	<!-- <KS:KS> rebrand: support-URL sentence removed (unsupported research viewer); was: -->
+	<!-- Wygląda na to, że [APP_NAME] zawiesił się. Jeśli ten problem występuje regularnie, skontaktuj się ze wsparciem technicznym pod adresem https://www.firestormviewer.org/support. -->
+	<!-- </KS:KS> -->
 	<string name="MBFreezeDetected">
-		Wygląda na to, że [APP_NAME] zawiesił się. Jeśli ten problem występuje regularnie, skontaktuj się ze wsparciem technicznym pod adresem https://www.firestormviewer.org/support.
+		Wygląda na to, że [APP_NAME] zawiesił się.
 	</string>
 	<string name="MBAlert">
 		Powiadomienie

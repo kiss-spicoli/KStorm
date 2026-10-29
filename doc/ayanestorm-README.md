@@ -1,0 +1,207 @@
+<img align="left" width="100" height="100" src="ayanestorm_256.png" alt="Logo of AyaneStorm viewer"/>
+
+**[Firestorm](https://www.firestormviewer.org) is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.**
+
+# AyaneStorm - A viewer for photographers
+
+AyaneStorm is a fork of Firestorm viewer with a focus on photography and visual quality. Its code base is usually on par with Firestorm latest beta.
+
+[![Download the latest release](https://img.shields.io/github/v/release/AyaneStorm/ayanestorm?style=for-the-badge&logo=github&label=Download%20latest%20release&color=7B68EE)](https://github.com/AyaneStorm/ayanestorm/releases/latest)
+
+Available for the following platforms:
+- Windows (a setup and a .zip version are provided; either install it using the setup, or just extract the .zip and run the AyaneStorm executable inside it)
+- Linux (a .tar.gz version is provided; extract it and run the executable)
+- MacOS (a .dmg version is provided)
+
+## Features (so far ; some features might get merged in official Firestorm)
+- **My Lights** floater: manage a list of viewer-local lights that follow your avatar (with position presets, isolate-avatar background modes, an animation freeze toggle, light beacons and rig presets), accessible from AyaneStorm > My Lights
+- **Advanced Shape Deformer**: edit avatar-joint positions and scales with live previews, comparison bypasses, undo/redo, notecard import/export, worn-deformer loading and optional persistent mesh baking
+- **Environment Effects panel** gathering viewer-local photographic effects in one place
+- **Depth of Field** with a new noise-free **Live** mode that looks the same on Windows and macOS, plus an **aperture-sampled** mode for still images with shaped bokeh, lens effects and autofocus (see below)
+- **Realistic night sky**: about 20,000 real stars with their true colors and brightness, positioned for any latitude, with a photographic Milky Way, the Magellanic Clouds and bright nebulae (see below)
+- **Viewer-local color grading** with exposure, white balance, tonal controls, vibrance, an eight-band color mixer, Colorize, split toning, grain, Negative color inversion and reusable presets
+- **Importable 1D and 3D `.cube` LUTs** with automatic naming, alphabetical selection, Previous/Next navigation and adjustable strength
+- **Selectable transparency rendering**: standard alpha blending, AYAstorm unified alpha ordering, lossless Exact OIT, AVBOIT, and the new **Mac OIT**, an order-independent transparency mode built on OpenGL 4.1 that finally brings correct transparency sorting to macOS (also available on Windows and Linux; Exact OIT and AVBOIT remain unavailable on macOS)
+- **Volumetric sun and moon god rays**, with optional volumetric local lights
+- **Procedural sunrise** and sunset horizon lighting, including colored clouds, sky haze and water-horizon fog
+- **Procedural sunset sun** with configurable color, edge feathering, shimmer and halo
+- **Advanced moon rendering** with phases, earthshine, terminator relief, horizon tint and halo
+- **Procedural animated auroras** with configurable appearance and quality
+- **Viewer-local snow** with adjustable flakes, fall speed and distance; flakes react to EEP lighting and briefly settle on solid surfaces
+- **Camera effects** including sun and moon lens flares, a configurable vignette and chromatic aberration
+- **Avatar thumbnails** in the Conversations panel, with typing indicators on thumbnails and tab names
+- **Conference blocker**: leave and persistently block an ad-hoc conference so later text, immediate and voice invitations to it are declined automatically; manage blocked conferences from Comm > Blocked Conferences
+- **Nearby Chat range counter**: optionally show how many other avatars are inside the currently selected Whisper, Say or Shout range, with an optional friends count
+- **Favorite Streams panel**, including a configurable default stream
+- Can keep the previous stream after teleporting or ask before changing streams
+- Nearby and recent people in the Conversations panel
+- Snapshots up to 11500x11500 resolution
+- AVX2 optimized build (now also in Firestorm)
+- Made the Animation Speed menu easily accessible: it is no longer in Developer > Avatar > Animation Speed, it is now directly accessible in AyaneStorm > animation
+- Added a "All Animations Slowed Down" menu that directly sets animations speed to the minimum (10%)
+- Added a "Freeze Animations" menu in World > Animation Speed, effectively freezing all animations. Very useful for photographers!
+- No longer shows the stupid ":non-potable_water:" and "fleur-de-lys" emojis when typing ":-P" or ":-D" (use package located in https://github.com/AyaneStorm/3p-emoji-shortcodes)
+- Increased resolution limit to 2048x2048 for snapshot uploaded to inventory (merged in Second-Life)
+- Updated OpenJPEG to 2.5.2 (for Jpeg2000 format) (Firestorm also updated to this version now)
+- Fixed texture and snapshots poor upload quality with OpenJPEG (merged in Firestorm)
+- Enabled "lossless" texture uploads
+- New icons
+- Custom login page
+- Added support for WebP format, like in Alchemy
+- Bigger camera controls
+- Can double-click on an animation in the AO to play it (merged in Firestorm)
+- Can preview profile, picks and 1st life as others would see it (merged in Firestorm)
+- Can see oneself in Nearby people list, so that the people count is correct, and you can double-click on yourself to focus camera on you
+- Bigger profile pictures!
+- Changed location of "Drop inventory item here" in profile to a more logical one
+- Additional advanced phototools by Kiss Spicoli
+- Added a slider on top to change the render distance, just like in Starlight UI
+- Includes latest updates from Firestorm
+- Windows, macOS and Linux builds
+- All builds with FMOD for audio and Kakadu for JPG2000 encoder/decoder
+
+### Advanced Shape Deformer
+
+Open **AyaneStorm > Advanced Shape Deformer** to edit the position and scale of all 159 avatar skeleton targets beyond the limits of normal appearance sliders.
+
+- Preview changes live, enter exact values, or hold **Ctrl** while dragging a slider for finer control.
+- Reset individual axes or joints, use undo/redo, and bypass a joint, all scale changes, or the complete deformation for quick A/B comparisons.
+- Use **Load Worn** to continue editing one worn attachment whose inventory name begins with `AS Deformer -`. Detach it when prompted, then confirm to restore the preview without resetting the shape visually.
+- Export an editable, versioned configuration to a notecard and import it later. Import errors identify the invalid line so hand-edited configurations are easier to correct.
+- If the worn shape changes or is updated, the editor detects the cleared preview and offers to reload the deformation.
+- **Bake & Upload** creates a persistent rigged-mesh deformer and warns when any bypass is active.
+
+> [!IMPORTANT]
+> The live preview is temporary. Baking uploads a new mesh asset and incurs the region's normal L$ upload fee. Position overrides use standard rigged-mesh behavior; scale overrides are visible only in compatible AyaneStorm viewers. The deformer is calibrated for the displayed worn shape, so remove unrelated worn deformers before baking unless their combined effect is intentional.
+
+### Depth of Field
+
+Open the **AyaneStorm Depth of Field** floater to choose a mode:
+
+- **Live (new)**: a layered depth of field designed to be noise-free and stable while you move. It looks the same on Windows and macOS and blurs transparent objects such as hair and glass at their real depth. Light sources can turn into aperture-shaped bokeh highlights in their own layers, with adjustable color saturation. It shares the aperture shape and lens effects below, and adds field curvature.
+- **Aperture-sampled (still images only)**: renders the scene through many points of a virtual lens and averages them, for photographic snapshots. Choose the aperture shape (circle, triangle to nonagon, square), blade rounding, rotation and anamorphic ratio, and add lens effects: cat's-eye bokeh, spherical aberration, axial chromatic aberration, corner darkening and bright bokeh highlights.
+- **Standard (Firestorm)** remains available.
+- Autofocus on eyes or on an area, subject tracking, adjustable focus time and a physical blur size based on the camera settings.
+
+### Night sky
+
+Open **Star Settings** (from the toolbar, the menus, or the **Stars** tab of the Environment Effects panel). Everything is viewer-local and does not change the region's environment settings.
+
+- **Real sky** (default): the 20,000 brightest stars of a real star catalogue, with colors from their measured temperature and brightness from their magnitude, so constellations such as Orion or the Southern Cross are recognizable. Choose a latitude, or pick one of over 50 places (the world's largest cities, the largest city of other notable countries, the poles and the equator). The sky turns around the celestial pole, which sits above the viewer's north.
+- **Milky Way and deep-sky glow**: a photographic Milky Way from NASA's Deep Star Maps (Gaia data), with real dust lanes and star clouds, plus the Magellanic Clouds, Andromeda and bright nebulae. It turns with the stars, fades at dawn and toward the horizon, and blurs naturally with depth of field.
+- **Procedural** mode: improved random stars with temperature colors, adjustable brightness contrast and an optional Milky Way band.
+- Adjustable density, brightness, size, twinkle, color realism and saturation, star brightness contrast and the faintness of the dimmest stars. Bright stars glow and give strong bokeh with depth of field.
+- Untick **Enable AyaneStorm stars** to get the stock sky back.
+
+Star data: Celestial Data (Frohn & Hernangómez, BSD 3-Clause). Milky Way: NASA/Goddard Space Flight Center Scientific Visualization Studio; Gaia DR2: ESA/Gaia/DPAC.
+
+## Quick build instructions (for Windows):
+
+First, make sure you installed all the prerequisites software. See [Windows](building_windows.md)
+
+Build without FMOD (the simplest):
+```
+git clone https://github.com/AyaneStorm/ayanestorm.git
+cd ayanestorm
+prepare_no_fmod.bat (only the first time)
+build_no_fmod.bat
+```
+
+Build with FMOD (more complicated):
+First, follow Alchemy Viewer instructions to generate the FMOD library file (you'll need Cygwin64).
+Then update the set_fmod_vars.bat file with correct values.
+
+- FMOD_HASH is the MD5 hash of the FMOD file
+- FMOD_URL is the location of the FMOD file (it must start with file:///)
+
+Then type:
+
+```
+git clone https://github.com/AyaneStorm/ayanestorm.git
+cd ayanestorm
+prepare_with_fmod.bat  (only the first time)
+build_with_fmod.bat
+```
+
+If you already prepared the build and want to rebuild later with another CMD window:
+- Open a new CMD window
+- Depending on whether you want to build with FMOD or without, type `rebuild_with_fmod.bat` or `rebuild_no_fmod.bat` so that the required variables are set again
+- Then type `build_with_fmod.bat` or `build_without_fmod.bat` for each subsequent build
+
+### Kakadu build for Windows
+There is absolutely no instructions anywhere for building SecondLife / Firestorm / Alchemy with Kakadu, but I managed to do it. If you're interested, do as follow:
+- Acquire a Kakadu license (can't help you with this, and won't share mine, it's private, please don't ask)
+- Install the Visual Studio 2019 Build Tools and optionnaly Visual Studio itself (won't work with VS2022 build tools with current Kakadu version 8.4.1)
+- Install Mingw64, make sure that you can create .tar.bz2 files.
+- Extract Kakadu library somewhere
+- In coresys directory you'll find a VS2019 solution and project
+- Set coresys VS2019 project configuration to `<ConfigurationType>StaticLibrary</ConfigurationType>` instead of `<ConfigurationType>DynamicLibrary</ConfigurationType>`
+- Set linker additional dependencies to:
+    `..\srclib_ht\Win-x86-64\kdu_ht2019R.lib;%(AdditionalDependencies) for Release`
+    `..\srclib_ht\Win-x86-64\kdu_ht2019D.lib;%(AdditionalDependencies) for Debug`
+  (It is simpler to edit that in the project properties in Visual Studio, but that's optional)
+- Prepare Kakadu sources for high speed Kakadu if your license allows it (see Enabling_HT.txt in Kakadu library)
+- In VS 2019 build tools, cd to Kakadu coresys folder and type:
+    `msbuild.exe coresys_2019.sln -t:coresys -p:Configuration="Release" -p:Platform="x64"` for Release, or
+    `msbuild.exe coresys_2019.sln -t:coresys -p:Configuration="Debug" -p:Platform="x64"` for Debug
+- You'll obtain a kdu_84R.lib or a kdu_84D.lib in coresys/../../bin_x64/
+- Git clone this repository: https://github.com/AyaneStorm/kdu_installable_template
+- In kdu-8.4.1-windows-233220159-template directory:
+  - Copy and rename kdu_84R.lib to lib/Release/kdu_x64.lib
+  - Copy and rename kdu_84D.lib to lib/Debug/kdu_x64.lib
+  - Copy all the .h files of Kakadu into include/ (all, not only coresys headers)
+  - Copy the Kakadu license into LICENSES/
+- In Mingw64, type:
+    `cd kdu-8.4.1-windows-233220159-template/ && tar -cvjSf kdu-8.4.1-windows-233220159.tar.bz2 *`
+    `mv kdu-8.4.1-windows-233220159.tar.bz2 ../ && cd .. && md5sum kdu-8.4.1-windows-233220159.tar.bz2`
+- You should obtain a `kdu-8.4.1-windows-233220159.tar.bz2` file and its MD5 checksum (keep that checksum for later)
+- Go to you my_autobuild.xml file, and look for the `kdu` key.
+- The Windows related part should look like this (change paths where needed):
+    ```
+    <key>windows64</key>
+    <map>
+    <key>archive</key>
+    <map>
+        <key>hash</key>
+        <string>the MD5 hash you obtained previously</string>
+        <key>hash_algorithm</key>
+        <string>md5</string>
+        <key>url</key>
+        <string>file:///C:/path/to/kakadu/kdu-8.4.1-windows-233220159.tar.bz2</string>
+    </map>
+    <key>name</key>
+    <string>windows64</string>
+    </map>
+    ```
+- Just reconfigure with --kdu and recompile.
+
+## Open Source
+
+Firestorm is a third party viewer derived from the official [Second Life](https://github.com/secondlife/viewer) client. The client codebase has been open source since 2007 and is available under the LGPL license.
+
+## Download
+
+Pre-built versions of the viewer releases for Windows, Mac and Linux can be downloaded from the [official website](https://www.firestormviewer.org/choose-your-platform/).
+
+## Build Instructions
+
+Build instructions for each operating system can be found using the links below and in the official [wiki](https://wiki.firestormviewer.org).
+
+- [Windows](building_windows.md)
+- [Mac](building_macos.md)
+- [Linux](building_linux.md)
+
+> [!NOTE]
+> We do not provide support for compiling the viewer or issues resulting from using a self-compiled viewer. However, there is a self-compilers group within Second Life that can be joined to ask questions related to compiling the viewer: [Firestorm Self Compilers](https://tinyurl.com/firestorm-self-compilers)
+
+## Contribute
+
+Help make Firestorm better! You can get involved with improvements by filing bugs and suggesting enhancements via [JIRA](https://jira.firestormviewer.org) or [creating pull requests](../CONTRIBUTING.md).
+
+## Community respect
+
+This section is guided by the [TPV Policy](https://secondlife.com/corporate/third-party-viewers) and the [Second Life Code of Conduct](https://github.com/secondlife/viewer?tab=coc-ov-file).
+
+Firestorm code is made available during ongoing development, with the **master** branch representing the current nightly build. Developers and self-compilers are encouraged to work on their own forks and contribute back via pull requests, as detailed in the [contributing guide](../CONTRIBUTING.md).
+
+If you intend to use our code for your own viewer beyond personal use, please only use code from official release branches (for example, `Firestorm_7.1.13`), rather than from pre-release/preview or nightly builds.

@@ -10,9 +10,10 @@ function install_desktop_entry()
     local installation_prefix="$1"
     local desktop_entries_dir="$2"
 
+    # <KS:KS> rebrand: Name= was "AyaneStorm Viewer"
     local desktop_entry="\
 [Desktop Entry]\n\
-Name=AyaneStorm Viewer\n\
+Name=KStorm Viewer\n\
 Comment=Client for accessing 3D virtual worlds\n\
 Exec=${installation_prefix}/firestorm\n\
 Icon=${installation_prefix}/ayanestorm_icon.png\n\

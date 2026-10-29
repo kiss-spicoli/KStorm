@@ -822,9 +822,12 @@ Se ritieni che si tratti di un errore, contatta support@secondlife.com
 	<string name="AssetUploadServerUnavaliable">
 		Servizio non disponibile o tempo scaduto
 	</string>
+	<!-- <KS:KS> rebrand: support-URL sentence removed (unsupported research viewer); was: -->
+	<!-- Errore nella richiesta di invio. Visitare -->
+	<!-- https://www.firestormviewer.org/support per avere aiuto nella soluzione. -->
+	<!-- </KS:KS> -->
 	<string name="AssetUploadRequestInvalid">
-		Errore nella richiesta di invio. Visitare
-https://www.firestormviewer.org/support per avere aiuto nella soluzione.
+		Errore nella richiesta di invio.
 	</string>
 	<string name="texture">
 		texture

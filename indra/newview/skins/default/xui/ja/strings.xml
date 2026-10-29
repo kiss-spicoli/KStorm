@@ -3223,8 +3223,11 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		[APP_NAME]は前回の実行時にフリーズしています。
 クラッシュ報告を送信しますか？
 	</string>
+	<!-- <KS:KS> rebrand: support-URL sentence removed (unsupported research viewer); was: -->
+	<!-- [APP_NAME]がフリーズしたようです。この問題が頻繁に発生する場合は、https://www.firestormviewer.org/support からサポートにお問い合わせください。 -->
+	<!-- </KS:KS> -->
 	<string name="MBFreezeDetected">
-		[APP_NAME]がフリーズしたようです。この問題が頻繁に発生する場合は、https://www.firestormviewer.org/support からサポートにお問い合わせください。
+		[APP_NAME]がフリーズしたようです。
 	</string>
 	<string name="MBAlert">
 		通知
