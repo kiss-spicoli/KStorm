@@ -10,6 +10,10 @@ on:
         description: 'Build Windows (untick for the shader check alone)'
         type: boolean
         default: true
+      release_tag:
+        description: 'Make a draft release with this tag, e.g. kstorm-7.2.5.12345 (needs Build Windows; blank for none)'
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -92,3 +96,32 @@ jobs:
           path: build-*/newview/Release/*Setup.exe
           if-no-files-found: error
           retention-days: 7
+
+  # A draft and a pre-release: nothing is public until it is published by hand on GitHub.
+  release:
+    if: ${{ inputs.windows && inputs.release_tag != '' }}
+    needs: [shaders, windows]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Get the installer
+        uses: actions/download-artifact@v8
+        with:
+          name: KStorm-windows
+          path: dist
+
+      - name: Create the draft release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.release_tag }}
+        run: |
+          case "$TAG" in
+            kstorm-*) ;;
+            *) echo "::error::The tag must start with kstorm-"; exit 1 ;;
+          esac
+          installer="$(find dist -name '*Setup.exe' -print -quit)"
+          test -n "$installer"
+          gh release create "$TAG" "$installer" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA"             --title "$TAG" --draft --prerelease             --notes "Unsupported research viewer for Second Life. The installer is unsigned, so Windows SmartScreen will warn."
