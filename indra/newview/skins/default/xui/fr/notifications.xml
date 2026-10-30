@@ -82,7 +82,7 @@ Détails de l&apos;erreur : La notification, appelée &apos;[_NAME]&apos;, est i
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		Une erreur est survenue lors de la mise à jour de [APP_NAME].  Veuillez [https://www.firestormviewer.org/downloads télécharger la dernière version] du client.
+		Une erreur est survenue lors de la mise à jour de [APP_NAME].  Veuillez [https://github.com/kiss-spicoli/KStorm/releases télécharger la dernière version] du client.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FoundLegacyNsisInstallation">
@@ -1585,7 +1585,7 @@ Si vous utilisez [CURRENT_GRID] pour la première fois, vous devez ouvrir un com
 
 Vérifiez votre connexion Internet et réessayez dans quelques minutes, cliquez sur Aide pour consulter la page [SUPPORT_SITE] ou bien sur Téléporter pour essayer d&apos;aller chez vous.
 		<url name="url">
-			https://www.firestormviewer.org/support/
+			https://support.secondlife.com/
 		</url>
 		<form name="form">
 			<button name="OK" text="OK"/>

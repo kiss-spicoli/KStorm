@@ -31,7 +31,7 @@ Xəta təfərrüatları: &quot;[_NAME]&quot; adlı bildiriş notifications.xml f
 		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="Bəli"/>
 	</notification>
 	<notification name="BadInstallation">
-		[APP_NAME] yenilənərkən xəta baş verdi. Klientin [https://www.firestormviewer.org/downloads ən son versiyasını yükləyin].
+		[APP_NAME] yenilənərkən xəta baş verdi. Klientin [https://github.com/kiss-spicoli/KStorm/releases ən son versiyasını yükləyin].
 	</notification>
 	<notification name="LoginFailedNoNetwork">
 		[CURRENT_GRID] şəbəkəsinə qoşulmaq alınmadı.

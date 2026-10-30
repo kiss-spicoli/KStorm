@@ -41,7 +41,7 @@
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="BadInstallation">
-		[APP_NAME] 更新時出錯。請在 [https://www.firestormviewer.org/downloads 下載] 最新版本的檢視器。
+		[APP_NAME] 更新時出錯。請在 [https://github.com/kiss-spicoli/KStorm/releases 下載] 最新版本的檢視器。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="FoundLegacyNsisInstallation">

@@ -2810,12 +2810,12 @@
        </menu_item_call>
        <menu_item_separator/>
     	<menu_item_call
-             label="Firestorm Blog"
-             name="Firestorm Blog">
+             label="KStorm on GitHub"
+             name="KStorm on GitHub">
              <menu_item_call.on_click
              function="PromptShowURL"
              name="firestorm_blog_url"
-             parameter="WebLaunchExternalTarget,https://www.firestormviewer.org/" />
+             parameter="WebLaunchExternalTarget,https://github.com/kiss-spicoli/KStorm" />
        </menu_item_call>
     	<menu_item_call
              label="Firestorm Primfeed"
@@ -2896,7 +2896,7 @@
         </menu_item_call>
         
         <menu_item_call
-         label="Troubleshooting"
+         label="Firestorm Troubleshooting"
          name="Troubleshooting">
             <menu_item_call.on_click
              function="PromptShowURL"
@@ -2904,6 +2904,7 @@
              parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org/firestorm_troubleshooting" />
         </menu_item_call>
 	   
+        <!-- <KS:KS> Firestorm's support group and classes don't cover KStorm.
         <menu_item_call
          label="Join Firestorm Support Group"
          name="firestorm_support_group">
@@ -2923,6 +2924,7 @@
              name="wiki_classes_url"
              parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org/firestorm_classes" />
         </menu_item_call>
+        </KS:KS> -->
 
         <menu_item_call
          label="Firestorm Events Calendar"

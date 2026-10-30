@@ -82,7 +82,7 @@ Detalhes do erro: a notificação chamada &apos;[_NAME]&apos; não foi encontrad
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		A instalação de [APP_NAME] está com defeito. Por favor [https://www.firestormviewer.org/downloads baixe uma nova cópia do viewer] e reinstale.
+		A instalação de [APP_NAME] está com defeito. Por favor [https://github.com/kiss-spicoli/KStorm/releases baixe uma nova cópia do viewer] e reinstale.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
@@ -1589,7 +1589,7 @@ Se esta for a primeira vez que você usa [CURRENT_GRID], você deve primeiro cri
 
 Verifique sua conexão com a Internet e tente novamente ou clique em Ajuda para ir para [SUPPORT_SITE] ou clique em Teletransportar para se teletransportar para casa.
 		<url name="url">
-			https://www.firestormviewer.org/support/
+			https://support.secondlife.com/
 		</url>
 		<form name="form">
 			<button name="OK" text="OK"/>
@@ -1602,7 +1602,7 @@ Verifique sua conexão com a Internet e tente novamente ou clique em Ajuda para 
 
 Verifique sua conexão com a Internet e tente novamente ou clique em Ajuda para acessar [SUPPORT_SITE].
 		<url name="url">
-			https://www.firestormviewer.org/support/
+			https://support.secondlife.com/
 		</url>
 		<form name="form">
 			<button name="OK" text="OK"/>

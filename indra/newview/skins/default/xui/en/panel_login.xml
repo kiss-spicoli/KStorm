@@ -13,10 +13,12 @@
     name="forgot_password_url">
     http://secondlife.com/account/request.php
   </panel.string>
+  <!-- <KS:KS> was https://www.firestormviewer.org/join-secondlife/ -->
   <panel.string
     name="sign_up_url">
-    https://www.firestormviewer.org/join-secondlife/
+        https://join.secondlife.com/
   </panel.string>
+  <!-- </KS:KS> -->
   <layout_stack
    follows="all"
    layout="topleft"
