@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, the commit after `kstorm` `e5904b335c2` (Camera Controls toggle).
-- **KStorm's own work:** 132 commits (Kissmy Spicoli, Oct 18 to Oct 29), 205 files, about 16,011
+- **Last updated:** 2026-10-29, the commit after `kstorm` `a4c369db39e` (README and public docs).
+- **KStorm's own work:** 137 commits (Kissmy Spicoli, Oct 18 to Oct 29), 203 files, about 15,800
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -274,7 +274,9 @@ is built on. (`3b2b3c33241`)
   still show AyaneStorm's art. (`59ebef89371`)
 - **Ayane's names stay.** Features Ayane created keep their AyaneStorm names: the AyaneStorm
   menu and Preferences tab, AyaneStorm Depth of Field, AyaneStorm stars and the rest.
-- **README.** Rewritten for KStorm; AyaneStorm's README is kept as `doc/ayanestorm-README.md`.
+- **README.** The KStorm home page: the mission (Looks and Scenes, and research), what KStorm
+  adds, credit to Ayane with links to her repository, status and build. AyaneStorm's README is
+  kept as `doc/ayanestorm-README.md`. (`8972fffd967`)
 - **Login screen.** Drawn by the viewer itself, with no web page, so the built-in browser does
   not even start before you log in and nothing is sent anywhere. One background fills the
   screen (a purple gradient, `ks_login_bg`). The KStorm logo sits centred near 40% of the
