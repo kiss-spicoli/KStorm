@@ -1,8 +1,6 @@
 # Hair occlusion (body-proxy capsule shadows + proximity darkening)
 
-Status: implemented, not built or tested yet. Branch: `feat-hair-occlusion` off `kstorm`. Author: Kissmy Spicoli.
-
-Note: AGENTS.md says author "chanayane@firestorm"; the KStorm brief says Kissmy Spicoli. This doc follows the brief.
+Status: implemented and merged into `kstorm` (2026-10-24, branch `feat-hair-occlusion`). Author: Kissmy Spicoli.
 
 ## Decisions (user, 2026-10-23)
 
