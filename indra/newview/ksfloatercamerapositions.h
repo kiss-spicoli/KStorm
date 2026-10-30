@@ -19,7 +19,8 @@ class LLLineEditor;
 class LLScrollListCtrl;
 class LLTextBox;
 
-// The camera views of every sim, with Apply, the editing buttons and the Lock Camera toggle. Views
+// The camera views of every sim, with Apply, the editing buttons, the Lock Camera toggle and the
+// Camera Controls toggle. Views
 // of this sim and connected sims (labeled) can be applied and edited; other sims' (dimmed and
 // labeled, hidden while Show disconnected is off) reached by Teleport and deleted.
 // Closing it turns Lock Camera off and resets the view. It resizes in height only (the list
@@ -53,6 +54,7 @@ private:
 
     LLScrollListCtrl* mList = nullptr;
     LLButton* mLockButton = nullptr;
+    LLButton* mControlsButton = nullptr;   // Camera Controls floater toggle
     LLTextBox* mDetails = nullptr;
     std::vector<KSCameraPositions::Record> mRecords;   // as listed
     std::string mLastRegion;    // agent region, to refresh the list on change

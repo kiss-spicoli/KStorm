@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, at `kstorm` commit `87744f514bd`.
-- **KStorm's own work:** 127 commits (Kissmy Spicoli, Oct 18 to Oct 29), 202 files, about 15,975
+- **Last updated:** 2026-10-29, the commit after `kstorm` `90a125dd1eb` (Camera Controls toggle).
+- **KStorm's own work:** 132 commits (Kissmy Spicoli, Oct 18 to Oct 29), 205 files, about 16,011
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -175,6 +175,9 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 - **Floater.** It resizes in height only and keeps its size across closing and sessions. View
   names have no tooltip, so nothing covers the list. The Lock toggle is labeled Lock Camera.
   (`335882a6511`)
+- **Camera Controls** toggle beside Lock Camera. It opens and closes the Camera Controls floater
+  (orbit, pan and zoom) as Ctrl+K does, the small one when that option is on, and shows pressed
+  while it is open. (Committed on `kstorm` with this entry, so no hash here.)
 - **Draw Distance** slider below Lock Camera, 8 to 1024 m. It is the same setting as
   Preferences and follows every other setter, such as the Reference look and `/dd`.
   (`baf89dee7c3`, range `b3bb171d4d6`)

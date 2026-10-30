@@ -47,6 +47,15 @@ the camera to the avatar.
   edge. `save_rect` keeps the size across closing and sessions. `min_height` is the XUI height.
 - **"Lock Camera"** (user, 2026-10-28): the Lock toggle is labeled Lock Camera, and every
   mention follows.
+- **Camera Controls toggle** (user, 2026-10-29): Lock Camera shares its row with a
+  **Camera Controls** toggle (each 137 px), so the floater keeps its height. It opens and closes
+  the viewer's Camera Controls floater (orbit, pan and zoom) as Ctrl+K does
+  (`FSToggleCameraFloater`): `fs_camera_small` while `FSUseSmallCameraFloater` is on, else
+  `camera`, through `LLFloaterReg::toggleInstance()`. The toolbar's
+  `toggleInstanceOrBringToFront()` was dropped (user, 2026-10-29): clicking the button takes
+  focus from Camera Controls, so each click only raised it. `draw()` sets the button pressed
+  while that floater is open, however it was opened. While Lock Camera is on, its controls have no visible
+  effect: the idle update pins the rendered camera instead of running `updateCamera()`.
 - **Draw Distance** (user, 2026-10-28): a slider just below Lock Camera, bound to `RenderFarClip`
   (`control_name`), so it follows every other setter: Preferences > Graphics > General and
   Advanced, looks such as the Reference look, the Performance floaters, the `/dd` chat command.
@@ -105,7 +114,7 @@ the camera to the avatar.
 |---|---|
 | `kscamerapositions.cpp/.h` | Records (load/save, per-sim), Apply, Lock Camera state, hooks' entry points |
 | `ksfloatercamerapositions.cpp/.h` | Floater `ks_camera_positions` and name dialog `ks_camera_position_edit` |
-| `floater_ks_camera_positions.xml` | 300 px wide, height-resizable: list (View, Sim), Show disconnected (requires teleport), details line, Apply / Save current as... / Update / Rename... / Delete... / Lock Camera, Draw Distance, Disable Camera Constraints |
+| `floater_ks_camera_positions.xml` | 300 px wide, height-resizable: list (View, Sim), Show disconnected (requires teleport), details line, Apply / Save current as... / Update / Rename... / Delete... / Lock Camera, Camera Controls, Draw Distance, Disable Camera Constraints |
 | `floater_ks_camera_position_edit.xml` | Name dialog (Save, Rename) |
 
 `<KS:KS>`-tagged upstream edits: `menu_viewer.xml` (menu item), `llviewerfloaterreg.cpp`

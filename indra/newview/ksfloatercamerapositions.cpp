@@ -48,6 +48,13 @@ namespace
     }
 
     const std::string SHOW_DISCONNECTED = "KSCameraPositionsShowDisconnected";
+    // The Camera Controls floater Ctrl+K toggles: the small one while FSUseSmallCameraFloater is on
+    // (as FSToggleCameraFloater in llviewermenu.cpp).
+    std::string cameraControls()
+    {
+        static LLCachedControl<bool> use_small(gSavedSettings, "FSUseSmallCameraFloater");
+        return use_small ? "fs_camera_small" : "camera";
+    }
 
     // List value of a record: unique across regions and grids.
     std::string rowValue(const KSCameraPositions::Record& record)
@@ -104,6 +111,13 @@ bool KSFloaterCameraPositions::postBuild()
         {
             KSCameraPositions::setLocked(!KSCameraPositions::isLocked());
         });
+    mControlsButton = getChild<LLButton>("ks_camera_controls");
+    mControlsButton->setCommitCallback([](LLUICtrl*, const LLSD&)
+        {
+            // Opens or closes, like Ctrl+K: clicking here takes focus from the floater, so the
+            // toolbar's bring-to-front step would never close it.
+            LLFloaterReg::toggleInstance(cameraControls());
+        });
 
     mChangedConnection = KSCameraPositions::changedSignal().connect([this]() { refreshList(); });
     // The Show disconnected check box binds the setting (control_name); the list follows it.
@@ -141,6 +155,8 @@ void KSFloaterCameraPositions::draw()
     {
         refreshList();
     }
+    // The Camera Controls toggle shows pressed while that floater is open, however it was opened.
+    mControlsButton->setToggleState(LLFloaterReg::instanceVisible(cameraControls()));
     LLFloater::draw();
 }
 
