@@ -1,6 +1,6 @@
 # KStorm2 lighting UI design
 
-Author: Kissmy Spicoli. Date: 2026-10-24. Status: **in design**; nothing here is implemented.
+Author: Kissmy Spicoli. Date: 2026-10-24. Status: **implemented** as KStorm Lighting and Look Inventory, from section 10 (As designed); later decisions are dated in place. Sections 1–9 record how the design got there, section 11 the implementation plan.
 
 Input: `doc/kstorm2-lighting-factor-map.md` section 10 (panel summary), with the decisions in its sections 8 and 12 (12.1, 12.7, 12.8) folded in. That document holds the rationale and code analysis. This one is the specification: per control, the final label, binding, range, step, tooltip, dependency behaviour and code site.
 
