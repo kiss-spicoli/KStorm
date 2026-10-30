@@ -1,8 +1,8 @@
 # KStorm2 lighting factor map (HDR mode C only)
 
-Author: Kissmy Spicoli. Date: 2026-10-24. Branch `kstorm` at `b3c3ad52aa0` (after the ks-rename, slider-fix and docs merges; KStorm files, classes and settings use `ks*`/`KS*`, ownership tags `<KS:KS>`).
+Author: Kissmy Spicoli. Date: 2026-10-24. Branch `kstorm` at `c5194292095` (after the ks-rename, slider-fix and docs merges; KStorm files, classes and settings use `ks*`/`KS*`, ownership tags `<KS:KS>`).
 
-Derived from the original lighting map (`doc/kstorm-lighting-factor-map.md`, retired 2026-10-24; in git history at `a2b60aab0a5` and earlier; the parts still needed are Appendices B–D), reduced to the lighting KStorm will use: EEP/PBR with HDR. EEP skies run in mode C; legacy skies use LL's default auto-adjust (mode B, the same HDR shading with LL's conversion scales), decided 2026-10-24. Content that applied only to classic, auto-adjusted legacy or hybrid skies has been removed; for that material see Appendices B–D.
+Derived from the original lighting map (`doc/kstorm-lighting-factor-map.md`, retired 2026-10-24; in git history at `bc9e1ec3fc3` and earlier; the parts still needed are Appendices B–D), reduced to the lighting KStorm will use: EEP/PBR with HDR. EEP skies run in mode C; legacy skies use LL's default auto-adjust (mode B, the same HDR shading with LL's conversion scales), decided 2026-10-24. Content that applied only to classic, auto-adjusted legacy or hybrid skies has been removed; for that material see Appendices B–D.
 
 This document changes no code. The one related code change, the Advanced Lighting atmosphere sliders (3.2), was made separately on `feat-al-atmosphere-sliders` and merged. Paths are relative to `indra/newview/` unless they start with `indra/`.
 
@@ -68,9 +68,9 @@ Key to columns. **Behaviour** describes the factor in mode C. **UI**: where the 
 |---|---|---|---|
 | `blue_horizon`, `blue_density` | `calcAtmosphericVars`; desaturated in irradiance capture (`llsettingsvo.cpp:699`, `RenderDesaturateIrradiance`) | Sky colour, sun attenuation, haze additive. Editor ÷2. | ED, PL, AL |
 | `haze_horizon`, `haze_density` | same | Haze, sun attenuation (`haze_density*0.25`). | ED, PL, AL |
-| `density_multiplier` | same | Haze thickness and sun extinction. Stored = display × 0.001. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `403c38b3323`, not yet built). |
-| `distance_multiplier` | same | Haze distance. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `403c38b3323`, not yet built). |
-| `max_y` (Max Altitude) | same; `calculateLightSettings` | Sun extinction altitude. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `403c38b3323`, not yet built). |
+| `density_multiplier` | same | Haze thickness and sun extinction. Stored = display × 0.001. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `6719de8c790`, not yet built). |
+| `distance_multiplier` | same | Haze distance. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `6719de8c790`, not yet built). |
+| `max_y` (Max Altitude) | same; `calculateLightSettings` | Sun extinction altitude. | ED. AL: hidden (commented out of `floater_advanced_lighting.xml`) until `feat-al-atmosphere-sliders`, which shows and wires it (merged into `kstorm` at `6719de8c790`, not yet built). |
 | `cloud_*` (colour, scale, variance, density/detail, scroll, map) | `cloudsV/F.glsl`; `cloud_shadow` above | Mostly visual. Coverage feeds lighting. | ED clouds, PL (colour, coverage, scale, map) |
 | `moisture_level`, `droplet_radius`, `ice_level`, rainbow/halo IDs | `skyF.glsl` | Rainbow and halo only. | ED atmos tab. Not in PL/AL. |
 | dome offset/radius | `llvowlsky.cpp`, `ashorizonscattering.cpp:69` | Geometry constants. | none (asset-only) |
@@ -195,7 +195,7 @@ Probe toggle, volume type (sphere/box), dynamic, update type, mirror, **ambiance
 | Panel | Opened from | Lighting factors | Notes |
 |---|---|---|---|
 | Personal Lighting `env_adjust_snapshot` | World > Environment | ambient, blue H/D, sun colour, cloud colour/map/coverage/scale, haze H/D, probe ambiance, scene gamma, sun/moon rotation, az/el, sun scale, glow, stars, water normal map | Creates ENV_LOCAL sky |
-| Advanced Lighting `env_adjust_snapshot_advanced` | World > Environment, PT, APT, Quick Prefs, nav bar | probe ambiance, scene gamma, HDR sunlight scale, ambient scale, haze H/D, exposure, glow, density multiplier, distance multiplier, max altitude (wired on `feat-al-atmosphere-sliders`, merged `403c38b3323`), SSAO, SSR, DoF, local light count, attached lights, sun/moon trackballs, colours | The nearest thing to a unified lighting panel today |
+| Advanced Lighting `env_adjust_snapshot_advanced` | World > Environment, PT, APT, Quick Prefs, nav bar | probe ambiance, scene gamma, HDR sunlight scale, ambient scale, haze H/D, exposure, glow, density multiplier, distance multiplier, max altitude (wired on `feat-al-atmosphere-sliders`, merged `6719de8c790`), SSAO, SSR, DoF, local light count, attached lights, sun/moon trackballs, colours | The nearest thing to a unified lighting panel today |
 | Fixed sky editor / Day Cycle | My Environments, inventory | every sky field. | Asset editing |
 | KStorm Environment Effects `ks_environment_effects` | KStorm menu | Set KS environment, shadows, HDR sunlight scale, ambient scale, HDR scale (= gamma), exposure, AO block, DoF button | Duplicates 4 AL sliders with different ranges |
 | AyaneStorm Environment Effects | World > Environment, toolbar | volumetric, camera effects, colour grading, sun, horizon, moon, stars, auroras, weather | Viewer-local visuals |
@@ -471,7 +471,7 @@ Live controls whose label, tooltip, range or placement misrepresents what they d
 
 ## 12. Decisions on section 11 and follow-up findings (2026-10-24)
 
-The slider wiring from section 3.2 is committed (`9b783fa6bf6`) and merged into `kstorm` (`403c38b3323`); not yet built.
+The slider wiring from section 3.2 is committed (`afa5c90931e`) and merged into `kstorm` (`6719de8c790`); not yet built.
 
 ### 12.1 Decisions
 
@@ -630,7 +630,7 @@ Decided = adopted (scope: new UI, plus My Lights where marked). Declined = left 
 
 ## Appendix B: The original viewer as built (all four modes)
 
-Kept from the retired `doc/kstorm-lighting-factor-map.md` (removed 2026-10-24; full text in git history at `a2b60aab0a5` and earlier). This is how the viewer behaves **today**, before section 8 and the UI design are implemented; useful when debugging current behaviour.
+Kept from the retired `doc/kstorm-lighting-factor-map.md` (removed 2026-10-24; full text in git history at `bc9e1ec3fc3` and earlier). This is how the viewer behaves **today**, before section 8 and the UI design are implemented; useful when debugging current behaviour.
 
 Four conditions select the mode. None has its own control.
 

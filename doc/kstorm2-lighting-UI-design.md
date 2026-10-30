@@ -140,7 +140,7 @@ Range notation: `min–max / step`. A pair is written `slider min–max / step; 
 | **Air Glow Color** | sky `blue_horizon` | 0–3 per channel (color + intensity) | "Sky and distant-fog color from clear air." | Note at 0: "Sole fog color while Haze Density is 0." | `skyV.glsl:142-155` |
 | **Air Density** | sky `blue_density` | 0–3 per channel (color + intensity) | "Clear-air amount per color: sunset reddening, fog fade rate and the air/haze mix." | Note at 0: "Fog strength follows the red component while Haze Density is 0." | `atmosphericsFuncs.glsl:66-83`, `hazeF.glsl:89` |
 
-Engineering prerequisite (O6): the 0/0 guards in `cloudsV.glsl`, `asHorizonCloudTintV.glsl` and `lllegacyatmospherics.cpp` are committed on `fix-haze-zero-nan-guards` (`050e76568c6`) and must be merged before this group can set Haze Density to 0.
+Engineering prerequisite (O6): the 0/0 guards in `cloudsV.glsl`, `asHorizonCloudTintV.glsl` and `lllegacyatmospherics.cpp` are committed on `fix-haze-zero-nan-guards` (`491e2c4b964`) and must be merged before this group can set Haze Density to 0.
 
 ### 2.5 Atmosphere: other
 
@@ -392,7 +392,7 @@ Not included (decided 2026-10-24): "Enable Reflection Probe Selection" (`SelectR
 | O3 | My Lights falloff | **Resolved as recommended:** curve combo Stock / Shaped / Smooth plateau / Physical, default Shaped at Softness 1; positive out-of-range falloff value decoded in `calcLegacyDistanceAttenuation`; legacy-material alpha included via `alphaF.glsl` (§8.3). |
 | O4 | Dynamic exposure | **Resolved:** labels and ranges as proposed in §8.2 (now in §3). |
 | O5 | Expert settings with no existing UI | **Closed** (decided 2026-10-25): none are surfaced. The safe ones are held by Use KS Reference (§12.1, §12.5); glow internals and HDRI are not in the KStorm UI; Eye mask radius gets a control in AyaneStorm's My Lights (A11). |
-| O6 | NaN guard for Haze Density 0 | **Done:** committed `050e76568c6` on `fix-haze-zero-nan-guards`; not merged, not built (the shader validator named in AGENTS.md is not in the repo). |
+| O6 | NaN guard for Haze Density 0 | **Done:** committed `491e2c4b964` on `fix-haze-zero-nan-guards`; not merged, not built (the shader validator named in AGENTS.md is not in the repo). |
 | O7 | "As-is" ranges | **Resolved:** Sunlight Gain 0–20 / 0.01 (KS); Max nearby lights 0–512. |
 | O8 | Transition time | **Resolved:** kept at 0 (instant), not exposed (R11). Effect: seconds to blend when a sky, water or day cycle is picked manually (inventory apply, World > Environment presets, preset combos); not used for region/parcel changes or day-cycle progression (`llenvironment.cpp:1391-1395`). |
 | O9 | Trackball | **Resolved:** removed from the new UI. |
