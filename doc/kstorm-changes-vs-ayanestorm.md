@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-29, the commit after `kstorm` `a4c369db39e` (README and public docs).
-- **KStorm's own work:** 137 commits (Kissmy Spicoli, Oct 18 to Oct 29), 203 files, about 15,800
+- **Last updated:** 2026-10-30, the commit after `kstorm` `cd2ee237f6f` (grid selector removed).
+- **KStorm's own work:** 138 commits (Kissmy Spicoli, Oct 18 to Oct 30), 204 files, about 15,800
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -256,7 +256,8 @@ is built on. (`3b2b3c33241`)
 
 - **Name and channel.** The window title, About, the exe's file details and the name sent to
   the grid at login say KStorm. The channel is `KStorm-Research`: an unsupported research viewer.
-- **Second Life only.** OpenSim support is off: no grid selector, no OpenSim tab in
+- **Second Life only.** OpenSim support is off: no grid selector (turned off at every launch,
+  even if saved settings turn it on, and its Preferences checkbox is hidden), no OpenSim tab in
   Preferences, no grid list downloaded at startup, and no Vivox voice (Second Life uses WebRTC).
 - **New data folders.** Settings, logins and chat logs live in `%APPDATA%\KStorm_x64`, the cache
   in `%LOCALAPPDATA%\KStorm_x64`. The AyaneStorm settings were copied over once; the AyaneStorm

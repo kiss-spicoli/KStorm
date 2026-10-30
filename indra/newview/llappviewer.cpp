@@ -3321,6 +3321,11 @@ bool LLAppViewer::initConfiguration()
     //Todo, find a cleaner way of doing this via the various set_default arguments.
     loadSettingsFromDirectory("User");
 
+    // <KS:KS> No grid selector on the login screen, even if saved settings turn it on.
+    // Ctrl+Shift+G at login still shows it until the next launch.
+    gSavedSettings.setBOOL("ForceShowGrid", false);
+    // </KS:KS>
+
     // <FS:Ansariel> Debug setting to disable log throttle
     nd::logging::setThrottleEnabled(gSavedSettings.getBOOL("FSEnableLogThrottle"));
 
