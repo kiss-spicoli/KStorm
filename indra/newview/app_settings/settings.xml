@@ -151,7 +151,10 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <!-- <KS:KS> Off: the default list is hosted by Firestorm, and KStorm is Second Life only.
+    <integer>1</integer> -->
+    <integer>0</integer>
+    <!-- </KS:KS> -->
   </map>
   <key>GridListDownloadURL</key>
   <map>
@@ -15152,7 +15155,10 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Type</key>
 			<string>String</string>
 			<key>Value</key>
-			<string>https://phoenixviewer.com/app/file-a-jira/?environment=[ENVIRONMENT]</string>
+			<!-- <KS:KS> Firestorm's tracker doesn't take KStorm reports.
+			<string>https://phoenixviewer.com/app/file-a-jira/?environment=[ENVIRONMENT]</string> -->
+			<string>https://github.com/kiss-spicoli/KStorm#readme</string>
+			<!-- </KS:KS> -->
 		</map>
 	<key>RevokePermsOnStopAnimation</key>
     <map>
