@@ -42,8 +42,9 @@ new code here;
 
 ## Git Safety
 
-- Destructive or mutating Git commands are absolutely FORBIDDEN. Eg: git reset, git rebase, git merge, git mv, git checkout, git commit, git stash, git push, git pull... Just use read-only Git commands.
-- Only read-only Git commands are allowed.
+- Local commits and merges are allowed: git add, git commit, git merge, git branch, git switch, git checkout of a branch.
+- Commands that rewrite or discard work (git reset --hard, git rebase, git filter-repo, git stash drop, git clean, force options) need the user's request in chat for that job.
+- Pushing is FORBIDDEN unless the user explicitly commands that push.
 
 ## Git usage guidelines
 
