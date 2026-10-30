@@ -305,8 +305,7 @@ Details: `doc/kstorm-rebrand-plan.md`.
 
 - **Naming.** All KStorm code uses `ks*` names and `<KS:KS>` tags, so it is easy to tell apart
   from AyaneStorm's. (`51295134d8e`)
-- **Design and research docs.** Lighting factors, UI design, decisions and an AI-render idea; no
-  code. (`148ca6d0c3f`, `bc9e1ec3fc3`, `6481f69ea73`, `ac19c718818`, `8cf26fc8201`,
+- **Design and research docs.** Lighting factors, UI design and decisions; no code. (`148ca6d0c3f`, `bc9e1ec3fc3`, `6481f69ea73`, `ac19c718818`, `8cf26fc8201`,
   `213d02378ce`, `12b3036fe26`)
 - **This document.** (`161a0c9d973`)
 
