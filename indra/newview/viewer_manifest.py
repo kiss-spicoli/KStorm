@@ -956,6 +956,9 @@ class Windows_x86_64_Manifest(ViewerManifest):
         return result
         # </FS:Ansariel>
     def dl_url_from_channel(self):
+        # <KS:KS> KStorm's own downloads, on every channel
+        return 'https://github.com/kiss-spicoli/KStorm/releases'
+        # </KS:KS>
         if self.channel_type() == 'release':
             return 'https://www.firestormviewer.org/choose-your-platform'
         elif self.channel_type() == 'beta':

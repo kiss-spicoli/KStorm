@@ -163,7 +163,9 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "The Phoenix Firestorm Project, Inc."
+            // <KS:KS> VALUE "CompanyName", "The Phoenix Firestorm Project, Inc."
+            VALUE "CompanyName", "KStorm"
+            // </KS:KS>
             // <KS:KS> rebrand
             // VALUE "FileDescription", "AyaneStorm"
             VALUE "FileDescription", "KStorm"

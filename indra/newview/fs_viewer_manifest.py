@@ -17,7 +17,10 @@ class FSViewerManifest:
             'app_name_oneword':self.app_name_oneword()
             }
 
-        return "Phoenix-%(app_name)s_%(optimized)s-%(version_dashes)s" % substitution_strings
+        # <KS:KS> no Phoenix- prefix: this isn't a Phoenix or Firestorm product
+        #return "Phoenix-%(app_name)s_%(optimized)s-%(version_dashes)s" % substitution_strings
+        return "%(app_name)s_%(optimized)s-%(version_dashes)s" % substitution_strings
+        # </KS:KS>
 
     def fs_is_opensim(self):
         return self.args['viewer_flavor'] == 'oss' #Havok would be hvk
