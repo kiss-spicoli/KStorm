@@ -5,13 +5,14 @@ name: KStorm build
 
 on:
   workflow_dispatch:
+    inputs:
+      windows:
+        description: 'Build Windows (untick for the shader check alone)'
+        type: boolean
+        default: true
 
 permissions:
   contents: read
-
-concurrency:
-  group: kstorm-build-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   shaders:
@@ -26,26 +27,19 @@ jobs:
       - name: Install glslang
         run: sudo apt-get update && sudo apt-get install -y glslang-tools
 
-      # Same check as AGENTS.md: the viewer prepends #version, so validate a copy.
+      # Validates each changed shader in the variants the viewer compiles.
       - name: Validate shaders changed since master (GLSL 4.10)
         shell: bash
-        run: |
-          fail=0
-          for f in $(git diff --name-only --diff-filter=d origin/master...HEAD -- '*.glsl'); do
-            case "$f" in
-              *F.glsl) ext=frag ;;
-              *V.glsl) ext=vert ;;
-              *) continue ;;
-            esac
-            echo "== $f"
-            { echo "#version 410 core"; cat "$f"; } > "$RUNNER_TEMP/check.$ext"
-            glslangValidator "$RUNNER_TEMP/check.$ext" || { echo "::error file=$f::GLSL errors"; fail=1; }
-          done
-          exit $fail
+        run: bash scripts/ks_check_shaders.sh $(git diff --name-only --diff-filter=d origin/master...HEAD -- '*.glsl')
 
   windows:
+    if: ${{ inputs.windows }}
     runs-on: windows-2022
     timeout-minutes: 360
+    # Only here, so that a shader-only run can't cancel a Windows build in progress.
+    concurrency:
+      group: kstorm-windows-${{ github.ref }}
+      cancel-in-progress: true
     env:
       AUTOBUILD_VSVER: "170"
       AUTOBUILD_VARIABLES_FILE: ${{ github.workspace }}/build-variables/variables
