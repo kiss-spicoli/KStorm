@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-30, the commit after `kstorm` `93359bea398` (GitHub build workflow).
-- **KStorm's own work:** 140 commits (Kissmy Spicoli, Oct 18 to Oct 30), 205 files, about 15,900
+- **Last updated:** 2026-10-30, the commit after `kstorm` `b2ae4c858bc` (shader check fixed).
+- **KStorm's own work:** 142 commits (Kissmy Spicoli, Oct 18 to Oct 30), 206 files, about 16,000
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -311,9 +311,9 @@ Details: `doc/kstorm-rebrand-plan.md`.
 - **Design and research docs.** Lighting factors, UI design and decisions; no code. (`148ca6d0c3f`, `bc9e1ec3fc3`, `6481f69ea73`, `ac19c718818`, `8cf26fc8201`,
   `213d02378ce`, `12b3036fe26`)
 - **This document.** (`161a0c9d973`)
-- **KStorm's own GitHub build.** A workflow started by hand checks changed shaders and builds an
-  unsigned Windows installer, with no secrets. Firestorm's inherited workflows stay in the repo.
-  (`fd5e6b6b825`)
+- **KStorm's own GitHub build.** A workflow started by hand checks changed shaders in the variants
+  the viewer compiles and builds an unsigned Windows installer, with no secrets. Firestorm's
+  inherited workflows stay in the repo. (`fd5e6b6b825`, `d97e886eaaf`)
 
 ## Keyboard shortcuts
 
