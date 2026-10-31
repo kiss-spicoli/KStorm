@@ -523,6 +523,9 @@ void KSFloaterLighting::applyFirstOpenLayout()
     }
     saveDocked(docked);
     closeDockedPanes();
+    // After the close, which records each pane's state. With none saved, the dock button opens
+    // every pane collapsed; a pane is only wide once it is opened.
+    gSavedSettings.setString("KSLightingPaneStates", "");
 
     // How far below the launcher's top its panes reach. A pane's top follows its button, so the
     // tall panes on the low buttons reach below the launcher (Depth of field, by 172 px). Only
