@@ -347,6 +347,8 @@ Function CheckCPUFlagsAVX2
     Return
 FunctionEnd
 
+# <KS:KS> No prompt to fetch a different build; see the disabled call below.
+!if 0
 Function CheckCPUFlagsAVX2_Prompt
     Push $1
     Push $3
@@ -367,6 +369,8 @@ Function CheckCPUFlagsAVX2_Prompt
       Pop $1
       Return
 FunctionEnd
+!endif
+# </KS:KS>
 
 # <FS:Ansariel> Optional start menu entry
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

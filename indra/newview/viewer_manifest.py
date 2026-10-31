@@ -325,7 +325,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         global CHANNEL_VENDOR_BASE
         # a standard map of strings for replacing in the templates
         #<FS:TS> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
-        channel_base = "Phoenix-" + CHANNEL_VENDOR_BASE
+        # <KS:KS> no Phoenix- prefix
+        #channel_base = "Phoenix-" + CHANNEL_VENDOR_BASE
+        channel_base = CHANNEL_VENDOR_BASE
+        # </KS:KS>
         if self.fs_is_opensim():
             channel_base = channel_base + "OS"
         #</FS:TS>

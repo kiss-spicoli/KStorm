@@ -136,7 +136,7 @@ class FSViewerManifest:
         self.fs_save_symbols("linux")
 
     def fs_linux_tar_excludes(self):
-        installer_name_components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
+        installer_name_components = [self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
         installer_name = "_".join(installer_name_components)
         return "--exclude=%s/bin/.debug" % installer_name
 
@@ -154,7 +154,7 @@ class FSViewerManifest:
         except:
             print("Cannot run pdbcopy, packaging private symbols")
 
-        tarName = "%s/Phoenix_%s_%s_%s_pdbsymbols-windows-%d.tar.xz" % (self.args['configuration'].lower(),
+        tarName = "%s/%s_%s_%s_pdbsymbols-windows-%d.tar.xz" % (self.args['configuration'].lower(),
                                                                         self.fs_channel_legacy_oneword(),
                                                                         '-'.join(self.args['version']),
                                                                         self.args['viewer_flavor'],
@@ -196,7 +196,7 @@ class FSViewerManifest:
                                                                        osname,
                                                                        self.address_size))):
             # Rename to add version numbers
-            sName = "%s/Phoenix_%s_%s_%s_symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
+            sName = "%s/%s_%s_%s_symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
                                                                        self.fs_channel_legacy_oneword(),
                                                                        '-'.join( self.args['version'] ),
                                                                        self.args['viewer_flavor'],
@@ -244,7 +244,7 @@ class FSViewerManifest:
         from shutil import rmtree
         import tarfile
 
-        components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
+        components = [self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
         symbolsName = "_".join(components)
         symbolsName = symbolsName + "_" + self.args["viewer_flavor"] + "-" + osname + "-" + str(self.address_size) + ".tar.bz2"
 
