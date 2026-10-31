@@ -252,6 +252,7 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="flickr"
            />
+<!-- <KS:KS> Primfeed is hidden in KStorm.
   <command name="primfeed"
            available_in_toybox="true"
            icon="Command_Primfeed_Icon"
@@ -261,7 +262,8 @@
            execute_parameters="primfeed"
            is_running_function="Floater.IsOpen"
            is_running_parameters="primfeed"
-           />           
+           />
+</KS:KS> -->           
   <command name="speak"
            available_in_toybox="true"
            icon="Command_Speak_Icon"

@@ -112,6 +112,7 @@
      function="Snapshot.SendToFlickr"/>
   </button>
   </layout_panel>
+<!-- <KS:KS> Primfeed is hidden in KStorm.
   <layout_panel
    auto_resize="false"
    user_resize="false"
@@ -136,6 +137,7 @@
      function="Snapshot.SendToPrimfeed"/>
   </button>
   </layout_panel>
+</KS:KS> -->
   <layout_panel
    auto_resize="false"
    user_resize="false"
