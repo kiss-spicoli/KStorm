@@ -1,4 +1,4 @@
-<img align="left" width="100" height="100" src="doc/kstorm_256.png" alt="Logo of KStorm viewer"/>
+<img align="left" width="100" height="100" src="indra/newview/skins/default/textures/kstorm_icon.png" alt="Logo of KStorm viewer"/>
 
 # KStorm - A research viewer for photographers
 
