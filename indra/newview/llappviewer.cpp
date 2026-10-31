@@ -3701,6 +3701,9 @@ bool LLAppViewer::initConfiguration()
 // [RLVa:KB] - Patch: RLVa-2.1.0
     if (LLControlVariable* pControl = gSavedSettings.getControl(RlvSettingNames::Main))
     {
+        // <KS:KS> RLVa is retired: clear an "on" saved by an earlier build.
+        pControl->resetToDefault();
+        // </KS:KS>
         if ( (pControl->getValue().asBoolean()) && (pControl->hasUnsavedValue()) )
         {
             pControl->resetToDefault();

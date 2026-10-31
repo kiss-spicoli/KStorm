@@ -1543,7 +1543,10 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 
 bool RlvHandler::canEnable()
 {
-    return LLStartUp::getStartupState() <= STATE_LOGIN_CLEANUP;
+    // <KS:KS> RLVa is retired in KStorm and can't be switched on.
+    //return LLStartUp::getStartupState() <= STATE_LOGIN_CLEANUP;
+    return false;
+    // </KS:KS>
 }
 
 bool RlvHandler::setEnabled(bool fEnable)

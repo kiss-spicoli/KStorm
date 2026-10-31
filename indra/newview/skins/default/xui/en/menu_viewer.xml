@@ -4083,7 +4083,8 @@
              parameter="FSAlwaysFly" />
         </menu_item_check>
 
-        <menu_item_check
+        <!-- <KS:KS> RLVa is retired in KStorm.
+<menu_item_check
            label="RestrainedLove API"
            name="RLV API">
               <menu_item_check.on_check
@@ -4095,6 +4096,7 @@
               <menu_item_check.on_visible
                function="RLV.MainToggleVisible" />
         </menu_item_check>
+</KS:KS> -->
 
         <menu_item_call
          label="Show Debug Settings"
