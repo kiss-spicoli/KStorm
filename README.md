@@ -94,11 +94,11 @@ Prerequisites: see [doc/building_windows.md](doc/building_windows.md). KStorm bu
 FMOD, no Havok) configuration with OpenSim support off:
 
 ```
-autobuild configure -A 64 -c ReleaseFS_open -- --chan Research --no-opensim -DLL_TESTS:BOOL=FALSE
+autobuild configure -A 64 -c ReleaseFS_open -- --chan Research --no-opensim --avx2 -DLL_TESTS:BOOL=FALSE
 autobuild build -A 64 -c ReleaseFS_open --no-configure
 ```
 
-The channel is `KStorm-Research`.
+The channel is `KStorm-Research`. The build assumes AVX2.
 
 ## Troubleshooting
 
@@ -106,8 +106,9 @@ KStorm has no support team or issue tracker. Firestorm's and Linden Lab's suppor
 problems with this viewer. Questions about your Second Life account still go to
 [Second Life support](https://support.secondlife.com/).
 
-- **System requirements.** KStorm runs on 64-bit Windows with a graphics card and an up-to-date
-  driver. The current build runs on processors with or without AVX2.
+- **System requirements.** KStorm assumes 202x hardware: 64-bit Windows, a processor with AVX2, a
+  graphics card with an up-to-date driver, and a display of at least 1K, with 4K preferred. It won't
+  run on a processor without AVX2.
 - **Antivirus.** Security software can slow the viewer or block parts of it. If it does, add
   exclusions for the install folder (normally `C:\Program Files\KStorm-Research`), the settings
   folder `%APPDATA%\KStorm_x64` and the cache folder `%LOCALAPPDATA%\KStorm_x64`.
