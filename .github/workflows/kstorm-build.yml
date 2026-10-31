@@ -124,4 +124,6 @@ jobs:
           esac
           installer="$(find dist -name '*Setup.exe' -print -quit)"
           test -n "$installer"
-          gh release create "$TAG" "$installer" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA"             --title "$TAG" --draft --prerelease             --notes "Unsupported research viewer for Second Life. The installer is unsigned, so Windows SmartScreen will warn."
+          gh api "repos/$GITHUB_REPOSITORY/contents/.github/kstorm-release-page.md?ref=$GITHUB_SHA" -H "Accept: application/vnd.github.raw" > page.md
+          sed -i -e "s/@VERSION@/${TAG#kstorm-}/g" -e "s/@TAG@/$TAG/g" page.md
+          gh release create "$TAG" "$installer" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA"             --title "$TAG" --draft --prerelease             --notes-file page.md
