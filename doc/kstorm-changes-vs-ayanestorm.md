@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-31, with the merge of `fix-ks-uninstaller-settings-folder`.
-- **KStorm's own work:** 162 commits (Kissmy Spicoli, Oct 18 to Oct 31), 300 files, about 17,000
+- **Last updated:** 2026-10-31, with the merge of `fix-ks-readme-logo`.
+- **KStorm's own work:** 164 commits (Kissmy Spicoli, Oct 18 to Oct 31), 300 files, about 17,000
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -317,8 +317,8 @@ is built on. (`3b2b3c33241`)
 - **Releases.** The GitHub workflow can make a draft pre-release, using the release page in
   `.github/kstorm-release-page.md`, which carries the disclosures and privacy statement Linden
   Lab's viewer policy requires. (`527fa9878f4`, `34ebe455a19`)
-- **Notification icon.** `kstorm_icon.png`, used for Growl notifications, has new art.
-  (`092ac4c97ea`)
+- **Notification icon.** `kstorm_icon.png`, used for Growl notifications, has new art, and the
+  README's title now shows it too. (`092ac4c97ea`, `e6c2934413d`)
 
 Details: `doc/kstorm-rebrand-plan.md`.
 
