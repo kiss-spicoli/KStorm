@@ -7,9 +7,7 @@
 	<string name="SECOND_LIFE_GRID">
 		Second Life-Grid:
 	</string>
-	<string name="SUPPORT_SITE">
-		Firestorm Support-Portal
-	</string>
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="StartupLoading">
 		[APP_NAME] wird geladen...
 	</string>
@@ -213,7 +211,7 @@ Voice-Serverversion: [VOICE_VERSION]
 		Beenden
 	</string>
 	<string name="create_account_url">
-		https://www.firestormviewer.org/join-secondlife/
+		https://join.secondlife.com/
 	</string>
 	<string name="AgniGridLabel">
 		Second Life Main Grid (Agni)
@@ -226,7 +224,7 @@ Voice-Serverversion: [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
-https://www.firestormviewer.org/choose-your-platform/
+https://github.com/kiss-spicoli/KStorm/releases
 
 Weitere Informationen finden Sie auf der folgenden FAQ-Seite: 
 http://secondlife.com/viewer-access-faq
@@ -3314,7 +3312,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="MBVideoDrvErr">
 		[APP_NAME] kann nicht ausgeführt werden, da die Treiber Ihrer Videokarte entweder nicht richtig installiert oder veraltet sind, oder die entsprechende Hardware nicht unterstützt wird. Bitte vergewissern Sie sich, dass Sie die aktuellsten Treiber für die Videokarte installiert haben. Falls Sie die aktuellsten Treiber bereits installiert haben, installieren Sie diese bitte erneut.
 
-Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_SITE].
+Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</string>
 	<string name="MBOutOfMemoryTitle">Kein Arbeitsspeicher verfügbar</string>
 	<string name="MBOutOfMemoryErr">
@@ -3325,7 +3323,7 @@ Falls wenig Arbeitsspeicher auf Ihrem Computers verfügbar ist, beenden Sie ande
 	<string name="MBMissingFile">
 		[APP_NAME] konnte einige der benötigten Dateien nicht finden oder auf sie zugreifen und muss daher beendet werden.
 
-Bitte installieren Sie den Viewer von [DOWNLOAD_URL] erneut und wenden Sie sich an [SUPPORT_SITE] falls das Problem nach einer Neuinstallation weiterhin besteht.
+Bitte installieren Sie den Viewer von [DOWNLOAD_URL] erneut und wenden Sie sich an https://github.com/kiss-spicoli/KStorm#troubleshooting falls das Problem nach einer Neuinstallation weiterhin besteht.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Bartschatten

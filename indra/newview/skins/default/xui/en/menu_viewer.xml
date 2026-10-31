@@ -962,6 +962,7 @@
           function="Floater.Toggle"
           parameter="flickr"/>
       </menu_item_call>
+<!-- <KS:KS> Primfeed is hidden in KStorm.
       <menu_item_call
         label="Primfeed..."
         name="Primfeed">
@@ -969,6 +970,7 @@
           function="Floater.Toggle"
           parameter="primfeed"/>
       </menu_item_call>
+</KS:KS> -->
       <menu_item_call
         label="Discord..."
         name="Discord">
@@ -2810,13 +2812,14 @@
        </menu_item_call>
        <menu_item_separator/>
     	<menu_item_call
-             label="Firestorm Blog"
-             name="Firestorm Blog">
+             label="KStorm on GitHub"
+             name="KStorm on GitHub">
              <menu_item_call.on_click
              function="PromptShowURL"
              name="firestorm_blog_url"
-             parameter="WebLaunchExternalTarget,https://www.firestormviewer.org/" />
+             parameter="WebLaunchExternalTarget,https://github.com/kiss-spicoli/KStorm" />
        </menu_item_call>
+<!-- <KS:KS> Primfeed is hidden in KStorm.
     	<menu_item_call
              label="Firestorm Primfeed"
              name="Firestorm Primfeed">
@@ -2825,6 +2828,8 @@
              name="firestorm_primfeed_url"
              parameter="WebLaunchExternalTarget,https://www.primfeed.com/firestorm-viewer" />
        </menu_item_call>
+</KS:KS> -->
+<!-- <KS:KS> Firestorm's own social pages.
     	<menu_item_call
              label="Firestorm Flickr"
              name="Firestorm Flickr">
@@ -2833,6 +2838,8 @@
              name="firestorm_flickr_url"
              parameter="WebLaunchExternalTarget,http://www.flickr.com/groups/firestormviewer/pool/" />
        </menu_item_call>
+</KS:KS> -->
+<!-- <KS:KS> Firestorm's own social pages.
     	<menu_item_call
              label="Firestorm YouTube"
              name="Firestorm YouTube">
@@ -2841,6 +2848,8 @@
              name="firestorm_youtube_url"
              parameter="WebLaunchExternalTarget,http://www.youtube.com/user/PhoenixViewerSL" />
        </menu_item_call>
+</KS:KS> -->
+<!-- <KS:KS> Firestorm's own social pages.
     	<menu_item_call
              label="Firestorm Twitter"
              name="Firestorm Twitter">
@@ -2849,6 +2858,8 @@
              name="firestorm_twitter_url"
              parameter="WebLaunchExternalTarget,https://twitter.com/phoenixviewersl" />
        </menu_item_call>
+</KS:KS> -->
+<!-- <KS:KS> Firestorm's own social pages.
     	<menu_item_call
              label="Firestorm Plurk"
              name="Firestorm Plurk">
@@ -2857,6 +2868,7 @@
              name="firestorm_plurk_url"
              parameter="WebLaunchExternalTarget,http://www.plurk.com/ThePhoenixViewerProject" />
        </menu_item_call>
+</KS:KS> -->
        <menu_item_separator/>
        <menu_item_call
              label="Message of the day"
@@ -2885,25 +2897,29 @@
             function="ToggleUIHints"/>
         </menu_item_check>
         
+        <!-- <KS:KS> Was "Firestorm Wiki", https://wiki.firestormviewer.org -->
         <menu_item_call
-         label="Firestorm Wiki"
-         name="Firestorm Wiki"
+         label="KStorm Help"
+         name="KStorm Help"
 	     shortcut="F1">
              <menu_item_call.on_click
              function="PromptShowURL"
              name="script_library_url"
-             parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org" />
+             parameter="WebLaunchExternalTarget,https://github.com/kiss-spicoli/KStorm#readme" />
         </menu_item_call>
         
+        <!-- <KS:KS> Firestorm's troubleshooting page doesn't cover KStorm.
         <menu_item_call
-         label="Troubleshooting"
+         label="Firestorm Troubleshooting"
          name="Troubleshooting">
             <menu_item_call.on_click
              function="PromptShowURL"
              name="wiki_troubleshooting_url"
              parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org/firestorm_troubleshooting" />
         </menu_item_call>
+        </KS:KS> -->
 	   
+        <!-- <KS:KS> Firestorm's support group and classes don't cover KStorm.
         <menu_item_call
          label="Join Firestorm Support Group"
          name="firestorm_support_group">
@@ -2923,7 +2939,9 @@
              name="wiki_classes_url"
              parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org/firestorm_classes" />
         </menu_item_call>
+        </KS:KS> -->
 
+        <!-- <KS:KS> Firestorm's own events.
         <menu_item_call
          label="Firestorm Events Calendar"
          name="Firestorm Events Calendar">
@@ -2932,6 +2950,7 @@
              name="events_calendar_url"
              parameter="WebLaunchExternalTarget,https://teamup.com/ksxdajnbw9mvw7cbwz" />
         </menu_item_call>
+        </KS:KS> -->
 
         <menu_item_check
          label="Guidebook"
@@ -4076,7 +4095,8 @@
              parameter="FSAlwaysFly" />
         </menu_item_check>
 
-        <menu_item_check
+        <!-- <KS:KS> RLVa is retired in KStorm.
+<menu_item_check
            label="RestrainedLove API"
            name="RLV API">
               <menu_item_check.on_check
@@ -4088,6 +4108,7 @@
               <menu_item_check.on_visible
                function="RLV.MainToggleVisible" />
         </menu_item_check>
+</KS:KS> -->
 
         <menu_item_call
          label="Show Debug Settings"
@@ -6039,18 +6060,22 @@
         <menu_item_call.on_click
          function="Advanced.CompressFileTest" />
       </menu_item_call>
+<!-- <KS:KS> Primfeed is hidden in KStorm.
       <menu_item_call
        label="Primfeed Auth Test"
        name="primfeed_auth_test">
         <menu_item_call.on_click
          function="Advanced.PrimfeedAuth" />
       </menu_item_call>
+</KS:KS> -->
+<!-- <KS:KS> Primfeed is hidden in KStorm.
       <menu_item_call
        label="Primfeed Auth Reset"
        name="primfeed_auth_clear">
         <menu_item_call.on_click
          function="Advanced.PrimfeedAuthReset" />
       </menu_item_call>
+</KS:KS> -->
 
       <menu_item_call
          label="Enable Visual Leak Detector"

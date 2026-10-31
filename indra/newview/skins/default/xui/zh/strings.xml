@@ -18,9 +18,7 @@
 	<string name="SECOND_LIFE_GRID">
 		第二人生
 	</string>
-	<string name="SUPPORT_SITE">
-		Firestorm支援網站
-	</string>
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
 	<string name="VIEWER_GENERATION">
 		檢視器[VERSION]
@@ -239,7 +237,7 @@ Voice Server Version: [VOICE_VERSION]
 		退出
 	</string>
 	<string name="create_account_url">
-		https://www.firestormviewer.org/join-secondlife/
+		https://join.secondlife.com/
 	</string>
 	<string name="AgniGridLabel">
 		第二人生主網路 (Agni)
@@ -248,11 +246,11 @@ Voice Server Version: [VOICE_VERSION]
 		第二人生測試網路 (Aditi)
 	</string>
 	<string name="ViewerDownloadURL">
-		https://www.firestormviewer.org/choose-your-platform/
+		https://github.com/kiss-spicoli/KStorm/releases
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 目前版本檢視器已無法繼續登入第二人生, 請前往以下網站下載最新版本檢視器:
-https://www.firestormviewer.org/choose-your-platform/
+https://github.com/kiss-spicoli/KStorm/releases
 
 更多相關資訊, 請檢視下面的常見問題解答:
 http://secondlife.com/viewer-access-faq
@@ -841,7 +839,7 @@ support@secondlife.com.
 	</string>
 	<!-- <KS:KS> rebrand: was https://wiki.firestormviewer.org/changelog:firestorm_change_log_ -->
 	<string name="RELEASE_NOTES_BASE_URL" translate="false">
-		https://github.com/kiss-spicoli/phoenix-firestorm#
+		https://github.com/kiss-spicoli/KStorm#
 	</string>
 	<string name="LoadingData">
 		載入中...
@@ -3468,7 +3466,7 @@ support@secondlife.com.
 	<string name="MBVideoDrvErr">
 		[APP_NAME] 無法執行，這可能因為你的顯示卡驅動程式安裝不當、版本過舊，或者你的硬體不受支援。請確定你安裝了最新的顯示卡驅動程式。如果已裝了最新驅動程式，請再重新安裝。
 
-如果你持續收到此訊息，請聯絡 [SUPPORT_SITE].
+如果你持續收到此訊息，請聯絡 https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</string>
 	<string name="MBOutOfMemoryTitle">
 		記憶體不足
@@ -3481,7 +3479,7 @@ support@secondlife.com.
 	<string name="MBMissingFile">
 		[APP_NAME] 無法存取或找到所需的某些檔案，將被關閉。
 
-請從 [DOWNLOAD_URL] 重新安裝檢視器，如果重新安裝後問題仍然存在，請聯絡 [SUPPORT_SITE]。
+請從 [DOWNLOAD_URL] 重新安裝檢視器，如果重新安裝後問題仍然存在，請聯絡 https://github.com/kiss-spicoli/KStorm#troubleshooting。
 	</string>
 	<!-- Avatar Shape Information -->
 	<string name="5 O'Clock Shadow">

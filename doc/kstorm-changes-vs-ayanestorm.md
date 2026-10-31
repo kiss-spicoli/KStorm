@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-30, the commit after `kstorm` `b2ae4c858bc` (shader check fixed).
-- **KStorm's own work:** 142 commits (Kissmy Spicoli, Oct 18 to Oct 30), 206 files, about 16,000
+- **Last updated:** 2026-10-30, with the merge of `fix-ks-release-blockers` (release preparation).
+- **KStorm's own work:** 157 commits (Kissmy Spicoli, Oct 18 to Oct 30), 300 files, about 17,000
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -292,6 +292,31 @@ is built on. (`3b2b3c33241`)
   `494dea04776`)
 - **No Report Problem.** Help > Report Problem, which files bugs with Firestorm, is hidden on
   the login screen and in world. (`721ecc549f3`)
+- **No contact with Firestorm's servers.** The viewer used to fetch Firestorm's messages, version
+  blocks, team list, asset list, client tags, grid list and grid news at every start. All of that
+  is gone from the code and settings, so startup no longer waits for it. The grid news checkbox is
+  gone from Preferences. Firestorm's team flags and `/reqsysinfo` no longer apply, and neither does
+  its global asset list. (`5726da43aa1`, `431889dbdee`)
+- **Links.** Help and F1 open KStorm's README, whose new Troubleshooting section replaces the wiki
+  links in messages and Preferences. Downloads go to KStorm's Releases page; sign-up and account
+  support go to Second Life. Messages about a broken install point to the README. Firestorm's
+  troubleshooting, support group, classes, events and social menu items are gone, and text like
+  `FIRE-123` in chat no longer links to Firestorm's JIRA. (`c12d8898d9a`, `431889dbdee`,
+  `87ea69ddb5f`)
+- **Primfeed hidden.** Its toolbar button, menu items and snapshot button are gone, and Firestorm's
+  API key is deleted from the settings. (`82c2d9cf3fc`)
+- **RLVa off.** RLVa can't be switched on, a saved "on" is cleared at startup, and its menu and
+  Preferences controls are gone. Items that depend on RestrainedLove won't respond. (`be0e9d5a3f3`)
+- **Installer.** No `Phoenix` in the file names, a `SOFTWARE\KStorm` registry key, KStorm as the
+  publisher in the installed apps list, and no prompt to download another build.
+  (`9a3a7ed93f9`, `5007ac0e996`)
+- **AVX2 and current hardware.** Builds assume AVX2 and 202x hardware, with a display of at least
+  1K and 4K preferred. There is no build for older processors. (`4066bfbe5fe`)
+- **Releases.** The GitHub workflow can make a draft pre-release, using the release page in
+  `.github/kstorm-release-page.md`, which carries the disclosures and privacy statement Linden
+  Lab's viewer policy requires. (`527fa9878f4`, `34ebe455a19`)
+- **Notification icon.** `kstorm_icon.png`, used for Growl notifications, has new art.
+  (`092ac4c97ea`)
 
 Details: `doc/kstorm-rebrand-plan.md`.
 
@@ -303,6 +328,8 @@ Details: `doc/kstorm-rebrand-plan.md`.
   (`491e2c4b964`)
 - **Older skies.** They no longer look darker than they should, because probe fill can never
   drop to zero. (`532ab810f21`)
+- **Conversations window.** Its minimum height is halved to 141 px, so it can be made much
+  shorter. Torn-off windows keep their own limits. (`c8b73f87333`)
 
 ## 13. Renames and documentation
 
@@ -355,3 +382,9 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
   display text
 - for the login screen: the login panel (`fspanellogin.cpp`, `panel_fs_nui_login.xml`), the icon
   list (`textures.xml`) and the Help menus (`menu_login.xml`, `menu_viewer.xml`)
+- for release preparation: the Firestorm feed and grid fetches (`fsdata.cpp`, `llstartup.cpp`,
+  `llviewernetwork.cpp`, `settings.xml`), RLVa (`rlvhandler.cpp`, `llappviewer.cpp`), chat links
+  (`llurlregistry.cpp`), error messages (`llappviewer.cpp`, `lltransutil.cpp`, `llerror.cpp`), the
+  installer and packaging scripts, Preferences panels, and links in the skin files, including the
+  translated ones
+- for the Conversations window's minimum height: `fsfloaterimcontainer.cpp`

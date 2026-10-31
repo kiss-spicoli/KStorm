@@ -18,9 +18,7 @@
 	<string name="SECOND_LIFE_GRID">
 		Сеть Second Life
 	</string>
-	<string name="SUPPORT_SITE">
-		Портал технической поддержки Firestorm
-	</string>
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="StartupDetectingHardware">
 		Обнаружение оборудования...
 	</string>
@@ -227,7 +225,7 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 		Выйти
 	</string>
 	<string name="create_account_url">
-		https://www.firestormviewer.org/join-secondlife/
+		https://join.secondlife.com/
 	</string>
 	<string name="AgniGridLabel">
 		Second Life Главная Сетка (Agni)
@@ -236,11 +234,11 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 		Second Life Бета-тест Сетка (Aditi)
 	</string>
 	<string name="ViewerDownloadURL">
-		https://www.firestormviewer.org/choose-your-platform/
+		https://github.com/kiss-spicoli/KStorm/releases
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		У клиента, которым вы пользуетесь, больше нет доступа к игре Second Life. Загрузить новую версию клиента можно по адресу:
-https://www.firestormviewer.org/choose-your-platform/
+https://github.com/kiss-spicoli/KStorm/releases
 
 Дополнительные сведения смотрите в разделе вопросов и ответов по адресу:
 http://secondlife.com/viewer-access-faq
@@ -3264,7 +3262,7 @@ support@secondlife.com.
 	</string>
 	<string name="MBVideoDrvErr">
 		Не удается запустить приложение [APP_NAME], поскольку драйверы видеокарты неправильно установлены, устарели или предназначены для оборудования, которое не поддерживается. Установите или переустановите последние драйверы видеокарты.
-Если это сообщение продолжает отображаться, обратитесь на сайт [SUPPORT_SITE].
+Если это сообщение продолжает отображаться, обратитесь на сайт https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</string>
 	<string name="MBOutOfMemoryTitle">
 		недостаточно памяти
@@ -3277,7 +3275,7 @@ support@secondlife.com.
 	<string name="MBMissingFile">
 		[APP_NAME] не удалось получить доступ к некоторым нужным файлам или найти их, и будет закрыто.
 
-Пожалуйста, переустановите программу просмотра с [DOWNLOAD_URL] и обратитесь на [SUPPORT_SITE], если проблема не устранится после переустановки.
+Пожалуйста, переустановите программу просмотра с [DOWNLOAD_URL] и обратитесь на https://github.com/kiss-spicoli/KStorm#troubleshooting, если проблема не устранится после переустановки.
 	</string>
 	<string name="5 O'Clock Shadow">
 		5 часовая тень

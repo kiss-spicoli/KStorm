@@ -10,10 +10,12 @@
     bg_opaque_color="0.16 0.16 0.16 1"
     background_opaque="true"
     width="1024">
+  <!-- <KS:KS> Second Life's login page; was https://phoenixviewer.com/app/loginV3/ -->
   <panel.string
      name="real_url" translate="false">
-     https://phoenixviewer.com/app/loginV3/
+          https://viewer-splash.secondlife.com/
   </panel.string>
+  <!-- </KS:KS> -->
   <string name="reg_in_client_url" translate="false">
     http://secondlife.eniac15.lindenlab.com/reg-in-client/
   </string>

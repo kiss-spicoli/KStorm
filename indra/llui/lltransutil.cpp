@@ -45,12 +45,19 @@ bool LLTransUtil::parseStrings(const std::string& xml_filename, const std::set<s
     if (!success)
     {
         const std::string error_string =
-            "Firestorm couldn't access some of the files it needs and will be closed."
-            "\n\nPlease reinstall viewer from https://www.firestormviewer.org/download and "
-            "contact https://www.firestormviewer.org/support if issue persists after reinstall.";
+            // <KS:KS> KStorm's name and downloads; KStorm is unsupported.
+            //"Firestorm couldn't access some of the files it needs and will be closed."
+            //"\n\nPlease reinstall viewer from https://www.firestormviewer.org/download and "
+            //"contact https://www.firestormviewer.org/support if issue persists after reinstall.";
+            "KStorm couldn't access some of the files it needs and will be closed."
+            "\n\nPlease reinstall viewer from https://github.com/kiss-spicoli/KStorm/releases";
+            // </KS:KS>
         LLError::LLUserWarningMsg::show(error_string, LLError::LLUserWarningMsg::ERROR_MISSING_FILES);
         gDirUtilp->dumpCurrentDirectories(LLError::LEVEL_WARN);
-        LL_ERRS() << "Couldn't load string table " << xml_filename << ". Please reinstall viewer from https://www.firestormviewer.org/download and contact https://www.firestormviewer.org/support if issue persists after reinstall." << LL_ENDL;
+        // <KS:KS> KStorm's downloads; KStorm is unsupported.
+        //LL_ERRS() << "Couldn't load string table " << xml_filename << ". Please reinstall viewer from https://www.firestormviewer.org/download and contact https://www.firestormviewer.org/support if issue persists after reinstall." << LL_ENDL;
+        LL_ERRS() << "Couldn't load string table " << xml_filename << ". Please reinstall viewer from https://github.com/kiss-spicoli/KStorm/releases" << LL_ENDL;
+        // </KS:KS>
         return false;
     }
 

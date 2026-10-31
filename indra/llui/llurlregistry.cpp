@@ -112,7 +112,9 @@ LLUrlRegistry::LLUrlRegistry()
     registerUrl(new LLUrlEntryEmail());
     registerUrl(new LLUrlEntryIPv6());
     // parse jira issue names to links -KC
-    registerUrl(new LLUrlEntryJira());
+    // <KS:KS> Issue names would link to Firestorm's JIRA
+    //registerUrl(new LLUrlEntryJira());
+    // </KS:KS>
 }
 
 LLUrlRegistry::~LLUrlRegistry()

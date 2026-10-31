@@ -18,9 +18,7 @@
 	<string name="SECOND_LIFE_GRID">
 		Second Life Ağı
 	</string>
-	<string name="SUPPORT_SITE">
-		Firestorm Destek Portalı
-	</string>
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="StartupDetectingHardware">
 		Donanım saptanıyor...
 	</string>
@@ -194,7 +192,7 @@ Ses Sunucusu Sürümü: [VOICE_VERSION]
 		Çık
 	</string>
 	<string name="create_account_url">
-		https://www.firestormviewer.org/join-secondlife/
+		https://join.secondlife.com/
 	</string>
 	<string name="AgniGridLabel">
 		Second Life Ana Ağı (Agni)
@@ -2987,7 +2985,7 @@ Bu iletiyi almaya devam ederseniz, lütfen [SUPPORT_SITE] bölümüne başvurun.
 	<string name="MBVideoDrvErr">
 		[APP_NAME] çalışamıyor çünkü video kartı sürücüleriniz düzgün yüklenemedi, süresi geçmiş durumda veya desteklenmeyen donanımlar için geliştirilmiş. Lütfen en yeni video kartı sürücülerine sahip olduğunuza emin olun; en yeni sürücüler mevcutsa da bunları tekrar yüklemeyi deneyin.
 
-Bu iletiyi almaya devam ederseniz, lütfen [SUPPORT_SITE] bölümüne başvurun.
+Bu iletiyi almaya devam ederseniz, lütfen https://github.com/kiss-spicoli/KStorm#troubleshooting bölümüne başvurun.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Bir Günlük Sakal

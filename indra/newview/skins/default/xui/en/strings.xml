@@ -20,8 +20,12 @@
 	<!-- </KS:KS> -->
 	<!-- </AS:Chanayane> -->
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
+	<!-- <KS:KS> Not Firestorm's support portal or downloads.
 	<string name="SUPPORT_SITE">Firestorm Support Portal</string>
-	<string name="DOWNLOAD_URL">https://www.firestormviewer.org/choose-your-platform/</string>
+	<string name="DOWNLOAD_URL">https://www.firestormviewer.org/choose-your-platform/</string> -->
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
+	<string name="DOWNLOAD_URL">https://github.com/kiss-spicoli/KStorm/releases</string>
+	<!-- </KS:KS> -->
 	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
 	<string name="VIEWER_GENERATION">Viewer [VERSION]</string>
 	<string name="SHORT_VIEWER_GENERATION">V[VERSION]</string>
@@ -145,17 +149,21 @@ Voice Server Version: [VOICE_VERSION]
 	<string name="LoginFailedNoNetwork">Network error: Could not establish connection, please check your network connection.</string>
 	<string name="LoginFailedHeader">Login failed.</string>
 	<string name="Quit">Quit</string>
-	<string name="create_account_url">https://www.firestormviewer.org/join-secondlife/</string>
+	<!-- <KS:KS> <string name="create_account_url">https://www.firestormviewer.org/join-secondlife/</string> -->
+	<string name="create_account_url">https://join.secondlife.com/</string>
+	<!-- </KS:KS> -->
 	
 	<string name="AgniGridLabel">Second Life Main Grid (Agni)</string>
 	<string name="AditiGridLabel">Second Life Beta Test Grid (Aditi)</string>
     <string name="AgniGridLabelShort">Agni (production)</string>
     <string name="AditiGridLabelShort">Aditi (beta)</string>
 	
-	<string name="ViewerDownloadURL">https://www.firestormviewer.org/choose-your-platform/</string>
+	<!-- <KS:KS> <string name="ViewerDownloadURL">https://www.firestormviewer.org/choose-your-platform/</string> -->
+	<string name="ViewerDownloadURL">https://github.com/kiss-spicoli/KStorm/releases</string>
+	<!-- </KS:KS> -->
 	<string name="LoginFailedViewerNotPermitted">
 The viewer you are using can no longer access Second Life. Please visit the following page to download a new viewer:
-https://www.firestormviewer.org/choose-your-platform/
+https://github.com/kiss-spicoli/KStorm/releases
 
 For more information, see our FAQ below:
 http://secondlife.com/viewer-access-faq</string>
@@ -421,7 +429,7 @@ are allowed.
 	<!-- Always mark translate="false" for strings that are nothing but URLs, as they don't need translation. -->
 	<!-- <KS:KS> rebrand: About release notes go to the KStorm home; the version the code appends lands after # and is ignored -->
 	<!-- <string name="RELEASE_NOTES_BASE_URL" translate="false">https://wiki.firestormviewer.org/changelog:firestorm_change_log_</string> -->
-	<string name="RELEASE_NOTES_BASE_URL" translate="false">https://github.com/kiss-spicoli/phoenix-firestorm#</string>
+	<string name="RELEASE_NOTES_BASE_URL" translate="false">https://github.com/kiss-spicoli/KStorm#</string>
 	<!-- </KS:KS> -->
 
 	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
@@ -1584,7 +1592,7 @@ Running in window.
 	<string name="MBVideoDrvErr">
 		[APP_NAME] is unable to run because your video card drivers did not install properly, are out of date, or are for unsupported hardware. Please make sure you have the latest video card drivers and even if you do have the latest, try reinstalling them.
 
-If you continue to receive this message, contact the [SUPPORT_SITE].
+If you continue to receive this message, see KStorm's README: https://github.com/kiss-spicoli/KStorm#troubleshooting
 	</string>
     <string name="MBOutOfMemoryTitle">Out Of Memory</string>
     <string name="MBOutOfMemoryErr">
@@ -1595,7 +1603,7 @@ If your computer's RAM is low, quit any heavy applications before runing [APP_NA
     <string name="MBMissingFile">
         [APP_NAME] couldn't access or find some of the files it needs and will be closed.
 
-Please reinstall viewer from [DOWNLOAD_URL] and contact [SUPPORT_SITE] if issue persists after reinstall.
+Please reinstall viewer from [DOWNLOAD_URL]. If the issue persists after reinstall, see KStorm's README: https://github.com/kiss-spicoli/KStorm#troubleshooting
     </string>
 
     <!-- Avatar Shape Information -->

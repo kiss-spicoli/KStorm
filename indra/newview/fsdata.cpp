@@ -58,7 +58,10 @@
 #include "rlvhelper.h"
 // [/RLVa:KB]
 
-const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
+// <KS:KS> No address for Firestorm's servers left in the viewer; see startDownload().
+//const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
+const std::string LEGACY_CLIENT_LIST_URL;
+// </KS:KS>
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 
 FSData::FSData() :
@@ -69,8 +72,10 @@ FSData::FSData() :
     mHeaders.insert("User-Agent", LLViewerMedia::getInstance()->getCurrentUserAgent());
     mHeaders.insert("viewer-version", LLVersionInfo::getInstance()->getChannelAndVersionFS());
 
-    mBaseURL = gSavedSettings.getBOOL("FSdataQAtest") ? "http://phoenixviewer.com/app/fsdatatest" : "http://phoenixviewer.com/app/fsdata";
-    mFSDataURL = mBaseURL + "/" + "data.xml";
+    // <KS:KS>
+    //mBaseURL = gSavedSettings.getBOOL("FSdataQAtest") ? "http://phoenixviewer.com/app/fsdatatest" : "http://phoenixviewer.com/app/fsdata";
+    //mFSDataURL = mBaseURL + "/" + "data.xml";
+    // </KS:KS>
 }
 
 FSData::~FSData()
@@ -233,7 +238,10 @@ void downloadComplete(LLSD const &aData, std::string const &aURL, bool success)
     FSData::getInstance()->processResponder(data, aURL, success, lastModified);
 }
 
-#ifdef OPENSIM
+// <KS:KS> Used only by the disabled download in startDownload().
+//#ifdef OPENSIM
+#if 0
+// </KS:KS>
 static void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::string const &aFilename)
 {
     LL_DEBUGS("fsdata") << aURL << ": " << aData << LL_ENDL;
@@ -294,6 +302,12 @@ static void downloadError(LLSD const &aData, std::string const &aURL)
 // call this just before the login screen and after the LLProxy has been setup.
 void FSData::startDownload()
 {
+    // <KS:KS> KStorm doesn't use Firestorm's data feed: those servers aren't KStorm's to load,
+    // and the feed carries Firestorm's own messages, version blocks and team list.
+    // Marked done so startup doesn't wait for it.
+    mFSDataDone = true;
+#if 0
+    // </KS:KS>
     mFSdataFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata.xml");
     mFSdataDefaultsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, llformat("fsdata_defaults.%s.xml", LLVersionInfo::getInstance()->getShortVersion().c_str()));
     mClientTagsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
@@ -348,11 +362,18 @@ void FSData::startDownload()
         FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( downloadCompleteScript, _1, url, filename ), boost::bind( downloadError, _1, url ), LLCore::HttpHeaders::ptr_t(), httpOpts);
     }
 #endif
+    // <KS:KS>
+#endif
+    // </KS:KS>
 }
 
 // call this _after_ the login screen to pick up grid data.
 void FSData::downloadAgents()
 {
+    // <KS:KS> No Firestorm team list or asset blacklist; see startDownload().
+    mAgentsDone = true;
+#if 0
+    // </KS:KS>
 #ifdef OPENSIM
     std::string filename_prefix = LLGridManager::getInstance()->getGridId();
 #else
@@ -408,6 +429,9 @@ void FSData::downloadAgents()
         httpOpts->setLastModified((long)last_modified);
         FSCoreHttpUtil::callbackHttpGetRaw(mAssetsURL, boost::bind(downloadComplete, _1, mAssetsURL, true), boost::bind(downloadComplete, _1, mAssetsURL, false), LLCore::HttpHeaders::ptr_t(), httpOpts);
     }
+    // <KS:KS>
+#endif
+    // </KS:KS>
 }
 
 void FSData::processData(const LLSD& fs_data)

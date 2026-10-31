@@ -14,9 +14,7 @@
 	<string name="SECOND_LIFE_GRID">
 		Red de Second Life
 	</string>
-	<string name="SUPPORT_SITE">
-		Portal de Soporte de Firestorm
-	</string>
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="StartupDetectingHardware">
 		Identificando el hardware...
 	</string>
@@ -191,11 +189,11 @@ Versión del servidor de voz: [VOICE_VERSION]
 		Salir
 	</string>
 	<string name="create_account_url">
-		https://www.firestormviewer.org/join-secondlife/
+		https://join.secondlife.com/
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Ya no puedes acceder a Second Life con el visor que estás utilizando. Visita la siguiente página para descargar un nuevo visor:
-https://www.firestormviewer.org/choose-your-platform/
+https://github.com/kiss-spicoli/KStorm/releases
  
 Si deseas obtener más información, consulta las preguntas frecuentes que aparecen a continuación:
 http://secondlife.com/viewer-access-faq
@@ -2985,7 +2983,7 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="MBVideoDrvErr">
 		[APP_NAME] no puede ejecutarse porque los drivers de tu tarjeta de vídeo o no están bien instalados, o no están actualizados, o son para hardware no admitido. Por favor, comprueba que tienes los drivers más actuales para tu tarjeta de vídeo, y, aunque los tengas, intenta reinstalarlos.
  
-Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
+Si sigues recibiendo este mensaje, contacta con https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Barba del día

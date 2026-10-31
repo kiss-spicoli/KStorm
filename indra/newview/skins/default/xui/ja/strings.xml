@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-	<string name="SUPPORT_SITE">
-		Firestormサポートポータル
-	</string>
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="StartupLoading">
 		[APP_NAME]をインストールしています…
 	</string>
@@ -205,7 +203,7 @@ LibVLCのバージョン：[LIBVLC_VERSION]
 	<string name="AditiGridLabelShort">Aditi（ベータ）</string>
 	<string name="LoginFailedViewerNotPermitted">
 		お使いの古いビューアでは、[CURRENT_GRID]にアクセスできません。以下のページから新しいビューアをダウンロードしてください：
-https://www.firestormviewer.org/choose-your-platform/
+https://github.com/kiss-spicoli/KStorm/releases
 
 詳細については、ＦＡＱを参照してください：
 https://secondlife.com/viewer-access-faq
@@ -3284,7 +3282,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		お使いのコンピューターのビデオカードのドライバが正常にインストールされていないか、古いまたはサポート対象外のため、[APP_NAME]を実行することができませんでした。
 最新のビデオカードドライバがインストールされているのを確認し、されている場合は再インストールをお試しください。
 
-このメッセージが何度も出る場合は、[SUPPORT_SITE]へご連絡ください。
+このメッセージが何度も出る場合は、https://github.com/kiss-spicoli/KStorm#troubleshootingへご連絡ください。
 	</string>
 	<string name="MBOutOfMemoryTitle">
 		メモリが超過
@@ -3297,7 +3295,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="MBMissingFile">
 		[APP_NAME]は、実行に必要なファイルの一部にアクセスできないか、ファイルが見つからなかったため閉じられます。
 
-[DOWNLOAD_URL] からビューアを再インストールてください。再インストール後も問題が解決しない場合は[SUPPORT_SITE] に連絡してください。
+[DOWNLOAD_URL] からビューアを再インストールてください。再インストール後も問題が解決しない場合はhttps://github.com/kiss-spicoli/KStorm#troubleshooting に連絡してください。
 	</string>
 	<!-- Avatar Shape Information -->
 	<string name="5 O'Clock Shadow">

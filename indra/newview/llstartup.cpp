@@ -1017,6 +1017,9 @@ bool idle_startup()
 
 // <AW: opensim>
 #ifndef SINGLEGRID
+        // <KS:KS> The default grid list is hosted by Firestorm; KStorm uses its built-in list.
+        sGridListRequestReady = true;
+#if 0
         if(!gSavedSettings.getBOOL("GridListDownload"))
         {
             sGridListRequestReady = true;
@@ -1036,6 +1039,8 @@ bool idle_startup()
             std::string url = gSavedSettings.getString("GridListDownloadURL");
             FSCoreHttpUtil::callbackHttpGet(url, last_modified, boost::bind(downloadGridlistComplete, _1), boost::bind(downloadGridlistError, _1, url));
         }
+#endif
+        // </KS:KS>
 #else
         sGridListRequestReady = true;
 #endif
@@ -3472,11 +3477,15 @@ bool idle_startup()
         }
         // </FS:Techwolf Lupindo>
         // <FS:PP>
+        // <KS:KS> This feed comes from Firestorm's server.
+#if 0
         if (gSavedSettings.getBOOL("AutoQueryGridStatus"))
         {
             FSCoreHttpUtil::callbackHttpGetRaw(gSavedSettings.getString("AutoQueryGridStatusURL"),
                 downloadGridstatusComplete, [](const LLSD& data) { downloadGridstatusError(data, gSavedSettings.getString("AutoQueryGridStatusURL")); });
         }
+#endif
+        // </KS:KS>
         // </FS:PP>
 
         // <FS:PP> Restore open IMs from previous session

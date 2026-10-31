@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-	<string name="SUPPORT_SITE">
-		Portale di supporto di Firestorm
-	</string>
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="StartupDetectingHardware">
 		Ricerca hardware...
 	</string>
@@ -207,7 +205,7 @@ Voice Server Version: [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Il viewer utilizzato non è più in grado di accedere a Second Life. Visitare questa pagina per scaricare un nuovo viewer:
-https://www.firestormviewer.org/downloads/
+https://github.com/kiss-spicoli/KStorm/releases/
 
 Per maggiori informazioni, consultare le domande frequenti alla pagina:
 http://secondlife.com/viewer-access-faq
@@ -3150,7 +3148,7 @@ Se il messaggio persiste, contattare [SUPPORT_SITE].
 	<string name="MBVideoDrvErr">
 		[APP_NAME] Non riesce ad avviarsi perchè i driver della scheda video non sono stati installati correttamente, non sono aggiornati, o sono per un hardware non supportato. Assicurati di avere i driver della scheda video più recenti e anche se li hai installati, prova a installarli di nuovo.
 
-Se il messaggio persiste, contattare [SUPPORT_SITE].
+Se il messaggio persiste, contattare https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</string>
 	<string name="MBOutOfMemoryTitle">
 		Fuori memoria
@@ -3163,7 +3161,7 @@ Se il tuo computer ha poca RAM, chiudi tutte le applicazioni pesanti prima di es
 	<string name="MBMissingFile">
 		[APP_NAME] non è riuscita ad accedere ad alcuni file necessari e verrà pertanto chiusa.
 
-Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il problema persiste dopo la reinstallazione.
+Reinstallare il browser da [DOWNLOAD_URL] e contattare https://github.com/kiss-spicoli/KStorm#troubleshooting se il problema persiste dopo la reinstallazione.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Barba leggera

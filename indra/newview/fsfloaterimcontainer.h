@@ -104,6 +104,10 @@ private:
         VOICE_STATE_ERROR
     };
 
+    // <KS:KS> Half the minimum height of the Conversations floater
+    void        computeResizeLimits(S32& new_min_width, S32& new_min_height) override;
+    // </KS:KS>
+
     LLFloater*  getCurrentVoiceFloater();
     void        onVoiceStateIndicatorChanged(const LLSD& data);
 

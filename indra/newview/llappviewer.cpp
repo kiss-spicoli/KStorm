@@ -3106,17 +3106,27 @@ bool LLAppViewer::initConfiguration()
         LLError::LLUserWarningMsg::showMissingFiles();
         if (gDirUtilp->fileExists(settings_file_list))
         {
+            // <KS:KS> KStorm's own downloads; KStorm is unsupported.
+            //LL_ERRS() << "Cannot load default configuration file settings_files.xml. "
+            //    << "Please reinstall viewer from https://www.firestormviewer.org/choose-your-platform/ "
+            //    << "and contact https://www.firestormviewer.org/support if issue persists after reinstall."
+            //    << LL_ENDL;
             LL_ERRS() << "Cannot load default configuration file settings_files.xml. "
-                << "Please reinstall viewer from https://www.firestormviewer.org/choose-your-platform/ "
-                << "and contact https://www.firestormviewer.org/support if issue persists after reinstall."
+                << "Please reinstall viewer from https://github.com/kiss-spicoli/KStorm/releases"
                 << LL_ENDL;
+            // </KS:KS>
         }
         else
         {
+            // <KS:KS> KStorm's own downloads; KStorm is unsupported.
+            //LL_ERRS() << "Default configuration file settings_files.xml not found. "
+            //    << "Please reinstall viewer from https://www.firestormviewer.org/choose-your-platform/ "
+            //    << "and contact https://www.firestormviewer.org/support if issue persists after reinstall."
+            //    << LL_ENDL;
             LL_ERRS() << "Default configuration file settings_files.xml not found. "
-                << "Please reinstall viewer from https://www.firestormviewer.org/choose-your-platform/ "
-                << "and contact https://www.firestormviewer.org/support if issue persists after reinstall."
+                << "Please reinstall viewer from https://github.com/kiss-spicoli/KStorm/releases"
                 << LL_ENDL;
+            // </KS:KS>
         }
     }
 
@@ -3691,6 +3701,9 @@ bool LLAppViewer::initConfiguration()
 // [RLVa:KB] - Patch: RLVa-2.1.0
     if (LLControlVariable* pControl = gSavedSettings.getControl(RlvSettingNames::Main))
     {
+        // <KS:KS> RLVa is retired: clear an "on" saved by an earlier build.
+        pControl->resetToDefault();
+        // </KS:KS>
         if ( (pControl->getValue().asBoolean()) && (pControl->hasUnsavedValue()) )
         {
             pControl->resetToDefault();
@@ -5782,8 +5795,12 @@ void LLAppViewer::badNetworkHandler()
         "Try uninstalling and reinstalling to see if this resolves \n"
         "the issue. \n"
         " \n"
-        "If the problem continues, see the Tech Support FAQ at: \n"
-        "www.firestormviewer.org/support";
+        // <KS:KS> KStorm's README; KStorm is unsupported.
+        //"If the problem continues, see the Tech Support FAQ at: \n"
+        //"www.firestormviewer.org/support";
+        "KStorm is an unsupported research viewer. See: \n"
+        "https://github.com/kiss-spicoli/KStorm#readme";
+        // </KS:KS>
     forceDisconnect(message.str());
 
     LLApp::instance()->writeMiniDump();

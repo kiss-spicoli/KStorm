@@ -7,9 +7,7 @@
 	<string name="SECOND_LIFE_GRID">
 		Grille de Second Life
 	</string>
-	<string name="SUPPORT_SITE">
-		Portail Assistance Firestorm
-	</string>
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="StartupLoading">
 		Chargement de [APP_NAME]...
 	</string>
@@ -203,7 +201,7 @@ Version serveur vocal : [VOICE_VERSION]
 		Quitter
 	</string>
 	<string name="create_account_url">
-		https://www.firestormviewer.org/join-secondlife/
+		https://join.secondlife.com/
 	</string>
 	<string name="AgniGridLabel">
 		Grille principale de Second Life (Agni)
@@ -3233,7 +3231,7 @@ Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 	<string name="MBVideoDrvErr">
 		[APP_NAME] ne peut pas s&apos;exécuter car les pilotes de votre carte vidéo n&apos;ont pas été installés correctement, ne sont pas à jour, ou sont pour du matériel non pris en charge. Assurez-vous d&apos;avoir des pilotes de cartes vidéos récents, et même si vous avez les plus récents, réinstallez-les.
 
-Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
+Si ce message persiste, veuillez aller sur la page https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</string>
 	<string name="MBOutOfMemoryTitle">
 		Out Of Memory
@@ -3246,7 +3244,7 @@ Si la mémoire vive de votre ordinateur est faible, quittez les applications lou
 	<string name="MBMissingFile">
 		[APP_NAME] n'a pas pu accéder ou trouver certains des fichiers dont il a besoin et sera fermé.
 
-Veuillez réinstaller la le clientuse à partir de [DOWNLOAD_URL] et contacter [SUPPORT_SITE] si le problème persiste après la réinstallation.
+Veuillez réinstaller la le clientuse à partir de [DOWNLOAD_URL] et contacter https://github.com/kiss-spicoli/KStorm#troubleshooting si le problème persiste après la réinstallation.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Ombre de 5 heures

@@ -109,7 +109,10 @@ SetOverwrite on							# Overwrite files by default
 #AutoCloseWindow true					# After all files install, close window
 
 # Registry key paths, ours and Microsoft's
-!define LINDEN_KEY      "SOFTWARE\The Phoenix Firestorm Project"
+# <KS:KS> KStorm's own registry key
+#!define LINDEN_KEY      "SOFTWARE\The Phoenix Firestorm Project"
+!define LINDEN_KEY      "SOFTWARE\KStorm"
+# </KS:KS>
 !define INSTNAME_KEY    "${LINDEN_KEY}\${INSTNAME}"
 !define MSCURRVER_KEY   "SOFTWARE\Microsoft\Windows\CurrentVersion"
 !define MSNTCURRVER_KEY "SOFTWARE\Microsoft\Windows NT\CurrentVersion"
@@ -315,7 +318,10 @@ Function CheckCPUFlagsAVX2
     IntCmp $1 1 OK_AVX2
     ; AVX2 not supported
     ; Replace %DLURL% in the language string with the URL
-    ${WordReplace} "$(MissingAVX2)" "%DLURL%" "${DL_URL}-legacy-cpus" "+*" $3
+    # <KS:KS> One download page: no separate -legacy-cpus page
+    #${WordReplace} "$(MissingAVX2)" "%DLURL%" "${DL_URL}-legacy-cpus" "+*" $3
+    ${WordReplace} "$(MissingAVX2)" "%DLURL%-legacy-cpus/" "${DL_URL}" "+*" $3
+    # </KS:KS>
     MessageBox MB_OK "$3"
     
     MessageBox MB_YESNO $(AVX2OverrideConfirmation) IDNO NoInstall
@@ -328,7 +334,10 @@ Function CheckCPUFlagsAVX2
     Return
 
   NoInstall:
-    ${OpenURL} "${DL_URL}-legacy-cpus"
+    # <KS:KS> One download page: no separate -legacy-cpus page
+    #${OpenURL} "${DL_URL}-legacy-cpus"
+    ${OpenURL} "${DL_URL}"
+    # </KS:KS>
     Quit
 
   OK_AVX2:
@@ -338,6 +347,8 @@ Function CheckCPUFlagsAVX2
     Return
 FunctionEnd
 
+# <KS:KS> No prompt to fetch a different build; see the disabled call below.
+!if 0
 Function CheckCPUFlagsAVX2_Prompt
     Push $1
     Push $3
@@ -358,6 +369,8 @@ Function CheckCPUFlagsAVX2_Prompt
       Pop $1
       Return
 FunctionEnd
+!endif
+# </KS:KS>
 
 # <FS:Ansariel> Optional start menu entry
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -424,8 +437,10 @@ Call CheckCPUFlags							# Make sure we have SSE2 support
 # but also allow them to override.
 ${If} ${ISAVX2} == 1
   Call CheckCPUFlagsAVX2
-${Else}
-  Call CheckCPUFlagsAVX2_Prompt
+# <KS:KS> No prompt to fetch a different build: KStorm may not publish one.
+#${Else}
+#  Call CheckCPUFlagsAVX2_Prompt
+# </KS:KS>
 ${EndIf}
 
 Call CheckWindowsVersion					# Don't install On unsupported systems
@@ -630,7 +645,7 @@ CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
 
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Create Account.url" \
 				"InternetShortcut" "URL" \
-				"https://www.firestormviewer.org/join-secondlife/"
+				"https://join.secondlife.com/" # <KS:KS> was https://www.firestormviewer.org/join-secondlife/
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Your Account.url" \
 				"InternetShortcut" "URL" \
 				"https://www.secondlife.com/account/"
@@ -672,10 +687,16 @@ WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "" "$INSTDIR"
 WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Version" "${VERSION_LONG}"
 WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Shortcut" "$INSTSHORTCUT"
 WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Exe" "$VIEWER_EXE"
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "Publisher" "The Phoenix Firestorm Project, Inc."
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLInfoAbout" "https://www.firestormviewer.org"
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLUpdateInfo" "https://www.firestormviewer.org/downloads"
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "HelpLink" "https://www.firestormviewer.org/support"
+# <KS:KS> KStorm's name and pages in Windows' list of installed apps
+#WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "Publisher" "The Phoenix Firestorm Project, Inc."
+#WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLInfoAbout" "https://www.firestormviewer.org"
+#WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLUpdateInfo" "https://www.firestormviewer.org/downloads"
+#WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "HelpLink" "https://www.firestormviewer.org/support"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "Publisher" "KStorm"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLInfoAbout" "https://github.com/kiss-spicoli/KStorm"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLUpdateInfo" "https://github.com/kiss-spicoli/KStorm/releases"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "HelpLink" "https://github.com/kiss-spicoli/KStorm#readme"
+# </KS:KS>
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayName" "$INSTNAME"
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "UninstallString" '"$INSTDIR\uninst.exe"'
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayVersion" "${VERSION_LONG}"

@@ -82,7 +82,7 @@ Détails de l&apos;erreur : La notification, appelée &apos;[_NAME]&apos;, est i
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		Une erreur est survenue lors de la mise à jour de [APP_NAME].  Veuillez [https://www.firestormviewer.org/downloads télécharger la dernière version] du client.
+		Une erreur est survenue lors de la mise à jour de [APP_NAME].  Veuillez [https://github.com/kiss-spicoli/KStorm/releases télécharger la dernière version] du client.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FoundLegacyNsisInstallation">
@@ -726,7 +726,7 @@ L&apos;objet est peut-être inaccessible ou a peut-être été supprimé.
 
 Consulter [_URL] pour en savoir plus ?
 		<url name="url" option="0">
-			https://wiki.firestormviewer.org/fs_system_requirements
+			https://github.com/kiss-spicoli/KStorm#troubleshooting
 		</url>
 		<usetemplate ignoretext="Mon matériel n&apos;est pas pris en charge" name="okcancelignore" notext="Non" yestext="Oui"/>
 	</notification>
@@ -1585,7 +1585,7 @@ Si vous utilisez [CURRENT_GRID] pour la première fois, vous devez ouvrir un com
 
 Vérifiez votre connexion Internet et réessayez dans quelques minutes, cliquez sur Aide pour consulter la page [SUPPORT_SITE] ou bien sur Téléporter pour essayer d&apos;aller chez vous.
 		<url name="url">
-			https://www.firestormviewer.org/support/
+			https://support.secondlife.com/
 		</url>
 		<form name="form">
 			<button name="OK" text="OK"/>
@@ -4260,7 +4260,7 @@ Si vous avez toujours des problèmes, veuillez consulter la page [SUPPORT_SITE].
 		- Votre mémoire système ne remplit pas les conditions minimum requises.
 	</global>
 	<global name="LLLeapUpdaterFailure">
-		Le lancement du service de mise à jour [UPDATER_APP] a échoué. Veuillez vérifier que le client est correctement installé et qu'il dispose des autorisations nécessaires pour s'exécuter. Si vous continuez à rencontrer des problèmes, veuillez consulter le [SUPPORT_SITE].
+		Le lancement du service de mise à jour [UPDATER_APP] a échoué. Veuillez vérifier que le client est correctement installé et qu'il dispose des autorisations nécessaires pour s'exécuter. Si vous continuez à rencontrer des problèmes, veuillez consulter le https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</global>
 	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
 		Si vous possédez un terrain, vous pouvez le définir comme domicile.
@@ -5748,14 +5748,14 @@ Certains programmes antivirus peuvent bloquer par erreur des parties de [APP_NAM
 
 Pour obtenir des instructions détaillées sur la manière de mettre [APP_NAME] sur liste blanche - y compris une liste de fichiers et de dossiers à exclure - veuillez consulter notre guide :
 
-https://wiki.firestormviewer.org/antivirus_whitelisting
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 	</notification>
 	<notification name="ViewerProcessRunningAsAdmin">
 Un ou plusieurs processus du client s'exécutent actuellement en tant qu'administrateur. Cela peut entraîner un certain nombre de problèmes et empêcher le bon fonctionnement des fichiers multimédias et des pages Web au sein de celui-ci.
 
 Veuillez vous assurer qu'aucun processus du client n'est configuré pour s'exécuter en tant qu'administrateur. Pour plus d'informations, veuillez consulter la page suivante :
 
-https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 		 <usetemplate ignoretext="M'avertir lorsque le client est exécuté avec les droits d'administrateur" name="okignore" yestext="OK" />
 	</notification>
 	<notification label="Confirmer le remplacement de la pose" name="ConfirmPoserOverwrite">

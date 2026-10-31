@@ -7,9 +7,7 @@
 	<string name="SECOND_LIFE_GRID">
 		Second Life şəbəkəsi
 	</string>
-	<string name="SUPPORT_SITE">
-		Firestorm texniki dəstək portalı
-	</string>
+	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="StartupDetectingHardware">
 		Avadanlıq təyin olunur...
 	</string>
@@ -216,7 +214,7 @@ Səs serveri versiyası: [VOICE_VERSION]
 		Çıxış
 	</string>
 	<string name="create_account_url">
-		https://www.firestormviewer.org/join-secondlife/
+		https://join.secondlife.com/
 	</string>
 	<string name="AgniGridLabel">
 		Second Life Əsas Şəbəkəsi (Agni)
@@ -226,7 +224,7 @@ Səs serveri versiyası: [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		İstifadə etdiyiniz klientin artıq Second Life oyununa girişi yoxdur. Siz müştərinin yeni versiyasını bu ünvandan yükləyə bilərsiniz:
-https://www.firestormviewer.org/choose-your-platform/
+https://github.com/kiss-spicoli/KStorm/releases
 
 Ətraflı məlumat üçün FAQ bölməsinə baxın:
 http://secondlife.com/viewer-access-faq
@@ -3165,7 +3163,7 @@ Bu mesaj göstərilməyə davam edərsə, [SUPPORT_SITE] saytına daxil olun.
 	</string>
 	<string name="MBVideoDrvErr">
 		[APP_NAME] tətbiqini işə salmaq mümkün deyil, çünki qrafik kartı drayverləri səhv quraşdırılıb, köhnəlmiş və ya dəstəklənməyən aparat üçün. Ən son video kart drayverlərini quraşdırın və ya yenidən quraşdırın.
-Bu mesaj göstərilməyə davam edərsə, [SUPPORT_SITE] saytına daxil olun.
+Bu mesaj göstərilməyə davam edərsə, https://github.com/kiss-spicoli/KStorm#troubleshooting saytına daxil olun.
 	</string>
 	<string name="5 O&apos;Clock Shadow">
 		Maye

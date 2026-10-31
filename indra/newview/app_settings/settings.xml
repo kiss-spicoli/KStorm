@@ -151,7 +151,10 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <!-- <KS:KS> Off: the default list is hosted by Firestorm, and KStorm is Second Life only.
+    <integer>1</integer> -->
+    <integer>0</integer>
+    <!-- </KS:KS> -->
   </map>
   <key>GridListDownloadURL</key>
   <map>
@@ -162,7 +165,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
+    <!-- <KS:KS> was http://phoenixviewer.com/app/fsdata/grids.xml --><string></string>
   </map>
   <key>FSPrimfeedViewerApiKey</key>
   <map>
@@ -173,7 +176,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>xAcXYt8SBius3Lor4wHle8L96PDHYlAZuWYXIYQUdW4b09mjhQUAwiqmWp5UNYXLpq5GSUtuKHuDYLwaueACPkew93l6MRY8jfBKSH09kv0zyGglpky07X7X7Sp4Rzin</string>
+    <!-- <KS:KS> Firestorm's key deleted. --><string></string>
   </map>
   <key>FSGridBuilderURL</key>
   <map>
@@ -184,7 +187,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>https://phoenixviewer.com/app/fsdata/fs_grid_builder.html</string>
+    <!-- <KS:KS> was https://phoenixviewer.com/app/fsdata/fs_grid_builder.html --><string></string>
   </map>
   <key>LastConnectedGrid</key>
   <map>
@@ -6180,7 +6183,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://wiki.firestormviewer.org/[TOPIC]</string>
+      <!-- <KS:KS> was https://wiki.firestormviewer.org/[TOPIC] --><string>https://github.com/kiss-spicoli/KStorm#readme</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -6193,7 +6196,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://wiki.firestormviewer.org/start#basic_functions</string>
+      <!-- <KS:KS> was https://wiki.firestormviewer.org/start#basic_functions --><string>https://github.com/kiss-spicoli/KStorm#readme</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>    
@@ -15152,7 +15155,10 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Type</key>
 			<string>String</string>
 			<key>Value</key>
-			<string>https://phoenixviewer.com/app/file-a-jira/?environment=[ENVIRONMENT]</string>
+			<!-- <KS:KS> Firestorm's tracker doesn't take KStorm reports.
+			<string>https://phoenixviewer.com/app/file-a-jira/?environment=[ENVIRONMENT]</string> -->
+			<string>https://github.com/kiss-spicoli/KStorm#readme</string>
+			<!-- </KS:KS> -->
 		</map>
 	<key>RevokePermsOnStopAnimation</key>
     <map>
@@ -27729,7 +27735,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://phoenixviewer.com/app/loginV3/secondlifegrid.xml</string>
+      <!-- <KS:KS> was https://phoenixviewer.com/app/loginV3/secondlifegrid.xml --><string></string>
     </map>
     <key>FSIgnoreAdHocSessions</key>
     <map>
