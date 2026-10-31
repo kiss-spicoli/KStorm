@@ -27,6 +27,7 @@ namespace
 {
     constexpr S32 COMPACT_WIDTH = 44;
     constexpr S32 BUTTON_MARGIN = 8;
+    constexpr S32 FIRST_OPEN_RIGHT_MARGIN = 20;
 
     std::string formatF32(F32 value, S32 digits)
     {
@@ -497,6 +498,74 @@ void KSFloaterLighting::refreshDockButton()
 void KSFloaterLighting::onOpen(const LLSD& key)
 {
     refreshStatuses();
+    // Here, not in postBuild(): the floater's saved rect is applied after postBuild(), and only an
+    // opened floater saves its rect.
+    if (!gSavedSettings.getBOOL("KSLightingFirstOpenDone"))
+    {
+        gSavedSettings.setBOOL("KSLightingFirstOpenDone", true);
+        applyFirstOpenLayout();
+    }
+}
+
+void KSFloaterLighting::applyFirstOpenLayout()
+{
+    // Every pane docked on the left. Closed panes need no placing: each goes to its slot when it
+    // opens. A side this install already chose stays: sideFor() still puts the pane on the left,
+    // since the launcher has no room on its right. Proxies are always docked on the left
+    // (dockedPanes()), and the AyaneStorm floaters are not touched.
+    std::map<std::string, bool> docked = loadDocked();
+    for (const Entry& entry : mEntries)
+    {
+        if (!entry.mFloater.empty() && entry.mProxy.empty())
+        {
+            docked.emplace(entry.mFloater, false);
+        }
+    }
+    saveDocked(docked);
+    closeDockedPanes();
+
+    // How far below the launcher's top its panes reach. A pane's top follows its button, so the
+    // tall panes on the low buttons reach below the launcher (Depth of field, by 172 px). Only
+    // their height is needed, so they are built and stay closed.
+    const S32 width = getRect().getWidth();
+    const S32 height = getRect().getHeight();
+    S32 reach = height;
+    for (const Entry& entry : mEntries)
+    {
+        if (entry.mFloater.empty() || !entry.mProxy.empty())
+        {
+            continue;
+        }
+        if (LLFloater* pane = LLFloaterReg::getInstance(entry.mFloater))
+        {
+            reach = llmax(reach, getRect().mTop - paneSlot(entry, pane->getRect(), false).mBottom);
+        }
+    }
+
+    // Near the right edge, halfway up, raised as far as the panes need. The launcher's header
+    // comes first: a screen too short for both keeps it at the top. postBuild() already made the
+    // launcher narrow.
+    const LLRect snap = gFloaterView->getSnapRect();
+    const S32 halfway_top = snap.mBottom + (snap.getHeight() + height) / 2;
+    LLRect rect;
+    rect.setLeftTopAndSize(snap.mRight - FIRST_OPEN_RIGHT_MARGIN - width,
+                           llmin(llmax(halfway_top, snap.mBottom + reach), snap.mTop),
+                           width, height);
+    // As a user's move, so the floater saves it and keeps its place when the window resizes.
+    setShape(rect, true);
+}
+
+void KSFloaterLighting::closeDockedPanes()
+{
+    const std::map<std::string, bool> docked = dockedPanes();
+    for (const Entry& entry : mEntries)
+    {
+        const std::string& name = dockName(entry);
+        if (!entry.mFloater.empty() && docked.count(name) && LLFloaterReg::instanceVisible(name))
+        {
+            LLFloaterReg::hideInstance(name);
+        }
+    }
 }
 
 void KSFloaterLighting::onClose(bool app_quitting)
@@ -504,15 +573,7 @@ void KSFloaterLighting::onClose(bool app_quitting)
     if (!app_quitting)
     {
         // Docked panes belong to the launcher: they go with it. Undocked panes stay.
-        const std::map<std::string, bool> docked = dockedPanes();
-        for (const Entry& entry : mEntries)
-        {
-            const std::string& name = dockName(entry);
-            if (!entry.mFloater.empty() && docked.count(name) && LLFloaterReg::instanceVisible(name))
-            {
-                LLFloaterReg::hideInstance(name);
-            }
-        }
+        closeDockedPanes();
     }
     LLFloater::onClose(app_quitting);
 }
