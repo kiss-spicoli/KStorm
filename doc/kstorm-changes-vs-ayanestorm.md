@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-31, with the merge of `fix-ks-uninstaller-firestorm-data`.
-- **KStorm's own work:** 159 commits (Kissmy Spicoli, Oct 18 to Oct 31), 300 files, about 17,000
+- **Last updated:** 2026-10-31, with the merge of `fix-ks-uninstaller-settings-folder`.
+- **KStorm's own work:** 161 commits (Kissmy Spicoli, Oct 18 to Oct 31), 300 files, about 17,000
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -309,8 +309,9 @@ is built on. (`3b2b3c33241`)
   Preferences controls are gone. Items that depend on RestrainedLove won't respond. (`be0e9d5a3f3`)
 - **Installer.** No `Phoenix` in the file names, a `SOFTWARE\KStorm` registry key, KStorm as the
   publisher in the installed apps list, and no prompt to download another build. Uninstalling no
-  longer deletes Firestorm's folder in `ProgramData`.
-  (`9a3a7ed93f9`, `5007ac0e996`, `837bea300fa`)
+  longer deletes Firestorm's folder in `ProgramData`, and answering Yes to removing data now clears
+  the settings folder the viewer really uses, keeping chat logs.
+  (`9a3a7ed93f9`, `5007ac0e996`, `837bea300fa`, `26ab25d88b8`)
 - **AVX2 and current hardware.** Builds assume AVX2 and 202x hardware, with a display of at least
   1K and 4K preferred. There is no build for older processors. (`4066bfbe5fe`)
 - **Releases.** The GitHub workflow can make a draft pre-release, using the release page in
