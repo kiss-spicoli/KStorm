@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-31, with the merge of `feat-ks-launcher-first-run`.
-- **KStorm's own work:** 168 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,000
+- **Last updated:** 2026-10-31, with the merge of `fix-ks-atmospheric-pass`.
+- **KStorm's own work:** 172 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,000
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -123,6 +123,11 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
     instead of three (`0e93d03982a`)
   - glow blurred 3 times, the most Preferences allows, instead of the default 2
     (`1a8d4134002`), at full glow resolution, 1024 rows instead of 512 (`0c76b76f294`)
+  - keeps `RenderDeferredAtmospheric` on. This setting controls all sun and ambient light on
+    normal surfaces, and turning it off leaves them black except for local lights. Its misleading
+    Atmospheric pass box is gone from the Atmosphere pane. It can only be turned off in Debug
+    Settings, and every startup turns it back on, so that lasts one session. (`c9896848df9`,
+    `22b1fcc7346`)
 - **Saving a look makes it the active one** (`e52a1f164be`). The save took about 90 seconds
   and is now near-instant. Each look switch does one graphics rebuild instead of dozens. A
   Second Life bug that kept the shader cache from saving after each new build is fixed.
@@ -296,6 +301,8 @@ is built on. (`3b2b3c33241`)
   `494dea04776`)
 - **No Report Problem.** Help > Report Problem, which files bugs with Firestorm, is hidden on
   the login screen and in world. (`721ecc549f3`)
+- **No password eye.** The login page's show and hide password buttons did not work and are
+  removed. (`063c3ade3e0`)
 - **No contact with Firestorm's servers.** The viewer used to fetch Firestorm's messages, version
   blocks, team list, asset list, client tags, grid list and grid news at every start. All of that
   is gone from the code and settings, so startup no longer waits for it. The grid news checkbox is
@@ -395,3 +402,5 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
   installer and packaging scripts, Preferences panels, and links in the skin files, including the
   translated ones
 - for the Conversations window's minimum height: `fsfloaterimcontainer.cpp`
+- for turning `RenderDeferredAtmospheric` on at startup: `llappviewer.cpp`
+- for removing the login password eye: `panel_fs_nui_login.xml`, `panel_fs_login.xml`
