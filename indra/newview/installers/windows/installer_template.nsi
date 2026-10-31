@@ -1065,16 +1065,18 @@ Push $2
 #            RMDir /r "$2\AppData\Local\AyaneStormOS_x64"		#Delete the OpenSim cache folder
 #        ${EndIf}
 #    ${EndIf}
-# Delete files in \Users\<User>\AppData\Roaming\KStorm
+# Delete files in \Users\<User>\AppData\Roaming\KStorm_x64
 # Remove all settings files but leave any other .txt files to preserve the chat logs
-    RMDir /r "$2\AppData\Roaming\KStorm\logs"
-    RMDir /r "$2\AppData\Roaming\KStorm\browser_profile"
-    RMDir /r "$2\AppData\Roaming\KStorm\user_settings"
-    Delete  "$2\AppData\Roaming\KStorm\*.xml"
-    Delete  "$2\AppData\Roaming\KStorm\*.bmp"
-    Delete  "$2\AppData\Roaming\KStorm\search_history.txt"
-    Delete  "$2\AppData\Roaming\KStorm\plugin_cookies.txt"
-    Delete  "$2\AppData\Roaming\KStorm\typed_locations.txt"
+# The viewer's folder is APP_NAME + "_x64" (llappviewer.cpp), and KStorm has no 32-bit build
+    RMDir /r "$2\AppData\Roaming\KStorm_x64\logs"
+    RMDir /r "$2\AppData\Roaming\KStorm_x64\browser_profile"
+    RMDir /r "$2\AppData\Roaming\KStorm_x64\user_settings"
+    Delete  "$2\AppData\Roaming\KStorm_x64\*.xml"
+    Delete  "$2\AppData\Roaming\KStorm_x64\*.bmp"
+    Delete  "$2\AppData\Roaming\KStorm_x64\search_history.txt"
+    Delete  "$2\AppData\Roaming\KStorm_x64\plugin_cookies.txt"
+    Delete  "$2\AppData\Roaming\KStorm_x64\typed_locations.txt"
+    RMDir   "$2\AppData\Roaming\KStorm_x64"			# Only if nothing is left in it
 # Delete files in \Users\<User>\AppData\Local\KStorm
     ${If} ${ISOPENSIM} == "0"
         ${If} ${IS64BIT} == "0"
