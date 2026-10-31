@@ -162,7 +162,7 @@ Rebrand impact per language:
 
 ### 3.5 Docs and repo text
 
-- `README.md`: rewrite as the KStorm README: name, one-paragraph lineage with credit, link to `doc/kstorm-changes-vs-ayanestorm.md`, build pointer. Move the AyaneStorm feature list into a "Inherited from AyaneStorm" section, or keep the original text verbatim as `doc/ayanestorm-README.md`. Remove AyaneStorm download badge and `git clone` URLs (they point at AyaneStorm's GitHub). Logo -> `doc/kstorm_256.png`.
+- `README.md`: rewrite as the KStorm README: name, one-paragraph lineage with credit, link to `doc/kstorm-changes-vs-ayanestorm.md`, build pointer. Move the AyaneStorm feature list into a "Inherited from AyaneStorm" section, or keep the original text verbatim as `doc/ayanestorm-README.md`. Remove AyaneStorm download badge and `git clone` URLs (they point at AyaneStorm's GitHub). Logo -> `indra/newview/skins/default/textures/kstorm_icon.png`.
 - `AGENTS.md` / `CLAUDE.md`: title "KStorm Agent Instructions"; author `Kissmy Spicoli`; tag `<KS:KS>`; note that `<AS:Chanayane>` tags in existing code are kept as credit. (Today the memory notes override these lines; the rebrand makes the file match.)
 - `doc/ayanestorm-*.md` (41 files) and comments in `as*` code: keep (Tier C). `doc/kstorm-changes-vs-ayanestorm.md`: keep its name; add a "Rebrand" section when merged.
 - Code comments in `ks*` files that say "AyaneStorm floater" (ksfloaterlighting*, ksmotionmode, kslightingpresets): keep; they describe origin accurately.
