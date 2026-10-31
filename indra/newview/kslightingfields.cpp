@@ -160,6 +160,31 @@ namespace
             { "blue_horizon", { [](LLSettingsSky& s) { return s.getBlueHorizon(); }, [](LLSettingsSky& s, LLColor3 v) { s.setBlueHorizon(v); } } },
             { "blue_density", { [](LLSettingsSky& s) { return s.getBlueDensity(); }, [](LLSettingsSky& s, LLColor3 v) { s.setBlueDensity(v); } } },
             { "cloud_color", { [](LLSettingsSky& s) { return s.getCloudColor(); }, [](LLSettingsSky& s, LLColor3 v) { s.setCloudColor(v); } } },
+            // Sky Ambient Color: the hue only, shown at full brightness. Sky Ambient Gain holds the
+            // brightness (luminance), which picking a color keeps, up to 3 per channel. Black has
+            // no hue, so picking it changes nothing.
+            { "ambient_color", { [](LLSettingsSky& s)
+                                 {
+                                     const LLColor3 c = s.getAmbientColor();
+                                     const F32 peak = llmax(c.mV[0], llmax(c.mV[1], c.mV[2]));
+                                     return peak > 1e-6f ? c * (1.f / peak) : LLColor3(1.f, 1.f, 1.f);
+                                 },
+                                 [](LLSettingsSky& s, LLColor3 v)
+                                 {
+                                     const F32 hue_lum = luminance(v);
+                                     if (hue_lum < 1e-6f)
+                                     {
+                                         return;
+                                     }
+                                     F32 lum = luminance(s.getAmbientColor());
+                                     if (lum < 1e-6f)
+                                     {
+                                         lum = 0.01f; // keep the hue while Sky Ambient Gain is at 0
+                                     }
+                                     LLColor3 c = v * (lum / hue_lum);
+                                     const F32 peak = llmax(c.mV[0], llmax(c.mV[1], c.mV[2]));
+                                     s.setAmbientColor(peak > 3.f ? c * (3.f / peak) : c);
+                                 } } },
         };
         return fields;
     }
