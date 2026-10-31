@@ -9,6 +9,7 @@
 #include "ksfloatercamerapositions.h"
 
 #include "kscamerapositions.h"
+#include "llagentcamera.h"
 #include "llbutton.h"
 #include "llfloaterreg.h"
 #include "lllineeditor.h"
@@ -18,11 +19,32 @@
 #include "lltextbox.h"
 #include "lluicolortable.h"
 #include "llviewercontrol.h"
+#include "llviewerinput.h"
 
 namespace
 {
     const std::string EDITOR = "ks_camera_position_edit";
     const std::string DEGREE = "\xC2\xB0";
+
+    // Same ramp as the Cameratools and Camera Controls roll buttons (llfloatercamera.cpp): a click
+    // nudges, and holding builds to full speed.
+    const F32 ROLL_NUDGE_TIME = 0.25f;  // seconds
+    const F32 ROLL_NUDGE_RATE = 0.05f;  // fraction of normal speed
+
+    void rollCamera(const LLButton* button, bool left)
+    {
+        const F32 time = button->getHeldDownTime();
+        const F32 rate = time < ROLL_NUDGE_TIME ? ROLL_NUDGE_RATE + time * (1.f - ROLL_NUDGE_RATE) / ROLL_NUDGE_TIME : 1.f;
+        gAgentCamera.unlockView();
+        if (left)
+        {
+            gAgentCamera.setRollLeftKey(rate);
+        }
+        else
+        {
+            gAgentCamera.setRollRightKey(rate);
+        }
+    }
 
     // Asks before something that cannot be undone; on Yes runs action.
     void confirm(const std::string& message, std::function<void()> action)
@@ -118,6 +140,13 @@ bool KSFloaterCameraPositions::postBuild()
             // toolbar's bring-to-front step would never close it.
             LLFloaterReg::toggleInstance(cameraControls());
         });
+    mRollLeftButton = getChild<LLButton>("ks_camera_roll_left");
+    mRollLeftButton->setCommitCallback([this](LLUICtrl*, const LLSD&) { rollCamera(mRollLeftButton, true); });
+    mRollLeftButton->setHeldDownCallback([this](LLUICtrl*, const LLSD&) { rollCamera(mRollLeftButton, true); });
+    mRollRightButton = getChild<LLButton>("ks_camera_roll_right");
+    mRollRightButton->setCommitCallback([this](LLUICtrl*, const LLSD&) { rollCamera(mRollRightButton, false); });
+    mRollRightButton->setHeldDownCallback([this](LLUICtrl*, const LLSD&) { rollCamera(mRollRightButton, false); });
+    refreshRollHint();
 
     mChangedConnection = KSCameraPositions::changedSignal().connect([this]() { refreshList(); });
     // The Show disconnected check box binds the setting (control_name); the list follows it.
@@ -134,7 +163,23 @@ bool KSFloaterCameraPositions::postBuild()
 
 void KSFloaterCameraPositions::onOpen(const LLSD& key)
 {
+    refreshRollHint();
     refreshList();
+}
+
+// Shows the current bindings, since they can be changed in Preferences > Controls. Roll has the
+// same keys in every camera mode by default; third person is the mode a scene is shot in.
+void KSFloaterCameraPositions::refreshRollHint()
+{
+    const auto bindingText = [this](const std::string& control)
+        {
+            const std::string keys = gViewerInput.getKeyBindingAsString("third_person", control);
+            return keys.empty() ? getString("roll_no_key") : keys;
+        };
+    LLStringUtil::format_map_t args;
+    args["[LEFT]"] = bindingText("roll_left");
+    args["[RIGHT]"] = bindingText("roll_right");
+    getChild<LLUICtrl>("ks_camera_roll_hint")->setValue(getString("roll_hint", args));
 }
 
 void KSFloaterCameraPositions::onClose(bool app_quitting)
@@ -279,6 +324,9 @@ void KSFloaterCameraPositions::refreshButtons()
     getChild<LLUICtrl>("ks_camera_delete")->setEnabled(record != nullptr);
     mLockButton->setToggleState(KSCameraPositions::isLocked());
     mLockButton->setEnabled(region || KSCameraPositions::isLocked());
+    // Lock Camera blocks the roll keys too (KSCameraPositions::blocksAction()).
+    mRollLeftButton->setEnabled(!KSCameraPositions::isLocked());
+    mRollRightButton->setEnabled(!KSCameraPositions::isLocked());
     mDetails->setText(record ? detailsText(record->mView) : std::string());
 }
 

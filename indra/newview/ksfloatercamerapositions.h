@@ -42,6 +42,7 @@ public:
 private:
     void refreshList();
     void refreshButtons();
+    void refreshRollHint();
     const KSCameraPositions::Record* selectedRecord() const;
     // The selected record when it can be applied and edited, else null.
     const KSCameraPositions::Record* selectedAvailable() const;
@@ -55,6 +56,8 @@ private:
     LLScrollListCtrl* mList = nullptr;
     LLButton* mLockButton = nullptr;
     LLButton* mControlsButton = nullptr;   // Camera Controls floater toggle
+    LLButton* mRollLeftButton = nullptr;
+    LLButton* mRollRightButton = nullptr;
     LLTextBox* mDetails = nullptr;
     std::vector<KSCameraPositions::Record> mRecords;   // as listed
     std::string mLastRegion;    // agent region, to refresh the list on change
