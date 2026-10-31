@@ -963,6 +963,28 @@ void FSFloaterIMContainer::sessionIDUpdated(const LLUUID& old_session_id, const 
     }
 }
 
+// <KS:KS> Half the minimum height of the Conversations floater. Mirrors LLMultiFloater::computeResizeLimits,
+// which is private and can't be called from here. Hosted floaters keep their own limits when torn off.
+void FSFloaterIMContainer::computeResizeLimits(S32& new_min_width, S32& new_min_height)
+{
+    static LLUICachedControl<S32> tabcntr_close_btn_size("UITabCntrCloseBtnSize", 0);
+    const S32 floater_header_size = LLFloater::getDefaultParams().header_height;
+    const S32 tabcntr_header_height = LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size;
+
+    for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+    {
+        LLFloater* floaterp = (LLFloater*)mTabContainer->getPanelByIndex(tab_idx);
+        if (floaterp)
+        {
+            new_min_width = llmax(new_min_width, floaterp->getMinWidth() + LLPANEL_BORDER_WIDTH * 2);
+            new_min_height = llmax(new_min_height, floaterp->getMinHeight() + floater_header_size + tabcntr_header_height);
+        }
+    }
+
+    new_min_height /= 2;
+}
+// </KS:KS>
+
 void FSFloaterIMContainer::tabOpen(LLFloater* opened_floater, bool from_click)
 {
     LLEmojiHelper::instance().hideHelper(nullptr, true);
