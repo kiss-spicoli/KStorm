@@ -839,7 +839,7 @@ support@secondlife.com.
 	</string>
 	<!-- <KS:KS> rebrand: was https://wiki.firestormviewer.org/changelog:firestorm_change_log_ -->
 	<string name="RELEASE_NOTES_BASE_URL" translate="false">
-		https://github.com/kiss-spicoli/phoenix-firestorm#
+		https://github.com/kiss-spicoli/KStorm#
 	</string>
 	<string name="LoadingData">
 		載入中...
@@ -3466,7 +3466,7 @@ support@secondlife.com.
 	<string name="MBVideoDrvErr">
 		[APP_NAME] 無法執行，這可能因為你的顯示卡驅動程式安裝不當、版本過舊，或者你的硬體不受支援。請確定你安裝了最新的顯示卡驅動程式。如果已裝了最新驅動程式，請再重新安裝。
 
-如果你持續收到此訊息，請聯絡 [SUPPORT_SITE].
+如果你持續收到此訊息，請聯絡 https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</string>
 	<string name="MBOutOfMemoryTitle">
 		記憶體不足
@@ -3479,7 +3479,7 @@ support@secondlife.com.
 	<string name="MBMissingFile">
 		[APP_NAME] 無法存取或找到所需的某些檔案，將被關閉。
 
-請從 [DOWNLOAD_URL] 重新安裝檢視器，如果重新安裝後問題仍然存在，請聯絡 [SUPPORT_SITE]。
+請從 [DOWNLOAD_URL] 重新安裝檢視器，如果重新安裝後問題仍然存在，請聯絡 https://github.com/kiss-spicoli/KStorm#troubleshooting。
 	</string>
 	<!-- Avatar Shape Information -->
 	<string name="5 O'Clock Shadow">

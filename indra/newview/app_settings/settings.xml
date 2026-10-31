@@ -165,7 +165,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
+    <!-- <KS:KS> was http://phoenixviewer.com/app/fsdata/grids.xml --><string></string>
   </map>
   <key>FSPrimfeedViewerApiKey</key>
   <map>
@@ -187,7 +187,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>https://phoenixviewer.com/app/fsdata/fs_grid_builder.html</string>
+    <!-- <KS:KS> was https://phoenixviewer.com/app/fsdata/fs_grid_builder.html --><string></string>
   </map>
   <key>LastConnectedGrid</key>
   <map>
@@ -6183,7 +6183,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://wiki.firestormviewer.org/[TOPIC]</string>
+      <!-- <KS:KS> was https://wiki.firestormviewer.org/[TOPIC] --><string>https://github.com/kiss-spicoli/KStorm#readme</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -6196,7 +6196,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://wiki.firestormviewer.org/start#basic_functions</string>
+      <!-- <KS:KS> was https://wiki.firestormviewer.org/start#basic_functions --><string>https://github.com/kiss-spicoli/KStorm#readme</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>    
@@ -27735,7 +27735,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://phoenixviewer.com/app/loginV3/secondlifegrid.xml</string>
+      <!-- <KS:KS> was https://phoenixviewer.com/app/loginV3/secondlifegrid.xml --><string></string>
     </map>
     <key>FSIgnoreAdHocSessions</key>
     <map>

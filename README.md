@@ -101,6 +101,30 @@ autobuild build -A 64 -c ReleaseFS_open --no-configure
 
 The channel is `KStorm-Research`.
 
+## Troubleshooting
+
+KStorm has no support team or issue tracker. Firestorm's and Linden Lab's support don't cover
+problems with this viewer. Questions about your Second Life account still go to
+[Second Life support](https://support.secondlife.com/).
+
+- **System requirements.** KStorm runs on 64-bit Windows with a graphics card and an up-to-date
+  driver. The current build runs on processors with or without AVX2.
+- **Antivirus.** Security software can slow the viewer or block parts of it. If it does, add
+  exclusions for the install folder (normally `C:\Program Files\KStorm-Research`), the settings
+  folder `%APPDATA%\KStorm_x64` and the cache folder `%LOCALAPPDATA%\KStorm_x64`.
+- **Web pages, search or the marketplace don't load.** These use the viewer's built-in browser. Check
+  the antivirus exclusions above, make sure the viewer isn't running as administrator, then restart it.
+- **Running as administrator.** This can stop media and web pages working. In the shortcut's
+  Properties, under Compatibility and Advanced, turn off the administrator options.
+- **Voice doesn't connect.** Allow TCP 80 and 443 and UDP 3478, 3479, 5060, 5062, 6250 and
+  12000-32000 through your firewall, and turn off any SIP ALG feature in your router.
+- **Maximum bandwidth.** Set it a little below your connection's measured download speed, and
+  lower it if you see packet loss or textures stall.
+- **Texture cache size.** A larger cache means fewer downloads when you return to a place. Use
+  what your disk can spare.
+- **Viewer won't start or files are missing.** Install again from
+  [Releases](https://github.com/kiss-spicoli/KStorm/releases).
+
 ## Community respect
 
 KStorm follows the [Third Party Viewer Policy](https://secondlife.com/corporate/third-party-viewers)

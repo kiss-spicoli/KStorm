@@ -60,6 +60,7 @@
      top_pad="3"
      tool_tip="Displays a notice if the simulator version changes during a teleport or while crossing a region."
      width="450"/>
+<!-- <KS:KS> The news feed came from Firestorm's server.
     <check_box
      control_name="AutoQueryGridStatus"
      height="16"
@@ -68,6 +69,7 @@
      name="AutoQueryGridStatus"
      top_pad="3"
      width="450"/>
+</KS:KS> -->
 
     <check_box
       control_name="FSEnableGrowl"

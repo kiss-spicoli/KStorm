@@ -3191,7 +3191,7 @@ Uruchomione w oknie.
 	<string name="MBVideoDrvErr">
 		Aplikacja [APP_NAME] nie może zostać uruchomiona, ponieważ sterowniki Twojej karty wideo są niepoprawnie zainstalowane, niezaktualizowane lub przeznaczone dla nieobsługiwanego rodzaju sprzętu. Upewnij się, że Twoja karta wideo została zaktualizowana poprawnie, spróbuj zainstalować sterowniki ponownie.
 
-Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
+Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</string>
 	<string name="MBOutOfMemoryTitle">
 		Zabrakło pamięci
@@ -3204,7 +3204,7 @@ Jeśli w komputerze jest mało pamięci RAM, zamknij wszystkie obciążające ap
 	<string name="MBMissingFile">
 		[APP_NAME] nie mogła uzyskać dostępu do niektórych potrzebnych plików, dlatego zostanie zamknięta.
 
-Zainstaluj ponownie przeglądarkę z [DOWNLOAD_URL] i skontaktuj się z [SUPPORT_SITE], jeśli problem będzie się powtarzał po reinstalacji.
+Zainstaluj ponownie przeglądarkę z [DOWNLOAD_URL] i skontaktuj się z https://github.com/kiss-spicoli/KStorm#troubleshooting, jeśli problem będzie się powtarzał po reinstalacji.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Cień na godzinie 5

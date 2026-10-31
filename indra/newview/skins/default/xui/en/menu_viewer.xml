@@ -2885,16 +2885,18 @@
             function="ToggleUIHints"/>
         </menu_item_check>
         
+        <!-- <KS:KS> Was "Firestorm Wiki", https://wiki.firestormviewer.org -->
         <menu_item_call
-         label="Firestorm Wiki"
-         name="Firestorm Wiki"
+         label="KStorm Help"
+         name="KStorm Help"
 	     shortcut="F1">
              <menu_item_call.on_click
              function="PromptShowURL"
              name="script_library_url"
-             parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org" />
+             parameter="WebLaunchExternalTarget,https://github.com/kiss-spicoli/KStorm#readme" />
         </menu_item_call>
         
+        <!-- <KS:KS> Firestorm's troubleshooting page doesn't cover KStorm.
         <menu_item_call
          label="Firestorm Troubleshooting"
          name="Troubleshooting">
@@ -2903,6 +2905,7 @@
              name="wiki_troubleshooting_url"
              parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org/firestorm_troubleshooting" />
         </menu_item_call>
+        </KS:KS> -->
 	   
         <!-- <KS:KS> Firestorm's support group and classes don't cover KStorm.
         <menu_item_call
@@ -2926,6 +2929,7 @@
         </menu_item_call>
         </KS:KS> -->
 
+        <!-- <KS:KS> Firestorm's own events.
         <menu_item_call
          label="Firestorm Events Calendar"
          name="Firestorm Events Calendar">
@@ -2934,6 +2938,7 @@
              name="events_calendar_url"
              parameter="WebLaunchExternalTarget,https://teamup.com/ksxdajnbw9mvw7cbwz" />
         </menu_item_call>
+        </KS:KS> -->
 
         <menu_item_check
          label="Guidebook"

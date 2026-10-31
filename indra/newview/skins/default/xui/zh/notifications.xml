@@ -4023,7 +4023,7 @@ URL：[AUDIOURL]
 關閉路由器中的SIP ALG功能。
 
 將無法用語音通訊。
-https://wiki.firestormviewer.org/fs_voice
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 		<usetemplate ignoretext="當檢視器無法連線到語音伺服器時警告我" name="okignore" yestext="確定"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -4031,7 +4031,7 @@ https://wiki.firestormviewer.org/fs_voice
 
 將無法用語音通訊。
 請檢查你的網路和防火墻設定。
-[https://wiki.firestormviewer.org/fs_voice]
+[https://github.com/kiss-spicoli/KStorm#troubleshooting]
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
@@ -4347,7 +4347,7 @@ https://wiki.firestormviewer.org/fs_voice
 		- 你的系統記憶卡未達系統最低設定要求。
 	</global>
 	<global name="LLLeapUpdaterFailure">
-		啟動更新服務 [UPDATER_APP] 失敗。請檢查檢視器是否已正確安裝，並且具有運行所需的權限。如果您繼續遇到問題，請存取 [SUPPORT_SITE]。
+		啟動更新服務 [UPDATER_APP] 失敗。請檢查檢視器是否已正確安裝，並且具有運行所需的權限。如果您繼續遇到問題，請存取 https://github.com/kiss-spicoli/KStorm#troubleshooting。
 	</global>
 	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
 	如果您擁有土地，您可以將其設定為您的家。
@@ -5865,14 +5865,14 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 
 有關如何將 [APP_NAME] 加入防毒軟體白名單的詳細說明，包括需要排除的檔案與資料夾清單，請參閱我們的指南：
 
-https://wiki.firestormviewer.org/antivirus_whitelisting
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 	</notification>
 	<notification name="ViewerProcessRunningAsAdmin">
 		目前有一個或多個檢視器程序正在以管理員身分執行。已知這可能會導致一些問題，例如媒體和網頁無法正常顯示。
 
 請確保檢視器程序未以管理員身分執行。如需更多資訊，請參閱
 
-https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 		<usetemplate ignoretext="當檢視器以管理員身分執行時發出警告" name="okignore" yestext="確定" />
 	</notification>
 	<notification label="確認覆蓋姿勢" name="ConfirmPoserOverwrite">

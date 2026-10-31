@@ -657,7 +657,7 @@ Obyekt əhatə dairəsindən kənarda ola və ya silinə bilər.
 
 Ətraflı məlumat üçün [_URL] saytına daxil olmaq istərdinizmi?
 		<url name="url">
-			https://wiki.firestormviewer.org/fs_system_requirements
+			https://github.com/kiss-spicoli/KStorm#troubleshooting
 		</url>
 		<usetemplate ignoretext="Mənim kompüter avadanlığım dəstəklənmir" name="okcancelignore" notext="Xeyr" yestext="Bəli"/>
 	</notification>
@@ -3707,7 +3707,7 @@ Zəhmət olmasa şəbəkənizi və təhlükəsizlik divarı quraşdırmanızı y
 Routerinizdə hər hansı SIP ALG funksiyasını söndürün.
 
 Səsli rabitə mövcud olmayacaq.
-https://wiki.firestormviewer.org/fs_voice
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 		<usetemplate ignoretext="Səs serverinə qoşulma zamanı problemlər yarandı" name="okignore" yestext="Bəli"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3715,7 +3715,7 @@ https://wiki.firestormviewer.org/fs_voice
 
 Səsli rabitə mövcud olmayacaq.
 Zəhmət olmasa şəbəkənizi və təhlükəsizlik divarı quraşdırmanızı yoxlayın.
-[https://wiki.firestormviewer.org/fs_voice]
+[https://github.com/kiss-spicoli/KStorm#troubleshooting]
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( [EXISTENCE] san. canlı )
@@ -3959,7 +3959,7 @@ Davam edilsin?
 		- Kompüterinizin sistem yaddaşı minimum tələblərə cavab vermir.
 	</global>
 	<global name="LLLeapUpdaterFailure">
-		[UPDATER_APP] yeniləyici xidmətini işə salmaq alınmadı. İzləyicinin düzgün quraşdırıldığını və işləmək üçün lazımi icazələrə malik olduğunu yoxlayın. Problemlərlə üzləşməyə davam etsəniz, [SUPPORT_SITE] saytına daxil olun.
+		[UPDATER_APP] yeniləyici xidmətini işə salmaq alınmadı. İzləyicinin düzgün quraşdırıldığını və işləmək üçün lazımi icazələrə malik olduğunu yoxlayın. Problemlərlə üzləşməyə davam etsəniz, https://github.com/kiss-spicoli/KStorm#troubleshooting saytına daxil olun.
 	</global>
 	<global name="Siz yalnız öz torpağınızda və ya qitə Infohub-da &quot;Ev&quot; məkanınızı təyin edə bilərsiniz.">
 		Torpaq sahəsiniz varsa, onu evinizə çevirə bilərsiniz.

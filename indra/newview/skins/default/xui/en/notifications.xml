@@ -1923,7 +1923,7 @@ Visit [_URL] for more information?
     <tag>confirm</tag>
     <url option="0" name="url">
 
-			https://wiki.firestormviewer.org/fs_system_requirements
+			https://github.com/kiss-spicoli/KStorm#troubleshooting
     </url>
     <usetemplate
      ignoretext="My computer hardware is not supported"
@@ -10424,7 +10424,7 @@ Please check your network and firewall setup.
 Disable any SIP ALG feature in your router.
 
 Voice communications will not be available.
-https://wiki.firestormviewer.org/fs_voice
+https://github.com/kiss-spicoli/KStorm#troubleshooting
     <tag>voice</tag>
   <tag>fail</tag>
     <usetemplate
@@ -10441,7 +10441,7 @@ We're having trouble connecting to your voice server.
 
 Voice communications will not be available.
 Please check your network and firewall setup.
-[https://wiki.firestormviewer.org/fs_voice]
+[https://github.com/kiss-spicoli/KStorm#troubleshooting]
     <tag>voice</tag>
   <tag>fail</tag>
     <usetemplate
@@ -11282,7 +11282,7 @@ Do you wish to continue?
   </global>
   
   <global name="LLLeapUpdaterFailure">
-Failed to launch updater service [UPDATER_APP]. Please verify the viewer is installed correctly and has the necessary permissions to run. If you continue to experience issues, please visit the [SUPPORT_SITE].
+Failed to launch updater service [UPDATER_APP]. Please verify the viewer is installed correctly and has the necessary permissions to run. If you continue to experience issues, please see KStorm's README: https://github.com/kiss-spicoli/KStorm#troubleshooting
   </global>
 
 <!-- these are alert strings from server. the name needs to match entire the server string, and needs to be changed
@@ -15223,7 +15223,7 @@ Some antivirus programs may mistakenly block parts of [APP_NAME], slowing down i
 
 For detailed instructions on how to whitelist [APP_NAME] - including a list of files and folders to exclude - please visit our guide:
 
-https://wiki.firestormviewer.org/antivirus_whitelisting
+https://github.com/kiss-spicoli/KStorm#troubleshooting
   </notification>
 
   <!-- <FS:TJ> Detect and notify if the viewer is trying to run as admin on Windows -->
@@ -15235,7 +15235,7 @@ One or more viewer processes are currently running as administrator. This is kno
 
 Please ensure that all viewer processes are not set to run as administrator. For more information, please read here:
 
-https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+https://github.com/kiss-spicoli/KStorm#troubleshooting
     <tag>fail</tag>
     <usetemplate
      ignoretext="Warn me when the viewer is running as administrator"

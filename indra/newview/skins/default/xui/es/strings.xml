@@ -2983,7 +2983,7 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="MBVideoDrvErr">
 		[APP_NAME] no puede ejecutarse porque los drivers de tu tarjeta de vídeo o no están bien instalados, o no están actualizados, o son para hardware no admitido. Por favor, comprueba que tienes los drivers más actuales para tu tarjeta de vídeo, y, aunque los tengas, intenta reinstalarlos.
  
-Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
+Si sigues recibiendo este mensaje, contacta con https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Barba del día

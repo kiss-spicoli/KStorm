@@ -3887,7 +3887,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 ルーターのSIP ALG機能を無効にします。
 
 音声通話は利用できなくなります。
-https://wiki.firestormviewer.org/fs_voice
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 		<usetemplate ignoretext="ビューアが音声サーバーに接続できない場合の警告" name="okignore" yestext="ＯＫ"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3895,7 +3895,7 @@ https://wiki.firestormviewer.org/fs_voice
 
 ボイスチャットによるコミュニケーションが利用できません。
 お使いのネットワークやファイアウォールの設定を確認してください。
-[https://wiki.firestormviewer.org/fs_voice]
+[https://github.com/kiss-spicoli/KStorm#troubleshooting]
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
@@ -4205,7 +4205,7 @@ https://wiki.firestormviewer.org/fs_voice
 		－あなたのシステムメモリは、必須動作環境の条件を満たしていません。
 	</global>
 	<global name="LLLeapUpdaterFailure">
-		アップデーターサービス[UPDATER_APP]の起動に失敗しました。ビューアが正しくインストールされ、実行に必要な権限があることを確認してください。引き続き問題が発生する場合は、[SUPPORT_SITE]をご覧ください。
+		アップデーターサービス[UPDATER_APP]の起動に失敗しました。ビューアが正しくインストールされ、実行に必要な権限があることを確認してください。引き続き問題が発生する場合は、https://github.com/kiss-spicoli/KStorm#troubleshootingをご覧ください。
 	</global>
 	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
 		自分の土地を持っている場合、そこを「ホーム」に設定できます。持っていない場合は、マップから「情報ハブ」をお探しください。
@@ -5774,7 +5774,7 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 
 [APP_NAME]をホワイトリストに登録する方法 (除外するファイルとフォルダのリストを含む) の詳細については、次のガイドをご覧ください。
 
-https://wiki.firestormviewer.org/antivirus_whitelisting
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 	</notification>
 	<notification name="WaterExclusionSurfacesWarning">
 		水面を非表示にするボックスをチェックすると、テクスチャ、凹凸、光沢の選択が上書きされます。

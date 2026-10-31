@@ -3669,7 +3669,7 @@ Consigliamo di controllare le impostazioni di rete e del firewall.
 Disabilitare tutte le funzioni SIP ALG sul router.
 
 Le comunicazioni tramite voce non saranno disponibili.
-https://wiki.firestormviewer.org/fs_voice
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 		<usetemplate ignoretext="Avvisami quando non è possibile la connessione con il server voce" name="okignore"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3677,7 +3677,7 @@ https://wiki.firestormviewer.org/fs_voice
 
 Le comunicazioni tramite voce non saranno disponibili.
 Consigliamo di controllare le impostazioni di rete e del firewall.
-[https://wiki.firestormviewer.org/fs_voice]
+[https://github.com/kiss-spicoli/KStorm#troubleshooting]
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( presente da [EXISTENCE] secondi )
@@ -5392,7 +5392,7 @@ Alcuni programmi antivirus potrebbero bloccare erroneamente parti di [APP_NAME],
 
 Per istruzioni dettagliate su come autorizzare [APP_NAME], che includono l'elenco di file e cartelle da escludere, consulta la nostra guida:
 
-https://wiki.firestormviewer.org/antivirus_whitelisting
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 	</notification>
 
 	<notification name="FSSetTitleRegion">

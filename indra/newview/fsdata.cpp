@@ -58,7 +58,10 @@
 #include "rlvhelper.h"
 // [/RLVa:KB]
 
-const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
+// <KS:KS> No address for Firestorm's servers left in the viewer; see startDownload().
+//const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
+const std::string LEGACY_CLIENT_LIST_URL;
+// </KS:KS>
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 
 FSData::FSData() :
@@ -69,8 +72,10 @@ FSData::FSData() :
     mHeaders.insert("User-Agent", LLViewerMedia::getInstance()->getCurrentUserAgent());
     mHeaders.insert("viewer-version", LLVersionInfo::getInstance()->getChannelAndVersionFS());
 
-    mBaseURL = gSavedSettings.getBOOL("FSdataQAtest") ? "http://phoenixviewer.com/app/fsdatatest" : "http://phoenixviewer.com/app/fsdata";
-    mFSDataURL = mBaseURL + "/" + "data.xml";
+    // <KS:KS>
+    //mBaseURL = gSavedSettings.getBOOL("FSdataQAtest") ? "http://phoenixviewer.com/app/fsdatatest" : "http://phoenixviewer.com/app/fsdata";
+    //mFSDataURL = mBaseURL + "/" + "data.xml";
+    // </KS:KS>
 }
 
 FSData::~FSData()

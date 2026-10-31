@@ -2985,7 +2985,7 @@ Bu iletiyi almaya devam ederseniz, lütfen [SUPPORT_SITE] bölümüne başvurun.
 	<string name="MBVideoDrvErr">
 		[APP_NAME] çalışamıyor çünkü video kartı sürücüleriniz düzgün yüklenemedi, süresi geçmiş durumda veya desteklenmeyen donanımlar için geliştirilmiş. Lütfen en yeni video kartı sürücülerine sahip olduğunuza emin olun; en yeni sürücüler mevcutsa da bunları tekrar yüklemeyi deneyin.
 
-Bu iletiyi almaya devam ederseniz, lütfen [SUPPORT_SITE] bölümüne başvurun.
+Bu iletiyi almaya devam ederseniz, lütfen https://github.com/kiss-spicoli/KStorm#troubleshooting bölümüne başvurun.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Bir Günlük Sakal

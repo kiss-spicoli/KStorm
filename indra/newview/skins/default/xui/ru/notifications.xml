@@ -671,7 +671,7 @@
 
 Найти более подробную информацию на [_URL]?
 		<url name="url">
-			https://wiki.firestormviewer.org/fs_system_requirements
+			https://github.com/kiss-spicoli/KStorm#troubleshooting
 		</url>
 		<usetemplate ignoretext="Оборудование моего компьютера не поддерживается" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
@@ -3888,7 +3888,7 @@ URL: [AUDIOURL]
 Отключите любую функцию SIP ALG в вашем маршрутизаторе.
 
 Голосовая связь будет недоступна.
-https://wiki.firestormviewer.org/fs_voice
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 		<usetemplate ignoretext="Возникли проблемы соединения с голосовым сервером" name="okignore" yestext="Да"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3896,7 +3896,7 @@ https://wiki.firestormviewer.org/fs_voice
 
 Голосовое общение будет недоступно.
 Проверьте настройки сети и брандмауэра.
-[https://wiki.firestormviewer.org/fs_voice]
+[https://github.com/kiss-spicoli/KStorm#troubleshooting]
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( [EXISTENCE] сек. жизни )
@@ -4173,7 +4173,7 @@ https://wiki.firestormviewer.org/fs_voice
 		- Системная память вашего компьютера не удовлетворяет минимальным требованиям.
 	</global>
 	<global name="LLLeapUpdaterFailure">
-		Не удалось запустить службу обновления  [UPDATER_APP]. Убедитесь, что программа просмотра установлена правильно и имеет необходимые разрешения для запуска. Если у вас по-прежнему возникают проблемы, посетите [SUPPORT_SITE].
+		Не удалось запустить службу обновления  [UPDATER_APP]. Убедитесь, что программа просмотра установлена правильно и имеет необходимые разрешения для запуска. Если у вас по-прежнему возникают проблемы, посетите https://github.com/kiss-spicoli/KStorm#troubleshooting.
 	</global>
 	<global name="Вы можете установить положение &quot;Дом&quot; только на суше">
 		Если у вас есть участок земли, вы можете сделать его своим домом (домашним местоположением).
@@ -5677,7 +5677,7 @@ https://wiki.firestormviewer.org/fs_voice
 
 Для получения подробных инструкций о том, как внести [APP_NAME] в белый список, включая список файлов и папок, которые необходимо исключить, ознакомьтесь с нашим руководством:
 
-https://wiki.firestormviewer.org/antivirus_whitelisting
+https://github.com/kiss-spicoli/KStorm#troubleshooting
 	</notification>
 
 	<notification label="Подтвердить перезапись позы" name="ConfirmPoserOverwrite">
