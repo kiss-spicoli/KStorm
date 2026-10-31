@@ -624,7 +624,8 @@ Row order (2026-10-26): Surface Ambient Gain; sky; sun; moon; star. Groups are n
 | Variance | `sky cloud_variance` | 0–1 / 0.01 | 0 | |
 | Density X / Y / D | `sky cloud_pos_density1` x / y / z | 0–1, 0–1, 0–3 / 0.01 | 1, 0.53, 1 | |
 | Detail X / Y / D | `sky cloud_pos_density2` x / y / z | 0–1 / 0.01 | 1, 0.53, 0.12 | |
-| Scroll, map | XY pad, texture picker | | | |
+| Cloud image | `sky cloud_id` | texture picker | | Saved with a Look. (Built 2026-10-31.) |
+| Scroll | XY pad | | | Not built |
 
 #### 5. Water
 
@@ -638,7 +639,8 @@ Row order (2026-10-26): Surface Ambient Gain; sky; sun; moon; star. Groups are n
 | Blur | `water blur multiplier` | 0–0.5 / 0.001 | 0.04 | |
 | Transparent water | `RenderTransparentWater` | check box | true | |
 | Refraction above / below | `water scale above` / `below` | 0–3 / 0.01 | 0.03 / 0.2 | |
-| Normal map, waves | texture picker, 2 XY pads | | | |
+| Water normal map | `water normal_map` | texture picker | | Saved with a Look. (Built 2026-10-31.) |
+| Waves | 2 XY pads | | | Not built |
 
 *Enabling:* Refraction above and below are dimmed while Transparent water is off: opaque water draws no refraction (`waterF.glsl`, `underWaterF.glsl`; above still nudges where reflections are sampled, too little to tune).
 

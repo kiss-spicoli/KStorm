@@ -235,6 +235,8 @@ namespace
                                       [](LLSettingsSky& s, const LLSD& v) { s.setCloudPosDensity1(LLColor3(v)); } } },
             { "cloud_pos_density2", { "clouds", [](LLSettingsSky& s) { return s.getCloudPosDensity2().getValue(); },
                                       [](LLSettingsSky& s, const LLSD& v) { s.setCloudPosDensity2(LLColor3(v)); } } },
+            { "cloud_texture", { "clouds", [](LLSettingsSky& s) { return LLSD(s.getCloudNoiseTextureId()); },
+                                 [](LLSettingsSky& s, const LLSD& v) { s.setCloudNoiseTextureId(v.asUUID()); } } },
 
             // Read as the renderer uses it (a legacy sky's auto-adjusted value); setting it
             // makes a legacy copy an EEP sky, as the panes do.
@@ -268,6 +270,8 @@ namespace
                                   [](LLSettingsWater& w, const LLSD& v) { w.setFresnelOffset((F32)v.asReal()); } } },
             { "normal_scale", { "water", [](LLSettingsWater& w) { return w.getNormalScale().getValue(); },
                                 [](LLSettingsWater& w, const LLSD& v) { LLVector3 n; n.setValue(v); w.setNormalScale(n); } } },
+            { "normal_map", { "water", [](LLSettingsWater& w) { return LLSD(w.getNormalMapID()); },
+                              [](LLSettingsWater& w, const LLSD& v) { w.setNormalMapID(v.asUUID()); } } },
             { "scale_above", { "water", [](LLSettingsWater& w) { return realValue(w.getScaleAbove()); },
                                [](LLSettingsWater& w, const LLSD& v) { w.setScaleAbove((F32)v.asReal()); } } },
             { "scale_below", { "water", [](LLSettingsWater& w) { return realValue(w.getScaleBelow()); },
