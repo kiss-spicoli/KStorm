@@ -58,7 +58,8 @@ the camera to the avatar.
   effect: the idle update pins the rendered camera instead of running `updateCamera()`.
 - **Roll row** (user, 2026-10-31): the bottom row shows the roll keys as a hint (`Roll: R / T`), with the
   Cameratools roll buttons to its left and right, same images and same click and hold speed. The hint
-  reads the bindings, so it follows Preferences > Controls. The floater grew 18 px to 412. Both buttons are
+  reads the bindings, so it follows Preferences > Controls, and the buttons move to sit against it however
+  long the key names are (up to 244 px of text). The floater grew 18 px to 412. Both buttons are
   off while Lock Camera is on, which also blocks the keys. A saved view already stores its roll.
 - **Draw Distance** (user, 2026-10-28): a slider just below Lock Camera, bound to `RenderFarClip`
   (`control_name`), so it follows every other setter: Preferences > Graphics > General and

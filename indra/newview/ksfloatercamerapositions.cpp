@@ -179,7 +179,21 @@ void KSFloaterCameraPositions::refreshRollHint()
     LLStringUtil::format_map_t args;
     args["[LEFT]"] = bindingText("roll_left");
     args["[RIGHT]"] = bindingText("roll_right");
-    getChild<LLUICtrl>("ks_camera_roll_hint")->setValue(getString("roll_hint", args));
+    LLTextBox* hint = getChild<LLTextBox>("ks_camera_roll_hint");
+    hint->setValue(getString("roll_hint", args));
+
+    // Key names vary in length, so the buttons sit against the text wherever it ends.
+    constexpr S32 BUTTON_GAP = 4;
+    const LLRect hint_rect = hint->getRect();
+    const S32 half_width = llmin(hint->getTextPixelWidth(), hint_rect.getWidth()) / 2;
+    const auto moveButton = [](LLButton* button, S32 left)
+        {
+            LLRect rect = button->getRect();
+            rect.setOriginAndSize(left, rect.mBottom, rect.getWidth(), rect.getHeight());
+            button->setRect(rect);
+        };
+    moveButton(mRollLeftButton, hint_rect.getCenterX() - half_width - BUTTON_GAP - mRollLeftButton->getRect().getWidth());
+    moveButton(mRollRightButton, hint_rect.getCenterX() + half_width + BUTTON_GAP);
 }
 
 void KSFloaterCameraPositions::onClose(bool app_quitting)
