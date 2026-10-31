@@ -77,6 +77,8 @@ namespace
         "RenderShadowErrorCutoff", "RenderShadowNoise", "RenderSpotShadowBias",
         "RenderGTAOBackend", "RenderDeferredNoise", "RenderEdgeDepthCutoff", "RenderEdgeNormCutoff",
         "RenderEnableEmissiveBuffer",
+        // Off skips all sun and ambient light on deferred surfaces, leaving them black.
+        "RenderDeferredAtmospheric",
         "RenderGlowLumWeights", "RenderGlowMinLuminance", "RenderGlowMaxExtractAlpha",
         "RenderGlowWarmthAmount", "RenderGlowWarmthWeights", "RenderGlowNoise",
         "RenderDeferredDisplayGamma",

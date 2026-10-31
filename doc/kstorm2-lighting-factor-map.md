@@ -367,7 +367,7 @@ Method: every `control_name` (and code-wired widget) in all XUI files whose sett
 | `RenderLightRadius`, "Show bounding boxes for all lights" | PT, APT, menu | light debug visualisation | P4 |
 | `RenderReflectionProbeVolumes`, `RenderReflectionProbeShowTransparent` | menu | probe debug | P3 |
 | `RenderEdgeDepthCutoff`, `RenderEdgeNormCutoff`, `RenderDeferredNoise` | none | edge-aware shadow/AO blur and shadow noise | P3 |
-| `RenderDeferredAtmospheric` | none | atmospheric pass on geometry | P1 |
+| `RenderDeferredAtmospheric` | none | whole sun and ambient pass on deferred surfaces, plus haze; off leaves them black except for local lights | P1 |
 | `RenderDeferredDisplayGamma` | none | gamma used by alpha pool | P5 |
 | `RenderReflectionProbeDynamicAllocation`, `RenderHeroProbeConservativeUpdateMultiplier` | none | probe memory and update policy | P3 |
 
@@ -388,7 +388,7 @@ Five panels hold every lighting control (surfaced and currently unsurfaced). All
 - **Key light:** sun azimuth/elevation, moon azimuth/elevation (no trackball), **Sun & Moon Light Colour**, Sunlight Gain (`RenderHDRSkySunlightScale`), sun scale, moon scale (tooltip: larger discs fade out later at the horizon), **Moon Disk Brightness**, partial moon below horizon, star brightness.
 - **Fill:** **Sky Ambient Gain** (hue-preserving, 8.2), Surface Ambient Gain (`RenderSkyAmbientScale`, negatives allowed), **Probe Fill Strength** (0.01–10, step 0.01; 11.1 tooltip; disabled when probes are off, 8.3).
 - **Haze** (one section labelled "Haze", no special highlighting; Haze Density first): Haze Density; Haze Glow Brightness (Haze Horizon); Haze Glow Strength (Glow Size); Haze Glow Focus (Glow Focus); Air Glow Colour (Blue Horizon); Air Density (Blue Density) (both 0–3 per channel, the code range). Behaviour required by 12.7: while Haze Density is 0, Haze Glow Brightness, Haze Glow Strength and Haze Glow Focus show as inactive with the note "No effect while Haze Density is 0"; the two Air controls carry the haze-0 notes.
-- **Atmosphere — other:** Atmosphere Thickness (density multiplier), Fog Distance Scale (distance multiplier), **Haze Ceiling (m)** (max altitude; renamed **Atmosphere Height (m)**, decided 2026-10-25), moisture/droplet/ice, `RenderDeferredAtmospheric`.
+- **Atmosphere — other:** Atmosphere Thickness (density multiplier), Fog Distance Scale (distance multiplier), **Haze Ceiling (m)** (max altitude; renamed **Atmosphere Height (m)**, decided 2026-10-25), moisture/droplet/ice. (`RenderDeferredAtmospheric` is not a pane control: Debug Settings only since 2026-10-31, held on by KS Reference.)
 - **Clouds:** coverage, scale, variance, colour, density X/Y/D, detail X/Y/D, scroll, map.
 - **Water:** fog colour, density, underwater modifier, fresnel scale/offset, normal map/scale, waves, refraction above/below, blur, transparent water.
 - **Sky visuals (tabs linking the AEE panels):** procedural sun, moon rendering, stars/Milky Way, horizon scattering and water horizon fog, auroras, weather; Sky Detail (`WLSkyDetail`).
