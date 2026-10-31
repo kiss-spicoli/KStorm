@@ -8,7 +8,7 @@
  * removed on 2026-10-26: the compact launcher has no room for it.
  * For now it always opens compact with its mode toggle hidden; the open mode and
  * KSLightingCompact are kept for later. Opened from KStorm > KStorm Lighting (Alt+Shift+L)
- * or its toolbar button.
+ * or its toolbar button. The first open sets the home layout (applyFirstOpenLayout()).
  */
 #ifndef KS_FLOATERLIGHTING_H
 #define KS_FLOATERLIGHTING_H
@@ -78,6 +78,12 @@ private:
     // pane in its slot from top to bottom, collapsed or expanded as it was when it closed, each
     // in front of the one above it so every header stays visible.
     void onDockToggle();
+    // Hides every open docked pane and proxy header.
+    void closeDockedPanes();
+    // The first open only (KSLightingFirstOpenDone): the launcher near the right edge of the
+    // screen, halfway up (raised if a pane would hang below the screen), every pane docked and
+    // closed on its left.
+    void applyFirstOpenLayout();
     // Keeps every open docked pane in its slot (top aligned with its button, against the
     // launcher's edge), so docked panes follow the launcher and any other move or resize.
     void keepDockedPanesInPlace();
