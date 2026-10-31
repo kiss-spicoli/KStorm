@@ -938,7 +938,7 @@ Use KS Reference would set each of these while it is on and restore the previous
 | `RenderEdgeDepthCutoff` | 0.01 | default | Depth of field edge detection. |
 | `RenderEdgeNormCutoff` | 0.25 | default |  |
 | `RenderEnableEmissiveBuffer` | TRUE | default | Off breaks auto-exposure metering, glow and several AyaneStorm sky effects. |
-| `RenderDeferredAtmospheric` | TRUE | default | Off skips the whole sun and ambient pass (`pipeline.cpp`, soften pass), not just haze: deferred surfaces go black except for local lights. Removed from the Atmosphere pane 2026-10-31; Debug Settings only. |
+| `RenderDeferredAtmospheric` | TRUE | default | Off skips the whole sun and ambient pass (`pipeline.cpp`, soften pass), not just haze: deferred surfaces go black except for local lights. Removed from the Atmosphere pane 2026-10-31; Debug Settings only. Turned on at every startup (`llappviewer.cpp`), so turning it off lasts one session. |
 | `RenderGlowLumWeights` | 1.0 0.0 0.0 | default | Glow internals (6 settings). |
 | `RenderGlowMinLuminance` | 0.8 | default |  |
 | `RenderGlowMaxExtractAlpha` | 0.25 | default |  |

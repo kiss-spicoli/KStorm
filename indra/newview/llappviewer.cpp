@@ -1171,6 +1171,9 @@ bool LLAppViewer::init()
     settings_setup_listeners();
     // Modify settings based on system configuration and compile options
     settings_modify();
+    // <KS:KS> Off leaves deferred surfaces black, so turning it off in Debug Settings lasts one session.
+    gSavedSettings.setBOOL("RenderDeferredAtmospheric", true);
+    // </KS:KS>
 
     // Find partition serial number (Windows) or hardware serial (Mac)
     mSerialNumber = generateSerialNumber();
