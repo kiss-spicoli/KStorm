@@ -87,7 +87,6 @@ notices are retained.
 
 - Second Life only; OpenSim support is off.
 - Windows is the build that is used and tested.
-- There are no public builds yet.
 
 ## Build (Windows)
 
