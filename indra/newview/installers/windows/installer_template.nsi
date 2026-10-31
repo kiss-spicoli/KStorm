@@ -1100,12 +1100,15 @@ Pop $2
 Pop $1
 Pop $0
 
-# Delete files in ProgramData\Firestorm
-Push $0
-  ReadRegStr $0 SHELL_CONTEXT "${MSCURRVER_KEY}\Explorer\Shell Folders" "Common AppData"
-  StrCmp $0 "" +2
-  RMDir /r "$0\Firestorm"
-Pop $0
+# <KS:KS> ProgramData\Firestorm isn't KStorm's: a Firestorm install on the same PC may use it.
+# KStorm writes nothing to ProgramData, so there is nothing to remove there.
+## Delete files in ProgramData\Firestorm
+#Push $0
+#  ReadRegStr $0 SHELL_CONTEXT "${MSCURRVER_KEY}\Explorer\Shell Folders" "Common AppData"
+#  StrCmp $0 "" +2
+#  RMDir /r "$0\Firestorm"
+#Pop $0
+# </KS:KS>
 
 Keep:
 
