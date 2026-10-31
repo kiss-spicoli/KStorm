@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-31, with the merge of `fix-ks-remove-old-logo`.
-- **KStorm's own work:** 166 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,000
+- **Last updated:** 2026-10-31, with the merge of `feat-ks-launcher-first-run`.
+- **KStorm's own work:** 168 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,000
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -99,6 +99,10 @@ Details: `doc/ks-hair-occlusion.md`.
 - **Layout.** The launcher is always the compact icon strip, with no footer. Pane headers are
   taller and panes are 300 px wide. A Hair... button sits on Quick. (`7b5783c2f25`,
   `2b061db5011`, `f849cb87a61`, `47e14bc389a`, `34405ce728c`)
+- **First open.** The first time the launcher opens, it goes near the right edge of the screen,
+  halfway up, or higher if a pane would otherwise hang below the screen. Every pane and proxy is
+  docked and closed on its left, and the launcher is narrow. AyaneStorm's own windows are not
+  moved. (`9dbc85c5e28`)
 
 Details: `doc/kstorm2-lighting-UI-design.md`.
 
