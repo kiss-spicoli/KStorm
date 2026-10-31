@@ -2829,6 +2829,7 @@
              parameter="WebLaunchExternalTarget,https://www.primfeed.com/firestorm-viewer" />
        </menu_item_call>
 </KS:KS> -->
+<!-- <KS:KS> Firestorm's own social pages.
     	<menu_item_call
              label="Firestorm Flickr"
              name="Firestorm Flickr">
@@ -2837,6 +2838,8 @@
              name="firestorm_flickr_url"
              parameter="WebLaunchExternalTarget,http://www.flickr.com/groups/firestormviewer/pool/" />
        </menu_item_call>
+</KS:KS> -->
+<!-- <KS:KS> Firestorm's own social pages.
     	<menu_item_call
              label="Firestorm YouTube"
              name="Firestorm YouTube">
@@ -2845,6 +2848,8 @@
              name="firestorm_youtube_url"
              parameter="WebLaunchExternalTarget,http://www.youtube.com/user/PhoenixViewerSL" />
        </menu_item_call>
+</KS:KS> -->
+<!-- <KS:KS> Firestorm's own social pages.
     	<menu_item_call
              label="Firestorm Twitter"
              name="Firestorm Twitter">
@@ -2853,6 +2858,8 @@
              name="firestorm_twitter_url"
              parameter="WebLaunchExternalTarget,https://twitter.com/phoenixviewersl" />
        </menu_item_call>
+</KS:KS> -->
+<!-- <KS:KS> Firestorm's own social pages.
     	<menu_item_call
              label="Firestorm Plurk"
              name="Firestorm Plurk">
@@ -2861,6 +2868,7 @@
              name="firestorm_plurk_url"
              parameter="WebLaunchExternalTarget,http://www.plurk.com/ThePhoenixViewerProject" />
        </menu_item_call>
+</KS:KS> -->
        <menu_item_separator/>
        <menu_item_call
              label="Message of the day"
