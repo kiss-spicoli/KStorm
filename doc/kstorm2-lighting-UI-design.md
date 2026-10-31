@@ -150,7 +150,6 @@ Engineering prerequisite (O6): the 0/0 guards in `cloudsV.glsl`, `asHorizonCloud
 | **Atmosphere Thickness** | sky `density_multiplier` (stored = display × 0.001) | 0.0001–2 / 0.0001 | "Scales haze thickness and sun extinction." | `atmosphericsFuncs.glsl:66,79` |
 | **Fog Distance Scale** | sky `distance_multiplier` | 0.05–1000 / 0.01 | "Scales how fast distance fog builds." | same |
 | Moisture, Droplet radius, Ice | sky `moisture_level`, `droplet_radius`, `ice_level` | 0–1 / 0.001; 5–1000 / 0.01; 0–1 / 0.001 | "Rainbow and halo only." | `skyF.glsl` |
-| Atmospheric pass | `RenderDeferredAtmospheric` | check box | "Haze on scene geometry." | `pipeline.cpp:1368` |
 
 ### 2.6 Clouds
 
@@ -602,7 +601,6 @@ Row order (2026-10-26): Surface Ambient Gain; sky; sun; moon; star. Groups are n
 | Atmosphere Height (m) | `sky max_y` | 0–10000 / 0.01 | 1605 | Height of the atmosphere: limits fog, haze and sun dimming. |
 | Atmosphere Thickness | `sky density_multiplier` (stored = display × 0.001) | 0.0001–2 / 0.0001 | 0.1 | Scales haze thickness and sun extinction. |
 | Fog Distance Scale | `sky distance_multiplier` | 0.05–1000 / 0.01 | 0.8 | Scales how fast distance fog builds. |
-| Atmospheric pass | `RenderDeferredAtmospheric` | check box | true | Haze on scene geometry. |
 | Moisture | `sky moisture_level` | 0–1 / 0.001 | 0 | Rainbow and halo only. |
 | Droplet radius | `sky droplet_radius` | 5–1000 / 0.01 | 800 | |
 | Ice | `sky ice_level` | 0–1 / 0.001 | 0 | |
@@ -942,6 +940,7 @@ Use KS Reference would set each of these while it is on and restore the previous
 | `RenderEdgeDepthCutoff` | 0.01 | default | Depth of field edge detection. |
 | `RenderEdgeNormCutoff` | 0.25 | default |  |
 | `RenderEnableEmissiveBuffer` | TRUE | default | Off breaks auto-exposure metering, glow and several AyaneStorm sky effects. |
+| `RenderDeferredAtmospheric` | TRUE | default | Off skips the whole sun and ambient pass (`pipeline.cpp`, soften pass), not just haze: deferred surfaces go black except for local lights. Removed from the Atmosphere pane 2026-10-31; Debug Settings only. Turned on at every startup (`llappviewer.cpp`), so turning it off lasts one session. |
 | `RenderGlowLumWeights` | 1.0 0.0 0.0 | default | Glow internals (6 settings). |
 | `RenderGlowMinLuminance` | 0.8 | default |  |
 | `RenderGlowMaxExtractAlpha` | 0.25 | default |  |

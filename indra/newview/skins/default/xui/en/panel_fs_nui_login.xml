@@ -303,6 +303,7 @@
       top_pad="10"
       name="remember_check"
       width="204" />
+    <!-- <KS:KS> login password eye removed; it did not work.
     <button
       name="password_show_btn"
       tool_tip="Show password text"
@@ -327,6 +328,7 @@
       image_unselected="Profile_Group_Visibility_On"
       tab_stop="false"
       visible="false"  />
+    </KS:KS> -->
     </layout_panel> <!-- password_container -->
     <layout_panel
       auto_resize="false"
