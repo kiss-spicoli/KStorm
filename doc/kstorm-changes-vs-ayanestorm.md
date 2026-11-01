@@ -5,11 +5,12 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-31, with the merge of `feat-ks-ci-mac-webp`.
-- **KStorm's own work:** 178 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,000
+- **Last updated:** 2026-10-31, with the merges of `feat-ks-ambient-color` and
+  `feat-ks-lighting-texture-pickers`.
+- **KStorm's own work:** 180 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,000
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
-  example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
+  example VBAO, an improved ambient occlusion), plus two merges of newer Firestorm and Linden Lab
   code.
 
 To refresh the numbers:
@@ -17,7 +18,7 @@ To refresh the numbers:
 ```
 git log --reverse --no-merges --format="%h %ad %s" --date=short upstream/master..kstorm
 git diff --shortstat upstream/master kstorm
-git rev-list --count upstream/master..upstream/ayanestorm-dev
+git rev-list --count --first-parent --no-merges upstream/master..upstream/ayanestorm-dev
 ```
 
 ## 1. My Lights: your personal lights, much expanded
@@ -103,6 +104,12 @@ Details: `doc/ks-hair-occlusion.md`.
   halfway up, or higher if a pane would otherwise hang below the screen. Every pane and proxy is
   docked and closed on its left, and the launcher is narrow. The dock button then opens every
   pane collapsed. AyaneStorm's own windows are not moved. (`9dbc85c5e28`, `5128d9a831f`)
+- **Sky Ambient Color.** A color picker on the Sun/Moon pane sets the hue of the sky's ambient
+  color, which tints the sky, clouds and haze. Sky Ambient Gain still sets its brightness, and
+  surfaces use only that brightness. The pane grows 24 px, to 350. (`be66bd44ab0`)
+- **Cloud image and water normal map.** Pickers on the Clouds and Water panes choose these
+  textures, as in Personal Lighting. Looks now save both, and older Looks leave them as they are.
+  Each pane grows 69 px. (`b60e7afc10d`)
 
 Details: `doc/kstorm2-lighting-UI-design.md`.
 
