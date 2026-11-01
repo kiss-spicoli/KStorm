@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-31, with the merge of `feat-ks-ci-mac-linux`.
-- **KStorm's own work:** 176 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,000
+- **Last updated:** 2026-10-31, with the merge of `feat-ks-ci-mac-webp`.
+- **KStorm's own work:** 178 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,000
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus a merge of newer Firestorm and Linden Lab
@@ -354,9 +354,10 @@ Details: `doc/kstorm-rebrand-plan.md`.
 - **This document.** (`161a0c9d973`)
 - **KStorm's own GitHub build.** A workflow started by hand checks changed shaders in the variants
   the viewer compiles and builds an unsigned Windows installer, with no secrets. Optional Mac and
-  Linux jobs build a disk image and an archive the same way; these aren't released, and neither has
-  been run or tested yet. Firestorm's inherited workflows stay in the repo. (`fd5e6b6b825`,
-  `d97e886eaaf`, `e33ee113494`)
+  Linux jobs build a disk image and an archive the same way; these aren't released. The Linux build
+  has succeeded but its archive hasn't been run. The Mac job builds its own universal libwebp, because
+  the package is Intel only; it hasn't finished a build yet. Firestorm's inherited workflows stay in
+  the repo. (`fd5e6b6b825`, `d97e886eaaf`, `e33ee113494`, `9e37c1064c0`)
 
 ## Keyboard shortcuts
 
