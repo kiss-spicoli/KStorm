@@ -43,6 +43,7 @@
 class LLCheckBoxCtrl;
 class LLColorSwatchCtrl;
 class LLTextBox;
+class LLTextureCtrl;
 class LLUICtrl;
 
 class KSFloaterLightingPaneBase : public LLFloater
@@ -171,11 +172,16 @@ private:
     void refreshEnvironment();
     void onEnvCommit(const EnvBinding& binding);
     bool isEnvBinding(const LLView* view) const;
+    void connectTexturePickers();
+    void onCloudMapCommit();
+    void onWaterNormalMapCommit();
 
     std::vector<VectorSlider> mVectorSliders;
     std::vector<boost::signals2::connection> mConnections;
     LLCheckBoxCtrl* mLightBoxes = nullptr;
     std::vector<EnvBinding> mEnvBindings;
+    LLTextureCtrl* mCloudMap = nullptr;         // Clouds pane
+    LLTextureCtrl* mWaterNormalMap = nullptr;   // Water pane
     LLTextBox* mOrigin = nullptr;
     LLTextBox* mProbeInUse = nullptr;
     LLView* mPinnedNote = nullptr;

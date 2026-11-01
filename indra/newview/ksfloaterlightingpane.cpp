@@ -23,6 +23,7 @@
 #include "lllocalcliprect.h"
 #include "llselectmgr.h"
 #include "lltextbox.h"
+#include "lltexturectrl.h"
 #include "lluictrl.h"
 #include "lluictrlfactory.h"
 #include "llviewercontrol.h"
@@ -729,6 +730,8 @@ void KSFloaterLightingPane::connectEnvironment()
         }
     }
 
+    connectTexturePickers();
+
     mOrigin = findChild<LLTextBox>("ks_ro_origin");
     mProbeInUse = findChild<LLTextBox>("ks_ro_probe");
     mPinnedNote = findChildView("ks_note_pinned");
@@ -815,6 +818,24 @@ void KSFloaterLightingPane::refreshEnvironment()
         }
     }
 
+    // Only when it differs: setting a picker's value disturbs its open texture floater.
+    if (mCloudMap)
+    {
+        mCloudMap->setEnabled(sky != nullptr);
+        if (sky && mCloudMap->getValue().asUUID() != sky->getCloudNoiseTextureId())
+        {
+            mCloudMap->setValue(sky->getCloudNoiseTextureId());
+        }
+    }
+    if (mWaterNormalMap)
+    {
+        mWaterNormalMap->setEnabled(water != nullptr);
+        if (water && mWaterNormalMap->getValue().asUUID() != water->getNormalMapID())
+        {
+            mWaterNormalMap->setValue(water->getNormalMapID());
+        }
+    }
+
     if (mOrigin)
     {
         mOrigin->setText(!sky ? std::string("-") : legacy ? std::string("Legacy (auto-adjusted)") : std::string("EEP"));
@@ -897,6 +918,52 @@ void KSFloaterLightingPane::onEnvCommit(const EnvBinding& binding)
         }
         sky->update();
     }
+    KSEnvironment::notifyEdited();
+}
+
+void KSFloaterLightingPane::connectTexturePickers()
+{
+    mCloudMap = findChild<LLTextureCtrl>("ks_cloud_map");
+    if (mCloudMap)
+    {
+        mCloudMap->setDefaultImageAssetID(LLSettingsSky::GetDefaultCloudNoiseTextureId());
+        mCloudMap->setCommitCallback([this](LLUICtrl*, const LLSD&) { onCloudMapCommit(); });
+    }
+    mWaterNormalMap = findChild<LLTextureCtrl>("ks_water_normal_map");
+    if (mWaterNormalMap)
+    {
+        mWaterNormalMap->setDefaultImageAssetID(LLSettingsWater::GetDefaultWaterNormalAssetId());
+        mWaterNormalMap->setBlankImageAssetID(BLANK_OBJECT_NORMAL);
+        mWaterNormalMap->setCommitCallback([this](LLUICtrl*, const LLSD&) { onWaterNormalMapCommit(); });
+    }
+}
+
+void KSFloaterLightingPane::onCloudMapCommit()
+{
+    // As in onEnvCommit(): read the control before the local environment can be created.
+    const LLUUID id = mCloudMap->getValue().asUUID();
+    LLSettingsSky::ptr_t sky = KSEnvironment::getEditableSky();
+    // A new cloud texture only takes effect on a new sky, so copy it, as Personal Lighting does.
+    LLSettingsSky::ptr_t copy = sky ? sky->buildClone() : LLSettingsSky::ptr_t();
+    if (!copy)
+    {
+        return;
+    }
+    copy->setCloudNoiseTextureId(id);
+    KSEnvironment::commitSky(copy);
+    KSEnvironment::notifyEdited();
+}
+
+void KSFloaterLightingPane::onWaterNormalMapCommit()
+{
+    const LLUUID id = mWaterNormalMap->getValue().asUUID();
+    LLSettingsWater::ptr_t water = KSEnvironment::getEditableWater();
+    if (!water)
+    {
+        return;
+    }
+    water->setNormalMapID(id);
+    water->update();
     KSEnvironment::notifyEdited();
 }
 
