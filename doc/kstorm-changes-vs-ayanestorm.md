@@ -365,10 +365,10 @@ Details: `doc/kstorm-rebrand-plan.md`.
 - **This document.** (`161a0c9d973`)
 - **KStorm's own GitHub build.** A workflow started by hand checks changed shaders in the variants
   the viewer compiles and builds an unsigned Windows installer, with no secrets. Optional Mac and
-  Linux jobs build a disk image and an archive the same way; these aren't released. The Linux build
-  has succeeded but its archive hasn't been run. The Mac job builds its own universal libwebp, because
-  the package is Intel only. The Mac app, executable and bundle id are now KStorm's; the Mac job
-  hasn't finished a build yet. Firestorm's inherited workflows stay in the repo. (`fd5e6b6b825`,
+  Linux jobs build a disk image and an archive the same way; these aren't released. Both have built
+  on GitHub, but neither result has been run. The Mac job builds its own universal libwebp, because
+  the package is Intel only. The Mac app, executable and bundle id are now KStorm's. Firestorm's
+  inherited workflows stay in the repo. (`fd5e6b6b825`,
   `d97e886eaaf`, `e33ee113494`, `9e37c1064c0`, `ab389e2e4f5`)
 
 ## Keyboard shortcuts
