@@ -5,9 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-31, with the merges of `feat-ks-ambient-color`,
-  `feat-ks-lighting-texture-pickers`, `feat-ks-camera-roll-row` and `feat-ks-mac-app-name`.
-- **KStorm's own work:** 186 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,100
+- **Last updated:** 2026-11-01, with the merge of `feat-ks-snapshot-depth`.
+- **KStorm's own work:** 189 commits (Kissmy Spicoli, Oct 18 to Nov 1), 299 files, about 17,100
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus two merges of newer Firestorm and Linden Lab
@@ -355,6 +354,9 @@ Details: `doc/kstorm-rebrand-plan.md`.
   drop to zero. (`532ab810f21`)
 - **Conversations window.** Its minimum height is halved to 141 px, so it can be made much
   shorter. Torn-off windows keep their own limits. (`c8b73f87333`)
+- **Snapshot depth maps.** Depth and Depth (24 bit) snapshots now hold true distance, measured
+  straight ahead from the camera, from near to draw distance. They used to read about twice the
+  true distance up close. Anything past draw distance, and the sky, is white. (`50c26a372f2`)
 
 ## 13. Renames and documentation
 
@@ -401,6 +403,7 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
 - for Clear View: the settings listener (`llviewercontrol.cpp`), the snapshot UI restore
   (`llviewerwindow.cpp`), the Show User Interface shortcut notice (`llviewermenu.cpp`) and the
   depth-of-field progress counter (`asdofrenderer.cpp`)
+- for snapshot depth maps: the depth conversion (`llviewerwindow.cpp`)
 - for the shader-compile notice: the three settings handlers that reload shaders
   (`llviewercontrol.cpp`) and the main loop, which draws the notice in place of a frame
   (`llappviewer.cpp`)
