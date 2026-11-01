@@ -5,9 +5,9 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-10-31, with the merges of `feat-ks-ambient-color` and
-  `feat-ks-lighting-texture-pickers`.
-- **KStorm's own work:** 180 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,000
+- **Last updated:** 2026-10-31, with the merges of `feat-ks-ambient-color`,
+  `feat-ks-lighting-texture-pickers` and `feat-ks-camera-roll-row`.
+- **KStorm's own work:** 184 commits (Kissmy Spicoli, Oct 18 to Oct 31), 299 files, about 17,100
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus two merges of newer Firestorm and Linden Lab
@@ -197,6 +197,10 @@ Details: `doc/kstorm2-lighting-UI-design.md`.
 - **Draw Distance** slider below Lock Camera, 8 to 1024 m. It is the same setting as
   Preferences and follows every other setter, such as the Reference look and `/dd`.
   (`b76c5eb6089`, range `7914e82ebae`)
+- **Roll row.** The bottom row shows the keys that roll the camera, read from your key bindings,
+  with the Cameratools roll buttons on either side. Click nudges and hold rolls, as in Cameratools.
+  Both buttons turn off under Lock Camera, which also blocks the keys. The floater grows 18 px, to
+  412. (`3453cde40ed`, `79adbaf664f`)
 
 Details: `doc/kstorm-camera-positions.md`.
 
