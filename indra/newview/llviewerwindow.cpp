@@ -6379,8 +6379,16 @@ bool LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 
     S32 output_buffer_offset_y = 0;
 
-    F32 depth_conversion_factor_1 = (LLViewerCamera::getInstance()->getFar() + LLViewerCamera::getInstance()->getNear()) / (2.f * LLViewerCamera::getInstance()->getFar() * LLViewerCamera::getInstance()->getNear());
-    F32 depth_conversion_factor_2 = (LLViewerCamera::getInstance()->getFar() - LLViewerCamera::getInstance()->getNear()) / (2.f * LLViewerCamera::getInstance()->getFar() * LLViewerCamera::getInstance()->getNear());
+    // <KS:KS> Depth comes from setup3DRender()'s projection, whose far plane is MAX_FAR_CLIP * 2
+    // at any draw distance, and the loops below pass window depth d (0 to 1), not NDC (-1 to 1):
+    // 1/z = 1/near - d * (far - near) / (far * near). z is along the view axis, in meters.
+    //F32 depth_conversion_factor_1 = (LLViewerCamera::getInstance()->getFar() + LLViewerCamera::getInstance()->getNear()) / (2.f * LLViewerCamera::getInstance()->getFar() * LLViewerCamera::getInstance()->getNear());
+    //F32 depth_conversion_factor_2 = (LLViewerCamera::getInstance()->getFar() - LLViewerCamera::getInstance()->getNear()) / (2.f * LLViewerCamera::getInstance()->getFar() * LLViewerCamera::getInstance()->getNear());
+    const F32 depth_near = LLViewerCamera::getInstance()->getNear();
+    const F32 depth_far = MAX_FAR_CLIP * 2.f;
+    F32 depth_conversion_factor_1 = 1.f / depth_near;
+    F32 depth_conversion_factor_2 = (depth_far - depth_near) / (depth_far * depth_near);
+    // </KS:KS>
 
     // Subimages are in fact partial rendering of the final view. This happens when the final view is bigger than the screen.
     // In most common cases, scale_factor is 1 and there's no more than 1 iteration on x and y
