@@ -160,6 +160,24 @@ jobs:
         shell: bash
         run: autobuild configure -A 64 -c ReleaseFS_open -- --chan Research --no-opensim --package -DLL_TESTS:BOOL=FALSE
 
+      # The libwebp package is Intel only, which fails the Apple chip link. Replaces it with the
+      # same version built for both, one chip at a time so that each keeps its fast image code.
+      - name: Make libwebp universal
+        shell: bash
+        run: |
+          git clone --depth 1 --branch v1.3.2 https://github.com/webmproject/libwebp.git libwebp-src
+          target="$(sed -n 's/^CMAKE_OSX_DEPLOYMENT_TARGET:STRING=//p' build-darwin-universal/CMakeCache.txt)"
+          for arch in arm64 x86_64; do
+            cmake -S libwebp-src -B "libwebp-$arch" -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="$arch" -DCMAKE_OSX_DEPLOYMENT_TARGET="$target" \
+              -DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF \
+              -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_LIBWEBPMUX=OFF -DWEBP_BUILD_EXTRAS=OFF
+            cmake --build "libwebp-$arch" --target webp sharpyuv --parallel
+          done
+          for lib in libwebp libsharpyuv; do
+            lipo -create "libwebp-arm64/$lib.a" "libwebp-x86_64/$lib.a" -output "build-darwin-universal/packages/lib/release/$lib.a"
+            lipo -info "build-darwin-universal/packages/lib/release/$lib.a"
+          done
+
       - name: Build
         shell: bash
         run: autobuild build -A 64 -c ReleaseFS_open --no-configure
