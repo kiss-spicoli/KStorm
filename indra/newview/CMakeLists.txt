@@ -3057,13 +3057,24 @@ if (DARWIN)
   # magically known to CMake -- it's that these names are referenced in the
   # Info-SecondLife.plist file in the configure_file() directive below.
   #set(product "${VIEWER_CHANNEL}")
-  set(product "AyaneStorm")
-  set(MACOSX_EXECUTABLE_NAME "AyaneStorm")
-  set(MACOSX_BUNDLE_INFO_STRING "AyaneStorm Viewer")
+  # <KS:KS> rebrand: viewer_manifest.py expects the executable to be named CHANNEL_VENDOR_BASE
+  #set(product "AyaneStorm")
+  #set(MACOSX_EXECUTABLE_NAME "AyaneStorm")
+  #set(MACOSX_BUNDLE_INFO_STRING "AyaneStorm Viewer")
+  set(product "KStorm")
+  set(MACOSX_EXECUTABLE_NAME "KStorm")
+  set(MACOSX_BUNDLE_INFO_STRING "KStorm Viewer")
+  # </KS:KS>
   set(MACOSX_BUNDLE_ICON_FILE "ayanestorm_icon.icns")
-  set(MACOSX_BUNDLE_GUI_IDENTIFIER "li.ayane.storm")
+  # <KS:KS> rebrand
+  #set(MACOSX_BUNDLE_GUI_IDENTIFIER "li.ayane.storm")
+  set(MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.kiss-spicoli.kstorm")
+  # </KS:KS>
   set(MACOSX_BUNDLE_LONG_VERSION_STRING "${VIEWER_CHANNEL} ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
-  set(MACOSX_BUNDLE_BUNDLE_NAME "AyaneStorm")
+  # <KS:KS> rebrand
+  #set(MACOSX_BUNDLE_BUNDLE_NAME "AyaneStorm")
+  set(MACOSX_BUNDLE_BUNDLE_NAME "KStorm")
+  # </KS:KS>
   set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
   set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2026 The Phoenix Firestorm Project, Inc.")
