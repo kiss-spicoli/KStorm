@@ -519,7 +519,7 @@
         left="15"
         mouse_opaque="true"
         name="render_ambient_occlusion"
-        tool_tip="Darkens creases, corners and contact points where ambient light is blocked. Shadow softening (Soften, Blur size, Blur distance) also runs only while it is on."
+        tool_tip="Darkens creases, corners and contact points where ambient light is blocked. Sun-shadow softening (the shadow blur settings) also runs only while it is on."
         radio_style="false"
         top="201"
         width="250" />
