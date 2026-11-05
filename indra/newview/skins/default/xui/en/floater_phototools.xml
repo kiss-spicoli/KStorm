@@ -1155,7 +1155,7 @@
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Blur_Size"
-				 tool_tip="Width of the shadow-softening blur; 0 is sharpest. Needs Ambient occlusion on. Works with Blur distance."
+				 tool_tip="Width of the shadow-softening blur; 0 is sharpest. Needs Ambient occlusion on. Works with the shadow blur distance."
 				 control_name="RenderShadowBlurSize"
 				 follows="left|right"
 				 height="16"
@@ -1169,7 +1169,7 @@
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Blur_Size"
-				 tool_tip="Width of the shadow-softening blur; 0 is sharpest. Needs Ambient occlusion on. Works with Blur distance."
+				 tool_tip="Width of the shadow-softening blur; 0 is sharpest. Needs Ambient occlusion on. Works with the shadow blur distance."
 				 control_name="RenderShadowBlurSize"
 				 top_delta="-3"
 				 label_width="0"
@@ -1763,7 +1763,7 @@
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_I_Scaling"
-				 tool_tip="How much of the ambient light is kept in fully occluded areas, before Irradiance max caps it. Applies to both techniques."
+				 tool_tip="How much of the ambient light is kept in fully occluded areas, before the irradiance maximum caps it. Applies to both techniques."
 				 decimal_digits="2"
 				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceScale"
@@ -1779,7 +1779,7 @@
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_I_Scaling"
-				 tool_tip="How much of the ambient light is kept in fully occluded areas, before Irradiance max caps it. Applies to both techniques."
+				 tool_tip="How much of the ambient light is kept in fully occluded areas, before the irradiance maximum caps it. Applies to both techniques."
 				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceScale"
 				 top_delta="-3"
@@ -1984,11 +1984,11 @@
 				<text name="T_GTAO_I_Scale" type="string" length="1" follows="top|left" layout="topleft" left="5" top="125" height="16" width="70">Irrad. Scale</text>
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar name="GTAO_SB_I_Scale"
-  tool_tip="How much of the ambient light is kept in fully occluded areas, before Irradiance max caps it. Applies to both techniques." control_name="RenderSSAOIrradianceScale" enabled_control="RenderDeferredSSAO"
+  tool_tip="How much of the ambient light is kept in fully occluded areas, before the irradiance maximum caps it. Applies to both techniques." control_name="RenderSSAOIrradianceScale" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="75" top="123" height="16" width="127" min_val="0" max_val="2" increment="0.01" decimal_digits="2"/>
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner name="GTAO_S_I_Scale"
-  tool_tip="How much of the ambient light is kept in fully occluded areas, before Irradiance max caps it. Applies to both techniques." control_name="RenderSSAOIrradianceScale" enabled_control="RenderDeferredSSAO"
+  tool_tip="How much of the ambient light is kept in fully occluded areas, before the irradiance maximum caps it. Applies to both techniques." control_name="RenderSSAOIrradianceScale" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="202" top="120" width="53" min_val="0" max_val="10" increment="0.01" decimal_digits="2"/>
 				<button name="GTAO_Reset_I_Scale" follows="left|top" layout="topleft" left="255" top="120"
 				 height="22" width="20" label="D" tool_tip="Reset to the default value.">
@@ -2339,7 +2339,7 @@
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Focal_Length"
-				 tool_tip="Simulated lens length in millimeters, at the Field of view below: higher makes the sharp zone shallower."
+				 tool_tip="Simulated lens length in millimeters, at the depth-of-field field of view: higher makes the sharp zone shallower."
 				 control_name="CameraFocalLength"
 				 follows="top|left"
 				 height="16"
@@ -2353,7 +2353,7 @@
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Focal_Length"
-				 tool_tip="Simulated lens length in millimeters, at the Field of view below: higher makes the sharp zone shallower."
+				 tool_tip="Simulated lens length in millimeters, at the depth-of-field field of view: higher makes the sharp zone shallower."
 				 control_name="CameraFocalLength"
 				 top_delta="-3"
 				 label_width="0"
@@ -2821,7 +2821,7 @@
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Glow_Iterations"
-				 tool_tip="Glow blur rounds: higher is wider and smoother, and slower. Not the glow's brightness (Glow strength)."
+				 tool_tip="Glow blur rounds: higher is wider and smoother, and slower. Not the glow's brightness (the glow strength setting)."
 				 control_name="RenderGlowIterations"
 				 follows="top|left"
 				 height="16"
@@ -2835,7 +2835,7 @@
 				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Glow_Iterations"
-				 tool_tip="Glow blur rounds: higher is wider and smoother, and slower. Not the glow's brightness (Glow strength)."
+				 tool_tip="Glow blur rounds: higher is wider and smoother, and slower. Not the glow's brightness (the glow strength setting)."
 				 control_name="RenderGlowIterations"
 				 top_delta="-3"
 				 label_width="0"
