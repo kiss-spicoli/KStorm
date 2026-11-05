@@ -5,8 +5,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
 
 - **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
   contains all of it.
-- **Last updated:** 2026-11-01, with the merge of `feat-ks-snapshot-depth`.
-- **KStorm's own work:** 189 commits (Kissmy Spicoli, Oct 18 to Nov 1), 299 files, about 17,100
+- **Last updated:** 2026-11-05, with the merge of `fix-ks-camera-grid-case`.
+- **KStorm's own work:** 193 commits (Kissmy Spicoli, Oct 18 to Nov 5), 299 files, about 17,200
   lines added.
 - **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
   example VBAO, an improved ambient occlusion), plus two merges of newer Firestorm and Linden Lab
@@ -357,6 +357,11 @@ Details: `doc/kstorm-rebrand-plan.md`.
 - **Snapshot depth maps.** Depth and Depth (24 bit) snapshots now hold true distance, measured
   straight ahead from the camera, from near to draw distance. They used to read about twice the
   true distance up close. Anything past draw distance, and the sky, is white. (`50c26a372f2`)
+- **Saved views and lights on Second Life after a switch of build.** Builds with OpenSim support
+  call Second Life's grid `agni`, KStorm's build calls it `Agni`. Camera Positioning views and
+  My Lights lights left in place were matched to the grid with the case counted, so ones saved by
+  the other kind of build (such as AyaneStorm's) showed gray, could not be applied, or never came
+  back. The grid is now compared in lower case. (`ae8562a38d8`, `c7c7400615d`)
 
 ## 13. Renames and documentation
 
