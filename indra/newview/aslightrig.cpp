@@ -75,7 +75,12 @@ ASLightRig::~ASLightRig()
 // static
 std::string ASLightRig::currentGrid()
 {
-    return LLGridManager::getInstance()->getGridId();
+    // <KS:KS> Grid ids in lower case: OpenSim builds give "agni", --no-opensim builds "Agni"
+    // return LLGridManager::getInstance()->getGridId();
+    std::string grid = LLGridManager::getInstance()->getGridId();
+    LLStringUtil::toLower(grid);
+    return grid;
+    // </KS:KS>
 }
 
 LLViewerRegion* ASLightRig::getHomeRegion() const
@@ -534,7 +539,11 @@ void ASLightRig::fromLLSD(const LLSD& data)
             mFixedOffset.clamp(-MAX_FIXED_OFFSET, MAX_FIXED_OFFSET);
         }
         mRegionName = data["region"].asString();
+        // <KS:KS> Grid ids in lower case, as currentGrid() gives them
+        // mGrid = data["grid"].asString();
         mGrid = data["grid"].asString();
+        LLStringUtil::toLower(mGrid);
+        // </KS:KS>
     }
     // Absent from older presets: no boost.
     mBoost = data.has("boost") ? llclamp((F32)data["boost"].asReal(), MIN_BOOST, MAX_BOOST) : 1.f;

@@ -293,6 +293,9 @@ entry is disabled and the joint shows), save and reload a preset, relog.
   "place at avatar" for fixed lights.
 - A fixed light belongs to its home region: grid id
   (`LLGridManager::getGridId()`), region name and global position.
+  - The grid id is kept and compared in lower case: OpenSim builds give the
+    grid nick `agni`, `--no-opensim` builds (KStorm's) `Agni`. Lights saved by
+    either build match in both.
   - It is **dormant** while that region is not loaded (teleported away,
     beyond draw distance): no object, no light, no beacon, nothing submitted
     to the Shader backend.

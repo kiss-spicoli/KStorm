@@ -136,6 +136,9 @@ the camera to the avatar.
 - This is the My Lights approach (`as_my_lights_autosave.xml`, where `ASLightRig` stores
   `mRegionName` + `mGrid`): records are tagged with the region name and the grid id
   (`LLGridManager::getGridId()`), and their positions are region-local.
+- The grid id is kept and compared in lower case. OpenSim builds (`fsgridhandler.cpp`) return the grid
+  nick `agni`; `--no-opensim` builds (`llviewernetwork.cpp`, KStorm's) return `Agni`. Records saved by
+  either build match in both. Older files keep their spelling until the next save.
 - A record belongs **here** when its region and grid match the agent's region. Names are unique
   per sim, so the same label can exist on several sims. A record's sim is the one the camera was
   over when it was saved or last updated.

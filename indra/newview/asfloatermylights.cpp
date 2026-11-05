@@ -1325,7 +1325,11 @@ void ASFloaterMyLights::loadLightsFromFile(const std::string& filename)
     // rig (array) replaces every light.
     const bool region_only = data.isMap();
     const std::string region_name = region_only ? data["region"].asString() : std::string();
-    const std::string grid = region_only ? data["grid"].asString() : std::string();
+    // <KS:KS> Grid ids in lower case, as ASLightRig::currentGrid() gives them
+    // const std::string grid = region_only ? data["grid"].asString() : std::string();
+    std::string grid = region_only ? data["grid"].asString() : std::string();
+    LLStringUtil::toLower(grid);
+    // </KS:KS>
     const LLSD lights = region_only ? data["lights"] : data;
 
     for (auto it = mLights.begin(); it != mLights.end();)
