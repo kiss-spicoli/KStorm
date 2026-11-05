@@ -708,7 +708,7 @@
     layout="topleft"
     left="420"
     name="UseSSAO"
-    tool_tip="Darkens creases, corners and contact points where ambient light is blocked. Shadow softening (Soften, Blur size, Blur distance) also runs only while it is on."
+    tool_tip="Darkens creases, corners and contact points where ambient light is blocked. Sun-shadow softening (the shadow blur settings) also runs only while it is on."
     top_delta="22"
     width="240">
     <check_box.commit_callback

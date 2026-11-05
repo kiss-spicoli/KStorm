@@ -72,7 +72,7 @@
                        tool_tip="fog/haze/glow maximum altitude."/>
 <!-- </KS:KS> -->
                <!-- <KS:KS> tool_tip added </KS:KS> -->
-               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="UseSSAO" tool_tip="Darkens creases, corners and contact points where ambient light is blocked. Shadow softening (Soften, Blur size, Blur distance) also runs only while it is on." label="Ambient Occlusion" control_name="RenderDeferredSSAO">
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="UseSSAO" tool_tip="Darkens creases, corners and contact points where ambient light is blocked. Sun-shadow softening (the shadow blur settings) also runs only while it is on." label="Ambient Occlusion" control_name="RenderDeferredSSAO">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
                <!-- <KS:KS> tool_tip added </KS:KS> -->
                <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="ScreenSpaceReflections" tool_tip="Adds reflections of what is on screen, moving objects included, on top of the reflection probes. Anything off screen is not reflected." label="Screen Space Reflections" control_name="RenderScreenSpaceReflections">
