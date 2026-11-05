@@ -203,6 +203,7 @@
    width="40">
     Faster
   </text>
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <slider
     control_name="RenderFarClip"
     decimal_digits="0"
@@ -216,6 +217,7 @@
     min_val="64"
     max_val="512"
     name="draw_distance"
+    tool_tip="How far away, in meters, the scene is drawn. Longer costs frame rate."
     left_pad="5"
     width="250">
   </slider>
@@ -300,6 +302,7 @@
     width="128">
     Shadow Detail:
   </text>
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <combo_box
    control_name="RenderShadowDetail"
    height="18"
@@ -307,6 +310,7 @@
    left_delta="150"
    top_delta="0"
    name="ShadowDetail"
+   tool_tip="Which lights cast shadows: none, the sun and moon, or the sun, moon and projector lights. God rays and every shadow control need it above None."
    width="153">
     <combo_box.drop_down_button pad_right="20" />
     <combo_box.item
@@ -354,6 +358,7 @@
    width="380">
     Reducing or turning off transparent water may improve frame rate.
   </text>
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <check_box
     control_name="RenderTransparentWater"
     height="16"
@@ -361,6 +366,7 @@
     label="Transparent Water"
     layout="topleft"
     name="TransparentWater"
+    tool_tip="See through the water surface, with refraction. Off draws opaque water with a simple texture; refraction needs it on."
     top_delta="24"
     left="157"
     width="280">

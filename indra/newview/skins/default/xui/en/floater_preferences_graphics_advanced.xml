@@ -24,6 +24,7 @@
      General
   </text>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <slider
     control_name="RenderFarClip"
     decimal_digits="0"
@@ -38,6 +39,7 @@
     min_val="64"
     max_val="512"
     name="DrawDistance"
+    tool_tip="How far away, in meters, the scene is drawn. Longer costs frame rate."
     top_delta="16"
     width="330">
     </slider>
@@ -69,6 +71,7 @@
     top_delta="16"
     width="336" />
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <slider
     control_name="RenderGlowResolutionPow"
     decimal_digits="0"
@@ -83,6 +86,7 @@
     min_val="8"
     max_val="9"
     name="RenderPostProcess"
+    tool_tip="Glow buffer resolution: higher keeps a wide glow smooth, at some cost."
     show_text="false"
     top_delta="16"
     width="300">
@@ -102,6 +106,7 @@
     width="65">
        Low
   </text>
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <slider
     control_name="RenderLocalLightCount"
     decimal_digits="0"
@@ -116,6 +121,7 @@
     min_val="0"
     max_val="8192"
     name="MaxLights"
+    tool_tip="Most local lights drawn at once, worn lights included; the nearest are kept. 0 turns local lights off."
     top_delta="16"
     width="336" />
     <text
@@ -642,6 +648,7 @@
      Shaders
   </text>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <check_box
     control_name="RenderTransparentWater"
     height="16"
@@ -650,6 +657,7 @@
     layout="topleft"
     left="420"
     name="TransparentWater"
+    tool_tip="See through the water surface, with refraction. Off draws opaque water with a simple texture; refraction needs it on."
     top_delta="18"
     width="300">
     <check_box.commit_callback
@@ -691,6 +699,7 @@
        Low
   </text>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <check_box
     control_name="RenderDeferredSSAO"
     height="16"
@@ -699,12 +708,14 @@
     layout="topleft"
     left="420"
     name="UseSSAO"
+    tool_tip="Darkens creases, corners and contact points where ambient light is blocked. Shadow softening (Soften, Blur size, Blur distance) also runs only while it is on."
     top_delta="22"
     width="240">
     <check_box.commit_callback
       function="Pref.RenderOptionUpdate" />
   </check_box>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <check_box
     control_name="RenderDepthOfField"
     height="16"
@@ -713,6 +724,7 @@
     layout="topleft"
     left="420"
     name="UseDoF"
+    tool_tip="Blurs the view except at the camera focus. Off while an edit tool, the Poser included, is open, unless depth of field in edit mode is on (the Poser's Enable DoF in Edit Mode, or Preferences &gt; Graphics &gt; Enable while in edit mode)."
     top_delta="20"
     width="240">
     <check_box.commit_callback
@@ -746,6 +758,7 @@
     width="128">
       Shadows:
   </text>
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <combo_box
    control_name="RenderShadowDetail"
    height="18"
@@ -753,6 +766,7 @@
    left_delta="175"
    top_delta="0" 
    name="ShadowDetail"
+   tool_tip="Which lights cast shadows: none, the sun and moon, or the sun, moon and projector lights. God rays and every shadow control need it above None."
    width="150">
      <combo_box.item
        label="None"
@@ -768,6 +782,7 @@
        value="2"/>
   </combo_box>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <check_box
     control_name="RenderScreenSpaceReflections"
     height="16"
@@ -776,6 +791,7 @@
     layout="topleft"
     left="420"
     name="ScreenSpaceReflections"
+    tool_tip="Adds reflections of what is on screen, moving objects included, on top of the reflection probes. Anything off screen is not reflected."
     top_delta="24"
     width="240">
     <check_box.commit_callback
@@ -796,6 +812,7 @@
     Reflection Detail:
   </text>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <combo_box
    control_name="RenderReflectionProbeDetail"
    height="18"
@@ -803,6 +820,7 @@
    left_delta="175"
    top_delta="0"
    name="ReflectionDetail"
+   tool_tip="How often reflection probes update: static (once), static plus dynamic (moving objects too), or realtime (every frame, costly)."
    width="150">
     <combo_box.item
       label="Static Only"
@@ -832,6 +850,7 @@
     Reflection Coverage:
   </text>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <combo_box
    control_name="RenderReflectionProbeLevel"
    height="18"
@@ -839,6 +858,7 @@
    left_delta="175"
    top_delta="0"
    name="ReflectionLevel"
+   tool_tip="What reflection probes capture: the sky only, placed (manual) probes only, placed probes plus terrain and water, or the full scene with objects."
    width="150">
     <combo_box.item
       label="None"
@@ -872,6 +892,7 @@
         Max Reflection Probes:
     </text>
 
+    <!-- <KS:KS> tool_tip added </KS:KS> -->
     <combo_box
      control_name="RenderReflectionProbeCount"
      height="18"
@@ -880,6 +901,7 @@
      left_delta="175"
      top_delta="0"
      name="ProbeCount"
+     tool_tip="Most reflection probes kept at once. Fewer saves memory; nearby probes are kept first."
      width="150">
         <combo_box.item
           label="None"
@@ -903,8 +925,10 @@
           value="256"/>
     </combo_box>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <slider
     control_name="RenderExposure"
+    tool_tip="Overall scene exposure."
     decimal_digits="1"
     follows="left|top"
     height="16"
@@ -923,6 +947,7 @@
   </slider>
 
   <!-- Mirror settings. -->
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <check_box
     control_name="RenderMirrors"
     height="16"
@@ -931,6 +956,7 @@
     layout="topleft"
     left="420"
     name="Mirrors"
+    tool_tip="Real-time reflections on faces set as mirrors. Costly. Mirror resolution and update rate apply only while it is on."
     top_delta="22"
     width="240">
     <check_box.commit_callback
@@ -951,6 +977,7 @@
     Mirror Resolution:
   </text>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <combo_box
    control_name="RenderHeroProbeResolution"
    height="18"
@@ -958,6 +985,7 @@
    left_delta="175"
    top_delta="0"
    name="MirrorResolution"
+   tool_tip="Resolution of the mirror render. Higher is sharper and slower. Mirrors only."
    width="150">
     <combo_box.item
       label="256"
@@ -991,6 +1019,7 @@
     Mirror Update Rate:
   </text>
 
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <combo_box
    control_name="RenderHeroProbeUpdateRate"
    height="18"
@@ -998,6 +1027,7 @@
    left_delta="175"
    top_delta="0"
    name="HeroProbeUpdateRate"
+   tool_tip="How often mirrors are re-rendered: every frame is smoothest and slowest. Mirrors only."
    width="150">
     <combo_box.item
       label="Low"
@@ -1018,6 +1048,7 @@
   </combo_box>
   <!-- End of mirror settings -->
   <!-- Sharpening Settings -->
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <slider
     control_name="RenderCASSharpness"
     decimal_digits="1"
@@ -1032,6 +1063,7 @@
     min_val="0.0"
     max_val="1.0"
     name="RenderSharpness"
+    tool_tip="Contrast Adaptive Sharpening: 0 is off, 1 strongest."
     show_text="true"
     top_delta="20"
     width="260">
@@ -1051,6 +1083,7 @@
     width="128">
     Tone Mapper:
   </text>
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <combo_box
     control_name="RenderTonemapType"
     height="18"
@@ -1058,6 +1091,7 @@
     left_delta="175"
     top_delta="0"
     name="TonemapType"
+    tool_tip="Tone mapping curve: ACES or Khronos Neutral."
     width="150">
      <combo_box.item
        label="Khronos Neutral"

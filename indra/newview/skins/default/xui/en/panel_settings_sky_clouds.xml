@@ -35,6 +35,7 @@
                     width="100">
                 Cloud Coverage:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -46,6 +47,7 @@
                     min_val="0"
                     max_val="1"
                     name="cloud_coverage"
+                    tool_tip="How much of the sky the clouds cover. Also removes sun and adds fill."
                     top_delta="0"
                     width="214"
                     can_edit_text="true"/>
@@ -59,6 +61,7 @@
                     width="100">
                 Cloud Scale:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -70,6 +73,7 @@
                     min_val="0.01"
                     max_val="3"
                     name="cloud_scale"
+                    tool_tip="Size of the cloud pattern."
                     top_delta="0"
                     width="214"
                     can_edit_text="true"/>
@@ -83,6 +87,7 @@
                     width="100">
                 Cloud Variance:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -94,6 +99,7 @@
                     min_val="0"
                     max_val="1.0"
                     name="cloud_variance"
+                    tool_tip="How much the cloud density varies across the sky."
                     top_delta="0"
                     width="214"
                     can_edit_text="true"/>
@@ -107,9 +113,11 @@
                     width="200">
                     Cloud Scroll:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <xy_vector
             follows="left|top"
                     name="cloud_scroll_xy"
+                    tool_tip="Direction and speed the clouds drift."
                     width="157"
                     height="178"
                     visible="true"
@@ -130,11 +138,13 @@
                     width="200">
                     Cloud Image:
                 </text>
+                <!-- <KS:KS> tool_tip added </KS:KS> -->
                 <texture_picker
                 height="123"
                 layout="topleft"
                 left_delta="5"
                 name="cloud_map"
+                tool_tip="Noise texture the clouds are made from."
                 top_pad="10"
                 width="100"/>
                 <text
@@ -147,6 +157,7 @@
                         width="80">
                     Cloud Color:
                 </text>
+                <!-- <KS:KS> tool_tip added </KS:KS> -->
                 <color_swatch
                         can_apply_immediately="true"
                         follows="left|top"
@@ -155,6 +166,7 @@
                         layout="topleft"
                         left_delta="5"
                         name="cloud_color"
+                        tool_tip="Color of the clouds."
                         top_pad="5"
                         width="60" />                    
         </layout_panel>
@@ -176,6 +188,7 @@
                     width="200">
                     Cloud Density:
                 </text>
+                <!-- <KS:KS> tool_tip added </KS:KS> -->
                 <slider
                 label="X"
                 decimal_digits="2"
@@ -188,9 +201,11 @@
                     min_val="0"
                     max_val="1"
                     name="cloud_density_x"
+                    tool_tip="Moves the main cloud layer's thick areas east-west."
                     top_delta="20"
                     width="200"
                     can_edit_text="true"/>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                     label="Y"
                     decimal_digits="2"
@@ -203,9 +218,11 @@
                     min_val="0"
                     max_val="1"
                     name="cloud_density_y"
+                    tool_tip="Moves the main cloud layer's thick areas north-south."
                     top_delta="20"
                     width="200"
                     can_edit_text="true"/>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     label="D"
                     decimal_digits="2"
@@ -218,6 +235,7 @@
                     min_val="0"
                     max_val="3"
                     name="cloud_density_d"
+                    tool_tip="Density of the main cloud layer."
                     top_delta="20"
                     width="200"
                     can_edit_text="true"/>
@@ -231,6 +249,7 @@
                     width="200">
                 Cloud Detail:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     label="X"
                     decimal_digits="2"
@@ -243,9 +262,11 @@
                     min_val="0"
                     max_val="1"
                     name="cloud_detail_x"
+                    tool_tip="Moves the detail layer's pattern east-west."
                     top_delta="20"
                     width="200"
                     can_edit_text="true"/>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     label="Y"
                     decimal_digits="2"
@@ -258,9 +279,11 @@
                     min_val="0"
                     max_val="1"
                     name="cloud_detail_y"
+                    tool_tip="Moves the detail layer's pattern north-south."
                     top_delta="20"
                     width="200"
                     can_edit_text="true"/>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     label="D"
                     decimal_digits="2"
@@ -273,6 +296,7 @@
                     min_val="0"
                     max_val="1"
                     name="cloud_detail_d"
+                    tool_tip="Density of the detail layer: how much fine structure the clouds show."
                     top_delta="20"
                     width="200"
                     can_edit_text="true"/>

@@ -213,22 +213,26 @@
          type="string">
            Show direction to:
          </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <check_box
          control_name="sunbeacon"
          height="16"
          label="Sun"
          layout="topleft"
-         name="sun" >
+         name="sun"
+         tool_tip="Draws a beacon pointing to the sun." >
           <check_box.commit_callback
            function="Beacons.UICheck" />
         </check_box>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <check_box
          control_name="moonbeacon"
          height="16"
          label="Moon"
          layout="topleft"
          top_pad="2"
-         name="moon" >
+         name="moon"
+         tool_tip="Draws a beacon pointing to the moon." >
           <check_box.commit_callback
            function="Beacons.UICheck" />
         </check_box>

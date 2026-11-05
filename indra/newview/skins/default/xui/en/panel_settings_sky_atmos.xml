@@ -38,6 +38,7 @@
                     width="100">
                 Ambient Color:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <color_swatch
                     can_apply_immediately="true"
                     follows="left|top"
@@ -46,6 +47,7 @@
                     layout="topleft"
                     left_delta="0"
                     name="ambient_light"
+                    tool_tip="Color and brightness of the sky's ambient light: tints the sky, clouds and haze; surfaces use only its brightness."
                     top_pad="5"
                     width="60" />
             <text
@@ -58,6 +60,7 @@
                     width="100">
                 Blue Horizon:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <color_swatch
                     can_apply_immediately="true"
                     follows="left|top"
@@ -66,6 +69,7 @@
                     layout="topleft"
                     left_delta="0"
                     name="blue_horizon"
+                    tool_tip="Sky and distant-fog color from clear air. The only fog color while Haze Density is 0."
                     top_pad="5"
                     width="60" />
             <text
@@ -78,6 +82,7 @@
                     width="100">
                 Blue Density:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <color_swatch
                     can_apply_immediately="true"
                     follows="left|top"
@@ -86,6 +91,7 @@
                     layout="topleft"
                     left_delta="0"
                     name="blue_density"
+                    tool_tip="Clear-air amount per color: sunset reddening, fog fade rate and the air/haze mix. Fog strength follows its red component while Haze Density is 0."
                     top_pad="5"
                     width="60" />
         </layout_panel>
@@ -121,6 +127,7 @@
                             width="100">
                         Haze Horizon:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -132,6 +139,7 @@
                             min_val="0"
                             max_val="5"
                             name="haze_horizon"
+                            tool_tip="Brightness of white haze and its sun glow. No effect while Haze Density is 0."
                             top_delta="0"
                             width="207"
                             can_edit_text="true"/>
@@ -145,6 +153,7 @@
                             width="100">
                         Haze Density:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -156,6 +165,7 @@
                             min_val="0"
                             max_val="5"
                             name="haze_density"
+                            tool_tip="Amount of white haze. At 0, Haze Horizon and the sun's Glow Focus and Glow Size stop working, and fog takes Blue Horizon only."
                             top_delta="0"
                             width="207"
                             can_edit_text="true"/>
@@ -169,6 +179,7 @@
                             width="100">
                         Moisture Level:
                     </text>
+                     <!-- <KS:KS> tool_tip added </KS:KS> -->
                      <slider
                             decimal_digits="3"
                             follows="left|top"
@@ -181,6 +192,7 @@
                             min_val="0"
                             max_val="1"
                             name="moisture_level"
+                            tool_tip="Water in the air: the rainbow. Rainbow and halo only."
                             width="207"
                             can_edit_text="true"/>
                     <text
@@ -193,6 +205,7 @@
                             width="100">
                         Droplet Radius:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -205,6 +218,7 @@
                             min_val="5.0"
                             max_val="1000.0"
                             name="droplet_radius"
+                            tool_tip="Size of the water droplets that make the rainbow and halo. Rainbow and halo only."
                             width="207"
                             can_edit_text="true"/>
                     <text
@@ -217,6 +231,7 @@
                             width="100">
                         Ice Level:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="3"
                             follows="left|top"
@@ -229,6 +244,7 @@
                             min_val="0"
                             max_val="1"
                             name="ice_level"
+                            tool_tip="Ice in the air: the halo around the sun. Rainbow and halo only."
                             width="207"
                             can_edit_text="true"/>
                 </layout_panel>            
@@ -250,6 +266,7 @@
                             width="105">
                         Density Multiplier:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="4"
                             follows="left|top"
@@ -261,6 +278,7 @@
                             min_val="0.0001"
                             max_val="2"
                             name="density_multip"
+                            tool_tip="Scales haze thickness and sun extinction."
                             top_delta="0"
                             width="219"
                             can_edit_text="true"/>
@@ -274,6 +292,7 @@
                             width="105">
                         Distance Multiplier:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -285,6 +304,7 @@
                             min_val="0.05"
                             max_val="1000"
                             name="distance_multip"
+                            tool_tip="Scales how fast distance fog builds."
                             top_delta="0"
                             width="219"
                             can_edit_text="true"/>
@@ -298,6 +318,7 @@
                             width="105">
                         Maximum Altitude:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -309,6 +330,7 @@
                             min_val="0"
                             max_val="10000"
                             name="max_alt"
+                            tool_tip="Height of the atmosphere: limits fog, haze and sun dimming."
                             top_delta="0"
                             width="219"
                             can_edit_text="true"/>
@@ -324,6 +346,7 @@
                             wrap="true">
                     Reflection Probe Ambiance (HDR):
                   </text>
+                  <!-- <KS:KS> tool_tip was "Intensity of environment based indirect lighting. At zero HDR scale becomes Brightness" </KS:KS> -->
                   <slider
                           decimal_digits="2"
                           follows="left|top"
@@ -335,7 +358,7 @@
                           min_val="0"
                           max_val="10"
                           name="probe_ambiance"
-                          tool_tip="Intensity of environment based indirect lighting. At zero HDR scale becomes Brightness"
+                          tool_tip="Intensity of environment based indirect lighting. At zero HDR scale becomes Brightness. Below 1: fill from the sky ambient; 1 or more: reflection probes replace it where they cover a surface (bounce light, darker interiors)."
                           top_delta="3"
                           width="219"
                           can_edit_text="true"/>
@@ -349,6 +372,7 @@
                             width="105">
                         Brightness:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -359,6 +383,7 @@
                             left_pad="5"
                             max_val="20"
                             name="scene_gamma"
+                            tool_tip="Brightness of the sky and haze relative to the scene; also sets how far auto-exposure can adjust."
                             top_delta="0"
                             width="219"
                             can_edit_text="true"/>

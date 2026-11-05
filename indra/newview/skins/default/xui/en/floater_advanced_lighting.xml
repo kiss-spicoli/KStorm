@@ -71,21 +71,27 @@
                <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0" max_val="10000"  increment="0.1"   can_edit_text="true" name="max_alt" 
                        tool_tip="fog/haze/glow maximum altitude."/>
 <!-- </KS:KS> -->
-               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="UseSSAO" label="Ambient Occlusion" control_name="RenderDeferredSSAO">
+               <!-- <KS:KS> tool_tip added </KS:KS> -->
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="UseSSAO" tool_tip="Darkens creases, corners and contact points where ambient light is blocked. Shadow softening (Soften, Blur size, Blur distance) also runs only while it is on." label="Ambient Occlusion" control_name="RenderDeferredSSAO">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
-               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="ScreenSpaceReflections" label="Screen Space Reflections" control_name="RenderScreenSpaceReflections">
+               <!-- <KS:KS> tool_tip added </KS:KS> -->
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="ScreenSpaceReflections" tool_tip="Adds reflections of what is on screen, moving objects included, on top of the reflection probes. Anything off screen is not reflected." label="Screen Space Reflections" control_name="RenderScreenSpaceReflections">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
-               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="DepthOfField" label="Depth Of Field" control_name="RenderDepthOfField">
+               <!-- <KS:KS> tool_tip added </KS:KS> -->
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="DepthOfField" tool_tip="Blurs the view except at the camera focus. Off while an edit tool, the Poser included, is open, unless depth of field in edit mode is on (the Poser's Enable DoF in Edit Mode, or Preferences &gt; Graphics &gt; Enable while in edit mode)." label="Depth Of Field" control_name="RenderDepthOfField">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
                <text      follows="top|left" height="10" width="180" layout="topleft" left="28" top_pad="2"  name="f_stop_label" >F/Stop:</text>
                <slider    follows="top|left" height="16" width="170" layout="topleft" left="20" top_pad="2"  decimal_digits="0" min_val="2" max_val="32"  increment="1" can_edit_text="true" name="f_stop" control_name="CameraFNumber" 
                           tool_tip="Sets 'distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). The blur rendered for shallow DOF can substantially reduce your frame rate." />
-               <check_box follows="top|left" height="16" width="185" layout="topleft" left="26" top_pad="2"  name="FocusFollowsPointer" label="Focus@Pointer" control_name="FSFocusPointFollowsPointer">
+               <!-- <KS:KS> tool_tip added </KS:KS> -->
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="26" top_pad="2"  name="FocusFollowsPointer" tool_tip="Focus on whatever is under the mouse pointer, as in flycam. Use with Focus locked." label="Focus@Pointer" control_name="FSFocusPointFollowsPointer">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
                <text      follows="top|left" height="10" width="180" layout="topleft" left="10" top_pad="18" name="max_lights_label">Max local lights:</text>
+               <!-- <KS:KS> tool_tip was "Up to this number of lights, including worn lights, nearest to the camera will be lit." </KS:KS> -->
                <slider    follows="top|left" height="16" width="180" layout="topleft" left="12" top_pad="2"  decimal_digits="0" min_val="0" max_val="512" increment="1" can_edit_text="true" name="local_light_count" control_name="RenderLocalLightCount" 
-                          tool_tip="Up to this number of lights, including worn lights, nearest to the camera will be lit."/>
-               <check_box follows="top|left" height="16" width="185" layout="topleft" left="20"              name="AttachedLights" label="Render Attached Lights" control_name="RenderAttachedLights">
+                          tool_tip="Most local lights drawn at once, worn lights included; the nearest are kept. 0 turns local lights off."/>
+               <!-- <KS:KS> tool_tip added </KS:KS> -->
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="20"              name="AttachedLights" tool_tip="Lights in attachments, yours and other people's. Off hides them all in your view only; others still see them." label="Render Attached Lights" control_name="RenderAttachedLights">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
                <text      follows="top|left" height="10" width="180" layout="topleft" left="28" top_pad="24" name="camera_roll_hint"
                           tool_tip="Or see Preferences/Controls/Camera: Roll Left and Roll Right.">ALT-Q  :Camera roll:  ALT-E</text>

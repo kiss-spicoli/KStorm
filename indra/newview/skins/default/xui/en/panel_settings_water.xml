@@ -44,6 +44,7 @@
                     width="60">
                 Color:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <color_swatch
                     can_apply_immediately="true"
                     follows="left|top"
@@ -52,6 +53,7 @@
                     layout="topleft"
                     left_delta="0"
                     name="water_fog_color"
+                    tool_tip="Tints what is seen below the water surface."
                     top_pad="5"
                     width="60" />
             <text
@@ -63,6 +65,7 @@
                     width="150">
                 Density Exponent:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -74,6 +77,7 @@
                     min_val="0.001"
                     max_val="100"
                     name="water_fog_density"
+                    tool_tip="How quickly things below the water surface fade."
                     top_delta="5"
                     width="150"
                     can_edit_text="true"/>
@@ -85,6 +89,7 @@
                     left_delta="-15"
                     width="150">
                 Underwater Modifier:</text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -96,6 +101,7 @@
                     min_val="0.0"
                     max_val="20.0"
                     name="water_underwater_mod"
+                    tool_tip="Multiplies the fog density while the camera is underwater."
                     top_delta="20"
                     width="150"
                     can_edit_text="true"/>
@@ -110,6 +116,7 @@
                             width="150">
                         Fresnel Scale:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -119,6 +126,7 @@
                             layout="topleft"
                             left_delta="5"
                             name="water_fresnel_scale"
+                            tool_tip="How much more the water reflects at grazing angles than looking straight down."
                             top_delta="15"
                             width="150"
                             can_edit_text="true"/>
@@ -131,6 +139,7 @@
                             width="150">
                         Fresnel Offset:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -140,6 +149,7 @@
                             layout="topleft"
                             left_delta="5"
                             name="water_fresnel_offset"
+                            tool_tip="Reflection added at every angle, looking straight down included."
                             top_pad="5"
                             width="150"
                             can_edit_text="true"/>
@@ -176,11 +186,13 @@
                             width="215">
                         Normal Map
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <texture_picker
                             height="84"
                             layout="topleft"
                             left_delta="0"
                             name="water_normal_map"
+                            tool_tip="Texture that gives the water its surface ripples."
                             top_pad="5"
                             width="61"/>
 
@@ -194,9 +206,11 @@
                             left_delta="175">
                         Large Wave Speed
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <xy_vector
                         follows="top|left"
                         name="water_wave1_xy"
+                        tool_tip="Direction and speed of the large waves."
                         width="120"
                         height="145"
                         visible="true"
@@ -219,9 +233,11 @@
                             left_delta="140">
                         Small Wave Speed
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <xy_vector
                         follows="top|left"
                         name="water_wave2_xy"
+                        tool_tip="Direction and speed of the small waves."
                         width="120"
                         height="145"
                         visible="true"
@@ -245,6 +261,7 @@
                             width="215">
                         Reflection Wavelet Scale
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -256,9 +273,11 @@
                             left_delta="10"
                             max_val="10"
                             name="water_normal_scale_x"
+                            tool_tip="Ripple strength of the first wave layer."
                             top_pad="5"
                             width="150"
                             can_edit_text="true"/>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -268,10 +287,12 @@
                             layout="topleft"
                             max_val="10"
                             name="water_normal_scale_y"
+                            tool_tip="Ripple strength of the second wave layer."
                             top_pad="6"
                             label="Y:"
                             width="150"
                             can_edit_text="true"/>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             decimal_digits="2"
                             follows="left|top"
@@ -281,6 +302,7 @@
                             layout="topleft"
                             max_val="10"
                             name="water_normal_scale_z"
+                            tool_tip="Ripple strength of the third wave layer."
                             top_pad="6"
                             label="Z:"
                             width="150"
@@ -316,8 +338,10 @@
                             width="215">
                         Refraction Scale (Above)
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             control_name="water_scale_above"
+                            tool_tip="How much ripples bend what is seen through the water from above. Needs Transparent Water."
                             decimal_digits="2"
                             follows="left|top"
                             increment="0.01"
@@ -343,8 +367,10 @@
                             width="215">
                         Refraction Scale (Below)
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             control_name="water_scale_below"
+                            tool_tip="How much ripples bend what is seen through the water from below. Needs Transparent Water."
                             decimal_digits="2"
                             follows="left|top"
                             height="16"
@@ -369,8 +395,10 @@
                             width="215">
                         Blur Multiplier
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider
                             control_name="water_blur_multip"
+                            tool_tip="How much the ripples blur the reflection."
                             follows="left|top"
                             height="16"
                             increment="0.001"
