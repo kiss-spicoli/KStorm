@@ -105,8 +105,10 @@ top="0">
 			Image:
 			</text>
 
+			<!-- <KS:KS> tool_tip added </KS:KS> -->
 			<check_box
 			control_name="sunbeacon"
+			tool_tip="Draws a beacon pointing to the sun."
 			width="60"
 			height="16"
 			label="Show Beacon"
@@ -313,8 +315,10 @@ top="0">
 			Image:
 			</text>
 
+			<!-- <KS:KS> tool_tip added </KS:KS> -->
 			<check_box
 			control_name="moonbeacon"
+			tool_tip="Draws a beacon pointing to the moon."
 			width="60"
 			height="16"
 			label="Show Beacon"

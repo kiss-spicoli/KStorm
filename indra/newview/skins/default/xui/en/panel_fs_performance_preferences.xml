@@ -264,6 +264,7 @@ Faster
    top_delta="0">
     Faster
   </text>
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <slider
     control_name="RenderFarClip"
     decimal_digits="0"
@@ -278,6 +279,7 @@ Faster
     min_val="32"
     max_val="1024"
     name="draw_distance"
+    tool_tip="How far away, in meters, the scene is drawn. Longer costs frame rate."
     left_pad="5"
     width="310" />
   <text
@@ -362,6 +364,7 @@ the ambience and appearance of the scene.
     width="128">
     Shadow sources:
   </text>
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
   <combo_box
    control_name="RenderShadowDetail"
    height="18"
@@ -369,6 +372,7 @@ the ambience and appearance of the scene.
    right="-20"
    top_delta="0"
    name="ShadowDetail"
+   tool_tip="Which lights cast shadows: none, the sun and moon, or the sun, moon and projector lights. God rays and every shadow control need it above None."
    width="150">
     <combo_box.item
       label="None"

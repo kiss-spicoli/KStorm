@@ -576,6 +576,7 @@
 				 width="162">
 				  Reflection Detail
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<combo_box
 				 control_name="RenderReflectionProbeDetail"
 				 height="20"
@@ -583,6 +584,7 @@
 				 left_pad="0"
 				 top_delta="-5"
 				 name="ReflectionDetail"
+				 tool_tip="How often reflection probes update: static (once), static plus dynamic (moving objects too), or realtime (every frame, costly)."
 				 right="-5">
 				  <combo_box.item
 				   label="Static Only"
@@ -611,6 +613,7 @@
 				 width="162">
 				  Reflection Coverage
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<combo_box
 				 control_name="RenderReflectionProbeLevel"
 				 height="20"
@@ -618,6 +621,7 @@
 				 left_pad="0"
 				 top_delta="-5"
 				 name="ReflectionLevel"
+				 tool_tip="What reflection probes capture: the sky only, placed (manual) probes only, placed probes plus terrain and water, or the full scene with objects."
 				 right="-5">
 				  <combo_box.item
 				   label="None"
@@ -650,6 +654,7 @@
 				 width="162">
 				  Mirror Resolution
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<combo_box
 				 control_name="RenderHeroProbeResolution"
 				 enabled_control="RenderMirrors"
@@ -658,6 +663,7 @@
 				 left_pad="0"
 				 top_delta="-5"
 				 name="MirrorResolution"
+				 tool_tip="Resolution of the mirror render. Higher is sharper and slower. Mirrors only."
 				 right="-5">
 				  <combo_box.item
 				   label="256"
@@ -694,6 +700,7 @@
 				 width="162">
 				  Mirror Update Rate
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<combo_box
 				 control_name="RenderHeroProbeUpdateRate"
 				 enabled_control="RenderMirrors"
@@ -702,6 +709,7 @@
 				 left_pad="0"
 				 top_delta="-5"
 				 name="HeroProbeUpdateRate"
+				 tool_tip="How often mirrors are re-rendered: every frame is smoothest and slowest. Mirrors only."
 				 right="-5">
 				  <combo_box.item
 				   label="Low"
@@ -733,6 +741,7 @@
 				 width="162">
 					Probe Resolution (Restart)
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<combo_box
 				 control_name="RenderReflectionProbeResolution"
 				 enabled_control="VertexShaderEnable"
@@ -742,7 +751,8 @@
 				 top_delta="-5"
 				 right="-5"
 				 follows="left|top"
-				 name="Probe_Resolution_Combo">
+				 name="Probe_Resolution_Combo"
+				 tool_tip="Size of each probe's reflection map: higher is sharper and uses much more video memory. A change may need a restart to show.">
 					<combo_box.item
 					 label="64"
 					 name="0"
@@ -793,8 +803,10 @@
 				 width="80">
 					Reflect. Dist.
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Reflection_Distance"
+				 tool_tip="How far, in meters, reflection probes see when they update."
 				 control_name="RenderReflectionProbeDrawDistance"
 				 follows="top|left"
 				 height="16"
@@ -805,8 +817,10 @@
 				 max_val="4096"
 				 top_delta="-2"
 				 width="117"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Reflection_Distance"
+				 tool_tip="How far, in meters, reflection probes see when they update."
 				 control_name="RenderReflectionProbeDrawDistance"
 				 top_delta="-3"
 				 label_width="0"
@@ -885,6 +899,7 @@
 				 tool_tip="Controls the types of shadows rendered from light sources. Point lights without projection features create lighting effects but do not cast shadows. Projected light textures remain visible regardless of this setting.">
 					Shadow Types
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<combo_box
 				 control_name="RenderShadowDetail"
 				 enabled_control="RenderDeferred"
@@ -894,6 +909,7 @@
 				 left_pad="0"
 				 top_delta="-2"
 				 name="ShadowDetail"
+				 tool_tip="Which lights cast shadows: none, the sun and moon, or the sun, moon and projector lights. God rays and every shadow control need it above None."
 				 right="-2">
 					<combo_box.item
 					 label="None"
@@ -981,8 +997,10 @@
 				 width="70">
 					Loc Lights
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Local_Lights"
+				 tool_tip="Most local lights drawn at once, worn lights included; the nearest are kept. 0 turns local lights off."
 				 can_edit_text="true"
 				 control_name="RenderLocalLightCount"
 				 follows="left|right"
@@ -995,8 +1013,10 @@
 				 max_val="8192"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Local_Lights"
+				 tool_tip="Most local lights drawn at once, worn lights included; the nearest are kept. 0 turns local lights off."
 				 can_edit_text="true"
 				 control_name="RenderLocalLightCount"
 				 top_delta="-3"
@@ -1033,8 +1053,10 @@
 				 width="70">
 					Shd. Res
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 					name="SB_Shadow_Res"
+					tool_tip="Shadow map size relative to the screen: higher is sharper and slower."
 					control_name="RenderShadowResolutionScale"
 					follows="left|right"
 					height="16"
@@ -1046,8 +1068,10 @@
 					top_delta="-2"
 					width="127">
 				</slider_bar>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Shadow_Res"
+				 tool_tip="Shadow map size relative to the screen: higher is sharper and slower."
 				 control_name="RenderShadowResolutionScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -1128,8 +1152,10 @@
 				 width="70">
 					Shd. Blur
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Blur_Size"
+				 tool_tip="Width of the shadow-softening blur; 0 is sharpest. Needs Ambient occlusion on. Works with Blur distance."
 				 control_name="RenderShadowBlurSize"
 				 follows="left|right"
 				 height="16"
@@ -1140,8 +1166,10 @@
 				 max_val="4"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Blur_Size"
+				 tool_tip="Width of the shadow-softening blur; 0 is sharpest. Needs Ambient occlusion on. Works with Blur distance."
 				 control_name="RenderShadowBlurSize"
 				 top_delta="-3"
 				 label_width="0"
@@ -1221,8 +1249,10 @@
 				 width="70">
 					Blur Dist.
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Blur_Dist"
+				 tool_tip="Narrows the shadow blur with distance from the camera: higher keeps far shadows sharper, 0 blurs every distance the same. Needs Ambient occlusion on."
 				 control_name="RenderShadowBlurDistFactor"
 				 follows="left|right"
 				 height="16"
@@ -1233,8 +1263,10 @@
 				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Blur_Dist"
+				 tool_tip="Narrows the shadow blur with distance from the camera: higher keeps far shadows sharper, 0 blurs every distance the same. Needs Ambient occlusion on."
 				 control_name="RenderShadowBlurDistFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -1270,8 +1302,10 @@
 				 width="70">
 					FOV Cutoff
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_FOV_Cutoff"
+				 tool_tip="Sun-shadow fitting: the widest projection angle, in radians (at most 1.4), a shadow split may use before it is refitted. Most scenes leave it alone."
 				 control_name="RenderShadowFOVCutoff"
 				 follows="left|right"
 				 height="16"
@@ -1282,8 +1316,10 @@
 				 max_val="100"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_FOV_Cutoff"
+				 tool_tip="Sun-shadow fitting: the widest projection angle, in radians (at most 1.4), a shadow split may use before it is refitted. Most scenes leave it alone."
 				 control_name="RenderShadowFOVCutoff"
 				 top_delta="-3"
 				 label_width="0"
@@ -1319,8 +1355,10 @@
 				 width="70">
 					Spot Offset
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Spot_Cutoff"
+				 tool_tip="Pushes projector shadows away from the surfaces that cast them, against shadow acne. Projector shadows only: Shadows set to sun, moon and projectors."
 				 can_edit_text="true"
 				 control_name="RenderSpotShadowOffset"
 				 follows="left|right"
@@ -1333,8 +1371,10 @@
 				 max_val=".04"
 				 top_delta="-2"
 				 width="123"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Spot_Cutoff"
+				 tool_tip="Pushes projector shadows away from the surfaces that cast them, against shadow acne. Projector shadows only: Shadows set to sun, moon and projectors."
 				 can_edit_text="true"
 				 control_name="RenderSpotShadowOffset"
 				 top_delta="-3"
@@ -1372,8 +1412,10 @@
 				 width="70">
 					Shd. Bias
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Shd_Bias"
+				 tool_tip="Above 0 surfaces shadow themselves (dark ground, shadows that come and go); below 0 shadows start away from what casts them. 0 keeps both away."
 				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 follows="left|right"
@@ -1386,8 +1428,10 @@
 				 max_val="0.001"
 				 top_delta="-2"
 				 width="107"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Shd_Bias"
+				 tool_tip="Above 0 surfaces shadow themselves (dark ground, shadows that come and go); below 0 shadows start away from what casts them. 0 keeps both away."
 				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 top_delta="-3"
@@ -1465,7 +1509,9 @@
 				<!-- <AS:Chanayane> Live AO technique and neutral comparison view. -->
 				<text name="T_AO_Technique" follows="top|left" layout="topleft"
 				 left="5" top_pad="5" width="65">Technique</text>
-				<combo_box name="AO_Technique" control_name="RenderAOTechnique"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<combo_box name="AO_Technique"
+  tool_tip="Legacy SSAO or GTAO (ground-truth ambient occlusion). Each technique's own settings work only under it." control_name="RenderAOTechnique"
 				 enabled_control="RenderDeferredSSAO" follows="top|left" layout="topleft"
 				 left_pad="0" top_delta="-3" height="20" width="105">
 					<combo_box.item label="Legacy SSAO" name="legacy" value="0"/>
@@ -1498,8 +1544,10 @@
 				 width="70">
 					Scale
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Scale"
+				 tool_tip="Legacy SSAO: size of the area searched for occluders, in pixels at 1 meter. Larger is wider."
 				 control_name="RenderSSAOScale"
 				 follows="left|right"
 				 height="16"
@@ -1510,8 +1558,10 @@
 				 max_val="10000"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Scale"
+				 tool_tip="Legacy SSAO: size of the area searched for occluders, in pixels at 1 meter. Larger is wider."
 				 control_name="RenderSSAOScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -1547,8 +1597,10 @@
 				 width="70">
 					Max Scale
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Max_Scale"
+				 tool_tip="Legacy SSAO: largest screen radius searched, in pixels. Limits the cost of large areas up close."
 				 control_name="RenderSSAOMaxScale"
 				 follows="left|right"
 				 height="16"
@@ -1559,8 +1611,10 @@
 				 max_val="10000"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Max_Scale"
+				 tool_tip="Legacy SSAO: largest screen radius searched, in pixels. Limits the cost of large areas up close."
 				 control_name="RenderSSAOMaxScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -1596,8 +1650,10 @@
 				 width="70">
 					Factor
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Scaling_Factor"
+				 tool_tip="Legacy SSAO: occlusion sensitivity. Larger darkens more."
 				 control_name="RenderSSAOFactor"
 				 follows="left|right"
 				 height="16"
@@ -1608,8 +1664,10 @@
 				 max_val="250"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Scaling_Factor"
+				 tool_tip="Legacy SSAO: occlusion sensitivity. Larger darkens more."
 				 control_name="RenderSSAOFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -1645,8 +1703,10 @@
 				 width="70">
 					Irrad. Max
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_I_Max"
+				 tool_tip="Most ambient light kept in fully occluded areas. Applies to both techniques."
 				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceMax"
 				 follows="left|right"
@@ -1659,8 +1719,10 @@
 				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_I_Max"
+				 tool_tip="Most ambient light kept in fully occluded areas. Applies to both techniques."
 				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceMax"
 				 top_delta="-3"
@@ -1698,8 +1760,10 @@
 				 width="70">
 					Irrad. Scale
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_I_Scaling"
+				 tool_tip="How much of the ambient light is kept in fully occluded areas, before Irradiance max caps it. Applies to both techniques."
 				 decimal_digits="2"
 				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceScale"
@@ -1712,8 +1776,10 @@
 				 max_val="2"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_I_Scaling"
+				 tool_tip="How much of the ambient light is kept in fully occluded areas, before Irradiance max caps it. Applies to both techniques."
 				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceScale"
 				 top_delta="-3"
@@ -1837,7 +1903,9 @@
 			 border_visible="true" background_visible="true" visible="false">
 				<text name="T_GTAO_Quality" type="string" length="1" follows="top|left" layout="topleft" left="5" top="10" height="16" width="70"
 				 tool_tip="Higher quality evaluates more horizon slices and samples per pixel.">Quality</text>
-				<combo_box name="GTAO_Quality" control_name="RenderGTAOQuality" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<combo_box name="GTAO_Quality"
+  tool_tip="GTAO only: Medium, High, Ultra or Cinematic. Higher is smoother and slower." control_name="RenderGTAOQuality" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="75" top="7" height="20" width="180">
 					<combo_box.item label="Medium" name="medium" value="1"/>
 					<combo_box.item label="High" name="high" value="2"/>
@@ -1851,10 +1919,14 @@
 
 				<text name="T_GTAO_Radius" type="string" length="1" follows="top|left" layout="topleft" left="5" top="33" height="16" width="70"
 				 tool_tip="World-space radius in metres used to search for occluders.">Radius</text>
-				<slider_bar name="GTAO_SB_Radius" control_name="RenderGTAORadius" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<slider_bar name="GTAO_SB_Radius"
+  tool_tip="GTAO only: radius searched for occluders, in meters." control_name="RenderGTAORadius" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="75" top="31" height="16" width="127"
 				 min_val="0.05" max_val="5.0" increment="0.05"/>
-				<spinner name="GTAO_S_Radius" control_name="RenderGTAORadius" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<spinner name="GTAO_S_Radius"
+  tool_tip="GTAO only: radius searched for occluders, in meters." control_name="RenderGTAORadius" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="202" top="28" width="53" min_val="0.05" max_val="5.0"
 				 increment="0.05" decimal_digits="2"/>
 				<button name="GTAO_Reset_Radius" follows="left|top" layout="topleft" left="255" top="28"
@@ -1864,10 +1936,14 @@
 
 				<text name="T_GTAO_Power" type="string" length="1" follows="top|left" layout="topleft" left="5" top="56" height="16" width="70"
 				 tool_tip="Visibility power; larger values produce stronger occlusion.">Power</text>
-				<slider_bar name="GTAO_SB_Power" control_name="RenderGTAOFinalValuePower" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<slider_bar name="GTAO_SB_Power"
+  tool_tip="GTAO only: contrast of the result. Higher darkens occluded areas more." control_name="RenderGTAOFinalValuePower" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="75" top="54" height="16" width="127"
 				 min_val="0.5" max_val="5.0" increment="0.05"/>
-				<spinner name="GTAO_S_Power" control_name="RenderGTAOFinalValuePower" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<spinner name="GTAO_S_Power"
+  tool_tip="GTAO only: contrast of the result. Higher darkens occluded areas more." control_name="RenderGTAOFinalValuePower" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="202" top="51" width="53" min_val="0.5" max_val="5.0"
 				 increment="0.05" decimal_digits="2"/>
 				<button name="GTAO_Reset_Power" follows="left|top" layout="topleft" left="255" top="51"
@@ -1877,7 +1953,9 @@
 
 				<text name="T_GTAO_Denoise" type="string" length="1" follows="top|left" layout="topleft" left="5" top="79" height="16" width="70"
 				 tool_tip="Edge-aware spatial denoiser; softer modes run more passes.">Denoise</text>
-				<combo_box name="GTAO_Denoise" control_name="RenderGTAODenoisePasses" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<combo_box name="GTAO_Denoise"
+  tool_tip="GTAO only: smoothing of the result: off, sharp, medium or soft." control_name="RenderGTAODenoisePasses" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="75" top="76" height="20" width="180">
 					<combo_box.item label="Disabled" name="disabled" value="0"/>
 					<combo_box.item label="Sharp" name="sharp" value="1"/>
@@ -1890,9 +1968,13 @@
 				</button>
 
 				<text name="T_GTAO_I_Max" type="string" length="1" follows="top|left" layout="topleft" left="5" top="102" height="16" width="70">Irrad. Max</text>
-				<slider_bar name="GTAO_SB_I_Max" control_name="RenderSSAOIrradianceMax" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<slider_bar name="GTAO_SB_I_Max"
+  tool_tip="Most ambient light kept in fully occluded areas. Applies to both techniques." control_name="RenderSSAOIrradianceMax" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="75" top="100" height="16" width="127" min_val="0" max_val="1" increment="0.001" decimal_digits="3"/>
-				<spinner name="GTAO_S_I_Max" control_name="RenderSSAOIrradianceMax" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<spinner name="GTAO_S_I_Max"
+  tool_tip="Most ambient light kept in fully occluded areas. Applies to both techniques." control_name="RenderSSAOIrradianceMax" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="202" top="97" width="53" min_val="0" max_val="10" increment="0.001" decimal_digits="3"/>
 				<button name="GTAO_Reset_I_Max" follows="left|top" layout="topleft" left="255" top="97"
 				 height="22" width="20" label="D" tool_tip="Reset to the default value.">
@@ -1900,9 +1982,13 @@
 				</button>
 
 				<text name="T_GTAO_I_Scale" type="string" length="1" follows="top|left" layout="topleft" left="5" top="125" height="16" width="70">Irrad. Scale</text>
-				<slider_bar name="GTAO_SB_I_Scale" control_name="RenderSSAOIrradianceScale" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<slider_bar name="GTAO_SB_I_Scale"
+  tool_tip="How much of the ambient light is kept in fully occluded areas, before Irradiance max caps it. Applies to both techniques." control_name="RenderSSAOIrradianceScale" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="75" top="123" height="16" width="127" min_val="0" max_val="2" increment="0.01" decimal_digits="2"/>
-				<spinner name="GTAO_S_I_Scale" control_name="RenderSSAOIrradianceScale" enabled_control="RenderDeferredSSAO"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<spinner name="GTAO_S_I_Scale"
+  tool_tip="How much of the ambient light is kept in fully occluded areas, before Irradiance max caps it. Applies to both techniques." control_name="RenderSSAOIrradianceScale" enabled_control="RenderDeferredSSAO"
 				 follows="top|left" layout="topleft" left="202" top="120" width="53" min_val="0" max_val="10" increment="0.01" decimal_digits="2"/>
 				<button name="GTAO_Reset_I_Scale" follows="left|top" layout="topleft" left="255" top="120"
 				 height="22" width="20" label="D" tool_tip="Reset to the default value.">
@@ -1925,11 +2011,15 @@
 				<text name="T_GTAO_Bent_Influence" type="string" length="1" follows="top|left"
 				 layout="topleft" left="5" top="197" height="16" width="70"
 				 tool_tip="Blend between geometric and bent normals for diffuse ambient lighting.">Influence</text>
-				<slider_bar name="GTAO_SB_Bent_Influence" control_name="RenderGTAOBentNormalInfluence"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<slider_bar name="GTAO_SB_Bent_Influence"
+  tool_tip="GTAO only: blend from the surface normal (0) to GTAO's bent normal (1) for ambient light. Needs bent normals on." control_name="RenderGTAOBentNormalInfluence"
 				 enabled_control="RenderGTAOBentNormals" follows="top|left" layout="topleft"
 				 left="75" top="195" height="16" width="127" min_val="0" max_val="1"
 				 increment="0.01"/>
-				<spinner name="GTAO_S_Bent_Influence" control_name="RenderGTAOBentNormalInfluence"
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
+				<spinner name="GTAO_S_Bent_Influence"
+  tool_tip="GTAO only: blend from the surface normal (0) to GTAO's bent normal (1) for ambient light. Needs bent normals on." control_name="RenderGTAOBentNormalInfluence"
 				 enabled_control="RenderGTAOBentNormals" follows="top|left" layout="topleft"
 				 left="202" top="192" width="53" min_val="0" max_val="1" increment="0.01"
 				 decimal_digits="2"/>
@@ -1981,6 +2071,7 @@
 				 height="80"
 			 border_visible="true"
 			 background_visible="true">
+				<!-- <KS:KS> tool_tip was "Enables Depth of Field (DoF), which simulates camera focus by blurring objects outside the focal plane, creating a realistic photographic effect. Turning this off can improve performance." </KS:KS> -->
 				<check_box
 				 control_name="RenderDepthOfField"
 				 enabled_control="RenderDeferred"
@@ -1989,7 +2080,7 @@
 				 layout="topleft"
 				 left="3"
 				 name="UseDepthofField"
-				 tool_tip="Enables Depth of Field (DoF), which simulates camera focus by blurring objects outside the focal plane, creating a realistic photographic effect. Turning this off can improve performance."
+				 tool_tip="Enables Depth of Field (DoF), which simulates camera focus by blurring objects outside the focal plane. Turning this off can improve performance. Off while an edit tool, the Poser included, is open, unless depth of field in edit mode is on (the Poser's Enable DoF in Edit Mode, or Preferences &gt; Graphics &gt; Enable while in edit mode)."
 				 top_pad="5"
 				 width="280"/>
 				<check_box
@@ -2032,8 +2123,10 @@
 					 parameter="fov"/>
 				</check_box>
 				<!-- <AS:Chanayane> Select and configure the independent AyaneStorm DoF renderer. -->
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<combo_box
 				 control_name="ASDepthOfFieldMode"
+				 tool_tip="Depth-of-field renderer: Standard (Firestorm), aperture-sampled (for still images), or Live (layered, noise-free). Every session starts with Standard."
 				 enabled_control="RenderDepthOfField"
 				 follows="top|left"
 				 height="20"
@@ -2084,8 +2177,10 @@
 				 width="70">
 					View angle
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Zoom"
+				 tool_tip="Camera view angle: Ctrl+0 zooms in, Ctrl+8 out, Ctrl+9 resets. With depth of field on, it changes the blur."
 				 control_name="CameraAngle"
 				 follows="left|top"
 				 height="16"
@@ -2096,8 +2191,10 @@
 				 max_val="3.06"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Zoom"
+				 tool_tip="Camera view angle: Ctrl+0 zooms in, Ctrl+8 out, Ctrl+9 resets. With depth of field on, it changes the blur."
 				 control_name="CameraAngle"
 				 top_delta="-3"
 				 label_width="0"
@@ -2133,8 +2230,10 @@
 				 width="70">
 					FOV
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_FOV"
+				 tool_tip="The view angle, in degrees, at which Focal length applies. Zooming in from it lengthens the simulated lens (more blur); zooming out shortens it. Does not change the view."
 				 control_name="CameraFieldOfView"
 				 follows="left|top"
 				 height="16"
@@ -2145,8 +2244,10 @@
 				 max_val="180"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_FOV"
+				 tool_tip="The view angle, in degrees, at which Focal length applies. Zooming in from it lengthens the simulated lens (more blur); zooming out shortens it. Does not change the view."
 				 control_name="CameraFieldOfView"
 				 top_delta="-3"
 				 label_width="0"
@@ -2182,8 +2283,10 @@
 				 width="70">
 					f-number
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_F_Number"
+				 tool_tip="Lens f-number: lower makes the sharp zone shallower (more blur in front of and behind the focus)."
 				 control_name="CameraFNumber"
 				 follows="top|left"
 				 height="16"
@@ -2194,8 +2297,10 @@
 				 max_val="22"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_F_Number"
+				 tool_tip="Lens f-number: lower makes the sharp zone shallower (more blur in front of and behind the focus)."
 				 control_name="CameraFNumber"
 				 top_delta="-3"
 				 label_width="0"
@@ -2231,8 +2336,10 @@
 				 width="70">
 					Foc Length
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Focal_Length"
+				 tool_tip="Simulated lens length in millimeters, at the Field of view below: higher makes the sharp zone shallower."
 				 control_name="CameraFocalLength"
 				 follows="top|left"
 				 height="16"
@@ -2243,8 +2350,10 @@
 				 max_val="300"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Focal_Length"
+				 tool_tip="Simulated lens length in millimeters, at the Field of view below: higher makes the sharp zone shallower."
 				 control_name="CameraFocalLength"
 				 top_delta="-3"
 				 label_width="0"
@@ -2329,8 +2438,10 @@
 				 width="70">
 					CoC
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_CoC"
+				 tool_tip="Largest blur, in pixels, for things far from the focus. Does not change what is sharp."
 				 control_name="CameraMaxCoF"
 				 follows="top|left"
 				 height="16"
@@ -2341,8 +2452,10 @@
 				 max_val="150"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_CoC"
+				 tool_tip="Largest blur, in pixels, for things far from the focus. Does not change what is sharp."
 				 control_name="CameraMaxCoF"
 				 top_delta="-3"
 				 label_width="0"
@@ -2378,8 +2491,10 @@
 				 width="70">
 					Resolution
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Resolution"
+				 tool_tip="Resolution of the blur pass: 1 is full, 0.25 a quarter. Lower is faster and softer."
 				 control_name="CameraDoFResScale"
 				 follows="left|right"
 				 height="16"
@@ -2390,8 +2505,10 @@
 				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Resolution"
+				 tool_tip="Resolution of the blur pass: 1 is full, 0.25 a quarter. Lower is faster and softer."
 				 control_name="CameraDoFResScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -2487,6 +2604,7 @@
 				 layout="topleft">
 					HDR Tonemap Type
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<combo_box
 				 control_name="RenderTonemapType"
 				 enabled_control="VertexShaderEnable"
@@ -2496,6 +2614,7 @@
 				 top_delta="-3"
 				 follows="left|top"
 				 name="CB_Tonemap_Type"
+				 tool_tip="Tone mapping curve: ACES or Khronos Neutral."
 				 right="-5">
 					<combo_box.item
 					 label="Khronos Neutral"
@@ -2518,8 +2637,10 @@
 				 width="70">
 					Tone Mix
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Tonemap_Type"
+				 tool_tip="Mix between linear (0) and tone-mapped (1) colors."
 				 can_edit_text="true"
 				 control_name="RenderTonemapMix"
 				 follows="left|right"
@@ -2532,8 +2653,10 @@
 				 max_val="1"
 				 top_delta="0"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Tonemap_Type"
+				 tool_tip="Mix between linear (0) and tone-mapped (1) colors."
 				 can_edit_text="true"
 				 control_name="RenderTonemapMix"
 				 top_delta="-3"
@@ -2641,8 +2764,10 @@
 				 width="70">
 					Quality
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Glow_Quality"
+				 tool_tip="Glow buffer resolution: higher keeps a wide glow smooth, at some cost."
 				 control_name="RenderGlowResolutionPow"
 				 follows="top|left"
 				 height="16"
@@ -2654,8 +2779,10 @@
 				 max_val="10"
 				 top_delta="-2"
 				 width="127" />
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Glow_Quality"
+				 tool_tip="Glow buffer resolution: higher keeps a wide glow smooth, at some cost."
 				 control_name="RenderGlowResolutionPow"
 				 top_delta="-5"
 				 label_width="0"
@@ -2691,8 +2818,10 @@
 				 width="70">
 					Iterations
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Glow_Iterations"
+				 tool_tip="Glow blur rounds: higher is wider and smoother, and slower. Not the glow's brightness (Glow strength)."
 				 control_name="RenderGlowIterations"
 				 follows="top|left"
 				 height="16"
@@ -2703,8 +2832,10 @@
 				 max_val="200"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Glow_Iterations"
+				 tool_tip="Glow blur rounds: higher is wider and smoother, and slower. Not the glow's brightness (Glow strength)."
 				 control_name="RenderGlowIterations"
 				 top_delta="-3"
 				 label_width="0"
@@ -2739,8 +2870,10 @@
 				 width="70">
 					Strength
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Glow_Strength"
+				 tool_tip="How bright all glow and bloom are. Effective values start very low."
 				 control_name="RenderGlowStrength"
 				 follows="top|left"
 				 height="16"
@@ -2751,8 +2884,10 @@
 				 max_val=".5"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Glow_Strength"
+				 tool_tip="How bright all glow and bloom are. Effective values start very low."
 				 control_name="RenderGlowStrength"
 				 top_delta="-3"
 				 label_width="0"
@@ -2788,8 +2923,10 @@
 				 width="70">
 					Width
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Glow_Width"
+				 tool_tip="Spacing between glow blur samples: wider and softer, until gaps make it blocky; then raise the resolution or iterations."
 				 control_name="RenderGlowWidth"
 				 follows="left|right"
 				 height="16"
@@ -2800,8 +2937,10 @@
 				 max_val="50"
 				 top_delta="-2"
 				 width="127"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Glow_Width"
+				 tool_tip="Spacing between glow blur samples: wider and softer, until gaps make it blocky; then raise the resolution or iterations."
 				 control_name="RenderGlowWidth"
 				 top_delta="-3"
 				 label_width="0"
@@ -2878,8 +3017,10 @@
 				 width="90">
 					Draw Dist.
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Draw_Distance"
+				 tool_tip="How far away, in meters, the scene is drawn. Longer costs frame rate."
 				 control_name="RenderFarClip"
 				 follows="left|top"
 				 height="16"
@@ -2890,8 +3031,10 @@
 				 max_val="4096"
 				 top_delta="-2"
 				 width="107"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Draw_Distance"
+				 tool_tip="How far away, in meters, the scene is drawn. Longer costs frame rate."
 				 control_name="RenderFarClip"
 				 top_delta="-3"
 				 label_width="0"
@@ -3417,8 +3560,10 @@
 				 width="90">
 					Sharpening
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Sharpening"
+				 tool_tip="Contrast Adaptive Sharpening: 0 is off, 1 strongest."
 				 control_name="RenderCASSharpness"
 				 follows="left|top"
 				 height="16"
@@ -3429,8 +3574,10 @@
 				 max_val="1"
 				 top_delta="-2"
 				 width="107"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Sharpening"
+				 tool_tip="Contrast Adaptive Sharpening: 0 is off, 1 strongest."
 				 control_name="RenderCASSharpness"
 				 top_delta="-3"
 				 label_width="0"
@@ -3466,8 +3613,10 @@
 				 width="90">
 					Exposure
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar
 				 name="SB_Exposure"
+				 tool_tip="Overall scene exposure."
 				 control_name="RenderExposure"
 				 follows="left|top"
 				 height="16"
@@ -3478,8 +3627,10 @@
 				 max_val="10"
 				 top_delta="-2"
 				 width="107"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner
 				 name="S_Exposure"
+				 tool_tip="Overall scene exposure."
 				 control_name="RenderExposure"
 				 top_delta="-3"
 				 label_width="0"
@@ -4829,8 +4980,10 @@
 							 width="100">
 								View angle
 							</text>
+							<!-- <KS:KS> tool_tip added </KS:KS> -->
 							<slider
 							 name="SB_Zoom2"
+							 tool_tip="Camera view angle: Ctrl+0 zooms in, Ctrl+8 out, Ctrl+9 resets. With depth of field on, it changes the blur."
 							 can_edit_text="true"
 							 control_name="CameraAngle"
 							 follows="left|right"
