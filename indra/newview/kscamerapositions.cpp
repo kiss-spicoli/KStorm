@@ -65,9 +65,18 @@ namespace
     boost::signals2::connection sTeleportFinished;
     boost::signals2::connection sTeleportFailed;
 
+    // Grid ids are compared in lower case, as the grid managers look them up. The grid id's case
+    // depends on the build: OpenSim builds (fsgridhandler) give the grid nick "agni", others
+    // (llviewernetwork) the grid id "Agni". Records saved by either build must match in both.
+    std::string normalizedGrid(std::string grid)
+    {
+        LLStringUtil::toLower(grid);
+        return grid;
+    }
+
     std::string currentGrid()
     {
-        return LLGridManager::getInstance()->getGridId();
+        return normalizedGrid(LLGridManager::getInstance()->getGridId());
     }
 
     std::string filename()
@@ -98,7 +107,7 @@ namespace
         Record record;
         record.mName = data["name"].asString();
         record.mRegion = data["region"].asString();
-        record.mGrid = data["grid"].asString();
+        record.mGrid = normalizedGrid(data["grid"].asString());
         record.mView.mPosition.setValue(data["position"]);
         record.mView.mYaw = (F32)data["yaw"].asReal();
         record.mView.mPitch = (F32)data["pitch"].asReal();
