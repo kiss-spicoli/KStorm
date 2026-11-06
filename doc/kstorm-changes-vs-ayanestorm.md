@@ -389,10 +389,11 @@ Details: `doc/kstorm-rebrand-plan.md`.
   on GitHub, but neither result has been run. The Mac job builds its own universal libwebp, because
   the package is Intel only. The Mac app, executable and bundle id are now KStorm's. Since
   Firestorm 7.3.0 the Linux job installs the same system packages as Firestorm's own workflow,
-  libvlc among them. The shader check adds the code the viewer puts in every shader (the
+  libvlc among them. The Linux job publishes the archive from the runner's temp folder, where the
+  packaging script puts it on GitHub. The shader check adds the code the viewer puts in every shader (the
   `GBufferInfo` struct) and the GLTF size limits, so shaders that use them check cleanly.
   Firestorm's inherited workflows stay in the repo. (`fd5e6b6b825`, `d97e886eaaf`,
-  `e33ee113494`, `9e37c1064c0`, `ab389e2e4f5`, `3c9905be606`, `4e624e2882c`)
+  `e33ee113494`, `9e37c1064c0`, `ab389e2e4f5`, `3c9905be606`, `4e624e2882c`, `69eda347ec6`)
 
 ## Keyboard shortcuts
 
