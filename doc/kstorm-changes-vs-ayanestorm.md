@@ -9,8 +9,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
   reloads) and newer Firestorm and Linden Lab code (viewer 26.4.0, Firestorm 7.3.0). KStorm's
   previous base was `c1b790e08bd` (2026-10-06); the last KStorm before the update is tagged
   `pre-c3276f1fbc9`.
-- **Last updated:** 2026-11-06, with tooltips for lighting, environment and graphics controls.
-- **KStorm's own work:** 204 commits (Kissmy Spicoli, Oct 18 to Nov 6), 326 files, about 17,900
+- **Last updated:** 2026-11-06, with tooltips for the graphics controls AyaneStorm's update added.
+- **KStorm's own work:** 206 commits (Kissmy Spicoli, Oct 18 to Nov 6), 326 files, about 17,900
   lines added.
 - **Not yet in KStorm:** nothing; AyaneStorm's `ayanestorm-dev` and `master` are the same commit.
 
@@ -379,7 +379,9 @@ Details: `doc/kstorm-rebrand-plan.md`.
   field, and the KStorm Lighting panes and dialogs. Tooltips shared with other windows name the
   setting, not a KStorm pane label. The Glow quality slider keeps the name AyaneStorm's update
   gave it (`GlowResolution`). (`9f7e57d5e1b`, `f01d4a73a39`, `b447b97f5e9`, `2c39d11ebc1`,
-  `20b71e0acb1`, `b8677501912`, `42cbdda8a80`, merge `ed185ae2d9c`)
+  `20b71e0acb1`, `b8677501912`, `42cbdda8a80`, merge `ed185ae2d9c`) The graphics controls that
+  update added have tooltips too: Anisotropic Filtering, Post Process Quality and Phototools'
+  VBAO Thickness. (`dbdd2f41d09`, merge `3fc1db5d634`)
 - **This document.** (`161a0c9d973`)
 - **KStorm's own GitHub build.** A workflow started by hand checks changed shaders in the variants
   the viewer compiles and builds an unsigned Windows installer, with no secrets. Optional Mac and
