@@ -5628,9 +5628,6 @@ support@secondlife.com.
 	<string name="Command_Grid_Status_Label">
 		Статус Сетки
 	</string>
-	<string name="Command_HowTo_Label">
-		Инструкция
-	</string>
 	<string name="Command_Inventory_Label">
 		Инвентарь
 	</string>
@@ -5825,9 +5822,6 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
 		Показать текущий статус сетки
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		Выполнение типичных задач
 	</string>
 	<string name="Command_Inventory_Tooltip">
 		Просмотр и использование вашего имущества (CTRL+I)

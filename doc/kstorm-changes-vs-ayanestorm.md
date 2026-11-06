@@ -3,21 +3,24 @@
 A plain-language list of everything KStorm adds to AyaneStorm, grouped by feature, with the
 commits for each. Kept up to date as KStorm work is merged into the `kstorm` branch.
 
-- **Base:** AyaneStorm `master` as of 2026-10-06 (`c1b790e08bd`, `upstream/master`). KStorm
-  contains all of it.
-- **Last updated:** 2026-11-05, with the merge of `fix-ks-camera-grid-case`.
+- **Base:** AyaneStorm `master` as of 2026-11-05 (`c3276f1fbc9`, `upstream/master`). KStorm
+  contains all of it. That AyaneStorm merge brought in her `ayanestorm-dev` work (Exact volumetric
+  lighting with world-fixed clouds, VBAO, Inventory Rules, Edit Outfit reordering, merged shader
+  reloads) and newer Firestorm and Linden Lab code (viewer 26.4.0, Firestorm 7.3.0). KStorm's
+  previous base was `c1b790e08bd` (2026-10-06); the last KStorm before the update is tagged
+  `pre-c3276f1fbc9`.
+- **Last updated:** 2026-11-05, with the merge of AyaneStorm `master` `c3276f1fbc9`.
 - **KStorm's own work:** 193 commits (Kissmy Spicoli, Oct 18 to Nov 5), 299 files, about 17,200
   lines added.
-- **Not yet in KStorm:** 19 newer commits of AyaneStorm's own on its `ayanestorm-dev` branch (for
-  example VBAO, an improved ambient occlusion), plus two merges of newer Firestorm and Linden Lab
-  code.
+- **Not yet in KStorm:** nothing; AyaneStorm's `ayanestorm-dev` and `master` are the same commit.
 
 To refresh the numbers:
 
 ```
 git log --reverse --no-merges --format="%h %ad %s" --date=short upstream/master..kstorm
 git diff --shortstat upstream/master kstorm
-git rev-list --count --first-parent --no-merges upstream/master..upstream/ayanestorm-dev
+git rev-list --count kstorm..upstream/master
+git rev-list --count kstorm..upstream/ayanestorm-dev
 ```
 
 ## 1. My Lights: your personal lights, much expanded
@@ -349,7 +352,8 @@ Details: `doc/kstorm-rebrand-plan.md`.
 - **Advanced Lighting.** Three atmosphere sliders (Density, Distance, Maximum Altitude) were
   hidden in AyaneStorm; they are shown and working. (`afa5c90931e`)
 - **Haze bug.** Setting Haze Density to 0 could break the sky math (a divide-by-zero).
-  (`491e2c4b964`)
+  (`491e2c4b964`) Linden Lab moved the cloud part of that math from `cloudsV.glsl` to
+  `cloudsF.glsl`, so the guard moved with it in the AyaneStorm `c3276f1fbc9` merge.
 - **Older skies.** They no longer look darker than they should, because probe fill can never
   drop to zero. (`532ab810f21`)
 - **Conversations window.** Its minimum height is halved to 141 px, so it can be made much

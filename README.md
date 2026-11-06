@@ -41,7 +41,7 @@ it with different looks until you find the one with heart.
 
 ## What KStorm adds to AyaneStorm
 
-KStorm contains all of AyaneStorm `master` as of 2026-10-06. Its own work, in brief:
+KStorm contains all of AyaneStorm `master` as of 2026-11-05. Its own work, in brief:
 
 - **Look Inventory**: save your lighting as a named look, apply it, or turn it off to get back
   exactly what you had. **KS Reference** is the fixed reference look.
@@ -73,8 +73,10 @@ Every change, with its commits and the AyaneStorm files it touches, is listed in
 - **[AyaneStorm](https://github.com/AyaneStorm/ayanestorm)** by Ayane (Chanayane), a
   Firestorm-based viewer for photographers. Most of KStorm's rendering and photography features
   are Ayane's: depth of field, the night sky, color grading and LUTs, the transparency modes,
-  god rays, procedural sunsets, moon and auroras, snow, camera effects, the original My Lights
-  and more. Her features keep their AyaneStorm names in KStorm. Her README is kept in
+  god rays and their noise-free Exact mode with world-fixed clouds, GTAO and VBAO ambient
+  occlusion, procedural sunsets, moon and auroras, snow, camera effects, the original My Lights
+  and more, along with Inventory Rules and Edit Outfit reordering. Her features keep their
+  AyaneStorm names in KStorm. Her README is kept in
   [doc/ayanestorm-README.md](doc/ayanestorm-README.md).
 - **[Firestorm](https://www.firestormviewer.org)** by The Phoenix Firestorm Project, Inc.
 - **The [Second Life viewer](https://github.com/secondlife/viewer)** source code released by

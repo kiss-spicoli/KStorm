@@ -73,6 +73,8 @@
 #include "asexactoit.h"
 #include "asavboit.h"
 #include "asmacoit.h"
+#include "asoitshaderloader.h"
+#include "asshaderreload.h"
 // </AS:Chanayane>
 // <AS:Chanayane> Optional volumetric lighting
 #include "asvolumetriclighting.h"
@@ -619,6 +621,14 @@ void LLViewerShaderMgr::setShaders()
         return;
     }
 
+    // <AS:Chanayane> Requests made while shaders are loaded merge into one
+    // reload at the next frame, with the final settings.
+    if (ASShaderReload::defer())
+    {
+        return;
+    }
+    // </AS:Chanayane>
+
     mShaderList.clear();
 
     if (!gGLManager.mHasRequirements)
@@ -681,6 +691,7 @@ void LLViewerShaderMgr::setShaders()
 
     LLPipeline::sRenderGlow = gSavedSettings.getBOOL("RenderGlow");
     LLPipeline::RenderAvatarCloth = gSavedSettings.getBOOL("RenderAvatarCloth");
+    LLPipeline::sRenderTransparentWater = gSavedSettings.getBOOL("RenderTransparentWater");
 
     if (gViewerWindow)
     {
@@ -837,6 +848,9 @@ void LLViewerShaderMgr::setShaders()
 
 void LLViewerShaderMgr::unloadShaders()
 {
+    // <AS:Chanayane> Stop pending OIT compiles: their source programs are going away.
+    ASOITShaderLoader::invalidate();
+    // </AS:Chanayane>
     while (!LLGLSLShader::sInstances.empty())
     {
         LLGLSLShader* shader = *(LLGLSLShader::sInstances.begin());
@@ -992,6 +1006,9 @@ std::string LLViewerShaderMgr::loadBasicShaders()
     index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/gbufferUtil.glsl",                    1) );
     index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/globalF.glsl",                          1));
     index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/shadowUtil.glsl",                      1) );
+    // <AS:Chanayane> Cloud shadows, attached with shadowUtil (hasShadows).
+    index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/asCloudShadowUtilF.glsl",              1) );
+    // </AS:Chanayane>
     index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/aoUtil.glsl",                          1) );
     index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/pbrterrainUtilF.glsl",                 1) );
     index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/tonemapUtilF.glsl",                    1) );
@@ -1103,7 +1120,10 @@ bool LLViewerShaderMgr::loadShadersWater()
         return loadShadersWater();
     }
 
-    LLWorld::getInstance()->updateWaterObjects();
+    if (LLWorld::instanceExists())
+    {
+        LLWorld::getInstance()->updateWaterObjects();
+    }
 
     return true;
 }
@@ -2864,10 +2884,10 @@ bool LLViewerShaderMgr::loadShadersDeferred()
                 gSMAAEdgeDetectProgram[i].addPermutations(defines);
 
                 gSMAAEdgeDetectProgram[i].mShaderFiles.clear();
-                gSMAAEdgeDetectProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAAEdgeDetectF.glsl", GL_FRAGMENT_SHADER_ARB));
-                gSMAAEdgeDetectProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAAEdgeDetectV.glsl", GL_VERTEX_SHADER_ARB));
-                gSMAAEdgeDetectProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_FRAGMENT_SHADER_ARB));
-                gSMAAEdgeDetectProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_VERTEX_SHADER_ARB));
+                gSMAAEdgeDetectProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAAEdgeDetectF.glsl", GL_FRAGMENT_SHADER));
+                gSMAAEdgeDetectProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAAEdgeDetectV.glsl", GL_VERTEX_SHADER));
+                gSMAAEdgeDetectProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_FRAGMENT_SHADER));
+                gSMAAEdgeDetectProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_VERTEX_SHADER));
                 gSMAAEdgeDetectProgram[i].mShaderLevel = mShaderLevel[SHADER_DEFERRED];
                 success = gSMAAEdgeDetectProgram[i].createShader();
                 // llassert(success);
@@ -2890,10 +2910,10 @@ bool LLViewerShaderMgr::loadShadersDeferred()
                 gSMAABlendWeightsProgram[i].addPermutations(defines);
 
                 gSMAABlendWeightsProgram[i].mShaderFiles.clear();
-                gSMAABlendWeightsProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAABlendWeightsF.glsl", GL_FRAGMENT_SHADER_ARB));
-                gSMAABlendWeightsProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAABlendWeightsV.glsl", GL_VERTEX_SHADER_ARB));
-                gSMAABlendWeightsProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_FRAGMENT_SHADER_ARB));
-                gSMAABlendWeightsProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_VERTEX_SHADER_ARB));
+                gSMAABlendWeightsProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAABlendWeightsF.glsl", GL_FRAGMENT_SHADER));
+                gSMAABlendWeightsProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAABlendWeightsV.glsl", GL_VERTEX_SHADER));
+                gSMAABlendWeightsProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_FRAGMENT_SHADER));
+                gSMAABlendWeightsProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_VERTEX_SHADER));
                 gSMAABlendWeightsProgram[i].mShaderLevel = mShaderLevel[SHADER_DEFERRED];
                 success = gSMAABlendWeightsProgram[i].createShader();
                 // llassert(success);
@@ -2916,10 +2936,10 @@ bool LLViewerShaderMgr::loadShadersDeferred()
                 gSMAANeighborhoodBlendProgram[i].addPermutations(defines);
 
                 gSMAANeighborhoodBlendProgram[i].mShaderFiles.clear();
-                gSMAANeighborhoodBlendProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAANeighborhoodBlendF.glsl", GL_FRAGMENT_SHADER_ARB));
-                gSMAANeighborhoodBlendProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAANeighborhoodBlendV.glsl", GL_VERTEX_SHADER_ARB));
-                gSMAANeighborhoodBlendProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_FRAGMENT_SHADER_ARB));
-                gSMAANeighborhoodBlendProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_VERTEX_SHADER_ARB));
+                gSMAANeighborhoodBlendProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAANeighborhoodBlendF.glsl", GL_FRAGMENT_SHADER));
+                gSMAANeighborhoodBlendProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAANeighborhoodBlendV.glsl", GL_VERTEX_SHADER));
+                gSMAANeighborhoodBlendProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_FRAGMENT_SHADER));
+                gSMAANeighborhoodBlendProgram[i].mShaderFiles.push_back(make_pair("deferred/SMAA.glsl", GL_VERTEX_SHADER));
                 gSMAANeighborhoodBlendProgram[i].mShaderLevel = mShaderLevel[SHADER_DEFERRED];
                 success = gSMAANeighborhoodBlendProgram[i].createShader();
                 // llassert(success);
@@ -3289,13 +3309,18 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         success = gRlvSphereProgram.createShader();
     }
     // [/RLV:KB]
-// <AS:Chanayane> Load AVBOIT and Mac OIT from vanilla shaders, then load Exact OIT independently.
+// <AS:Chanayane> OIT families compile later, only those in use, a few programs
+// per frame (ASOITShaderLoader); compiling all three inline blocked ~13 s per reload.
+//  if (success)
+//  {
+//      ASAVBOIT::loadShaders(mShaderLevel[SHADER_DEFERRED]);
+//      ASMacOIT::loadShaders(mShaderLevel[SHADER_DEFERRED]);
+//  }
+//  success = ASExactOIT::loadShaders(success, mShaderLevel[SHADER_DEFERRED], use_sun_shadow, gSavedSettings.getBOOL("GLTFEnabled"), mShaderList);
     if (success)
     {
-        ASAVBOIT::loadShaders(mShaderLevel[SHADER_DEFERRED]);
-        ASMacOIT::loadShaders(mShaderLevel[SHADER_DEFERRED]);
+        ASOITShaderLoader::reset(mShaderLevel[SHADER_DEFERRED], use_sun_shadow, gSavedSettings.getBOOL("GLTFEnabled"));
     }
-    success = ASExactOIT::loadShaders(success, mShaderLevel[SHADER_DEFERRED], use_sun_shadow, gSavedSettings.getBOOL("GLTFEnabled"), mShaderList);
 // </AS:Chanayane>
 // <AS:Chanayane> Load optional volumetric lighting independently; a compile
 // failure here must not fail the whole deferred shader load.

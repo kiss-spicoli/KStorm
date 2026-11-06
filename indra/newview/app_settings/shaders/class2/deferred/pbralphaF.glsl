@@ -70,13 +70,14 @@ in vec3 vary_fragcoord;
 uniform vec2 screen_res;
 uniform sampler2D asVolumetricAtlas;
 uniform int asVolumetricEnabled;
+uniform float asVolumetricAtlasRange; // last slice end distance (metres)
 
 in vec3 vary_position;
 
 vec3 asVolumetricForeground(vec3 view_position)
 {
     if (asVolumetricEnabled == 0) return vec3(0.0);
-    float coordinate = sqrt(clamp(length(view_position) / 128.0, 0.0, 1.0)) * 16.0;
+    float coordinate = sqrt(clamp(length(view_position) / asVolumetricAtlasRange, 0.0, 1.0)) * 16.0;
     float upper = clamp(floor(coordinate), 0.0, 15.0);
     float weight = fract(coordinate);
     if (coordinate >= 16.0) { upper = 15.0; weight = 1.0; }
@@ -97,7 +98,7 @@ vec3 asVolumetricForeground(vec3 view_position)
 float asVolumetricTransmittance(vec3 view_position)
 {
     if (asVolumetricEnabled == 0) return 1.0;
-    float coordinate = sqrt(clamp(length(view_position) / 128.0, 0.0, 1.0)) * 16.0;
+    float coordinate = sqrt(clamp(length(view_position) / asVolumetricAtlasRange, 0.0, 1.0)) * 16.0;
     float upper = clamp(floor(coordinate), 0.0, 15.0);
     float weight = fract(coordinate);
     if (coordinate >= 16.0) { upper = 15.0; weight = 1.0; }
@@ -111,6 +112,10 @@ float asVolumetricTransmittance(vec3 view_position)
     float lo = texture(asVolumetricAtlas, (tile + uv) * 0.25).a;
     return mix(lo, hi, weight);
 }
+// </AS:Chanayane>
+
+// <AS:Chanayane> Cloud shadows (Exact volumetric mode), asCloudShadowUtilF.glsl.
+float asCloudSunShadow(float shadow, vec3 view_pos);
 // </AS:Chanayane>
 
 in vec2 base_color_texcoord;
@@ -246,7 +251,10 @@ void main()
     vec2 frag = vary_fragcoord.xy/vary_fragcoord.z*0.5+0.5;
 
 #ifdef HAS_SUN_SHADOW
-    scol = sampleDirectionalShadow(pos.xyz, norm.xyz, frag);
+    // <AS:Chanayane> Cloud shadows.
+    // scol = sampleDirectionalShadow(pos.xyz, norm.xyz, frag);
+    scol = asCloudSunShadow(sampleDirectionalShadow(pos.xyz, norm.xyz, frag), pos.xyz);
+    // </AS:Chanayane>
 #endif
 // <KS:KS> Body-proxy hair occlusion: proximity AO, then sun/moon occlusion.
     float ks_hair_ao = ksHairAO(pos.xyz, norm.xyz);
@@ -273,8 +281,8 @@ void main()
     irradiance *= ks_hair_ao;
 // </KS:KS>
 
-    vec3 diffuseColor;
-    vec3 specularColor;
+    vec3 diffuseColor = vec3(0.0);
+    vec3 specularColor = vec3(0.0);
     calcDiffuseSpecular(col.rgb, metallic, diffuseColor, specularColor);
 
     vec3 v = -normalize(pos.xyz);
