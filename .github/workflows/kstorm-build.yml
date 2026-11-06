@@ -267,11 +267,12 @@ jobs:
         shell: bash
         run: autobuild build -A 64 -c ReleaseFS_open --no-configure
 
+      # On a GitHub runner viewer_manifest.py writes the archive to RUNNER_TEMP, not newview.
       - name: Publish the archive
         uses: actions/upload-artifact@v7
         with:
           name: KStorm-linux
-          path: build-linux-*/newview/*.tar.xz
+          path: ${{ runner.temp }}/*.tar.xz
           if-no-files-found: error
           retention-days: 7
 
