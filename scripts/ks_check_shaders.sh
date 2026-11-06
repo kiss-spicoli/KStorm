@@ -29,6 +29,8 @@ check() {
         echo "#define GBUFFER_FLAG_HAS_PBR      0.67"
         echo "#define GBUFFER_FLAG_HAS_HDRI      1.0"
         echo "#define GET_GBUFFER_FLAG(data, flag)    (abs(data-flag)< 0.1)"
+        # Injected into every shader by LLShaderMgr::loadShaderFile() (master copy in deferredUtil.glsl).
+        echo "struct GBufferInfo { vec4 albedo; vec4 specular; vec3 normal; vec4 emissive; float gbufferFlag; float envIntensity; };"
         for d in "$@"; do
             echo "#define ${d%%=*} $([ "$d" != "${d#*=}" ] && echo "${d#*=}" || echo 1)"
             # The viewer generates diffuseLookup() for indexed textures; declaring it is enough here.
@@ -45,6 +47,14 @@ check() {
 }
 
 for f in "$@"; do
+    case "$f" in
+        */gltf/*)
+            # The viewer sets these from the GPU's uniform block size (llviewershadermgr.cpp);
+            # here they are OpenGL's guaranteed minimum block size, 16 KB.
+            check "$f" MAX_UBO_VEC4S=1024 MAX_NODES_PER_GLTF_OBJECT=341 MAX_MATERIALS_PER_GLTF_OBJECT=85
+            continue
+            ;;
+    esac
     case "${f##*/}" in
         alphaF.glsl)
             check "$f" USE_VERTEX_COLOR HAS_ALPHA_MASK USE_INDEXED_TEX HAS_SUN_SHADOW
