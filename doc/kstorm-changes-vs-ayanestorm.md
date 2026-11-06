@@ -9,8 +9,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
   reloads) and newer Firestorm and Linden Lab code (viewer 26.4.0, Firestorm 7.3.0). KStorm's
   previous base was `c1b790e08bd` (2026-10-06); the last KStorm before the update is tagged
   `pre-c3276f1fbc9`.
-- **Last updated:** 2026-11-05, with the merge of AyaneStorm `master` `c3276f1fbc9`.
-- **KStorm's own work:** 193 commits (Kissmy Spicoli, Oct 18 to Nov 5), 299 files, about 17,200
+- **Last updated:** 2026-11-06, with the shader check fix for code the viewer injects.
+- **KStorm's own work:** 197 commits (Kissmy Spicoli, Oct 18 to Nov 6), 299 files, about 17,200
   lines added.
 - **Not yet in KStorm:** nothing; AyaneStorm's `ayanestorm-dev` and `master` are the same commit.
 
@@ -380,8 +380,10 @@ Details: `doc/kstorm-rebrand-plan.md`.
   on GitHub, but neither result has been run. The Mac job builds its own universal libwebp, because
   the package is Intel only. The Mac app, executable and bundle id are now KStorm's. Since
   Firestorm 7.3.0 the Linux job installs the same system packages as Firestorm's own workflow,
-  libvlc among them. Firestorm's inherited workflows stay in the repo. (`fd5e6b6b825`,
-  `d97e886eaaf`, `e33ee113494`, `9e37c1064c0`, `ab389e2e4f5`, `3c9905be606`)
+  libvlc among them. The shader check adds the code the viewer puts in every shader (the
+  `GBufferInfo` struct) and the GLTF size limits, so shaders that use them check cleanly.
+  Firestorm's inherited workflows stay in the repo. (`fd5e6b6b825`, `d97e886eaaf`,
+  `e33ee113494`, `9e37c1064c0`, `ab389e2e4f5`, `3c9905be606`, `4e624e2882c`)
 
 ## Keyboard shortcuts
 
