@@ -885,8 +885,10 @@
          show_text="true"
          top_pad="3"
          width="324"/>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <slider
          control_name="RenderHighPrecisionPostProcess"
+         tool_tip="High uses 16-bit color buffers for anti-aliasing and post processing, which can reduce banding in smooth gradients such as sky and fog. Uses more video memory."
          decimal_digits="0"
          follows="left|top"
          height="15"
@@ -1026,8 +1028,10 @@
           width="110">
           Anisotropic Filtering:
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <combo_box
           control_name="RenderAnisotropicLevel"
+          tool_tip="Sharpens textures seen at a slant, such as floors, roads and walls. Higher levels look crisper at a small GPU cost."
           height="22"
           label="Anisotropic Filtering"
           layout="topleft"

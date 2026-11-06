@@ -2034,11 +2034,15 @@
 				<text name="T_VBAO_Thickness" type="string" length="1" follows="top|left"
 				 layout="topleft" left="5" top="220" height="16" width="70"
 				 tool_tip="VBAO assumed occluder thickness in metres. Lower lets light pass behind thin foreground objects; higher approaches GTAO.">Thickness</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider_bar name="VBAO_SB_Thickness" control_name="ASVBAOThickness"
+				 tool_tip="VBAO assumed occluder thickness in metres. Lower lets light pass behind thin foreground objects; higher approaches GTAO."
 				 enabled_control="RenderDeferredSSAO" follows="top|left" layout="topleft"
 				 left="75" top="218" height="16" width="127" min_val="0.01" max_val="2"
 				 increment="0.01"/>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<spinner name="VBAO_S_Thickness" control_name="ASVBAOThickness"
+				 tool_tip="VBAO assumed occluder thickness in metres. Lower lets light pass behind thin foreground objects; higher approaches GTAO."
 				 enabled_control="RenderDeferredSSAO" follows="top|left" layout="topleft"
 				 left="202" top="215" width="53" min_val="0.01" max_val="5" increment="0.01"
 				 decimal_digits="2"/>
@@ -3836,8 +3840,10 @@
 				 tool_tip="Improves the sharpness and clarity of textures viewed at angles, making surfaces like floors, roads, and walls appear crisper. While enhancing visual quality, enabling anisotropic filtering may slightly impact performance, especially on lower-end graphics hardware.">
 					Anisotropic Filtering
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<combo_box
 				 control_name="RenderAnisotropicLevel"
+				 tool_tip="Sharpens textures seen at a slant, such as floors, roads and walls. Higher levels look crisper at a small GPU cost."
 				 height="20"
 				 layout="topleft"
 				 follows="left|top"
