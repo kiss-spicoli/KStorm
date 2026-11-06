@@ -218,11 +218,23 @@ jobs:
         shell: bash
         run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
 
+      # The package list follows Firestorm's build_viewer.yml ("Install required Ubuntu packages").
+      # Since Firestorm 7.3.0 the Linux build links the system libvlc, PipeWire, GStreamer, D-Bus
+      # and Wayland through pkg-config, so their -dev packages must be installed.
       - name: Install GCC 14 and the build packages
         shell: bash
         run: |
+          dependencies=(
+            gcc-14 g++-14
+            python3-setuptools pkg-config ninja-build mesa-common-dev
+            libgl1-mesa-dev libglu1-mesa-dev libosmesa6-dev
+            libxinerama-dev libxrandr-dev libxcursor-dev libxfixes-dev libxft-dev
+            libpulse-dev libunwind-dev libpipewire-0.3-dev libdbus-1-dev
+            libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+            libvlc-dev libwayland-dev libfreetype6-dev libfontconfig1-dev
+          )
           sudo apt-get update
-          sudo apt-get install -y gcc-14 g++-14 python3-setuptools mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev libxinerama-dev libxrandr-dev libpulse-dev libfreetype6-dev libfontconfig1-dev
+          sudo apt-get install -y "${dependencies[@]}"
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 --slave /usr/bin/g++ g++ /usr/bin/g++-14
           echo "CC=gcc-14" >> "$GITHUB_ENV"
           echo "CXX=g++-14" >> "$GITHUB_ENV"

@@ -378,9 +378,10 @@ Details: `doc/kstorm-rebrand-plan.md`.
   the viewer compiles and builds an unsigned Windows installer, with no secrets. Optional Mac and
   Linux jobs build a disk image and an archive the same way; these aren't released. Both have built
   on GitHub, but neither result has been run. The Mac job builds its own universal libwebp, because
-  the package is Intel only. The Mac app, executable and bundle id are now KStorm's. Firestorm's
-  inherited workflows stay in the repo. (`fd5e6b6b825`,
-  `d97e886eaaf`, `e33ee113494`, `9e37c1064c0`, `ab389e2e4f5`)
+  the package is Intel only. The Mac app, executable and bundle id are now KStorm's. Since
+  Firestorm 7.3.0 the Linux job installs the same system packages as Firestorm's own workflow,
+  libvlc among them. Firestorm's inherited workflows stay in the repo. (`fd5e6b6b825`,
+  `d97e886eaaf`, `e33ee113494`, `9e37c1064c0`, `ab389e2e4f5`, `3c9905be606`)
 
 ## Keyboard shortcuts
 
