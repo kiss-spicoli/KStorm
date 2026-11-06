@@ -250,6 +250,7 @@
          width="185">
           Shaders:
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <check_box
          control_name="RenderTransparentWater"
          height="16"
@@ -258,11 +259,13 @@
          layout="topleft"
          left_delta="5"
          name="TransparentWater"
+         tool_tip="See through the water surface, with refraction. Off draws opaque water with a simple texture; refraction needs it on."
          top_pad="5"
          width="256" >
          <check_box.commit_callback
           function="Pref.RenderOptionUpdate" />
         </check_box>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <check_box
          control_name="RenderDeferredSSAO"
          height="16"
@@ -271,11 +274,13 @@
          layout="topleft"
          left_delta="0"
          name="UseSSAO"
+         tool_tip="Darkens creases, corners and contact points where ambient light is blocked. Sun-shadow softening (the shadow blur settings) also runs only while it is on."
          top_pad="1"
          width="256">
          <check_box.commit_callback
           function="Pref.RenderOptionUpdate" />
         </check_box>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <check_box
          control_name="RenderScreenSpaceReflections"
          height="16"
@@ -284,11 +289,13 @@
          layout="topleft"
          left_delta="0"
          name="ScreenSpaceReflections"
+         tool_tip="Adds reflections of what is on screen, moving objects included, on top of the reflection probes. Anything off screen is not reflected."
          top_pad="1"
          width="256">
          <check_box.commit_callback
           function="Pref.RenderOptionUpdate" />
         </check_box>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <check_box
          control_name="RenderMirrors"
          height="16"
@@ -297,6 +304,7 @@
          layout="topleft"
          left_delta="0"
          name="Mirrors"
+         tool_tip="Real-time reflections on faces set as mirrors. Costly. Mirror resolution and update rate apply only while it is on."
          top_pad="1"
          width="280">
           <check_box.commit_callback
@@ -315,6 +323,7 @@
          name="shadows_label">
           Shadows:
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <combo_box
          control_name="RenderShadowDetail"
          height="23"
@@ -322,6 +331,7 @@
          left_delta="5"
          top_pad="3"
          name="ShadowDetail"
+         tool_tip="Which lights cast shadows: none, the sun and moon, or the sun, moon and projector lights. God rays and every shadow control need it above None."
          width="185">
           <combo_box.commit_callback
          function="Pref.RenderOptionUpdate" />
@@ -351,6 +361,7 @@
          width="185">
           Reflection Detail:
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <combo_box
          control_name="RenderReflectionProbeDetail"
          height="23"
@@ -358,6 +369,7 @@
          left_delta="5"
          top_pad="3"
          name="ReflectionDetail"
+         tool_tip="How often reflection probes update: static (once), static plus dynamic (moving objects too), or realtime (every frame, costly)."
          width="185">
           <combo_box.item
            label="Static Only"
@@ -385,6 +397,7 @@
          width="185">
           Reflection Coverage:
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <combo_box
          control_name="RenderReflectionProbeLevel"
          height="23"
@@ -392,6 +405,7 @@
          left_delta="5"
          top_pad="3"
          name="ReflectionLevel"
+         tool_tip="What reflection probes capture: the sky only, placed (manual) probes only, placed probes plus terrain and water, or the full scene with objects."
          width="185">
           <combo_box.item
            label="None"
@@ -460,6 +474,7 @@
          width="185">
           Mirror Resolution:
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <combo_box
          control_name="RenderHeroProbeResolution"
          enabled_control="RenderMirrors"
@@ -468,6 +483,7 @@
          left_delta="5"
          top_pad="3"
          name="MirrorResolution"
+         tool_tip="Resolution of the mirror render. Higher is sharper and slower. Mirrors only."
          width="185">
           <combo_box.item
            label="256"
@@ -499,6 +515,7 @@
          width="185">
           Mirror Update Rate:
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <combo_box
          control_name="RenderHeroProbeUpdateRate"
          enabled_control="RenderMirrors"
@@ -507,6 +524,7 @@
          left_delta="5"
          top_pad="3"
          name="HeroProbeUpdateRate"
+         tool_tip="How often mirrors are re-rendered: every frame is smoothest and slowest. Mirrors only."
          width="185">
           <combo_box.item
            label="Low"
@@ -540,6 +558,7 @@
          top="60"
          width="280" />
 
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <slider
          control_name="RenderFarClip"
          decimal_digits="0"
@@ -554,6 +573,7 @@
          max_val="1024"
          min_val="32"
          name="DrawDistance"
+         tool_tip="How far away, in meters, the scene is drawn. Longer costs frame rate."
          top_pad="5"
          width="321" />
         <text
@@ -685,6 +705,7 @@
          width="128">
           0
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <slider
          control_name="RenderGlowResolutionPow"
          decimal_digits="0"
@@ -699,6 +720,7 @@
          max_val="9"
          min_val="8"
          name="GlowResolution"
+         tool_tip="Glow buffer resolution: higher keeps a wide glow smooth, at some cost."
          show_text="false"
          top_pad="5"
          width="281">
@@ -719,6 +741,7 @@
           Low
         </text>
 
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <slider
          control_name="RenderLocalLightCount"
          decimal_digits="0"
@@ -733,6 +756,7 @@
          min_val="0"
          max_val="8192"
          name="MaxLights"
+         tool_tip="Most local lights drawn at once, worn lights included; the nearest are kept. 0 turns local lights off."
          top_pad="5"
          width="317" />
 
@@ -752,8 +776,10 @@
          top_pad="2"
          width="317"/>
 
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <slider
          control_name="RenderExposure"
+         tool_tip="Overall scene exposure."
          disabled_control="RenderDisableVintageMode"
          decimal_digits="1"
          follows="left|top"
@@ -1480,17 +1506,19 @@ If you do not understand the distinction then leave this control alone."
          name="RenderAutoMaskAlphaDeferred"
          top_pad="-1"
          width="256"/>
+        <!-- <KS:KS> tool_tip was "Render glow. Note that strength needs to be set to zero to disable glow when shadows are enabled." </KS:KS> -->
         <check_box
          control_name="RenderGlow"
          height="16"
          initial_value="true"
          label="Render glow"
-         tool_tip="Render glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."
+         tool_tip="Draws the glow pass: faces with a Glow value and bright areas bloom. Off turns all glow off, with shadows on or not."
          layout="topleft"
          left_delta="0"
          name="RenderGlow"
          top_pad="1"
          width="256"/>
+		<!-- <KS:KS> tool_tip was "Glow strength. Higher = wider and smoother (default is 2) " </KS:KS> -->
 		<slider
 		enabled_control="RenderGlow"
 		control_name="RenderGlowIterations"
@@ -1501,7 +1529,7 @@ If you do not understand the distinction then leave this control alone."
 		increment="1"
 		initial_value="160"
 		label="Strength:"
-		tool_tip="Glow strength. Higher = wider and smoother (default is 2) "
+		tool_tip="Glow iterations: blur rounds, higher is wider and smoother and slower (default 2). Not the glow's brightness: that is Glow strength in Phototools."
 		label_width="50"
 		layout="topleft"
 		max_val="3"
@@ -1679,6 +1707,7 @@ If you do not understand the distinction then leave this control alone."
          top_pad="1"
          width="435" />
         <!-- Sharpening Settings -->
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <slider
          control_name="RenderCASSharpness"
          decimal_digits="1"
@@ -1692,6 +1721,7 @@ If you do not understand the distinction then leave this control alone."
          min_val="0.0"
          max_val="1.0"
          name="RenderSharpness"
+         tool_tip="Contrast Adaptive Sharpening: 0 is off, 1 strongest."
          show_text="true"
          top_pad="0"
          width="435">
@@ -1709,6 +1739,7 @@ If you do not understand the distinction then leave this control alone."
          width="170">
             Max. Reflection Probes:
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <combo_box
          control_name="RenderReflectionProbeCount"
          height="20"
@@ -1716,6 +1747,7 @@ If you do not understand the distinction then leave this control alone."
          left_pad="10"
          top_delta="-2"
          name="ProbeCount"
+         tool_tip="Most reflection probes kept at once. Fewer saves memory; nearby probes are kept first."
          width="150">
          <combo_box.item
           label="None"
@@ -1751,6 +1783,7 @@ If you do not understand the distinction then leave this control alone."
          width="170">
             Tone Mapper:
         </text>
+        <!-- <KS:KS> tool_tip added </KS:KS> -->
         <combo_box
          control_name="RenderTonemapType"
          height="20"
@@ -1758,6 +1791,7 @@ If you do not understand the distinction then leave this control alone."
          left_pad="10"
          top_delta="-2"
          name="TonemapType"
+         tool_tip="Tone mapping curve: ACES or Khronos Neutral."
          width="150">
          <combo_box.item
           label="Khronos Neutral"
@@ -1798,6 +1832,7 @@ If you do not understand the distinction then leave this control alone."
      follows="all"
      label="Depth of Field"
      name="DOF panel" >
+       <!-- <KS:KS> tool_tip added </KS:KS> -->
        <check_box
         control_name="RenderDepthOfField"
         height="16"
@@ -1806,6 +1841,7 @@ If you do not understand the distinction then leave this control alone."
         layout="topleft"
         left="10"
         name="UseDoF"
+        tool_tip="Blurs the view except at the camera focus. Off while an edit tool, the Poser included, is open, unless depth of field in edit mode is on (the Poser's Enable DoF in Edit Mode, or Preferences &gt; Graphics &gt; Enable while in edit mode)."
         top_pad="25"
         width="256">
          <check_box.commit_callback
@@ -1814,7 +1850,9 @@ If you do not understand the distinction then leave this control alone."
        <!-- <AS:Chanayane> Select and configure the independent AyaneStorm DoF renderer. -->
        <text name="ASDepthOfFieldModeLabel" follows="left|top" height="20" layout="topleft"
              left_delta="0" top_pad="7" width="160">Depth of Field renderer:</text>
-       <combo_box name="ASDepthOfFieldMode" control_name="ASDepthOfFieldMode"
+       <!-- <KS:KS> tool_tip added </KS:KS> -->
+       <combo_box name="ASDepthOfFieldMode"
+  tool_tip="Depth-of-field renderer: Standard (Firestorm), aperture-sampled (for still images), or Live (layered, noise-free). Every session starts with Standard." control_name="ASDepthOfFieldMode"
                   enabled_control="RenderDepthOfField" follows="left|top" height="22"
                   layout="topleft" left_pad="0" top_delta="-3" width="210">
          <combo_box.item label="Standard / Firestorm" name="standard" value="0"/>

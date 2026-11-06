@@ -464,8 +464,10 @@
 				 width="100">
 					View angle
 				</text>
+				<!-- <KS:KS> tool_tip added </KS:KS> -->
 				<slider
 				 name="SL_Zoom"
+				 tool_tip="Camera view angle: Ctrl+0 zooms in, Ctrl+8 out, Ctrl+9 resets. With depth of field on, it changes the blur."
 				 can_edit_text="true"
 				 control_name="CameraAngle"
 				 follows="left|right"

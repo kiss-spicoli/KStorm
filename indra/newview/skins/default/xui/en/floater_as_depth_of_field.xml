@@ -10,7 +10,8 @@
        (ASDoFRenderer::registerUICallbacks()). No focus lock button: with
        focus following the pointer, clicking it would focus on whatever is
        behind the button (use Alt+Shift+X). -->
-  <check_box name="dof_enable" control_name="RenderDepthOfField"
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <check_box name="dof_enable" tool_tip="Blurs the view except at the camera focus. Off while an edit tool, the Poser included, is open, unless depth of field in edit mode is on (the Poser's Enable DoF in Edit Mode, or Preferences &gt; Graphics &gt; Enable while in edit mode)." control_name="RenderDepthOfField"
              layout="topleft" left="15" top="11" width="150" height="20"
              label="Enable Depth of Field" />
   <button name="toolbar_animations" label="Toggle animations" layout="topleft"
@@ -24,7 +25,8 @@
     <button.commit_callback function="ASDepthOfField.Toolbar" parameter="refresh" />
   </button>
   <text name="mode_label" layout="topleft" left="15" top="46" width="125" height="18">Renderer</text>
-  <combo_box name="dof_mode" control_name="ASDepthOfFieldMode"
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <combo_box name="dof_mode" tool_tip="Depth-of-field renderer: Standard (Firestorm), aperture-sampled (for still images), or Live (layered, noise-free). Every session starts with Standard." control_name="ASDepthOfFieldMode"
              layout="topleft" left="145" top="42" width="235" height="22">
     <combo_box.item label="Standard / Firestorm" name="standard" value="0" />
     <combo_box.item label="Aperture-sampled (still images only)" name="aperture" value="2" />

@@ -26,6 +26,7 @@
     Volumetric lighting
   </text>
 
+  <!-- <KS:KS> tool_tip was "If checked, renders raymarched sun/moon light shafts through shadowed geometry. Requires Shadows to be enabled above None in the graphics preferences. Works on macOS." </KS:KS> -->
   <check_box
     follows="left|top"
     layout="topleft"
@@ -33,7 +34,7 @@
     control_name="RenderVolumetricLighting"
     enabled_control="RenderShadowDetail"
     label="Enable sun/moon god rays"
-    tool_tip="If checked, renders raymarched sun/moon light shafts through shadowed geometry. Requires Shadows to be enabled above None in the graphics preferences. Works on macOS."
+    tool_tip="If checked, renders raymarched sun/moon light shafts through shadowed geometry. Requires Shadows above None (Lighting Quick or Shadows pane, or the graphics preferences). Works on macOS."
     left="15"
     mouse_opaque="true"
     name="render_volumetric_lighting"

@@ -35,8 +35,10 @@
                     width="120">
                 Sun &amp; Stars
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <check_box
                     control_name="sunbeacon"
+                    tool_tip="Draws a beacon pointing to the sun."
                     width="60"
                     height="16"
                     label="Show Beacon"
@@ -54,8 +56,10 @@
                     width="100">
                 Position:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <sun_moon_trackball
                     name="sun_rotation"
+                    tool_tip="Drag to set the sun's position in the sky."
                     follows="left|top"
                     left_delta="0"
                     top_delta="15"
@@ -72,13 +76,16 @@
                     width="200">
                 Image and scale:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <texture_picker
                     height="123"
                     layout="topleft"
                     left_delta="5"
                     name="sun_image"
+                    tool_tip="Texture of the sun disc."
                     top_pad="5"
                     width="100"/>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider_bar
                     decimal_digits="2"
                     follows="left|top"
@@ -91,6 +98,7 @@
                     min_val="0.25"
                     max_val="20"
                     name="sun_scale"
+                    tool_tip="Size of the sun disc. Larger discs fade out later at the horizon."
                     orientation="vertical"
                     width="16"
                     can_edit_text="false"/>
@@ -104,6 +112,7 @@
                     width="80">
                 Color:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <color_swatch
                     can_apply_immediately="true"
                     follows="left|top"
@@ -112,6 +121,7 @@
                     layout="topleft"
                     left_delta="5"
                     name="sun_moon_color"
+                    tool_tip="Light color of both the sun and the moon."
                     top_pad="5"
                     width="60" />
           <text
@@ -124,6 +134,7 @@
             width="90">
             Azimuth:
           </text>
+          <!-- <KS:KS> tool_tip added </KS:KS> -->
           <slider
             decimal_digits="2"
             follows="left|top"
@@ -135,6 +146,7 @@
             min_val="0"
             max_val="359.99"
             name="sun_azimuth"
+            tool_tip="Sun direction around the horizon."
             top_delta="0"
             width="215"
             can_edit_text="true"/>
@@ -148,6 +160,7 @@
             width="90">
             Elevation:
           </text>
+          <!-- <KS:KS> tool_tip added </KS:KS> -->
           <slider
             decimal_digits="2"
             follows="left|top"
@@ -159,6 +172,7 @@
             min_val="-90"
             max_val="90"
             name="sun_elevation"
+            tool_tip="Sun height above the horizon."
             top_delta="0"
             width="215"
             can_edit_text="true"/>
@@ -172,6 +186,7 @@
                     width="90">
                 Glow Focus:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -183,6 +198,7 @@
                     min_val="-2"
                     max_val="2"
                     name="glow_focus"
+                    tool_tip="Tightness of the haze glow around the sun; higher is a tighter halo. No effect while Haze Density is 0."
                     top_delta="0"
                     width="215"
                     can_edit_text="true"/>
@@ -196,6 +212,7 @@
                     width="90">
                 Glow Size:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -207,6 +224,7 @@
                     min_val="0"
                     max_val="1.99"
                     name="glow_size"
+                    tool_tip="Brightness of the haze glow around the sun; it does not change its spread. No effect while Haze Density is 0."
                     top_delta="0"
                     width="215"
                     can_edit_text="true"/>
@@ -220,6 +238,7 @@
                     width="90">
                 Star Brightness:
             </text>
+            <!-- <KS:KS> tool_tip added </KS:KS> -->
             <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -231,6 +250,7 @@
                     min_val="0"
                     max_val="500"
                     name="star_brightness"
+                    tool_tip="Brightness of the stars. They are added over the sky, so they show only where the sky is dark. 0 hides them."
                     top_delta="0"
                     width="215"
                     can_edit_text="true"/>                    
@@ -254,8 +274,10 @@
                         width="120">
                 Moon
                 </text>
+                <!-- <KS:KS> tool_tip added </KS:KS> -->
                 <check_box
                         control_name="moonbeacon"
+                        tool_tip="Draws a beacon pointing to the moon."
                         width="60"
                         height="16"
                         label="Show Beacon"
@@ -273,8 +295,10 @@
                         width="100">
                 Position:
                 </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <sun_moon_trackball
                             name="moon_rotation"
+                            tool_tip="Drag to set the moon's position in the sky."
                             follows="left|top"
                             left_delta="0"
                             top_delta="15"
@@ -291,13 +315,16 @@
                             width="200">
                         Image and scale:
                     </text>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <texture_picker
                             height="123"
                             layout="topleft"
                             left_delta="5"
                             name="moon_image"
+                            tool_tip="Texture of the moon disc."
                             top_pad="10"
                             width="100"/>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <slider_bar
                             decimal_digits="2"
                             follows="left|top"
@@ -310,6 +337,7 @@
                             min_val="0.25"
                             max_val="20"
                             name="moon_scale"
+                            tool_tip="Size of the moon disc. Larger discs fade out later at the horizon."
                             orientation="vertical"
                             width="16"
                             can_edit_text="false"/>
@@ -323,6 +351,7 @@
                     width="90">
                     Azimuth:
                   </text>
+                  <!-- <KS:KS> tool_tip added </KS:KS> -->
                   <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -334,6 +363,7 @@
                     min_val="0"
                     max_val="359.99"
                     name="moon_azimuth"
+                    tool_tip="Moon direction around the horizon."
                     top_delta="0"
                     width="215"
                     can_edit_text="true"/>
@@ -347,6 +377,7 @@
                     width="90">
                     Elevation:
                   </text>
+                  <!-- <KS:KS> tool_tip added </KS:KS> -->
                   <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -358,6 +389,7 @@
                     min_val="-90"
                     max_val="90"
                     name="moon_elevation"
+                    tool_tip="Moon height above the horizon."
                     top_delta="0"
                     width="215"
                     can_edit_text="true"/>
@@ -371,6 +403,7 @@
                     width="90">
                     Brightness:
                   </text>
+                  <!-- <KS:KS> tool_tip added </KS:KS> -->
                   <slider
                     decimal_digits="2"
                     follows="left|top"
@@ -382,6 +415,7 @@
                     min_val="0.0"
                     max_val="1.0"
                     name="moon_brightness"
+                    tool_tip="Brightness of the moon disc and night glow. Does not change moonlight on surfaces."
                     top_delta="0"
                     width="215"
                     can_edit_text="true"/>                           

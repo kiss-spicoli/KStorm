@@ -5,19 +5,19 @@
      floater shrinks when a mode does not use it; the note and buttons follow the bottom. -->
 <floater can_close="true" can_dock="false" can_minimize="false" can_resize="false" height="258" layout="topleft" name="ks_lighting_preset_edit" single_instance="true" title="Look" width="300">
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_edit_name_label" top="9" width="46">Name</text>
-  <line_editor follows="left|top" height="20" layout="topleft" left="60" max_length_chars="63" name="ks_edit_name" top="6" width="230" />
-  <check_box follows="left|top" height="16" label="Sun/Moon" layout="topleft" left="10" name="ks_group_sunmoon" top="34" width="135" />
-  <check_box follows="left|top" height="16" label="Atmosphere" layout="topleft" left="10" name="ks_group_atmosphere" top="56" width="135" />
-  <check_box follows="left|top" height="16" label="Clouds" layout="topleft" left="10" name="ks_group_clouds" top="78" width="135" />
-  <check_box follows="left|top" height="16" label="Water" layout="topleft" left="10" name="ks_group_water" top="100" width="135" />
-  <check_box follows="left|top" height="16" label="Reflections" layout="topleft" left="10" name="ks_group_reflections" top="122" width="135" />
-  <check_box follows="left|top" height="16" label="All lights" layout="topleft" left="10" name="ks_group_all_lights" top="144" width="135" />
-  <check_box follows="left|top" height="16" label="Shadows" layout="topleft" left="10" name="ks_group_shadows" top="166" width="135" />
-  <check_box follows="left|top" height="16" label="Ambient" layout="topleft" left="150" name="ks_group_ambient" top="34" width="140" />
-  <check_box follows="left|top" height="16" label="Exposure" layout="topleft" left="150" name="ks_group_exposure" top="56" width="140" />
-  <check_box follows="left|top" height="16" label="Glow &amp; bloom" layout="topleft" left="150" name="ks_group_glow" top="78" width="140" />
-  <check_box follows="left|top" height="16" label="Depth of field" layout="topleft" left="150" name="ks_group_dof" top="100" width="140" />
-  <check_box follows="left|top" height="16" label="Vignette" layout="topleft" left="150" name="ks_group_vignette" top="122" width="140" />
+  <line_editor follows="left|top" height="20" layout="topleft" left="60" max_length_chars="63" name="ks_edit_name" tool_tip="Name of the look." top="6" width="230" />
+  <check_box follows="left|top" height="16" label="Sun/Moon" layout="topleft" left="10" name="ks_group_sunmoon" tool_tip="Saves the Sun/Moon pane's values with the look." top="34" width="135" />
+  <check_box follows="left|top" height="16" label="Atmosphere" layout="topleft" left="10" name="ks_group_atmosphere" tool_tip="Saves the Atmosphere pane's values with the look." top="56" width="135" />
+  <check_box follows="left|top" height="16" label="Clouds" layout="topleft" left="10" name="ks_group_clouds" tool_tip="Saves the Clouds pane's values with the look." top="78" width="135" />
+  <check_box follows="left|top" height="16" label="Water" layout="topleft" left="10" name="ks_group_water" tool_tip="Saves the Water pane's values with the look." top="100" width="135" />
+  <check_box follows="left|top" height="16" label="Reflections" layout="topleft" left="10" name="ks_group_reflections" tool_tip="Saves the Reflections pane's values with the look." top="122" width="135" />
+  <check_box follows="left|top" height="16" label="All lights" layout="topleft" left="10" name="ks_group_all_lights" tool_tip="Saves the All lights pane's values with the look." top="144" width="135" />
+  <check_box follows="left|top" height="16" label="Shadows" layout="topleft" left="10" name="ks_group_shadows" tool_tip="Saves the Shadows pane's values with the look." top="166" width="135" />
+  <check_box follows="left|top" height="16" label="Ambient" layout="topleft" left="150" name="ks_group_ambient" tool_tip="Saves the Ambient pane's values with the look." top="34" width="140" />
+  <check_box follows="left|top" height="16" label="Exposure" layout="topleft" left="150" name="ks_group_exposure" tool_tip="Saves the Exposure pane's values with the look." top="56" width="140" />
+  <check_box follows="left|top" height="16" label="Glow &amp; bloom" layout="topleft" left="150" name="ks_group_glow" tool_tip="Saves the Glow &amp; bloom pane's values with the look." top="78" width="140" />
+  <check_box follows="left|top" height="16" label="Depth of field" layout="topleft" left="150" name="ks_group_dof" tool_tip="Saves the Depth of field pane's values with the look." top="100" width="140" />
+  <check_box follows="left|top" height="16" label="Vignette" layout="topleft" left="150" name="ks_group_vignette" tool_tip="Saves the Vignette pane's values with the look." top="122" width="140" />
   <check_box follows="left|top" height="16" label="AyaneStorm floaters" layout="topleft" left="150" name="ks_group_ayanestorm" top="144" width="140" tool_tip="Settings of AyaneStorm's Environment Effects, Camera Effects and Depth of Field floaters." />
   <text_editor follows="left|top" height="154" layout="topleft" left="10" name="ks_edit_text" read_only="true" top="34" visible="false" width="280" word_wrap="false" />
   <text type="string" length="1" follows="left|bottom" height="30" layout="topleft" left="10" name="ks_edit_note" text_color="LtGray_50" top="194" width="280" wrap="true" />

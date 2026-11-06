@@ -3,7 +3,7 @@
 <!-- KStorm Camera Positioning dialog: Save current as, Rename (KSFloaterCameraPositionEdit). -->
 <floater can_close="true" can_dock="false" can_minimize="false" can_resize="false" height="100" layout="topleft" name="ks_camera_position_edit" single_instance="true" title="Camera View" width="300">
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_edit_name_label" top="9" width="46">Name</text>
-  <line_editor follows="left|top" height="20" layout="topleft" left="60" max_length_chars="63" name="ks_edit_name" top="6" width="230" />
+  <line_editor follows="left|top" height="20" layout="topleft" left="60" max_length_chars="63" name="ks_edit_name" tool_tip="Name of the view." top="6" width="230" />
   <text type="string" length="1" follows="left|top" height="30" layout="topleft" left="10" name="ks_edit_note" text_color="LtGray_50" top="34" width="280" wrap="true" />
   <button follows="left|top" height="22" label="Save" layout="topleft" left="120" name="ks_edit_ok" top="70" width="80" />
   <button follows="left|top" height="22" label="Cancel" layout="topleft" left="210" name="ks_edit_cancel" top="70" width="80" />

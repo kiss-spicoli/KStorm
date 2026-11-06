@@ -23,7 +23,8 @@
 
   <!-- Left column: editor for the selected light -->
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="15" name="as_light_name_label" top="36" width="60">Name</text>
-  <line_editor follows="left|top" height="20" layout="topleft" left="70" name="as_light_name" top="34" width="220" max_length_chars="63" />
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <line_editor follows="left|top" height="20" layout="topleft" left="70" name="as_light_name" tool_tip="Name of this light." top="34" width="220" max_length_chars="63" />
   <check_box follows="left|top" height="16" label="On" layout="topleft" left="300" name="ks_light_on" top="36" width="60" value="true" tool_tip="Turns this light on or off, keeping its settings. Enable My Lights still switches every light at once." />
 
   <!-- Placement: Follow avatar (joint presets + offsets) or Fixed (camera placement + region position) -->
@@ -34,9 +35,12 @@
   </combo_box>
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="225" name="ks_light_region" top="62" width="180" tool_tip="Region this fixed light is placed in. Away means that region is not loaded, so the light is off until you return." />
 
-  <button follows="left|top" height="22" layout="topleft" left="15" name="as_light_preset_head" top="84" width="90" label="Head" />
-  <button follows="left|top" height="22" layout="topleft" left="115" name="as_light_preset_chest" top="84" width="90" label="Chest" />
-  <button follows="left|top" height="22" layout="topleft" left="215" name="as_light_preset_back" top="84" width="90" label="Back" />
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <button follows="left|top" height="22" layout="topleft" left="15" name="as_light_preset_head" tool_tip="Anchors this light to your head, 0.4 m in front of it." top="84" width="90" label="Head" />
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <button follows="left|top" height="22" layout="topleft" left="115" name="as_light_preset_chest" tool_tip="Anchors this light to your chest, 0.5 m in front of it." top="84" width="90" label="Chest" />
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <button follows="left|top" height="22" layout="topleft" left="215" name="as_light_preset_back" tool_tip="Anchors this light to your chest, 0.5 m behind you." top="84" width="90" label="Back" />
   <button follows="left|top" height="22" layout="topleft" left="15" name="ks_light_place_camera" top="84" width="140" label="Place at camera" tool_tip="Fixes the light at the camera's position, in the region there." />
   <button follows="left|top" height="22" layout="topleft" left="165" name="ks_light_place_focus" top="84" width="160" label="Place at camera focus" tool_tip="Fixes the light at the camera focus point. After an Alt-click on an object this is near the object's middle rather than on its surface; without one it is at your avatar." />
 
@@ -69,7 +73,8 @@
   <slider can_edit_text="true" control_name="RenderLocalLightCount" decimal_digits="0" follows="left|top" height="16" increment="1" label="Max lights" label_width="65" layout="topleft" left="220" max_val="512" min_val="0" name="ks_light_max_local_lights" show_text="true" text_width="40" top="366" width="185" tool_tip="Maximum number of local lights rendered (RenderLocalLightCount), My Lights included; the same setting as Preferences &gt; Graphics &gt; Max. nearby lights. 0 turns off all local lights, My Lights too." />
   <check_box follows="left|top" height="16" label="Freeze animations" layout="topleft" left="15" name="as_light_freeze_anim" top="388" width="250" tool_tip="Freezes all avatar animations in view (same as AyaneStorm &gt; Animation &gt; Freeze Animations)." />
 
-  <button follows="left|top" height="23" layout="topleft" left="15" name="as_light_open_poser" top="414" width="150" label="Open Poser" />
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <button follows="left|top" height="23" layout="topleft" left="15" name="as_light_open_poser" tool_tip="Opens the Poser." top="414" width="150" label="Open Poser" />
   <check_box follows="left|top" height="16" label="Only My Lights" layout="topleft" left="180" name="ks_light_only_my_lights" top="418" width="225" control_name="KSLightRigOnlyMyLights" tool_tip="Turns off every other local light: world lights, everyone's worn lights including your own, and projectors. Sun, moon and ambient light stay. Your view only." />
 
   <!-- Spotlight for the selected light (LLVOVolume backend only) -->
@@ -114,17 +119,21 @@
   <scroll_list draw_heading="false" follows="left|top" layout="topleft" left="420" top="28" height="170" width="205" name="as_light_list" draw_stripes="true" multi_select="false">
     <scroll_list.columns label="Name" name="name" dynamic_width="true" />
   </scroll_list>
-  <button follows="left|top" height="22" layout="topleft" left="420" name="as_light_add" top="202" width="98" label="Add Light" />
-  <button follows="left|top" height="22" layout="topleft" left="527" name="as_light_delete" top="202" width="98" label="Delete Light" />
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <button follows="left|top" height="22" layout="topleft" left="420" name="as_light_add" tool_tip="Adds a new light to the list." top="202" width="98" label="Add Light" />
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <button follows="left|top" height="22" layout="topleft" left="527" name="as_light_delete" tool_tip="Deletes the selected light." top="202" width="98" label="Delete Light" />
   <button follows="left|top" height="22" layout="topleft" left="420" name="ks_light_clear_region" top="228" width="98" label="Clear region" tool_tip="Deletes every fixed light placed in the region you are in, after confirmation." />
   <button follows="left|top" height="22" layout="topleft" left="527" name="ks_light_clear_away" top="228" width="98" label="Clear away" tool_tip="Deletes every fixed light in regions that are not loaded, after confirmation." />
 
   <text type="string" length="1" follows="left|top" font="SansSerifSmallBold" height="14" layout="topleft" left="420" name="as_light_presets_header" top="262" width="200">Rig presets</text>
   <line_editor follows="left|top" height="20" layout="topleft" left="420" name="as_light_preset_name" top="280" width="205" max_length_chars="63" tool_tip="Name for Save preset." />
-  <button follows="left|top" height="22" layout="topleft" left="420" name="as_light_save_preset" top="304" width="98" label="Save preset..." />
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <button follows="left|top" height="22" layout="topleft" left="420" name="as_light_save_preset" tool_tip="Saves the lights as a preset, under the name above." top="304" width="98" label="Save preset..." />
   <check_box follows="left|top" height="16" label="This region only" layout="topleft" left="527" name="ks_light_preset_region_only" top="307" width="100" tool_tip="Save only the fixed lights placed in this region. Loading such a preset replaces only that region's fixed lights and leaves all other lights alone." />
   <combo_box allow_text_entry="false" follows="left|top" height="23" layout="topleft" left="420" name="as_light_preset_combo" top="330" width="205" tool_tip="Presets saved to disk." />
-  <button follows="left|top" height="22" layout="topleft" left="420" name="as_light_load_preset" top="356" width="205" label="Load preset..." />
+  <!-- <KS:KS> tool_tip added </KS:KS> -->
+  <button follows="left|top" height="22" layout="topleft" left="420" name="as_light_load_preset" tool_tip="Loads the preset chosen below, replacing the current lights." top="356" width="205" label="Load preset..." />
 
   <check_box follows="left|top" height="16" label="No eye highlights" layout="topleft" left="420" name="as_light_no_eye_specular" top="392" width="205" control_name="ASLightRigNoEyeSpecular" tool_tip="Removes My Lights specular highlights (catchlights) from your avatar's eyes. Eyes still receive the light's diffuse illumination. Shader backend only." />
   <!-- <KS:KS> Eye mask radius (ASLightRigEyeMaskRadius), previously Debug Settings only -->

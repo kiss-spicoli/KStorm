@@ -353,7 +353,9 @@
                           top_pad="5"
                           width="130"
                           can_edit_text="true"/>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <check_box control_name="sunbeacon"
+  tool_tip="Draws a beacon pointing to the sun."
                                width="60"
                                height="16"
                                label="Show Beacon"
@@ -507,7 +509,9 @@
                           top_pad="5"
                           width="130"
                           can_edit_text="true"/>
+                    <!-- <KS:KS> tool_tip added </KS:KS> -->
                     <check_box control_name="moonbeacon"
+  tool_tip="Draws a beacon pointing to the moon."
                                follows="left|top"
                                width="60"
                                height="16"

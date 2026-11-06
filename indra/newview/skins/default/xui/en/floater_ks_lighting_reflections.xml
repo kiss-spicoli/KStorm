@@ -4,21 +4,21 @@
      Generated layout: rows are 10 px from the left, 280 px wide. -->
 <floater can_close="true" header_height="38" can_dock="false" can_minimize="true" can_resize="false" height="270" layout="topleft" name="ks_lighting_reflections" save_rect="true" single_instance="true" title="Reflections" width="300">
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_probe_level_label" top="9" width="116">Coverage</text>
-  <combo_box control_name="RenderReflectionProbeLevel" follows="left|top" height="23" layout="topleft" left="130" name="ks_probe_level" top="6" width="160">
+  <combo_box control_name="RenderReflectionProbeLevel" follows="left|top" height="23" layout="topleft" left="130" name="ks_probe_level" tool_tip="What reflection probes capture: the sky only, placed (manual) probes only, placed probes plus terrain and water, or the full scene with objects." top="6" width="160">
     <combo_box.item label="Sky only" name="v0" value="0" />
     <combo_box.item label="Manual only" name="v1" value="1" />
     <combo_box.item label="Manual + terrain" name="v2" value="2" />
     <combo_box.item label="Full" name="v3" value="3" />
   </combo_box>
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_probe_detail_label" top="37" width="116">Probe detail</text>
-  <combo_box control_name="RenderReflectionProbeDetail" follows="left|top" height="23" layout="topleft" left="130" name="ks_probe_detail" top="34" width="160">
+  <combo_box control_name="RenderReflectionProbeDetail" follows="left|top" height="23" layout="topleft" left="130" name="ks_probe_detail" tool_tip="How often reflection probes update: static (once), static plus dynamic (moving objects too), or realtime (every frame, costly)." top="34" width="160">
     <combo_box.item label="Static" name="v0" value="0" />
     <combo_box.item label="Dynamic" name="v1" value="1" />
     <combo_box.item label="Realtime" name="v2" value="2" />
   </combo_box>
-  <check_box control_name="RenderScreenSpaceReflections" follows="left|top" height="16" label="Screen-space reflections" layout="topleft" left="10" name="ks_ssr" top="62" width="280" />
+  <check_box control_name="RenderScreenSpaceReflections" follows="left|top" height="16" label="Screen-space reflections" layout="topleft" left="10" name="ks_ssr" tool_tip="Adds reflections of what is on screen, moving objects included, on top of the reflection probes. Anything off screen is not reflected." top="62" width="280" />
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_probe_count_label" top="87" width="116">Probe count</text>
-  <combo_box control_name="RenderReflectionProbeCount" follows="left|top" height="23" layout="topleft" left="130" name="ks_probe_count" top="84" width="160">
+  <combo_box control_name="RenderReflectionProbeCount" follows="left|top" height="23" layout="topleft" left="130" name="ks_probe_count" tool_tip="Most reflection probes kept at once. Fewer saves memory; nearby probes are kept first. None leaves the sky probe only." top="84" width="160">
     <combo_box.item label="None" name="v1" value="1" />
     <combo_box.item label="32" name="v32" value="32" />
     <combo_box.item label="64" name="v64" value="64" />
@@ -26,7 +26,7 @@
     <combo_box.item label="256" name="v256" value="256" />
   </combo_box>
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="ks_probe_res_label" top="115" width="116">Probe resolution</text>
-  <combo_box control_name="RenderReflectionProbeResolution" follows="left|top" height="23" layout="topleft" left="130" name="ks_probe_res" top="112" width="160">
+  <combo_box control_name="RenderReflectionProbeResolution" follows="left|top" height="23" layout="topleft" left="130" name="ks_probe_res" tool_tip="Size of each probe's reflection map: higher is sharper and uses much more video memory. A change may need a restart to show." top="112" width="160">
     <combo_box.item label="64" name="v64" value="64" />
     <combo_box.item label="128" name="v128" value="128" />
     <combo_box.item label="256" name="v256" value="256" />
@@ -34,21 +34,21 @@
     <combo_box.item label="1024" name="v1024" value="1024" />
     <combo_box.item label="2048" name="v2048" value="2048" />
   </combo_box>
-  <slider can_edit_text="true" control_name="RenderReflectionProbeDrawDistance" decimal_digits="0" follows="left|top" height="16" increment="1" label="Probe draw distance" label_width="120" layout="topleft" left="10" max_val="4096" min_val="0" name="ks_probe_dist" show_text="true" text_width="56" top="140" width="280" />
-  <check_box control_name="RenderMirrors" follows="left|top" height="16" label="Mirrors" layout="topleft" left="10" name="ks_mirrors" top="162" width="280" />
+  <slider can_edit_text="true" control_name="RenderReflectionProbeDrawDistance" decimal_digits="0" follows="left|top" height="16" increment="1" label="Probe draw distance" label_width="120" layout="topleft" left="10" max_val="4096" min_val="0" name="ks_probe_dist" tool_tip="How far, in meters, reflection probes see when they update." show_text="true" text_width="56" top="140" width="280" />
+  <check_box control_name="RenderMirrors" follows="left|top" height="16" label="Mirrors" layout="topleft" left="10" name="ks_mirrors" tool_tip="Real-time reflections on faces set as mirrors. Costly. Hero resolution and Hero update rate apply only while it is on." top="162" width="280" />
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="20" name="ks_hero_res_label" top="187" width="106">Hero resolution</text>
-  <combo_box control_name="RenderHeroProbeResolution" follows="left|top" height="23" layout="topleft" left="130" name="ks_hero_res" top="184" width="160">
+  <combo_box control_name="RenderHeroProbeResolution" follows="left|top" height="23" layout="topleft" left="130" name="ks_hero_res" tool_tip="Resolution of the mirror render. Higher is sharper and slower. Mirrors only." top="184" width="160">
     <combo_box.item label="256" name="v256" value="256" />
     <combo_box.item label="512" name="v512" value="512" />
     <combo_box.item label="1024" name="v1024" value="1024" />
     <combo_box.item label="2048" name="v2048" value="2048" />
   </combo_box>
   <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="20" name="ks_hero_rate_label" top="215" width="106">Hero update rate</text>
-  <combo_box control_name="RenderHeroProbeUpdateRate" follows="left|top" height="23" layout="topleft" left="130" name="ks_hero_rate" top="212" width="160">
+  <combo_box control_name="RenderHeroProbeUpdateRate" follows="left|top" height="23" layout="topleft" left="130" name="ks_hero_rate" tool_tip="How often mirrors are re-rendered: every frame is smoothest and slowest. Mirrors only." top="212" width="160">
     <combo_box.item label="Every 6 frames" name="v6" value="6" />
     <combo_box.item label="Every 3 frames" name="v3" value="3" />
     <combo_box.item label="Every 2 frames" name="v2" value="2" />
     <combo_box.item label="Every frame" name="v1" value="1" />
   </combo_box>
-  <check_box control_name="RenderReflectionProbeVolumes" follows="left|top" height="16" label="Show probe volumes" layout="topleft" left="10" name="ks_probe_volumes" top="240" width="280" />
+  <check_box control_name="RenderReflectionProbeVolumes" follows="left|top" height="16" label="Show probe volumes" layout="topleft" left="10" name="ks_probe_volumes" tool_tip="Draws each reflection probe's influence volume. A display aid, not part of the look." top="240" width="280" />
 </floater>
