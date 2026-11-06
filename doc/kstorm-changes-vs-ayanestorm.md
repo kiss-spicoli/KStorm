@@ -393,7 +393,7 @@ Details: `doc/kstorm-rebrand-plan.md`.
   packaging script puts it on GitHub. The shader check adds the code the viewer puts in every shader (the
   `GBufferInfo` struct) and the GLTF size limits, so shaders that use them check cleanly.
   Firestorm's inherited workflows stay in the repo. (`fd5e6b6b825`, `d97e886eaaf`,
-  `e33ee113494`, `9e37c1064c0`, `ab389e2e4f5`, `3c9905be606`, `4e624e2882c`)
+  `e33ee113494`, `9e37c1064c0`, `ab389e2e4f5`, `3c9905be606`, `4e624e2882c`, `69eda347ec6`)
 
 ## Keyboard shortcuts
 
