@@ -9,8 +9,8 @@ commits for each. Kept up to date as KStorm work is merged into the `kstorm` bra
   reloads) and newer Firestorm and Linden Lab code (viewer 26.4.0, Firestorm 7.3.0). KStorm's
   previous base was `c1b790e08bd` (2026-10-06); the last KStorm before the update is tagged
   `pre-c3276f1fbc9`.
-- **Last updated:** 2026-11-06, with the shader check fix for code the viewer injects.
-- **KStorm's own work:** 197 commits (Kissmy Spicoli, Oct 18 to Nov 6), 299 files, about 17,200
+- **Last updated:** 2026-11-06, with tooltips for lighting, environment and graphics controls.
+- **KStorm's own work:** 204 commits (Kissmy Spicoli, Oct 18 to Nov 6), 326 files, about 17,900
   lines added.
 - **Not yet in KStorm:** nothing; AyaneStorm's `ayanestorm-dev` and `master` are the same commit.
 
@@ -373,6 +373,13 @@ Details: `doc/kstorm-rebrand-plan.md`.
   from AyaneStorm's. (`51295134d8e`)
 - **Design and research docs.** Lighting factors, UI design and decisions; no code. (`148ca6d0c3f`, `bc9e1ec3fc3`, `6481f69ea73`, `ac19c718818`, `8cf26fc8201`,
   `213d02378ce`, `12b3036fe26`)
+- **Tooltips.** Lighting, environment and graphics controls have tooltips that say what each
+  setting does: Second Life's environment and graphics panels, Firestorm's Phototools and
+  graphics preferences, AyaneStorm's Environment Effects, Camera Effects, My Lights and depth of
+  field, and the KStorm Lighting panes and dialogs. Tooltips shared with other windows name the
+  setting, not a KStorm pane label. The Glow quality slider keeps the name AyaneStorm's update
+  gave it (`GlowResolution`). (`9f7e57d5e1b`, `f01d4a73a39`, `b447b97f5e9`, `2c39d11ebc1`,
+  `20b71e0acb1`, `b8677501912`, `42cbdda8a80`, merge `ed185ae2d9c`)
 - **This document.** (`161a0c9d973`)
 - **KStorm's own GitHub build.** A workflow started by hand checks changed shaders in the variants
   the viewer compiles and builds an unsigned Windows installer, with no secrets. Optional Mac and
@@ -434,3 +441,7 @@ only where hooking in was unavoidable, with small edits tagged `<KS:KS>`:
 - for the Conversations window's minimum height: `fsfloaterimcontainer.cpp`
 - for turning `RenderDeferredAtmospheric` on at startup: `llappviewer.cpp`
 - for removing the login password eye: `panel_fs_nui_login.xml`, `panel_fs_login.xml`
+- for tooltips: tooltip text only, tagged `<KS:KS>`, in Second Life's, Firestorm's and AyaneStorm's lighting,
+  environment, Phototools and graphics preferences skin files (`panel_settings_sky_*.xml`,
+  `panel_settings_water.xml`, `floater_phototools.xml`, `panel_preferences_graphics1.xml`,
+  `panel_as_*.xml` and others)
